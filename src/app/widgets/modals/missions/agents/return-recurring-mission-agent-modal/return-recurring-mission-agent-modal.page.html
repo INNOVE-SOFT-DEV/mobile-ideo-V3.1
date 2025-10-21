@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Fermer</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" *ngIf="!isSliderOpen">
+  <div class="center-container">
+    <div class="center-title">
+      <p class="cls-title">Constat</p>
+    </div>
+    <ion-grid class="tac">
+      <ion-row>
+        <ion-col>
+          <ion-card class="custom-card">
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <p class="card-title">Photos de la cache clés avant départ ou terrain</p>
+                  </ion-col>
+                </ion-row>
+                <ng-container *ngIf="images?.key_cache_initial_photo?.length > 0">
+                  <div *ngFor="let group_photos of images.key_cache_initial_photo; let i = index">
+                    <ion-row class="image-row">
+                      <ng-container *ngFor="let photo of group_photos; let j = index">
+                        <ion-col class="btn_pic" *ngIf="photo.photo?.url">
+                          <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_cache_initial_photo', photo.id, i, j)"></ion-icon>
+                          <img [src]="photo.photo?.url" alt="" lightbox class="mhi" />
+                          <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_cache_initial_photo', i, j)"></ion-icon>
+                        </ion-col>
+                        <ion-col class="btn_upload" *ngIf="!photo.photo?.url" (click)="takePicture('key_cache_initial_photo' , i , j)">
+                          <ion-row>
+                            <ion-col>
+                              <ion-icon name="camera-outline" class="icon-tag"></ion-icon>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col class="sub_title">{{ (3 * i) + (j + 1) }}</ion-col>
+                          </ion-row>
+                        </ion-col>
+                      </ng-container>
+                    </ion-row>
+                  </div>
+                </ng-container>
+                <ion-grid class="btn_action" (click)="addPhotoMaterial()">
+                  <ion-row>
+                    <ion-col size="1.3">
+                      <ion-icon name="add-outline" class="icon-font"></ion-icon>
+                    </ion-col>
+                    <ion-col class="cls-p">Ajouter d'autres photos</ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-card class="custom-card">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <p class="card-title tac">Num de l’appart de cache clés</p>
+            </ion-col>
+          </ion-row>
+          <ng-container *ngIf="images?.key_cache_apartment_num?.length > 0">
+            <div *ngFor="let item of images.key_cache_apartment_num; let i = index" class="single-photo-wrapper">
+              <div class="single-photo-container">
+                <div class="single-btn_pic" *ngIf="item.photo?.url">
+                  <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_cache_apartment_num', item.id, i, 0)"></ion-icon>
+                  <img [src]="item.photo?.url" class="single-full-img" />
+                  <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_cache_apartment_num', i ,0)"></ion-icon>
+                </div>
+                <div class="single-btn_upload" *ngIf="!item.photo?.url" (click)="takePicture('key_cache_apartment_num' , i , 0 )">
+                  <ion-icon name="camera-outline" class="icon-tag"></ion-icon>
+                  <div class="sub_title">{{ i + 1 }}</div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ion-grid class="btn_action" (click)="addSinglePhotoSlot()">
+            <ion-row>
+              <ion-col size="1.3">
+                <ion-icon name="add-outline" class="icon-font"></ion-icon>
+              </ion-col>
+              <ion-col class="cls-p">Ajouter d'autres photos</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <ion-grid class="tac">
+      <ion-row>
+        <ion-col>
+          <ion-card class="custom-card">
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <p class="card-title">Décharge de prise/remise de clés</p>
+                  </ion-col>
+                </ion-row>
+                <ng-container *ngIf="images?.key_receipt?.length > 0">
+                  <div *ngFor="let group_photos of images.key_receipt; let i = index">
+                    <ion-row class="image-row">
+                      <ng-container *ngFor="let photo of group_photos; let j = index">
+                        <ion-col class="btn_pic" *ngIf="photo.photo?.url">
+                          <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_receipt', photo.id, i, j)"></ion-icon>
+                          <img [src]="photo.photo?.url" alt="" lightbox class="mhi" />
+                          <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_receipt', i, j)"></ion-icon>
+                        </ion-col>
+                        <ion-col class="btn_upload" *ngIf="!photo.photo?.url" (click)="takePicture('key_receipt' , i , j)">
+                          <ion-row>
+                            <ion-col>
+                              <ion-icon name="camera-outline" class="icon-tag"></ion-icon>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col class="sub_title">{{ (3 * i) + (j + 1) }}</ion-col>
+                          </ion-row>
+                        </ion-col>
+                      </ng-container>
+                    </ion-row>
+                  </div>
+                </ng-container>
+                <ion-grid class="btn_action" (click)="addPhotoGroupKeyDelivery()">
+                  <ion-row>
+                    <ion-col size="1.3">
+                      <ion-icon name="add-outline" class="icon-font"></ion-icon>
+                    </ion-col>
+                    <ion-col class="cls-p">Ajouter d'autres photos</ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="cls-b">
+      <ion-button class="custom-button">{{ 'save' | translate }}</ion-button>
+    </div>
+  </div>
+</ion-content>
+<ion-content [fullscreen]="true" *ngIf="isSliderOpen">
+  <app-glide [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
+</ion-content>

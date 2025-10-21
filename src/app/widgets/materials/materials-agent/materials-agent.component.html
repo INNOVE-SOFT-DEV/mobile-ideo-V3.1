@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goToProfile()" *ngIf="!isSuperVisor">
+        <ion-icon name="person-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goBack()" *ngIf="isSuperVisor">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">
+      {{ "Materials" | translate }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<div class="center-container">
+  <ion-card *ngFor="let material of materials?.materials" class="custom-card-agent" (click)="openModaMaterialAgentl(material)">
+    <ion-card-content>
+      <div *ngIf="material.state == 'pending'" class="cls-pending chip-status">{{ "pending" | translate }}</div>
+
+      <div *ngIf="material.state == 'to_collect'" class="cls-to-recover chip-status">
+        {{ "to collect" | translate }}
+      </div>
+
+      <div *ngIf="material.state == 'in_progress'" class="cls-in-progress chip-status">
+        {{ "in progress" | translate }}
+      </div>
+      <div class="image-container">
+        <img [src]="material.material.photo.url" alt="Matériel" />
+      </div>
+      <div class="text-container">
+        <h3 class="material-title">{{ material.material.name }}</h3>
+        <p class="material-description" *ngFor="let note of material.notes">{{ note.date + ":" + note.text }}</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ng-container *ngIf="materials?.materials == 0">
+    <div class="empty-container">
+      <img src="assets/img/emty-icon.png" />
+      <p class="cls-empty-title">{{ "No data found" | translate }}</p>
+      <p class="cls-empty-d">{{ "It appears that this list is currently empty" | translate }}</p>
+    </div>
+  </ng-container>
+  <div class="button-container">
+    <ion-button class="custom-button-send" (click)="openModal()">
+      <ion-icon name="add-outline"></ion-icon>
+      <span>{{ "Make a request" | translate }}</span>
+    </ion-button>
+  </div>
+</div>

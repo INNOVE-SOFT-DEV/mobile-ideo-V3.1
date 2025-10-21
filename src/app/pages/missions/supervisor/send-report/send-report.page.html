@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">Envoyez vers le client</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <ion-card>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="3">
+              <img [src]="data?.client_logo_url" />
+            </ion-col>
+            <ion-col size="9">
+              <div class="mt-20">
+                <p class="cls-p-title">
+                  {{data.intervention_name.split('-')[0]}}
+                  <br />
+                </p>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <div class="custom-banner">{{data.prestation}}</div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2"></ion-col>
+            <ion-col size="10">
+              <div class="cls-address">
+                <p class="cls-p-address">{{data.intervention_name.split('-')[1]}}</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="mission-title">Les contacts de la mission</div>
+
+    <div class="custom-card">
+      <ion-radio-group [(ngModel)]="selectedContactId" (ionChange)="onRadioChange($event)">
+        <div
+          class="card-item"
+          *ngFor="let item of data?.contacts"
+          [ngStyle]="{ 'background-color': selectedContactId === item.id ? '#ddf5ff' : '#fff' }"
+          (click)="selectContact(item.id)"
+        >
+          <div class="item-grid">
+            <div class="col-left">
+              <div class="item-name">{{ item?.name }}</div>
+              <div class="item-chip">
+                <span class="chip-text">{{ item?.role }}</span>
+              </div>
+            </div>
+            <div class="col-right">
+              <ion-radio slot="end" [value]="item.id"></ion-radio>
+            </div>
+          </div>
+        </div>
+      </ion-radio-group>
+    </div>
+
+    <div class="btn-container">
+      <ion-button class="custom-button" expand="block" (click)="shareReport()">
+        <ion-img slot="start" class="btn-icon" src="assets/img/Navigation.png"></ion-img>
+        Envoyez le rapport au client
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

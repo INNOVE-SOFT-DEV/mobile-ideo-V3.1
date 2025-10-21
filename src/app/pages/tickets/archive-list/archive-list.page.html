@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Liste archivée</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="tasks.length == 0  ">
+    <div class="empty-container">
+      <img src="assets/img/emty-icon.png" />
+      <p class="cls-empty-title">{{'No requests found' | translate}}</p>
+      <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+    </div>
+  </ng-container>
+
+  <div class="cls-ticket" *ngIf="tasks.length > 0  ">
+    <div class="task-card">
+      <div class="task-header">
+        <h3>Tickets archivées</h3>
+      </div>
+
+      <div class="task-item" *ngFor="let task of tasks">
+        <div class="task-col-left" *ngIf="task.is_archived == true">
+          <div class="task-row">
+            <span class="task-title">
+              {{ task.title }}
+              <span class="task-status">({{task.board.status}})</span>
+            </span>
+          </div>
+          <div class="task-row">
+            <img src="assets/img/user.png" class="task-user" />
+
+            <ion-icon name="sync-circle-outline" *ngIf="task.task_type?.[0] === '1'"></ion-icon>
+            <ion-icon name="cog-outline" *ngIf="task.task_type?.[0] === '2'"></ion-icon>
+            <ion-icon name="extension-puzzle-outline" *ngIf="task.task_type?.[0] === '3'"></ion-icon>
+            <ion-icon name="warning-outline" *ngIf="task.task_type?.[0] === '4'"></ion-icon>
+
+            <ion-icon name="mic-outline" *ngIf="task?.audio_file"></ion-icon>
+            <ion-icon name="image-outline" *ngIf="task?.image_files?.length > 0"></ion-icon>
+            <span class="task-date">⏱ {{ task.deadline }}</span>
+          </div>
+        </div>
+        <div class="task-col-right">
+          <img src="assets/img/trash-can.png" class="delete" (click)="deleteTicket(task)" />
+          <img src="assets/img/redo.png" class="refresh" (click)="restoreTicket(task)" />
+        </div>
+      </div>
+
+      <div #emprtyState class="empty-state" *ngIf="tasks.length === 0">
+        <p class="empty-text">Aucun ticket disponible</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

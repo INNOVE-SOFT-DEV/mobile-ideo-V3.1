@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">{{'Documents' | translate}}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <ion-searchbar placeholder="Rechercher" (ionInput)="filterUsers($event)"></ion-searchbar>
+
+    <ion-card *ngFor="let user of list_filtered_users" (click)="visitDocuments(user.id)">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="11" class="card_title">
+              {{user.first_name}} {{user.last_name}}
+              <br />
+              <div class="card_sub_title" style="background-color: #cdf3ff; border-radius: 12px; width: 100px; height: 25px; padding: 5px; margin-top: 5px; text-align: center">
+                {{user.is_teamleader == true ? "Chef d'equipe" : user.is_driver == true ? "Chauffeur" : "Agent"}}
+              </div>
+            </ion-col>
+            <ion-col size="0.5" style="padding-top: 20px">
+              <ion-icon name="chevron-forward-outline" style="font-size: 15px"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

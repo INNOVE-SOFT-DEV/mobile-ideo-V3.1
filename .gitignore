@@ -1,0 +1,33 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# Ionic build & cache
+platforms/
+plugins/
+www/
+dist/
+coverage/
+android/
+ios/
+.vscode/
+.idea/
+.angular/
+
+# Capacitor / Cordova build
+capacitor.config.json
+cordova/platforms/
+cordova/plugins/
+cordova/node_modules/
+
+# MacOS / Windows system files
+.DS_Store
+Thumbs.db

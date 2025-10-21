@@ -1,0 +1,19 @@
+.status-indicator {
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0 2px;
+}
+
+.green {
+  background-color: rgba(205, 255, 237, 1);
+}
+.red {
+  background-color: rgba(255, 220, 220, 1);
+}
+.yellow {
+  background-color: rgba(255, 239, 176, 1);
+}

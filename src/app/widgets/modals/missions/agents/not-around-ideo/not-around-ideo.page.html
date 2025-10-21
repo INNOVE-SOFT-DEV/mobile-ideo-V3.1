@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onBackReturn()">{{'Close' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <section class="confirmation-container not-in-range">
+    <h2 class="title"></h2>
+    <p>Vous êtes en dehors du rayon de la société. Si vous souhaitez changer de véhicule, veuillez vous rendre au local.</p>
+    <p>Voici la liste des véhicules disponibles :</p>
+
+    <ion-list class="custom-list">
+      <ion-item *ngFor="let vehicule of freeVehicules" lines="none" class="custom-item">
+        <ion-icon name="car-outline"></ion-icon>
+        <ion-label>{{vehicule[1]}}</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-note color="warning" class="note-message" *ngIf="type == 'unsuitable'">
+      <p>
+        <strong>Note :</strong>
+        Si vous souhaitez envoyer une photo de chantier, vous devez la prendre maintenant avant de vous rendre au local de la société.
+      </p>
+    </ion-note>
+    <ion-button (click)="onBackReturn()">
+      <span>Retour</span>
+    </ion-button>
+  </section>
+</ion-content>

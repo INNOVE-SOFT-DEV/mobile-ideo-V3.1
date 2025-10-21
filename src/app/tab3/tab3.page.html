@@ -1,0 +1,6 @@
+<ng-container *ngIf="isSuperVisor">
+  <app-absence-supervisor></app-absence-supervisor>
+</ng-container>
+<ng-container *ngIf="!isSuperVisor">
+  <app-agent-absence></app-agent-absence>
+</ng-container>

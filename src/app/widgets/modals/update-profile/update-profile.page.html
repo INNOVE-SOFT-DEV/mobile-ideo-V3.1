@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">{{'Cancel' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <div class="cls-supervisor">
+    <p><span class="cls-b-a">{{'Update my profile' | translate}}</span></p>
+    <div class="cls-booth"></div>
+    <p><span class="cls-b">{{'My profile' | translate}}</span></p>
+    <div class="cls-avatar-wrapper" (click)="uploadProfilePic()">
+      <div class="cls-avatar">
+        <ion-img [src]="user?.photo?.url ? user?.photo?.url : 'assets/img/icone-pdf.png'" class="img-avatar"></ion-img>
+      </div>
+      <ion-icon name="create-outline" class="edit-icon"></ion-icon>
+    </div>
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.first_name" disabled class="disabled-input"></ion-input>
+            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.last_name" disabled class="disabled-input"></ion-input>
+            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [(ngModel)]="phone" name="phone" type="tel" required [pattern]="phonePattern" #phoneCtrl="ngModel">
+              <div slot="label">
+                {{'Phone number' | translate}}
+                <ion-text color="danger" *ngIf="phoneCtrl.invalid && phoneCtrl.touched">{{'Requis' | translate}}</ion-text>
+                <ion-text color="danger" *ngIf="phoneCtrl.hasError('pattern') && phoneCtrl.touched">{{'Phone number error' | translate}}</ion-text>
+              </div>
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.address" disabled class="disabled-input"></ion-input>
+            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <div class="cls-booth"></div>
+    <p><span class="cls-b">{{'Registration' | translate}}</span></p>
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.email" disabled class="disabled-input"></ion-input>
+            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [(ngModel)]="password" name="password" type="password" minlength="6" #passwordCtrl="ngModel">
+              <div slot="label">
+                {{'password' | translate}}
+                <ion-text color="danger" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">{{'Min 6 characters' | translate}}</ion-text>
+              </div>
+            </ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <div class="btn-container">
+      <ion-button class="custom-button-update-cancel" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+        {{'Cancel' | translate}}
+      </ion-button>
+      <ion-button class="custom-button-update" [disabled]="(phoneCtrl.invalid && phoneCtrl.touched) || (passwordCtrl.invalid && passwordCtrl.touched)" (click)="saveProfile()">
+        <ion-icon *ngIf="!loading" name="checkmark-outline"></ion-icon>
+        <ion-spinner color="black" *ngIf="loading" name="crescent"></ion-spinner>
+        {{'Confirm' | translate}}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Vehicle' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <ion-card class="custom-card">
+      <ion-card-content>
+        <div class="input-container">
+          <ion-input placeholder="Rechercher..." class="custom-input" [(ngModel)]="filterKey" (ionInput)="applyFilter()"></ion-input>
+          <ion-icon name="search-outline" class="input-icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="custom-card" *ngFor="let vehicle of search_result" (click)="vehicleDriving(vehicle.name ,vehicle.id,vehicle.photo?.url)">
+      <div class="card-header">
+        <img [src]="vehicle.photo?.url" alt="Vehicle photo" class="vehicle-image" />
+        <div class="car-info">
+          <h2 class="car-name">{{ vehicle.name }}</h2>
+          <span *ngIf="!vehicle.active" class="status-badge">{{ 'Non Rolling' | translate }}</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{ 'Agent tracking' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-supervisor">
+    <div class="custom-search">
+      <input type="text" placeholder="Rechercher..." class="search-input" [(ngModel)]="searchTerm" (input)="onSearchChange()" />
+
+      <ion-icon name="search-outline" class="input-icon"></ion-icon>
+    </div>
+    <ion-grid class="toggle-grid">
+      <ion-row class="ion-justify-content-center toggle-row">
+        <ion-col size="auto" class="toggle-item">
+          <div class="toggle-wrapper">
+            <span class="toggle-label">Agent</span>
+            <ion-toggle [(ngModel)]="isAgent" class="green-toggle" (ionChange)="onAgentToggleChange($event)"></ion-toggle>
+          </div>
+        </ion-col>
+        <ion-col size="auto" class="toggle-item">
+          <div class="toggle-wrapper">
+            <span class="toggle-label">Camion</span>
+            <ion-toggle [(ngModel)]="isCamion" class="green-toggle" (ionChange)="onCamionToggleChange($event)"></ion-toggle>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="custom-block" #map id="map"></div>
+  </div>
+</ion-content>

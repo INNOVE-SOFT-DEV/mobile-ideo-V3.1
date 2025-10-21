@@ -1,0 +1,55 @@
+<ion-content *ngIf="!isSuperVisor" [fullscreen]="true">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="goToProfile()">
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title class="center-title">{{'My missions' | translate}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon name="notifications-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ng-container *ngIf="isLoaded; ">
+    <div class="header-container-agent" *ngIf="!isSuperVisor">
+      <div class="month-block" (click)="openPopover($event)">
+        <span class="month-text">{{ currentDate | capitalizeFirstLetter }}</span>
+        <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+      </div>
+      <ion-button expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button>
+    </div>
+    <ng-container *ngIf="punctuals?.length === 0 && regulars.length === 0 && forfaitaires.length === 0">
+      <div class="empty-container">
+        <img src="assets/img/emty-icon.png" />
+        <p class="cls-empty-title">{{'No data found' | translate}}</p>
+        <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+      </div>
+    </ng-container>
+    <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-forfaitaire>
+    <app-punctual [data]="punctuals" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-punctual>
+    <app-regular [data]="regulars" [supervisors]="superVisors"></app-regular>
+  </ng-container>
+</ion-content>
+<ion-content *ngIf="isSuperVisor" [fullscreen]="true">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="goToProfile()">
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title class="center-title">{{'My missions' | translate}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon name="notifications-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <app-main *ngIf="loaded" [counts]="counts"></app-main>
+</ion-content>

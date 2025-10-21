@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" *ngIf="!sliderOpen">
+  <div class="cls-details">
+    <div class="vehicle-label">{{'Vehicle1' | translate}}</div>
+    <ion-card class="custom-card">
+      <div class="card-header">
+        <img [src]="image" alt="Vehicle photo" class="vehicle-image" />
+        <div class="car-info">
+          <h2 class="car-name">{{name}}</h2>
+        </div>
+      </div>
+    </ion-card>
+    <div class="vehicle-label">{{'Vehicle return history' | translate}}</div>
+    <ion-card class="custom-card" *ngFor="let raison of data.return_raison.split(',')">
+      <div class="card-header">
+        <img [src]="getRaisonIcon(raison)" class="icon-image" />
+
+        <div class="car-info">
+          <h2 class="car-name">
+            {{ raison == 'has_issue' ? "Défaut" : "" }} {{ raison == 'not_functional' ? "Non roulat" : "" }} {{ raison == 'get_vehicule' ? "Atrribution" : "" }} {{ raison ==
+            'not_adapted' ? "Non adapter" : "" }} {{ raison == 'first' ? "Premier" : "" }}
+          </h2>
+          <span class="status-badge">{{data.date}}</span>
+        </div>
+        <ion-icon name="eye-outline" class="arrow-icon" (click)="openSliderModal(data, raison)"></ion-icon>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="sliderOpen">
+  <app-glide [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
+  <div *ngFor="let voice of voices; let i = index" class="flex">
+    <ion-button class="custom-button-update bg-record-lisen grid-item" (click)="playRecordingAgain(i)">
+      <ion-icon class="play-icon" name="play-circle-outline" slot="start"></ion-icon>
+    </ion-button>
+    <div #waveformContainer [id]="'waveform-' + i" class="grid-item waveform"></div>
+  </div>
+
+  <div class="blue-box">
+    <ion-list class="gradient-list">
+      <ion-item *ngFor="let note of notes" class="gradient-item">{{ note }}</ion-item>
+    </ion-list>
+  </div>
+</ion-content>

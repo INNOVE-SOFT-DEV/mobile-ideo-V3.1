@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{type}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">{{'Close' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <ion-img [src]="url " [alt]="type"></ion-img>
+</ion-content>

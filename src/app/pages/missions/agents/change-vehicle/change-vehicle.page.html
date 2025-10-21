@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'My Vehicle' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="center-container">
+    <div class="card-wrapper">
+      <div class="card-title">{{'Assigned vehicle' | translate}}</div>
+      <div class="plate-wrapper">
+        <div class="plate-overlay" *ngIf="currentVehicule">
+          <span class="plate-number">{{currentVehicule[1]! || ''}}</span>
+        </div>
+        <div class="plate-overlay" *ngIf="!hasVehicule">
+          <span class="plate-number">{{'XXXXXXXXXXXX'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="center-container-row">
+    <p class="cls-label">{{'Report a change?' | translate}}</p>
+    <ng-container *ngIf="hasVehicule">
+      <div class="replanification-block m-10 bg-FFFFFF" (click)="unsuitableVehicle()">
+        <ion-img src="../../assets/img/v.png"></ion-img>
+        <span class="replanification-text">{{'Unsuitable vehicle' | translate}}</span>
+      </div>
+      <div class="replanification-block m-10 bg-FFFFFF" (click)="nonRollingVehicle()">
+        <ion-img src="../../assets/img/r.png"></ion-img>
+        <span class="replanification-text">{{'Non-rolling vehicle' | translate}}</span>
+      </div>
+      <div class="replanification-block m-10 bg-FFFFFF" (click)="reportDefect()">
+        <ion-img src="../../assets/img/s.png"></ion-img>
+        <span class="replanification-text">{{'Report a defect' | translate}}</span>
+      </div>
+      <div class="replanification-block m-10 bg-gray">
+        <ion-img src="../../assets/img/a.png"></ion-img>
+        <span class="replanification-text">{{'Vehicle allocation' | translate}}</span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!hasVehicule">
+      <div class="replanification-block m-10 bg-gray">
+        <ion-img src="../../assets/img/v.png"></ion-img>
+        <span class="replanification-text">{{'Unsuitable vehicle' | translate}}</span>
+      </div>
+      <div class="replanification-block m-10 bg-gray">
+        <ion-img src="../../assets/img/r.png"></ion-img>
+        <span class="replanification-text">{{'Non-rolling vehicle' | translate}}</span>
+      </div>
+      <div class="replanification-block m-10 bg-gray">
+        <ion-img src="../../assets/img/s.png"></ion-img>
+        <span class="replanification-text">{{'Report a defect' | translate}}</span>
+      </div>
+      <div class="replanification-block m-10 bg-FFFFFF" (click)="vehicleAllocation()">
+        <ion-img src="../../assets/img/a.png"></ion-img>
+        <span class="replanification-text">{{'Vehicle allocation' | translate}}</span>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

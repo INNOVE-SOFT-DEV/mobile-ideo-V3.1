@@ -1,0 +1,51 @@
+<div class="cls-supervisor">
+  <ion-button fill="clear" class="close-button" (click)="closeModal()">
+    <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+  </ion-button>
+
+  <ion-grid class="custom-grid">
+    <ion-row>
+      <ion-col size="4">
+        <img [src]="sheetData?.['photo']?.['url']" class="car-image" />
+      </ion-col>
+      <ion-col size="8">
+        <ion-row class="align-center">
+          <ion-col size="2">
+            <img src="assets/img/teamleader.png" class="avatar-icon" />
+          </ion-col>
+          <ion-col size="8">
+            <div class="user-text">
+              {{ sheetData?.name }}
+            </div>
+          </ion-col>
+          <ion-col size="2">
+            <img src="assets/img/icon-succes.png" class="success-icon" />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="address-text">
+              {{ sheetData?.address_recup || "Adresse non disponible" }}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-chip class="orange-chip" expand="block">Nettoyage en intervention ponctuelle</ion-chip>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-chip class="action-chip">
+          <img src="assets/img/Shuffle.png" class="chip-icon" />
+          <span class="chip-text">Parcours</span>
+        </ion-chip>
+      </ion-col>
+      <ion-col size="6"></ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

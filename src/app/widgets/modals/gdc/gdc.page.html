@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Fermer</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card style="background: #fff8f2">
+    <ion-card-content>
+      <ion-grid style="padding-bottom: 0px">
+        <ion-row>
+          <ion-col class="card_title">⚠️ Rappel consignes GDC</ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid style="padding-top: 0px">
+        <ion-row>
+          <ion-col size="1"></ion-col>
+          <ion-col>
+            <p class="card_text">
+              1. Ne jamais prêter les clés aux entreprises ou à un éventuel gardien, toujours ouvrir soi-même. Respectez cette consigne quelques soit les demandes des entreprises.
+            </p>
+            <p class="card_text">
+              2. Cacher les clés chaque soir sur le chantier dans le logement désigné, dans un meuble sous évier ou dans un placard d’entrée et prendre la clef du logement.
+            </p>
+            <p class="card_text">
+              3. Prendre une photo des clés une fois remises dans la cachette chaque soir via l’application sur la partie « Rapport », pour historique et pour être sûr de ne pas
+              les oublier ailleurs avant départ.
+            </p>
+            <p class="card_text">4. Chaque feuille de décharge de prise ou de remise de clés signée est à prendre en photo via l’application en partie « Rapport ».</p>
+            <p class="card_text">5. Remplir correctement votre cahier de gestion de clés (voir vidéo de formation de la mission GDC).</p>
+            <p class="card_text">6. Toujours porter ses chaussures de sécurité et son gilet IDEO GROUPE.</p>
+          </ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid style="text-align: center">
+        <ion-row>
+          <ion-col size="1"></ion-col>
+          <ion-col>
+            <ion-grid id="btn_request" (click)="openVideo()">
+              <ion-row>
+                <ion-col size="3"><ion-icon name="play-outline" style="font-size: 25px"></ion-icon></ion-col>
+                <ion-col style="text-align: left; font-size: 15px; margin-bottom: 2px; margin-right: 10px">Voir la vidéo descriptive</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

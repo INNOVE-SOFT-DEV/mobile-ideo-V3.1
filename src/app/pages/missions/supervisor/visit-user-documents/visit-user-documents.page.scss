@@ -1,0 +1,106 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-details {
+  padding: 20px;
+  margin-top: 20px;
+}
+ion-card {
+  border-radius: 50px;
+  margin-top: 20px;
+}
+.card-success {
+  background-color: #cdffed;
+}
+.card-not-success {
+  background-color: #ffffff;
+}
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.align-center {
+  justify-content: flex-start;
+}
+
+.align-col {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.align-end {
+  justify-content: flex-end;
+}
+
+.cls-title {
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #233341;
+  margin-left: 5px;
+}
+
+.cls-title-icon {
+  width: 21px;
+  height: 21px;
+  color: #233341;
+}
+
+.show {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+}
+ion-checkbox {
+  --checkbox-background-checked: #cdffed !important;
+  --border-color-checked: rgba(0, 0, 0, 0.6) !important;
+  --checkmark-color: rgba(0, 0, 0, 0.6) !important;
+
+  height: 22px;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-col.checkbox-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 48px;
+  flex: 0 0 48px;
+  padding: 0 !important;
+}
+
+#btn_request {
+  margin-top: 20px;
+  border-radius: 25px;
+  border: 1px solid #4a80b2;
+  background-color: #4a80b2;
+  color: #fff;
+  padding: 10px;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.3px;
+}
+
+#share_txt {
+  color: #4a80b2;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.27px;
+  text-align: center;
+}

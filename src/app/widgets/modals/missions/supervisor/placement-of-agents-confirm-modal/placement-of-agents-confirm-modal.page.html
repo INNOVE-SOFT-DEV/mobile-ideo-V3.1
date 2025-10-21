@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">{{'Cancel' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="center-container">
+    <div class="title-confirmation">Confirmation de l’affectation de l’agent</div>
+  </div>
+
+  <ion-card class="card">
+    <ion-grid>
+      <ion-row class="ion-align-items-center ion-justify-content-between">
+        <ion-col size="2" class="avatar-col">
+          <img src="assets/img/avatar.png" alt="Avatar" class="avatar-img" />
+        </ion-col>
+        <ion-col size="10" class="info-col">
+          <ion-row class="name-row">{{ data.agent.user.first_name + ' ' + data.agent.user.last_name }}</ion-row>
+          <ion-row class="missions-row">{{ data.agent.planning_punctuals }} {{ data.agent.planning_punctuals == 1 ? 'mission' : 'missions'}}</ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card class="card pd-15">
+    <ion-card-header class="card-header">
+      <ion-card-title>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="9" push="3">
+              <p class="name-campany">{{ planning.intervention_name }}</p>
+            </ion-col>
+            <ion-col class="logo" size="3" pull="9">
+              <img class="logo" src="assets/img/logo_pitch 5.png" />
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-chip class="custom-chip">{{ planning.prestation }}</ion-chip>
+        <ion-row class="agent-row">
+          <ion-col size="6" class="img-text-col">
+            <div class="img-text-wrapper">
+              <img [src]="planning.logo?.url || 'assets/img/logo_pitch 5.png'" alt="Agent" class="agent-img" />
+              <span
+                [ngStyle]="{
+                  'color': planning.team.length > planning.agent_needed ? 'orange' :
+                           planning.team.length == planning.agent_needed ? 'green' : 'red'
+                }"
+                class="agents-text"
+              >
+                {{ planning.team.length }} / {{ planning.agent_needed }} agents
+              </span>
+            </div>
+          </ion-col>
+          <ion-col size="6" class="chip-col">
+            <div class="chip-custom">
+              <ion-icon name="navigate-outline"></ion-icon>
+              <span>{{calculateDistance(planning.lat , planning.long , data.agent?.user?.lat , data.agent?.user?.long ).toFixed(2 )}} km</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <div class="btn-container">
+    <ion-button class="custom-button-update-cancel" (click)="dismiss()">
+      <ion-icon name="close-outline"></ion-icon>
+      {{'Cancel' | translate}}
+    </ion-button>
+    <ion-button class="custom-button-update" (click)="confirmPlacement()">
+      <ion-icon name="checkmark-outline"></ion-icon>
+      {{'Confirm' | translate}}
+    </ion-button>
+  </div>
+</ion-content>

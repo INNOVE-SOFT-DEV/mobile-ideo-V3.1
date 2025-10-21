@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss('Close')">{{'Cancel' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="modal-content">
+  <div class="center-container" *ngIf="!isSliderOpen">
+    <div class="center-title">
+      <p class="cls-title">{{'Report a defect' | translate}}</p>
+    </div>
+    <p class="cls-label">{{'Description of the fault' | translate}}</p>
+    <textarea [(ngModel)]="note" class="styled-textarea" [placeholder]="'Add a note' | translate"></textarea>
+    <p class="cls-label-p">{{'Vehicle photos' | translate}}</p>
+
+    <div class="image-upload-wrapper">
+      <div class="center-icon-block" *ngFor="let image of images; let i = index" [ngStyle]="{ 'background-image': 'url(' + image.url + ')' }" (click)="openSlides(i)">
+        <ion-icon class="icon-delete" id="present-alert" name="trash" (click)="setTodelete(i , image)  ;$event.stopPropagation()"></ion-icon>
+      </div>
+
+      <div class="center-icon-block" (click)="triggerFileInput()">
+        <img src="assets/img/v-icon.png" alt="v-icon" class="main-icon" />
+        <img src="assets/img/plus.png" alt="plus-icon" class="plus-icon" />
+      </div>
+    </div>
+
+    <div class="button-container">
+      <ion-button class="custom-button-send" (click)="triggerFileInput()">
+        <ion-icon name="add-outline"></ion-icon>
+        <span>{{ 'Add more photos' | translate }}</span>
+      </ion-button>
+    </div>
+
+    <div id="waveform"></div>
+    <div *ngIf="isRecording || recording" class="cls-timer">{{ durationDisplay }}</div>
+    <div class="micro-container m-10">
+      <img *ngIf="!recording " src="assets/img/micro.png" alt="micro" class="micro-image" (click)="startRecording()" />
+      <ion-icon *ngIf="recording" name="stop-circle-outline" class="stop-icon red-icon cls-btn-stop" (click)="stopRecording()"></ion-icon>
+    </div>
+
+    <ion-button *ngIf="blobUrl " class="custom-button-update bg-record-lisen" (click)="playRecordingAgain()">
+      <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+      {{ 'Listen to the recording again' | translate }}
+    </ion-button>
+
+    <div class="btn-container">
+      <ion-button class="custom-button-update-cancel" (click)="dismiss('Close ')">
+        <ion-icon name="close-outline"></ion-icon>
+        {{'Cancel' | translate}}
+      </ion-button>
+      <ion-button class="custom-button-update bg-update" (click)="saveVoiceToApi()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        {{'To agree' | translate}}
+      </ion-button>
+    </div>
+  </div>
+  <ion-alert [isOpen]="isAlertOpen" trigger="present-alert" header="Alert!" [buttons]="alertButtons"></ion-alert>
+  <app-glide *ngIf="isSliderOpen" [images]="images" [index]="initialIndexPhoto"></app-glide>
+</ion-content>

@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <div class="search-container">
+      <ion-input placeholder="Rechercher..." class="search-input" #search_input [formControl]="searchControl"></ion-input>
+      <ion-icon name="search-outline" class="search-icon"></ion-icon>
+    </div>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" class="close-button">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <div class="center-container">
+    <div class="center-title">
+      <p class="cls-title">{{'Material request' | translate}}</p>
+    </div>
+    <div
+      [ngClass]="pickedMaterial.indexOf(material.id) != -1  ? 'custom-block-selected' : 'custom-block'"
+      *ngFor="let material of list_filtered_materials; let i = index"
+      (click)="PickMaterial(material.id)"
+    >
+      <ng-container>
+        <ion-icon name="hammer-outline" [ngClass]="pickedMaterial.indexOf(material.id) != -1  ? 'icon-left-selected' : 'icon-left'"></ion-icon>
+        <span class="block-text">{{material.name}}</span>
+        <ion-icon name="checkmark-circle-outline" [ngClass]="pickedMaterial.indexOf(material.id) != -1  ? 'icon-right-selected' : 'icon-right'"></ion-icon>
+      </ng-container>
+    </div>
+    <div class="cls-bloc-count">
+      <p class="cls-materials-count">{{'Selected material' | translate}} ({{pickedMaterial.length}})</p>
+      <div class="button-container" (click)="requireMaterial()">
+        <ion-button class="custom-button-send">
+          <ion-icon name="add-outline"></ion-icon>
+          <span>{{'To validate' | translate}}</span>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,41 @@
+<ion-content [fullscreen]="true">
+  <div class="login-container">
+    <img src="assets/img/logo.png" alt="Logo" class="logo-center" />
+
+    <h2 class="welcome-text">{{'Welcome' | translate}}</h2>
+    <p class="login-text">{{'Log in to your account' | translate}}</p>
+
+    <form (ngSubmit)="onSubmit()" class="form-container" #loginForm="ngForm">
+      <ion-list>
+        <ion-item>
+          <ion-input labelPlacement="floating" [(ngModel)]="email" name="email" type="email" required [pattern]="emailPattern" #emailCtrl="ngModel">
+            <div slot="label">
+              {{'Email' | translate}}
+              <ion-text color="danger" *ngIf="emailCtrl.invalid && emailCtrl.touched">{{'Requis' | translate}}</ion-text>
+              <ion-text color="danger" *ngIf="emailCtrl.hasError('pattern') && emailCtrl.touched">{{'Invalid email' | translate}}</ion-text>
+            </div>
+          </ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-list>
+        <ion-item>
+          <ion-input labelPlacement="floating" [(ngModel)]="password" name="password" type="password" required minlength="6" #passwordCtrl="ngModel">
+            <div slot="label">
+              {{'password' | translate}}
+              <ion-text color="danger" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">{{'Min 6 characters' | translate}}</ion-text>
+            </div>
+          </ion-input>
+        </ion-item>
+      </ion-list>
+
+      <div class="button-container">
+        <ion-button fill="solid" type="submit" [disabled]="loginForm.invalid" class="submit-button">
+          <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+
+          {{ 'login' | translate }}
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,133 @@
+.cls-supervisor {
+  padding: 20px;
+}
+
+.border-solid-2 {
+  width: 100%;
+  height: 2px;
+  background-color: #d9d9d9;
+}
+.cls-title {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+}
+.custom-card {
+  border-radius: 14px;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  background-color: white;
+  margin-top: 20px;
+}
+
+.centered-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: #233341;
+}
+
+ion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+ion-icon {
+  margin-right: 8px;
+  font-size: 20px;
+  color: #233341;
+}
+
+.text-label {
+  font-weight: 500;
+  font-size: 18px;
+  color: #233341;
+}
+
+.chip-right {
+  background: #cdffed;
+  color: #233341;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.date-text {
+  font-weight: 500;
+  font-size: 12px;
+  color: #233341;
+  margin-left: auto;
+}
+.custom-box {
+  background: #eefbff;
+  border: 1px dashed #4a80b2;
+  border-radius: 20px;
+  padding: 10px;
+  width: 85%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  margin: 0 auto;
+}
+
+.centered-icon {
+  font-size: 24px;
+  color: #4a80b2;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.custom-button-update {
+  --border-radius: 50px;
+  --background: #cdffed;
+  --background-hover: #cdffed;
+  --background-activated: #cdffed;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #233341;
+}
+.custom-button-update-cancel {
+  --border-radius: 50px;
+  --background: #ffcdcd;
+  --background-hover: #ffcdcd;
+  --background-activated: #ffcdcd;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #233341;
+}
+
+.repos {
+  background: #cdffed;
+}
+.rp {
+  background: #cdf3ff;
+}
+.sick {
+  background: #ffcdcd;
+}
+.leave {
+  background: #ffe5cd;
+}
+
+.cls-download-icon {
+  text-align: center;
+  margin: 10px;
+}
+
+.download-icon {
+  font-size: 24px;
+}
+
+ion-spinner {
+  color: black;
+}

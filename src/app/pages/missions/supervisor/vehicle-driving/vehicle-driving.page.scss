@@ -1,0 +1,187 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-details {
+  padding: 20px;
+  margin-top: 20px;
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+.month-block {
+  height: 45px;
+  width: 80%;
+  border-radius: 14px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  cursor: pointer;
+  width: 100%;
+}
+.month-text {
+  color: #707070;
+  font-size: 14px;
+  font-weight: bold;
+}
+.icon-calendar {
+  font-size: 20px;
+  color: #4a80b2;
+}
+.document-block {
+  height: 45px;
+  width: 20%;
+  border-radius: 14px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+.icon-document {
+  font-size: 20px;
+  color: #00a2e1;
+}
+.icon-document-active {
+  font-size: 20px;
+  color: white;
+}
+.document-block-active {
+  height: 45px;
+  width: 20%;
+  border-radius: 14px;
+  background: #4a80b2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  color: white;
+}
+.custom-card {
+  border-radius: 14px;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  padding: 10px;
+  margin-top: 20px;
+}
+.bg-c-b {
+  background-color: #cdf3ff;
+}
+.bg-c-w {
+  background-color: #fff;
+}
+.bg-c-r {
+  background-color: #ffdcdc;
+}
+.cls-by {
+  font-weight: 600;
+  font-size: 12px;
+  color: #233341;
+}
+.input-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid #bfbfbf;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 15px;
+}
+.custom-input {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  color: #707070;
+}
+.input-icon {
+  color: #707070;
+  font-size: 22px;
+}
+.custom-button {
+  --border-radius: 50px;
+  --background: #00a2e1;
+  --background-hover: #00a2e1;
+  --background-activated: #00a2e1;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #fff;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.vehicle-image {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.car-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.car-name {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #233341;
+  margin: 0;
+}
+.status-badge {
+  font-weight: 500;
+  font-size: 14px;
+  color: #233341;
+}
+.mt-40 {
+  margin-top: 40px;
+}
+.arrow-icon {
+  font-size: 20px;
+  color: #233341;
+}
+.empty-container {
+  text-align: center;
+  margin-top: 50px;
+  padding: 50px;
+}
+.cls-empty-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #233341;
+}
+.cls-empty-d {
+  font-weight: 500;
+  font-size: 14px;
+  color: #233341;
+}
+.custom-datetime-popover {
+  --width: 350px !important; 
+  --min-width: 350px !important;
+  --height: 400px !important;
+  --max-height: 400px !important;
+  .popover-content {
+    width: 350px !important;
+    height: 400px !important;
+  }
+}

@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Requests processed' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-supervisor">
+    <p class="cls-title">{{'Requests processed' | translate}}</p>
+    <div class="border-solid-2"></div>
+    <ion-card class="custom-card" *ngFor="let absence of absences; let i = index" (click)="openModal(absence)">
+      <ion-card-content>
+        <h2 class="title">{{absence?.user?.first_name}} {{absence?.user?.last_name}}</h2>
+        <div class="card-info">
+          <div class="info-left">
+            <ion-icon name="calendar-outline" class="icon"></ion-icon>
+            <p class="date">{{ absence.date_start | date:'dd MMM' | uppercase }} - {{ absence.date_end | date:'dd MMM' | uppercase }}</p>
+          </div>
+          <div>
+            <ion-chip *ngIf="absence.type_absence == 'personal_reason'" class="chip rp">
+              <p class="chip-text">{{'RP' | translate}}</p>
+            </ion-chip>
+            <ion-chip *ngIf="absence.type_absence == 'rest'" class="chip repos">
+              <p class="chip-text">{{'Rest' | translate}}</p>
+            </ion-chip>
+            <ion-chip *ngIf="absence.type_absence == 'sick_day'" class="chip sick">
+              <p class="chip-text">{{'Sick day' | translate}}</p>
+            </ion-chip>
+            <ion-chip *ngIf="absence.type_absence == 'vacation'" class="chip leave">
+              <p class="chip-text">{{'vacation' | translate}}</p>
+            </ion-chip>
+            <ion-chip *ngIf="absence.state == 'allowed'" class="chip repos">
+              <p class="chip-text">{{'allowed' | translate}}</p>
+            </ion-chip>
+            <ion-chip *ngIf="absence.state == 'refused'" class="chip sick">
+              <p class="chip-text">{{'refused' | translate}}</p>
+            </ion-chip>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ng-container *ngIf="absences?.length == 0 ">
+      <div class="empty-container">
+        <img src="assets/img/emty-icon.png" />
+        <p class="cls-empty-title">{{'No data found' | translate}}</p>
+        <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

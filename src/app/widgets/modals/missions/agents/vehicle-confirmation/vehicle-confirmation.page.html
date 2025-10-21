@@ -1,0 +1,44 @@
+<div class="modal-wrapper">
+  <div class="modal-background-grid"></div>
+
+  <div class="modal-content" *ngIf="success=='400'">
+    <div class="center-container">
+      <div class="center-title">
+        <p class="cls-title">{{'Confirmation of the mission vehicle' | translate}}</p>
+      </div>
+      <div class="plate-wrapper">
+        <div class="plate-overlay">
+          <span class="plate-number">{{data.teamMember.vehicule.name}}</span>
+        </div>
+      </div>
+      <p class="cls-label-p">{{'I confirm that I took this vehicle' | translate}}</p>
+    </div>
+
+    <div class="btn-container">
+      <ion-button class="custom-button" (click)="dismiss('Yes')">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        {{'Yes' | translate}}
+      </ion-button>
+      <ion-button class="custom-button" (click)="dismiss('No')">
+        <ion-icon name="close-outline"></ion-icon>
+        {{'No, I took another one' | translate}}
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="modal-content" *ngIf="success=='503'" (click)="dismiss('None')">
+    <div class="center-container-503">
+      <img src="assets/img/503.png" alt="v-icon" class="main-icon" />
+
+      <p class="cls-label-p">{{'Change possible only within a 1km radius of the premises' | translate}}</p>
+      <span class="cls-label-p-2">(8 rue David 93300 Aubervilliers)</span>
+    </div>
+  </div>
+
+  <div class="modal-content" *ngIf="success=='200'" (click)="dismiss('None')">
+    <div class="center-container-503">
+      <img src="assets/img/200.png" alt="v-icon" class="main-icon" />
+      <p class="cls-label-p">{{'Your confirmation has been taken into account' | translate}}</p>
+    </div>
+  </div>
+</div>

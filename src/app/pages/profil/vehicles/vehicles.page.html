@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Vehicle history' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-vehicles">
+    <div class="header-container">
+      <div class="month-block" (click)="openPopover($event)">
+        <span class="month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
+        <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+      </div>
+      <div class="document-block" [ngClass]="{'document-block-active': isDocumentBlockActive, 'document-block': !isDocumentBlockActive}" (click)="toggleDocumentBlock()">
+        <ion-icon name="document-text-outline" [ngClass]="{'icon-document-active': isDocumentBlockActive, 'icon-document': !isDocumentBlockActive}"></ion-icon>
+      </div>
+    </div>
+    <ng-container *ngIf="vehiclesReturns.length == 0">
+      <div class="empty-container">
+        <img src="assets/img/emty-icon.png" />
+        <p class="cls-empty-title">{{'No data found' | translate}}</p>
+        <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let vehicleReturn of vehiclesReturns">
+      <ion-card
+        [ngClass]="{'custom-card bg-c-b' : vehicleReturn.contravention && vehicleReturn.contravention.is_paid_by_ideo, 'custom-card bg-c-w' : !vehicleReturn.contravention ,  'custom-card bg-c-r' :  vehicleReturn.contravention && !vehicleReturn.contravention.is_paid_by_ideo}"
+      >
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="10" class="d-flex align-start">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="12" class="d-flex align-end">
+                      <span class="cls-title">{{vehicleReturn.initial_material.name}}</span>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="4" class="d-flex align-end">
+                      <span class="cls-date">{{vehicleReturn.date}}</span>
+                    </ion-col>
+                    <ion-col *ngIf="vehicleReturn?.contravention" size="8" class="d-flex align-end">
+                      <span class="cls-by">{{ vehicleReturn.contravention && vehicleReturn.contravention.is_paid_by_ideo ? 'Payer par IDEO' : 'Attribué par IDEO'}}</span>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+              <ion-col (click)="openDocument(vehicleReturn.contravention.file.url)" size="2" class="d-flex align-center" *ngIf="vehicleReturn.contravention">
+                <ion-icon name="document-text-outline" class="cls-icon"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </div>
+</ion-content>

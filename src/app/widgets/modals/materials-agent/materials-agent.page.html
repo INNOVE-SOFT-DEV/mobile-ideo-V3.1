@@ -1,0 +1,173 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">{{'Cancel' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="modal-content">
+  <div class="center-container" *ngIf="!isSliderOpen">
+    <div class="center-title">
+      <p class="cls-title">{{'My equipment' | translate}}</p>
+    </div>
+    <ion-row class="cards-container">
+      <ion-col size="6">
+        <div class="custom-card">
+          <img src="{{material?.material?.photo?.url}}" alt="Déshumidificateur" class="card-image" />
+          <p class="card-title">{{material.name}}</p>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="material.material?.address_recup != null">
+        <ion-col size="6" (click)="direction()">
+          <div class="custom-card">
+            <p class="card-title">{{'Pick-up location' | translate}}</p>
+            <div class="location">
+              <ion-icon name="home-outline"></ion-icon>
+              <span>{{material.material.address_recup}}</span>
+            </div>
+            <div class="card-footer">
+              <ion-icon name="navigate-outline"></ion-icon>
+              <span>{{'Navigate to' | translate}}</span>
+            </div>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+    <ng-container *ngIf="material.state == 'in_progress' && !isPhotoMaterialsEmpty ">
+      <ion-card class="photo-card">
+        <p class="photo-title">{{'Supported photos' | translate}}</p>
+        <ion-card-content>
+          <div *ngFor="let group_photos of grouped_photos_materials; let i = index" class="photo-container">
+            <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != ''">
+              <img src="{{group_photos[0]?.photo?.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('photo',i)" />
+            </div>
+            <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''">
+              <img src="{{group_photos[1]?.photo?.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('photo',i)" />
+            </div>
+            <div class="photo-block" *ngIf="group_photos[2]?.photo?.url != ''">
+              <img src="{{group_photos[2]?.photo?.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('photo',i)" />
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-container *ngIf="material.state == 'to_collect'">
+      <ion-card class="photo-card">
+        <p class="photo-title">{{'Supported photos' | translate}}</p>
+        <ion-card-content>
+          <div *ngFor="let group_photos of grouped_photos_materials; let i = index" class="photo-container">
+            <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != ''">
+              <img src="{{group_photos[0]?.photo?.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('photo',i)" />
+              <ion-icon class="icon-delete" name="trash" (click)="setOpen($event,'photo', group_photos[0].id,group_photos[0] , i , 0)"></ion-icon>
+            </div>
+            <div *ngIf="(group_photos[0]?.photo?.url == '' || group_photos[0]?.photo?.url == undefined)" (click)="takePicture('photo' ,i , 0)" class="photo-block add-photo">
+              <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+              <span class="photo-number">{{(3*i)+1}}</span>
+            </div>
+            <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''">
+              <img src="{{group_photos[1]?.photo?.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('photo',i)" />
+              <ion-icon class="icon-delete" name="trash" (click)="setOpen($event,'photo', group_photos[1].id,group_photos[1],i ,1)"></ion-icon>
+            </div>
+            <div *ngIf="group_photos[1]?.photo?.url == '' || group_photos[1]?.photo?.url == undefined" (click)="takePicture('photo' ,i ,1)" class="photo-block add-photo">
+              <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+              <span class="photo-number">{{(3*i)+2}}</span>
+            </div>
+            <div class="photo-block" *ngIf="group_photos[2]?.photo?.url != ''">
+              <img src="{{group_photos[2]?.photo?.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('photo',i)" />
+              <ion-icon class="icon-delete" name="trash" (click)="setOpen($event,'photo', group_photos[2].id,group_photos[2],i,2)"></ion-icon>
+            </div>
+            <div *ngIf="group_photos[2]?.photo?.url == '' || group_photos[2]?.photo?.url == undefined" (click)="takePicture('photo' ,i ,2)" class="photo-block add-photo">
+              <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+              <span class="photo-number">{{(3*i)+3}}</span>
+            </div>
+          </div>
+
+          <div class="button-container" *ngIf="material.state == 'to_collect'">
+            <ion-button class="custom-button-send" (click)="addPhotoMaterial()">
+              <ion-icon name="add-outline"></ion-icon>
+              <span>{{'Add more photos' | translate}}</span>
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+    <ion-card class="photo-card" *ngIf="material.state == 'in_progress'">
+      <ion-card-content>
+        <p class="photo-title">
+          {{'Restitution photos' | translate}}
+          <span class="cls-required">{{'(required)' | translate}}</span>
+        </p>
+        <div *ngFor="let group_photos of grouped_restitution_photos; let i = index" class="photo-container">
+          <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != ''">
+            <img src="{{group_photos[0].photo.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('return',i)" />
+            <ion-icon
+              style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
+              name="trash"
+              (click)="setOpen($event,'return', group_photos[0].id,group_photos[0],i,0)"
+            ></ion-icon>
+          </div>
+          <div *ngIf="group_photos[0]?.photo?.url == '' || group_photos[0]?.photo?.url == undefined" (click)="takePicture('return',i ,0)" class="photo-block add-photo">
+            <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+            <span class="photo-number">{{(3*i)+1}}</span>
+          </div>
+          <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''">
+            <img src="{{group_photos[1].photo.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('return',i)" />
+            <ion-icon
+              style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
+              name="trash"
+              (click)="setOpen($event,'return', group_photos[1].id,group_photos[1],i,1)"
+            ></ion-icon>
+          </div>
+          <div *ngIf="group_photos[1]?.photo?.url == '' || group_photos[1]?.photo?.url == undefined" (click)="takePicture('return',i,1)" class="photo-block add-photo">
+            <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+            <span class="photo-number">{{(3*i)+2}}</span>
+          </div>
+          <div class="photo-block" *ngIf="group_photos[2]?.photo?.url != ''">
+            <img src="{{group_photos[2].photo.url}}" alt="Photo 1" class="photo-img" (click)="openSlides('return',i)" />
+            <ion-icon
+              style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
+              name="trash"
+              (click)="setOpen($event,'return', group_photos[2].id,group_photos[2] ,i,2)"
+            ></ion-icon>
+          </div>
+          <div *ngIf="group_photos[2]?.photo?.url == '' || group_photos[2]?.photo?.url == undefined" (click)="takePicture('return',i,2)" class="photo-block add-photo">
+            <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+            <span class="photo-number">{{(3*i)+3}}</span>
+          </div>
+        </div>
+        <div class="button-container">
+          <ion-button (click)="addPhotoRestitutionMaterial()" class="custom-button-send">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>{{'Add more photos' | translate}}</span>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="note-card">
+      <ion-card-content>
+        <h3 class="note-title">{{'Note (remark)' | translate}}</h3>
+        <div class="note-container">
+          <textarea placeholder="Rien à signaler .." class="note-textarea" [(ngModel)]="note"></textarea>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <div class="button-container">
+      <ion-button class="custom-button-send" (click)="takeMaterial()">
+        <span>{{'To validate' | translate}}</span>
+      </ion-button>
+    </div>
+    <ion-alert
+      [isOpen]="isAlertOpen"
+      (didDismiss)="destroyIfConfirmed($event)"
+      header=""
+      subHeader=""
+      message="Êtes-vous sûr de bien vouloir le supprimer?"
+      [buttons]="alertButtons"
+    ></ion-alert>
+  </div>
+  <div *ngIf="isSliderOpen">
+    <app-glide [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
+  </div>
+</ion-content>

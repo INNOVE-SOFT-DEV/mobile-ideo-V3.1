@@ -1,0 +1,98 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-supervisor {
+  padding: 20px;
+}
+.border-solid-2 {
+  width: 100%;
+  height: 2px;
+  background-color: #d9d9d9;
+}
+.cls-title {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+}
+.custom-card {
+  border-radius: 14px;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  background-color: white;
+  padding: 10px;
+  margin-top: 20px;
+}
+.title {
+  color: #233341;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.card-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.info-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  font-size: 16px;
+  color: #233341;
+}
+
+.date {
+  color: #233341;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.chip {
+  border-radius: 10px;
+  padding: 10px;
+  height: auto;
+}
+.repos {
+  background: #cdffed;
+}
+.rp {
+  background: #cdf3ff;
+}
+.sick {
+  background: #ffcdcd;
+}
+.leave {
+  background: #ffe5cd;
+}
+.chip-text {
+  color: #233341;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.empty-container {
+  text-align: center;
+  margin-top: 50px;
+  padding: 50px;
+}
+.cls-empty-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #233341;
+}
+.cls-empty-d {
+  font-weight: 500;
+  font-size: 14px;
+  color: #233341;
+}

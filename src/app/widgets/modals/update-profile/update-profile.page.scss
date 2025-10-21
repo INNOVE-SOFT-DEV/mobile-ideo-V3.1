@@ -1,0 +1,212 @@
+.modal-content {
+  padding: 20px;
+  animation: modal-slide-up 0.3s ease-in-out;
+}
+@keyframes modal-slide-up {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+ion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+}
+.custom-button {
+  --border-radius: 50px;
+  --background: #ff6666;
+  --background-hover: #ff4d4d;
+  --background-activated: #ff3333;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+}
+.custom-button-update {
+  --border-radius: 50px;
+  --background: #cdffed;
+  --background-hover: #cdffed;
+  --background-activated: #cdffed;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #233341;
+}
+.custom-button-update-cancel {
+  --border-radius: 50px;
+  --background: #ffcdcd;
+  --background-hover: #ffcdcd;
+  --background-activated: #ffcdcd;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #233341;
+}
+.disabled-input {
+  opacity: 1;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #ff6666;
+}
+.cls-supervisor {
+  padding: 20px;
+}
+ion-card {
+  background-color: #ffffff;
+  border-radius: 18px;
+}
+p {
+  font-family: Montserrat, sans-serif;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+.cls-b {
+  font-weight: 700;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  display: inline;
+}
+.cls-b-a {
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  display: inline;
+}
+.cls-mession {
+  padding: 20px;
+  border-radius: 50px;
+  text-align: center;
+}
+.cls-card-title {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-card-title-link {
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #233341;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.cls-booth {
+  height: 2px;
+  background-color: #d9d9d9;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.cls-calendar {
+  width: 25px;
+  height: 25px;
+  color: #ffffff;
+}
+.cls-flex {
+  flex: 0.7 !important;
+  max-width: 30px !important;
+}
+.cls-chip-notif {
+  background-color: #ff2323;
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.cls-m {
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  display: block;
+}
+.cls-show-m {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+  text-align: left;
+}
+.top-section {
+  background-color: #3aa8d5;
+  color: white;
+  border-top-left-radius: 8px;
+  padding-left: 10px;
+  border-top-right-radius: 8px;
+}
+.input-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+}
+.cls-avatar-wrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cls-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.edit-icon {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: white;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 16px;
+  color: #3880ff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}

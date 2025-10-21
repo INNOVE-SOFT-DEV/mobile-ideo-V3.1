@@ -1,0 +1,8 @@
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="!isSuperVisor">
+    <app-materials-agent></app-materials-agent>
+  </ng-container>
+  <ng-container *ngIf="isSuperVisor">
+    <app-materials-requests-supervisor></app-materials-requests-supervisor>
+  </ng-container>
+</ion-content>

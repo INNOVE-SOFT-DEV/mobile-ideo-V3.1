@@ -1,0 +1,71 @@
+.center-container {
+  padding: 20px;
+}
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.cls-title {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: Montserrat;
+}
+.cls-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+  text-align: left;
+}
+.title_text_card {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 10px 0;
+}
+ion-card {
+  border-radius: 14px;
+  border: 0.4px solid rgba(0, 0, 0, 0.05);
+  background: #f8fdff;
+ion-card-content {
+    padding: 0px;
+  }
+}
+.card_title {
+  color: #233341;
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.36px;
+  padding-bottom: 10px;
+}
+.card_text {
+  color: #233341;
+  font-family: Montserrat, sans-serif;
+  text-align: left;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 26px; 
+  letter-spacing: -0.24px;
+  padding-bottom: 15px;
+}
+#btn_request {
+  height: 40px;
+  border-radius: 25px;
+  border: 0px;
+  background-color: #cdf3ff;
+  color: #fff;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.3px;
+  padding-top: 5px;
+  color: black;
+}

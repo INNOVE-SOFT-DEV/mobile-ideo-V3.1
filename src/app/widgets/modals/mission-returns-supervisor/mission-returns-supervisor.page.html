@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">{{ 'Cancel' | translate }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <div class="center-container">
+    <div class="center-title">
+      <p class="cls-title">{{ 'Return mission' | translate }}</p>
+    </div>
+    <p class="cls-label">{{ returnTime =='' ?('What type of feedback would you like to provide?' | translate ) : returnTime }}</p>
+    <div class="replanification-block m-50" [ngClass]="returnType.indexOf('rescheduling') != -1  ? 'bg-FEFD99' : 'bg-FFFFFF'">
+      <ion-icon name="calendar-clear-outline" class="agenda-icon"></ion-icon>
+      <span class="replanification-text">{{ 'Replanification' | translate }}</span>
+    </div>
+
+    <div class="replanification-block m-10" [ngClass]="returnType.indexOf('empty_truck') != -1 ? 'bg-CDF3FF' : 'bg-FFFFFF'">
+      <ion-icon name="car-outline" class="agenda-icon"></ion-icon>
+      <span class="replanification-text">{{ 'Truck to empty' | translate }}</span>
+    </div>
+
+    <div class="replanification-block m-10" [ngClass]="returnType.indexOf('agent_absence') != -1 ? 'bg-D6BDFF' : 'bg-FFFFFF'">
+      <ion-icon name="person-remove-outline" class="agenda-icon"></ion-icon>
+      <span class="replanification-text">{{ 'Agent absence' | translate }}</span>
+    </div>
+
+    <div class="replanification-block m-10" [ngClass]="returnType.indexOf('accident') != -1 ? 'bg-F4C5BA' : 'bg-FFFFFF'">
+      <ion-icon name="medkit-outline" class="agenda-icon"></ion-icon>
+      <span class="replanification-text">{{ 'Accident' | translate }}</span>
+    </div>
+
+    <div class="vocal-card">
+      <p class="vocal-card-title">{{ 'Record a voice' | translate }}</p>
+
+      <div class="vocal-card-grid">
+        <div class="vocal-badge" [ngClass]="important ? 'important' : 'not-important'">
+          <ion-icon name="alert-circle-outline" class="badge-icon"></ion-icon>
+          <span class="badge-text important-text">{{ 'Important' | translate }}</span>
+        </div>
+        <div class="vocal-badge" [ngClass]="!important ? 'important' : 'not-important'">
+          <ion-icon name="information-circle-outline" class="badge-icon"></ion-icon>
+          <span class="badge-text not-important-text">{{ 'Not Important' | translate }}</span>
+        </div>
+      </div>
+
+      <div id="waveform"></div>
+      <div *ngIf="audioUrl?.includes('http')" class="cls-timer">{{ durationDisplay }}</div>
+
+      <ion-button *ngIf="audioUrl" class="custom-button-update bg-record-lisen" (click)="playRecordingAgain()">
+        <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+        {{ 'Listen to the recording again' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

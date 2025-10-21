@@ -1,0 +1,9 @@
+<div class="glide" style="width: 100%; max-height: 400px">
+  <div class="glide__track" data-glide-el="track">
+    <ul class="glide__slides">
+      <li class="glide__slide" *ngFor="let image of images; let i = index">
+        <img *ngIf="image?.photo?.url != '' || image?.photo?.url != undefined" [src]="image?.photo?.url || image?.url" />
+      </li>
+    </ul>
+  </div>
+</div>

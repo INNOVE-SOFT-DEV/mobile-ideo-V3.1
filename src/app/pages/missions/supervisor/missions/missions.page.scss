@@ -1,0 +1,47 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.custom-card {
+  border-radius: 14px;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mt-40 {
+  margin-top: 40px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+  text-align: left;
+}
+.subtitle {
+  color: #233341;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0;
+}
+.icon {
+  font-size: 14px;
+  color: black;
+}
+.title {
+  font-weight: 500;
+  font-size: 14px;
+  color: black;
+}

@@ -1,0 +1,28 @@
+<div class="center-container">
+  <p class="cls-title">{{ "Material" | translate }}</p>
+  <div class="border-solid-2"></div>
+  <ion-card class="custom-card" (click)="goToMaterialRequest()" *ngIf="pendingCount > 0">
+    <ion-card-content>
+      <div class="card-header">
+        <ion-icon name="time-outline" class="icon"></ion-icon>
+        <h2 class="title">{{ "Current requests" | translate }}</h2>
+      </div>
+      <div class="card-footer">
+        <p class="subtitle">{{ pendingCount }} {{ "pending requests" | translate }}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="custom-card" (click)="goToMaterialRequestProcessed()">
+    <ion-card-content>
+      <div class="card-header">
+        <ion-icon name="checkmark-outline" class="icon"></ion-icon>
+        <h2 class="title">{{ "Requests processed" | translate }}</h2>
+      </div>
+      <div class="card-footer">
+        <p class="subtitle">{{ "See the list" | translate }}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</div>

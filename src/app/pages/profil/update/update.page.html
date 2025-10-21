@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'My account' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-supervisor">
+    <div class="cls-avatar">
+      <ion-img [src]="user?.photo?.url ? user?.photo?.url : 'assets/img/icone-pdf.png' " class="img-avatar"></ion-img>
+    </div>
+    <p>
+      <span class="cls-b">{{'Hello' | translate}}</span>
+      {{user?.first_name}} {{user?.last_name}}
+    </p>
+    <div class="btn-container">
+      <ion-button class="custom-button" (click)="logout()">{{'logout' | translate}}</ion-button>
+    </div>
+    <div class="cls-booth"></div>
+    <ion-card (click)="goDocuments()" class="cls-card">
+      <div class="top-section">
+        <ion-grid class="custom-grid">
+          <ion-row>
+            <ion-col size="2" class="cls-flex">
+              <ion-icon name="document-text-outline" class="cls-calendar"></ion-icon>
+            </ion-col>
+            <ion-col size="8">
+              <span class="cls-m">{{'Documents' | translate}}</span>
+            </ion-col>
+            <ion-col size="2">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <p class="cls-show-m">{{'View agent documents from the field' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="user?.role != 'supervisor'" (click)="goVehicles()" class="cls-card">
+      <div class="top-section">
+        <ion-grid class="custom-grid">
+          <ion-row>
+            <ion-col size="2" class="cls-flex">
+              <ion-icon name="car-outline" class="cls-calendar"></ion-icon>
+            </ion-col>
+            <ion-col size="8">
+              <span class="cls-m">{{'Vehicle' | translate}}</span>
+            </ion-col>
+            <ion-col size="2">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <p class="cls-show-m">{{'Visualize vehicle uses' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <div class="cls-booth"></div>
+    <p><span class="cls-b">{{'My profile' | translate}}</span></p>
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.first_name" disabled class="disabled-input"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.last_name" disabled class="disabled-input"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.phone" disabled class="disabled-input"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input labelPlacement="floating" [value]="user?.address" disabled class="disabled-input"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <div class="cls-booth"></div>
+    <div class="btn-container">
+      <ion-button class="custom-button-update" (click)="openModal()">{{'Update my profile' | translate}}</ion-button>
+    </div>
+  </div>
+</ion-content>

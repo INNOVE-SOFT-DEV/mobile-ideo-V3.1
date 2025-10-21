@@ -1,0 +1,48 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+.welcome-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.login-text {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.form-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+ion-input {
+  margin-bottom: 20px;
+}
+
+.logo-center {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+.submit-button {
+  width: 80%;
+  border-radius: 25px;
+  --border-radius: 25px;
+  --background: var(--ion-color-blue-ideo);
+}

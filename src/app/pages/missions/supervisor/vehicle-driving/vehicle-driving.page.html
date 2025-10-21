@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <div class="header-container">
+      <div class="month-block" (click)="openPopover($event)">
+        <span class="month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
+        <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+      </div>
+      <div [ngClass]="{'document-block-active': isDocumentBlockActive, 'document-block': !isDocumentBlockActive}" (click)="toggleDocumentBlock()">
+        <ion-icon name="list-outline" class="icon-document"></ion-icon>
+      </div>
+    </div>
+    <ng-container *ngIf="returnsUser.length === 0">
+      <div class="empty-container">
+        <img src="assets/img/emty-icon.png" />
+        <p class="cls-empty-title">{{ 'No data found' | translate }}</p>
+        <p class="cls-empty-d">{{ 'It appears that this list is currently empty' | translate }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="returnsUser.length > 0">
+      <ion-card
+        class="custom-card"
+        *ngFor="let item of returnsUser"
+        [ngClass]="{'bg-c-b' : item.contravention && item.contravention.is_paid_by_ideo, 'bg-c-w' : !item.contravention ,  'bg-c-r' :  item.contravention && !item.contravention.is_paid_by_ideo}"
+      >
+        <div class="card-header">
+          <img
+            [src]="item?.user?.photo?.url || ('https://ui-avatars.com/api/?name=' + item?.user?.first_name + '+' + item?.user?.last_name + '&background=233341&color=ffffff&size=64')"
+            alt="Vehicle photo"
+            class="vehicle-image"
+          />
+          <div class="car-info">
+            <h2 class="car-name">{{ item?.user?.first_name }} {{ item?.user?.last_name }}</h2>
+            <span class="status-badge">{{ item?.date }}</span>
+          </div>
+          <ng-container *ngIf="item.contravention">
+            <span class="cls-by">{{item.contravention.is_paid_by_ideo ? 'Payer par IDEO' : 'Attribué par IDEO'}}</span>
+          </ng-container>
+          <ion-icon name="document-text-outline" class="arrow-icon" *ngIf="item.contravention" (click)="openDocument(item.contravention.file.url)"></ion-icon>
+          <ion-icon name="chevron-forward-outline" class="arrow-icon" (click)="vehicleDrivingDetails(item)"></ion-icon>
+        </div>
+      </ion-card>
+    </ng-container>
+  </div>
+</ion-content>

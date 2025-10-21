@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">{{ 'Missions' | translate }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card class="custom-card mt-40">
+    <ion-card-content>
+      <div class="card-header">
+        <img src="assets/img/c-d.png" />
+        <h2 class="subtitle">{{ 'Recurring Missions' | translate }}</h2>
+      </div>
+      <div class="card-footer" (click)="goSuperVisorMissionDetails('regular')">
+        <p class="title">({{counts?.regulars_count}}) {{ 'See the missions' | translate }}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="custom-card mt-20">
+    <ion-card-content>
+      <div class="card-header">
+        <img src="assets/img/clock.png" />
+        <h2 class="subtitle">{{'One-off Missions' | translate}}</h2>
+      </div>
+      <div class="card-footer" (click)="goSuperVisorMissionDetails('punctual')">
+        <p class="title">({{counts?.punctuals_count}}){{ 'See the missions' | translate }}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="custom-card mt-20">
+    <ion-card-content>
+      <div class="card-header">
+        <img src="assets/img/tag.png" />
+        <h2 class="subtitle">{{'Fixed-price mission' | translate}}</h2>
+      </div>
+      <div class="card-footer" (click)="goSuperVisorMissionDetails('forfaitaire')">
+        <p class="title">({{counts?.forfaitaires_count}}){{ 'See the missions' | translate }}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="custom-card mt-20">
+    <ion-card-content>
+      <div class="card-header">
+        <img src="assets/img/reload.png" />
+        <h2 class="subtitle">{{'Location' | translate}}</h2>
+      </div>
+      <div class="card-footer">
+        <p class="title">{{ 'See the missions' | translate }}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="custom-card mt-20">
+    <ion-card-content>
+      <div class="card-header">
+        <img src="assets/img/location_on.png" />
+        <h2 class="subtitle">{{'Agent tracking' | translate}}</h2>
+      </div>
+      <div class="card-footer" (click)="agentTracking()">
+        <p class="title">{{'View the positions of agents and vehicles' | translate}}</p>
+        <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

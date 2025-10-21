@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Pointage</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <div class="custom-block" #map id="map"></div>
+
+    <div class="custom-card">
+      <div class="card-row">
+        <ion-icon name="business-outline"></ion-icon>
+        <span class="card-address">{{planning?.address}}</span>
+      </div>
+      <div class="card-title">{{ getFirstThreeWords(planning?.intervention_name) }}</div>
+    </div>
+    <div class="time-display">{{ currentTime }}</div>
+    <div
+      class="slide-confirm-container"
+      *ngIf="planning?.first_pointing_internal?.length == 1 || planning?.second_pointing_internal?.length == 1"
+      (touchstart)="onTouchStart($event)"
+      (touchmove)="onTouchMove($event)"
+      (touchend)="onTouchEnd()"
+    >
+      <ion-grid
+        class="slide-track"
+        [ngClass]="{'slide-track-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1  }"
+        *ngIf="shouldShowSlider()"
+      >
+        <ion-row class="ion-align-items-center" style="height: 48px">
+          <ion-col size="2" class="icon-col">
+            <ion-fab-button
+              class="slider-button"
+              [ngClass]="{'slider-button-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1 }"
+              [ngStyle]="{ transform: 'translateX(' + sliderX + 'px)' }"
+              (touchstart)="onTouchStart($event)"
+              (touchmove)="onTouchMove($event)"
+              (touchend)="onTouchEnd()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                class="slider-icon"
+                [ngClass]="{'slider-icon-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1 }"
+              >
+                <path d="M13.5 8L17.5 12L13.5 16M7.5 8L11.5 12L7.5 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </ion-fab-button>
+          </ion-col>
+          <ion-col size="10" class="slide-text-col">
+            <div class="slide-text" [ngClass]="{'slide-text-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1 }">
+              {{ getConfirmationText() }}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <ion-grid class="grid" *ngIf="planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 0">
+      <ion-row class="row">
+        <ion-col>Pointage réalisé avec succès</ion-col>
+      </ion-row>
+      <br />
+    </ion-grid>
+  </div>
+</ion-content>

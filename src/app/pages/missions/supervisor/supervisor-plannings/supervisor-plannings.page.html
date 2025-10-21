@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{ 'My missions' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="header-container-agent">
+    <div class="month-block" (click)="openPopover($event)">
+      <span class="month-text">{{ currentDate | capitalizeFirstLetter }}</span>
+      <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+    </div>
+    <ion-button expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button>
+  </div>
+  <ng-container *ngIf="punctuals?.length == 0">
+    <div class="empty-container">
+      <img src="assets/img/emty-icon.png" />
+      <p class="cls-empty-title">{{'No data found' | translate}}</p>
+      <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+    </div>
+  </ng-container>
+
+  <app-punctual *ngIf="punctuals.length > 0" [data]="punctuals" [isToDayPlannings]="isTodayPlannings" [supervisors]="superVisors"></app-punctual>
+</ion-content>

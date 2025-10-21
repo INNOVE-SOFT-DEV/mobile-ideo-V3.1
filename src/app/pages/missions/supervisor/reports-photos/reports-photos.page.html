@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Rapport photos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details" *ngIf="!isSliderOpen">
+    <div class="custom-select-container">
+      <div class="left">
+        <span class="selected-text">{{ selectedOption }}</span>
+      </div>
+      <div class="right">
+        <span class="select-label">Select</span>
+        <ion-icon name="chevron-down-outline" class="select-icon"></ion-icon>
+      </div>
+      <select [(ngModel)]="selectedOption" (change)="onChange($event)" class="select-native" name="select">
+        <option value="Tous les agents">Tous les agents</option>
+        <option *ngFor="let agent of team" value="{{`${agent?.first_name} ${agent?.last_name}`}}">{{`${agent?.first_name} ${agent?.last_name}`}}</option>
+      </select>
+    </div>
+
+    <div class="custom-tab-container">
+      <div class="tabs">
+        <div class="tab" [class.active]="activeTab === 'prestation'" (click)="setActiveTab('prestation')">
+          <ion-icon name="image-outline"></ion-icon>
+          <span>Prestation</span>
+        </div>
+
+        <div class="tab" [class.active]="activeTab === 'Camion'" (click)="setActiveTab('Camion')">
+          <ion-icon name="car-outline"></ion-icon>
+          <span>Camion</span>
+        </div>
+      </div>
+
+      <div class="tab-content">
+        <div *ngIf="activeTab === 'prestation'">
+          <ng-container *ngIf="images?.length == 0">
+            <div class="empty-container">
+              <img src="assets/img/emty-icon.png" />
+              <p class="cls-empty-title">{{'No data found' | translate}}</p>
+              <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+            </div>
+          </ng-container>
+          <div class="image-grid">
+            <div class="grid-item" *ngFor="let pair of images; let i = index">
+              <ng-container *ngIf="pair[0]?.photo?.url?.includes('http') ; else empty">
+                <img [src]="pair[0].photo.url" alt="Before" (click)="openSlides('photo_before', i)" />
+              </ng-container>
+              <ng-container *ngIf="pair[1]?.photo?.url?.includes('http') ; else empty">
+                <img [src]="pair[1].photo.url" alt="After" (click)="openSlides('photo_after', i)" />
+              </ng-container>
+              <div class="checkbox-container">
+                <label class="checkbox-label">
+                  <input name="checkbox" type="checkbox" (change)="onToggleInclude(pair , 'photo' , i)" class="hidden-checkbox" />
+                  <span class="custom-checkbox" [class.checked]="pair[0]?.no_include == true || pair[1]?.no_include == true">
+                    <span class="checkmark" *ngIf="pair[0]?.no_include == false || pair[1]?.no_include == false">✓</span>
+                    <span class="x-mark" *ngIf="pair[0]?.no_include == true || pair[1]?.no_include == true">✕</span>
+                  </span>
+                </label>
+              </div>
+
+              <ng-template #empty>
+                <div class="placeholder">
+                  <svg width="64px" height="64px" viewBox="-51.2 -51.2 614.40 614.40" xmlns="http://www.w3.org/2000/svg" fill="#aaa">
+                    <g stroke-width="0"></g>
+                    <g stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="4.096"></g>
+                    <g>
+                      <title>warning</title>
+                      <g fill="none" fill-rule="evenodd">
+                        <g fill="#aaa" transform="translate(32.000000, 42.666667)">
+                          <path
+                            d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 0,385.574034 0,362.009885 C0,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z M225.144334,42.6739678 L42.6666667,362.009885 L407.622001,362.009885 L225.144334,42.6739678 Z M224,272 C239.238095,272 250.666667,283.264 250.666667,298.624 C250.666667,313.984 239.238095,325.248 224,325.248 C208.415584,325.248 197.333333,313.984 197.333333,298.282667 C197.333333,283.264 208.761905,272 224,272 Z M245.333333,106.666667 L245.333333,234.666667 L202.666667,234.666667 L202.666667,106.666667 L245.333333,106.666667 Z"
+                          ></path>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'Camion'">
+          <ng-container *ngIf="imagesCamions?.length == 0">
+            <div class="empty-container">
+              <img src="assets/img/emty-icon.png" />
+              <p class="cls-empty-title">{{'No data found' | translate}}</p>
+              <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+            </div>
+          </ng-container>
+          <div class="truck-grid">
+            <div class="grid-item" *ngFor="let obj of imagesCamions ; let i = index">
+              <img [src]="obj.photo?.url" alt="image" (click)="openSlides('photo_truck',i)" />
+              <div class="checkbox-container">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="no_include" (change)="onToggleInclude(obj , 'truck' , i)" class="hidden-checkbox" />
+                  <span class="custom-checkbox" [class.checked]="obj?.no_include == true">
+                    <span class="checkmark" *ngIf="obj?.no_include == false">✓</span>
+                    <span class="x-mark" *ngIf="obj?.no_include == true">✕</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <ion-button class="custom-button" expand="block" (click)="downloadZip()">
+        <ion-img slot="start" class="btn-icon" src="assets/img/Download.png"></ion-img>
+        Télécharger les photos
+      </ion-button>
+
+      <ion-button class="custom-button" expand="block" (click)="sendReport()">
+        <ion-img slot="start" class="btn-icon" src="assets/img/Navigation.png"></ion-img>
+        Envoyez vers le client
+      </ion-button>
+    </div>
+  </div>
+
+  <app-glide *ngIf="isSliderOpen" [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
+</ion-content>

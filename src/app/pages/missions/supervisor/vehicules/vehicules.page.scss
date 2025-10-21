@@ -1,0 +1,90 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-details {
+  padding: 20px;
+  margin-top: 20px;
+}
+.custom-card {
+  border-radius: 14px;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  background-color: white;
+  padding: 10px;
+  margin-top: 20px;
+}
+.input-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid #bfbfbf;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 15px;
+}
+.custom-input {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  color: #707070;
+}
+.input-icon {
+  color: #707070;
+  font-size: 22px;
+}
+.custom-button {
+  --border-radius: 50px;
+  --background: #00a2e1;
+  --background-hover: #00a2e1;
+  --background-activated: #00a2e1;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #fff;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.vehicle-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 14.49px;
+  object-fit: cover;
+}
+.car-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.car-name {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #233341;
+  margin: 0;
+}
+.status-badge {
+  background-color: #ff6666;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-top: 4px;
+  max-width: fit-content;
+}
+.arrow-icon {
+  font-size: 20px;
+  color: #233341;
+}

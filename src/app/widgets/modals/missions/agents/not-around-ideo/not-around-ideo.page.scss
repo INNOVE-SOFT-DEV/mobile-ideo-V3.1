@@ -1,0 +1,64 @@
+.confirmation-container {
+  border-radius: 14px;
+  background-color: #f8fdff;
+  display: flex;
+  flex-direction: column;
+  color: #233341;
+  text-align: center;
+  letter-spacing: -0.24px;
+  padding: 20px;
+  font:
+    700 16px/26px Montserrat,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+}
+.item-native {
+  background-color: white;
+}
+
+.custom-list {
+  padding: 0px;
+  --background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+.custom-item {
+  --background: white;
+  color: #333;
+}
+ion-icon {
+  color: #009fe0;
+}
+
+.list-md,
+.list-ios {
+  background-color: white;
+}
+
+.not-in-range {
+  width: 100%;
+}
+
+.btn-retour {
+  background-color: #009fe0;
+}
+
+.note-message {
+  margin-top: 16px;
+  padding: 10px;
+  background-color: #ffcc00;
+  color: #333;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.note-message p {
+  margin: 0;
+}
+
+.back-arrow {
+  color: #ffffff;
+}

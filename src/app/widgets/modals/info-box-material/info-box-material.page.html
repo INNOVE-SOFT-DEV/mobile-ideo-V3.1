@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">{{'Cancel' | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="modal-content">
+  <div class="cls-supervisor">
+    <ion-card class="custom-card">
+      <ion-card-content>
+        <ion-card class="custom-card-c">
+          <ion-card-content>
+            <div class="card-container">
+              <div class="left-column">
+                <span class="name-text">{{material.user_first_name+ " "+ material.user_last_name}}</span>
+                <div class="chip">{{material.role}}</div>
+              </div>
+              <div class="left-column">
+                <a class="call-link" href="tel://{{material?.phone?.split(' ')?.join()}}">
+                  <img src="assets/img/icon-call.png" alt="Call Icon" class="call-icon" />
+                </a>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+        <div class="info-box waiting">
+          <span class="status-text">{{material.state == 'pending' ?'En attente de attribution' : material.state =='returned' ? 'Restitué' : 'En attente de restitution' }}</span>
+          <div class="info-row">
+            <div class="tool-container">
+              <ion-icon name="hammer-outline" class="tool-icon"></ion-icon>
+              <span class="tool-text">{{material.material.name}}</span>
+            </div>
+            <span class="date-text">{{material.required_date}}</span>
+          </div>
+        </div>
+        <ng-container *ngIf="material.state != 'pending'">
+          <ng-container *ngIf="materialData?.photos_materials.length > 0">
+            <div class="cls-bloc-title">
+              <p class="cls-title-photo">{{'Supported photos' | translate}}</p>
+            </div>
+
+            <div class="image-grid">
+              <div class="image-box" *ngFor="let photo of materialData?.photos_materials">
+                <img [src]="photo?.photo?.url" />
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="materialData?.return_materials.length > 0">
+            <div class="cls-bloc-title">
+              <p class="cls-title-photo">
+                {{'Restitution photos' | translate}}
+                <span class="cls-req">{{'(required)' | translate}}</span>
+              </p>
+            </div>
+            <div class="image-grid">
+              <div class="image-box" *ngFor="let photo of materialData?.return_materials">
+                <img [src]="photo?.photo?.url" />
+              </div>
+            </div>
+          </ng-container>
+          <div class="remark-box">
+            <h3 class="remark-title">{{'Noticed' | translate}}</h3>
+            <p class="remark-text" *ngFor="let note of material.note">{{note.date + ":" + note.text}}</p>
+          </div>
+        </ng-container>
+        <div class="btn-container" *ngIf="material.state == 'pending'">
+          <ion-button class="custom-button-update-cancel" (click)="dismiss()">
+            <ion-icon name="close-outline"></ion-icon>
+            {{'Cancel' | translate}}
+          </ion-button>
+          <ion-button class="custom-button-update" (click)="confirm()">
+            <ion-spinner *ngIf="loadingAccept" name="crescent"></ion-spinner>
+            <ion-icon *ngIf="!loadingAccept" name="checkmark-outline"></ion-icon>
+            {{'To agree' | translate}}
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

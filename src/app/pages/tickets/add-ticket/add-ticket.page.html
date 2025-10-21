@@ -1,0 +1,206 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">Nouveau ticket</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleMenu($event)">
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<div class="submenu" *ngIf="isMenuOpen">
+  <div class="submenu-item" (click)="Archive('archive')">
+    <img src="assets/img/ar.png" class="submenu-icon" />
+    <span>Archiver</span>
+  </div>
+  <hr />
+  <div class="submenu-item" (click)="Archive('delete')">
+    <img src="assets/img/sup.png" class="submenu-icon" />
+    <span>Supprimer</span>
+  </div>
+</div>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-ticket" *ngIf="task?.task_type?.includes('punctual') || task?.task_type?.includes('forfaitaire') || task?.task_type?.includes('regular')">
+    <div class="ticket-card">
+      <h2 class="ticket-title">{{ task?.intervention?.name }}</h2>
+
+      <ion-list *ngIf="task?.task_type?.includes('punctual') || task?.task_type?.includes('forfaitaire') || task?.task_type?.includes('regular')">
+        <ion-item *ngFor="let contact of task.intervention?.contacts; let i = index" [lines]="i === task.intervention.contacts.length - 1 ? 'none' : 'full'">
+          <ion-label>
+            <h2>{{ contact.name }}</h2>
+            <p>{{ contact.role }}</p>
+            <p *ngIf="contact.phone">📞 {{ contact.phone }}</p>
+            <p *ngIf="contact.email">✉️ {{ contact.email }}</p>
+          </ion-label>
+
+          <ion-buttons slot="end">
+            <ion-button color="primary" (click)="call(contact)">
+              <img class="call-icon" src="../../../../assets/img/phone-green.webp" />
+            </ion-button>
+            <ion-button color="secondary" (click)="email(contact)">
+              <img class="call-icon" src="../../../../assets/img/email-message-icon-design-in-blue-circle-png.webp" />
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+  <div class="cls-ticket">
+    <div class="ticket-card">
+      <div class="ticket-title">Type de ticket</div>
+      <div class="ticket-row">
+        <div class="ticket-col" *ngFor="let option of ticketOptions" [class.selected]="selectedOption === option" (click)="selectOption(option)">
+          <img [src]="option.img" [alt]="option.label" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-group">
+        <label class="form-label">Tableau</label>
+        <div class="custom-select">
+          <select [(ngModel)]="selectedTableau" (change)="onKanbanChange($event)" disabled="true">
+            <option *ngFor="let kanban of kanbans" [value]="kanban.id">{{ kanban.name }}</option>
+            <option value="other">Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Titre</label>
+        <div class="text-input-wrapper">
+          <input type="text" [(ngModel)]="title" placeholder="Titre du ticket" />
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="form-label">Titre</label>
+        <div class="text-input-wrapper">
+          <input type="text" [(ngModel)]="title" placeholder="Titre du ticket" />
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="selectedTableau === 'other'">
+        <label class="form-label">Ajouter un tableau</label>
+        <div class="text-input-wrapper">
+          <input type="text" [(ngModel)]="customTableau" placeholder="Nom du tableau" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Priorité</label>
+        <div class="custom-select">
+          <select [(ngModel)]="priority">
+            <option value="high">High</option>
+            <option value="mid">Mid</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Statut</label>
+        <div class="custom-select">
+          <select [(ngModel)]="selectedBoard">
+            <option *ngFor="let board of boards" [value]="board.id">{{ board.status }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Date limite (optionnelle)</label>
+        <div class="date-input-wrapper">
+          <input type="date" placeholder="--/--/----" [(ngModel)]="date" />
+          <img src="assets/img/Calendarx.png" alt="calendar" class="calendar-icon" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Assigner à</label>
+        <div class="custom-select">
+          <select [(ngModel)]="assignedUser" name="assignedUser">
+            <option *ngFor="let user of adminUsers" [value]="user.email">{{ user.first_name }} {{ user.last_name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group alert-group">
+        <label class="form-label">Alerte avant la date d’échéance</label>
+        <ion-toggle class="green-toggle" [(ngModel)]="alertBeforeDueDate"></ion-toggle>
+      </div>
+
+      <div class="custom-select-alert">
+        <span class="alert-label">Alerte</span>
+        <select id="alert-select" class="alert-select" [(ngModel)]="selectedAlert">
+          <option value="1d">1 jour avant</option>
+          <option value="2d">2 jours avant</option>
+          <option value="1w">1 semaine avant</option>
+        </select>
+      </div>
+
+      <div class="form-group alert-group">
+        <label class="form-label">Accès Publique</label>
+        <ion-toggle class="green-toggle" [(ngModel)]="publicAccess"></ion-toggle>
+      </div>
+    </div>
+
+    <div class="card-record">
+      <div class="card-text">Enregistrer un vocal</div>
+      <div id="waveform"></div>
+      <div class="card-image" *ngIf="!recording ">
+        <img src="assets/img/micr.png" alt="micro" (click)="startRecording()" />
+      </div>
+
+      <div class="card-image" *ngIf="recording">
+        <ion-icon *ngIf="recording" name="stop-circle-outline" class="stop-icon red-icon cls-btn-stop" (click)="stopRecording()"></ion-icon>
+      </div>
+
+      <ion-button *ngIf="blobUrl " class="custom-button-update bg-record-lisen" (click)="playRecordingAgain()">
+        <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+      </ion-button>
+    </div>
+
+    <ion-card class="card-note">
+      <div class="card-note-title">Note et observation</div>
+
+      <ion-textarea class="card-note-textarea" placeholder="Ajoutez une remarque " auto-grow="false" [(ngModel)]="note"></ion-textarea>
+
+      <div class="card-note-attachments-label">
+        <ion-img src="assets/img/attachement.png"></ion-img>
+        <span>Attachements</span>
+      </div>
+
+      <ion-grid class="card-note-attachments-grid">
+        <ion-row class="ion-wrap">
+          <ion-col size="auto" *ngFor="let block of attachmentBlocks; let i = index">
+            <div class="attachment-block" [ngClass]="block.type === 'filled' ? 'filled' : 'attachment-add'" (click)="onBlockClick(i)">
+              <ion-img *ngIf="block.type === 'filled'" [src]="block.image"></ion-img>
+
+              <ion-img
+                *ngIf="i !== attachmentBlocks.length - 1"
+                src="assets/img/supprimer.png"
+                class="delete-icon"
+                (click)="deleteAttachment(i); $event.stopPropagation()"
+              ></ion-img>
+
+              <ion-img *ngIf="i === attachmentBlocks.length - 1 && block.type === 'empty'" src="assets/img/add-pic.png" class="add-icon"></ion-img>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+    <div class="btn-save" (click)="saveTicket()">
+      <ion-img src="assets/img/save.png" class="btn-save-icon"></ion-img>
+      <span class="btn-save-text">Enregistrer</span>
+    </div>
+  </div>
+</ion-content>

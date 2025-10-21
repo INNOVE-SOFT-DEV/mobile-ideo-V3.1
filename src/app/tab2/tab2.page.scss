@@ -1,0 +1,122 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-chat {
+  padding: 20px;
+}
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@600&display=swap");
+
+ion-searchbar.custom-search {
+  width: 100%;
+  --background: #f7f7fc;
+  --border-radius: 4px;
+  --placeholder-color: #adb5bd;
+  --icon-color: #adb5bd;
+  --clear-button-color: #adb5bd;
+  --box-shadow: none;
+}
+
+ion-searchbar.custom-search::part(container) {
+  height: 36px;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+ion-searchbar.custom-search::part(input) {
+  font-family:
+    "Mulish",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+ion-searchbar.custom-search::part(input)::placeholder {
+  font-family:
+    "Mulish",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  color: #adb5bd;
+}
+
+ion-searchbar.custom-search::part(search-icon) {
+  width: 16.61px;
+  height: 16.61px;
+  margin-left: 3.49px;
+  margin-top: 3px;
+  opacity: 1;
+}
+
+.user-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  object-fit: cover;
+  position: relative;
+}
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  background: #2cc069;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-name {
+  font-family: "Mulish", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  color: #0f1828;
+}
+
+.user-status {
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: #adb5bd;
+}
+
+.badge-message {
+  position: absolute;
+  top: 28px;
+  right: 18px;
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

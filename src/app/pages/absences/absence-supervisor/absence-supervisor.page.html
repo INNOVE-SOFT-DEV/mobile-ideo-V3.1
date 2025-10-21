@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goProfile()">
+        <ion-icon name="person-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Absences' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="center-container">
+    <p class="cls-title">{{'My Requests' | translate}}</p>
+    <ion-card class="custom-card">
+      <ion-card-content>
+        <div class="card-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+            <path
+              d="M16 21.3125V19.3125C16 18.2516 15.5786 17.2342 14.8284 16.4841C14.0783 15.7339 13.0609 15.3125 12 15.3125H5C3.93913 15.3125 2.92172 15.7339 2.17157 16.4841C1.42143 17.2342 1 18.2516 1 19.3125V21.3125M17 11.3125L19 13.3125L23 9.3125M12.5 7.3125C12.5 9.52164 10.7091 11.3125 8.5 11.3125C6.29086 11.3125 4.5 9.52164 4.5 7.3125C4.5 5.10336 6.29086 3.3125 8.5 3.3125C10.7091 3.3125 12.5 5.10336 12.5 7.3125Z"
+              stroke="#233341"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <h2 class="title">Mes absences</h2>
+        </div>
+        <div class="card-footer" (click)="goAbsenceRequestAgent()">
+          <p class="subtitle">{{myCount}} {{'pending requests' | translate}}</p>
+          <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <div class="border-solid-2"></div>
+
+    <p class="cls-title">{{'Absences To Manage' | translate}}</p>
+
+    <ion-card class="custom-card" *ngIf="count >0">
+      <ion-card-content>
+        <div class="card-header">
+          <h2 class="title">
+            <span class="badge-indicator" role="status" [attr.aria-label]="'Badge with value ' + count">{{ count }}</span>
+            Demandes en cours
+          </h2>
+        </div>
+        <div class="card-footer" (click)="goToAbsenceRequest()">
+          <p class="subtitle">{{'pending requests' | translate}}</p>
+          <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="custom-card">
+      <ion-card-content>
+        <div class="card-header">
+          <ion-icon name="checkmark-outline" class="icon"></ion-icon>
+          <h2 class="title">{{'Requests processed' | translate}}</h2>
+        </div>
+        <div class="card-footer" (click)="goTorequestProcessed()">
+          <p class="subtitle">{{'See the list' | translate}}</p>
+          <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

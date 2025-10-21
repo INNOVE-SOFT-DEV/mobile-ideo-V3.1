@@ -1,0 +1,188 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-supervisor {
+  padding: 20px;
+}
+.custom-search {
+  width: 100%;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0px 4px 4px 0px #dfdfdf;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  opacity: 1;
+  margin: 0 auto;
+}
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  color: #707070;
+}
+.input-icon {
+  font-size: 22px;
+  color: #707070;
+}
+.toggle-grid {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+.toggle-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.toggle-item {
+  margin: 0 20px;
+}
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toggle-label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  color: #233341;
+  vertical-align: middle;
+}
+.green-toggle {
+  --handle-background: #fff;
+  --handle-background-checked: #fff;
+  --background: #ccc;
+  --background-checked: #fff;
+  --border-color-checked: #fff;
+  --ion-color-primary: #fff !important;
+  --ion-color-base: #fff;
+}
+.green-toggle::part(track) {
+  background-color: #ccc !important;
+}
+.green-toggle.toggle-checked::part(track) {
+  background-color: #65c466 !important;
+}
+#map {
+  border: 0.4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  width: 100%;
+  height: 700px;
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0 auto;
+}
+::ng-deep .my-sheet-modal {
+  --height: 40%;
+  --border-radius: 14px 14px 0 0;
+  align-items: flex-end;
+  --background: #fff;
+  --box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.1);
+}
+.sheet-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.custom-grid {
+  padding: 10px;
+}
+.car-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.avatar-icon,
+.success-icon {
+  width: 100%;
+  max-width: 24px;
+  height: auto;
+}
+.user-text {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-style: bold;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.15px;
+  color: #233341;
+}
+.address-text {
+  font-family: Montserrat;
+  font-weight: 500;
+  font-style: medium;
+  font-size: 14px;
+  letter-spacing: -1.5%;
+  color: #233341;
+  line-height: 100%;
+}
+.orange-chip {
+  width: 100%;
+  height: 42px;
+  border-radius: 20px;
+  padding: 4px 10px;
+  background: #ffe5cd;
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 100%;
+  color: #233341;
+  letter-spacing: -1.5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.action-chip {
+  height: 41px;
+  border-radius: 50px;
+  padding: 10px 16px;
+  border: 0.8px solid #23334166;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chip-icon {
+  width: 20px;
+  height: 20px;
+}
+.chip-text {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-style: bold;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  color: #233341;
+  font-size: 20px;
+}
+a {
+  text-decoration: none !important;
+}

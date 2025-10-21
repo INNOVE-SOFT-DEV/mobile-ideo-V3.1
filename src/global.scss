@@ -1,0 +1,78 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+@import "@ionic/angular/css/palettes/dark.system.css";
+body {
+  font-family: Montserrat, sans-serif;
+  background-color: #f4f9ff;
+}
+ion-content {
+  font-family: Montserrat, sans-serif;
+  background-color: #f4f9ff;
+}
+ion-button {
+  min-height: 50px;
+}
+html.md {
+  font-family: Montserrat, sans-serif !important;
+  background-color: #f4f9ff !important;
+}
+:root {
+  --ion-font-family: "Montserrat", sans-serif;
+}
+ion-datetime {
+  --ion-color-primary: #00a2e1;
+  --ion-color-base: #00a2e1;
+  --ion-text-color: #00a2e1;
+  --background: #fff;
+  font-family: "Montserrat", sans-serif;
+}
+
+.picker-button,
+.picker-toolbar-button,
+.picker-col {
+  font-family: "Montserrat", sans-serif;
+  color: #00a2e1;
+}
+
+@import "node_modules/@glidejs/glide/dist/css/glide.core.min.css";
+@import "node_modules/@glidejs/glide/dist/css/glide.theme.min.css";
+.custom-picker-popover ion-picker {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+.custom-picker-popover ion-picker .picker-columns {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+.custom-picker-popover ion-picker::part(columns) {
+  justify-content: center !important;
+  padding-left: 0 !important;
+}
+.custom-picker-popover ion-picker::part(column) {
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+.custom-picker-popover ion-picker::part(option) {
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.custom-picker-popover {
+  --min-width: 320px;
+  --width: 320px;
+  --max-width: 320px;
+  --height: auto;
+}
+.custom-picker-popover ion-picker {
+  width: 320px !important;
+}

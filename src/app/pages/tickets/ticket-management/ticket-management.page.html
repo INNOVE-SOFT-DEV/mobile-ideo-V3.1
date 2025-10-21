@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Gestion de tickets</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-ticket">
+    <ion-item class="search-box" lines="none">
+      <ion-input placeholder="Rechercher" class="search-input" [(ngModel)]="searchQuery" (input)="onSearchChange($event)"></ion-input>
+      <ion-icon slot="end" name="search-outline" class="search-icon"></ion-icon>
+    </ion-item>
+    <div class="cls-tickets">
+      <div class="custom-block" *ngFor="let table of filteredTables; let i = index" (click)="taskList(table)">
+        <span class="block-text">{{ table.name }}</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-button class="fixed-btn" expand="block" (click)="addTable()">
+  <div class="btn-content">
+    <img src="assets/img/add.png" class="btn-img" />
+    <span class="btn-text">Ajouter un tableau</span>
+  </div>
+</ion-button>

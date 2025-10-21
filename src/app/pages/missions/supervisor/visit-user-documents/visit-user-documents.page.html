@@ -1,0 +1,203 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">{{'users documents' | translate}}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <ion-card [ngClass]="{'card-success': user?.btp.url != null, 'card-not-success': user?.btp.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="1" *ngIf="user?.btp.url != null">
+              <ion-checkbox [(ngModel)]="btp" class="checkbox-col"></ion-checkbox>
+            </ion-col>
+            <ion-col size="9" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.btp.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.btp.url == null" name="cloud-upload-outline"></ion-icon>
+
+              <span class="cls-title">{{'BTP card' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.btp.url != null" (click)="displayDocument(user?.btp.url,'Carte BTP')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [ngClass]="{'card-success': user?.cin.url != null, 'card-not-success': user?.cin.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="1" *ngIf="user?.cin.url != null">
+              <ion-checkbox [(ngModel)]="cin" class="checkbox-col"></ion-checkbox>
+            </ion-col>
+
+            <ion-col size="9" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.cin.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.cin.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Identity document' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.cin.url != null" (click)="displayDocument(user?.cin.url,'Pièce d’identité')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.driving_license.url != null, 'card-not-success': user?.driving_license.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="1" *ngIf="user?.driving_license.url != null">
+              <ion-checkbox [(ngModel)]="driving_license" class="checkbox-col"></ion-checkbox>
+            </ion-col>
+
+            <ion-col size="9" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.driving_license.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.driving_license.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Driving license' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.driving_license.url != null" (click)="displayDocument(user?.driving_license.url ,'Permis de conduire')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.gray_card.url != null, 'card-not-success': user?.gray_card.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="10" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.gray_card.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.gray_card.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Gray card' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.gray_card.url != null" (click)="displayDocument(user?.gray_card.url,'Carte grise')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.vehicle_insurance.url != null, 'card-not-success': user?.vehicle_insurance.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="10" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.vehicle_insurance.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.vehicle_insurance.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Vehicle insurance' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.vehicle_insurance.url != null" (click)="displayDocument(user?.vehicle_insurance.url,'Assurance véhicule')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.mutuelle.url != null, 'card-not-success': user?.mutuelle.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="10" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.mutuelle.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.mutuelle.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Mutual' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.mutuelle.url != null" (click)="displayDocument(user?.mutuelle.url,'Mutuelle')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [ngClass]="{'card-success': user?.social_security.url != null, 'card-not-success': user?.social_security.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="10" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.social_security.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.social_security.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Social security' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.social_security.url != null" (click)="displayDocument(user?.social_security.url,'Sécurité sociale')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [ngClass]="{'card-success': user?.rib.url != null, 'card-not-success': user?.rib.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="1" *ngIf="user?.rib.url != null">
+              <ion-checkbox [(ngModel)]="rib" class="checkbox-col"></ion-checkbox>
+            </ion-col>
+
+            <ion-col size="9" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.rib.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.rib.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'RIB' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.rib.url != null" (click)="displayDocument(user?.rib.url,'RIB')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [ngClass]="{'card-success': user?.proof_address.url != null, 'card-not-success': user?.proof_address.url == null}">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center">
+            <ion-col size="10" class="d-flex align-center">
+              <ion-icon class="cls-title-icon" *ngIf="user?.proof_address.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="cls-title-icon" *ngIf="user?.proof_address.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="cls-title">{{'Proof of address' | translate}}</span>
+            </ion-col>
+            <ion-col size="2" class="d-flex align-end">
+              <p class="show" *ngIf="user?.proof_address.url != null" (click)="displayDocument(user?.proof_address.url, 'Justificatif de domicile')">{{'show' | translate}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-grid id="btn_request" (click)="share()" [style.background-color]=" rib == true || cin == true || driving_license == true || btp == true ? '#4A80B2' : '#FFF'">
+      <ion-row>
+        <ion-col id="share_txt" [style.color]=" rib == true || cin == true || driving_license == true || btp == true ? '#FFF' : '#4A80B2'">Partager les documents</ion-col>
+        <ion-col size="2">
+          <ion-icon
+            name="share-social-outline"
+            style="font-size: 24px"
+            [style.color]=" rib == true || cin == true || driving_license == true || btp == true ? '#FFF' : '#4A80B2'"
+          ></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

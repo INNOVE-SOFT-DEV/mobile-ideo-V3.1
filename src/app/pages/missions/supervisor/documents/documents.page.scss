@@ -1,0 +1,64 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-details {
+  padding: 20px;
+  margin-top: 20px;
+}
+ion-card {
+  border-radius: 14px;
+  border: 0.4px solid rgba(0, 0, 0, 0.05);
+  background: #f8fdff;
+
+  ion-card-content {
+    padding: 0px;
+  }
+}
+
+.card_title {
+  color: #233341;
+  text-align: left;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.36px;
+}
+
+.card_sub_title {
+  color: #233341;
+  text-align: left;
+  padding-left: 20px;
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.36px;
+}
+
+.card_state {
+  color: #233341;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.36px;
+}
+
+.parg_intervention {
+  color: #233341;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.21px;
+  text-align: left;
+}

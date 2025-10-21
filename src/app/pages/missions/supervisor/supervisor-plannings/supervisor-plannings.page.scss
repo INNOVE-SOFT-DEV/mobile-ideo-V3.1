@@ -1,0 +1,8 @@
+@use "../../../../../assets/scss/mission-style.scss" as *;
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}

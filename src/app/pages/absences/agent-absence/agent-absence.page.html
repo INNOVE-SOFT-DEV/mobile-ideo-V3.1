@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goToProfile()" *ngIf="!isSuperVisor">
+        <ion-icon name="person-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goBack()" *ngIf="isSuperVisor">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Absence request' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="center-container">
+    <p class="cls-title">{{'My absence requests' | translate}}</p>
+    <ng-container *ngIf="absences?.pending.length == 0  && absences?.refused.length == 0  && absences?.allowed.length == 0  ">
+      <div class="empty-container">
+        <img src="assets/img/emty-icon.png" />
+        <p class="cls-empty-title">{{'No requests found' | translate}}</p>
+        <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+      </div>
+    </ng-container>
+    <ion-card *ngIf="absences?.pending.length > 0" class="custom-card">
+      <ion-card-content>
+        <h2 class="cls-course">{{'In treatment course' | translate}}</h2>
+        <ng-container *ngFor="let pending of absences.pending">
+          <ion-button (click)="goUpdate(pending)" class="custom-button bg-in-treatment">
+            <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+            <span>du {{ pending.date_start | date: 'dd/MM/yy' }} au {{ pending.date_end | date: 'dd/MM/yy' }}</span>
+          </ion-button>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="absences?.allowed.length > 0" class="custom-card">
+      <ion-card-content>
+        <h2 class="cls-course">{{'Absence granted' | translate}}</h2>
+        <ng-container *ngFor="let allowed of absences.allowed">
+          <ion-button class="custom-button bg-granted">
+            <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+            <span>du {{ allowed.date_start | date: 'dd/MM/yy' }} au {{ allowed.date_end | date: 'dd/MM/yy' }}</span>
+          </ion-button>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="absences?.refused.length > 0" class="custom-card">
+      <ion-card-content>
+        <h2 class="cls-course">{{'Absence refused' | translate}}</h2>
+        <ng-container *ngFor="let refused of absences.refused">
+          <ion-button class="custom-button bg-refused">
+            <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+            <span>du {{ refused.date_start | date: 'dd/MM/yy' }} au {{ refused.date_end | date: 'dd/MM/yy' }}</span>
+          </ion-button>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+    <div class="button-container">
+      <ion-button class="custom-button-send" (click)="openModal()">
+        <ion-icon name="add-outline"></ion-icon>
+        <span>{{'Make a request' | translate}}</span>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Requests processed' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="cls-supervisor">
+    <p class="cls-title">{{'Requests processed' | translate}}</p>
+    <div class="border-solid-2">
+      <ion-card class="custom-card">
+        <ion-card-content>
+          <div class="input-container">
+            <ion-input placeholder="Rechercher..." class="custom-input" [(ngModel)]="filterKey"></ion-input>
+            <ion-icon name="search-outline" class="input-icon"></ion-icon>
+          </div>
+          <div class="cls-bloc-label">
+            <label class="cls-type-label">{{'Search type' | translate}}</label>
+          </div>
+          <div class="select-container">
+            <ion-select class="custom-select" [(ngModel)]="filterType" interface="popover" placeholder="Sélectionner">
+              <ion-select-option value="tool">{{'Material' | translate}}</ion-select-option>
+              <ion-select-option value="agents">{{'Agents' | translate}}</ion-select-option>
+              <ion-select-option value="consumable">{{'consumable' | translate}}</ion-select-option>
+            </ion-select>
+            <ion-icon name="chevron-down-outline" class="select-icon"></ion-icon>
+          </div>
+          <div class="button-container">
+            <ion-button expand="block" class="custom-button" (click)="fliterUserMAterials()">{{'Filter' | translate}}</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ng-container *ngFor="let material of materials; let i = index">
+      <ion-card (click)="openModal(material)" class="custom-card" *ngIf="material.user_first_name != null && material.required_date != null">
+        <ion-card-content>
+          <div class="title-container">
+            <ion-icon name="person-outline" class="title-icon"></ion-icon>
+            <span class="title-text">{{material.user_first_name+ " "+ material.user_last_name}}</span>
+          </div>
+          <div class="info-box awaiting">
+            <span class="status-text">{{'Returned' | translate}}</span>
+            <div class="info-row">
+              <div class="tool-container">
+                <ion-icon name="hammer-outline" class="tool-icon"></ion-icon>
+                <span class="tool-text">{{material.material.name}}</span>
+              </div>
+              <span class="date-text">{{ material.required_date | date: 'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="materials?.length == 0 ">
+    <div class="empty-container">
+      <img src="assets/img/emty-icon.png" />
+      <p class="cls-empty-title">{{'No data found' | translate}}</p>
+      <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+    </div>
+  </ng-container>
+</ion-content>

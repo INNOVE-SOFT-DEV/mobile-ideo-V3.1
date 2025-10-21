@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="center-title">Envoyez vers le client</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <ion-card>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="3">
+              <img src="assets/img/logo_pitch 5.png" />
+            </ion-col>
+            <ion-col size="9">
+              <div class="mt-20">
+                <p class="cls-p-title">{{data?.intervention_name.split('-')[0]}}</p>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <div class="custom-banner">{{data?.prestation}}</div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2"></ion-col>
+            <ion-col size="10">
+              <div class="cls-address">
+                <p class="cls-p-address">{{data?.intervention_name.split('-')[1]}}</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="mission-title">Contacts choisi</div>
+
+    <div class="custom-card">
+      <div class="card-item">
+        <div class="item-grid">
+          <div class="col-left">
+            <div class="item-name">{{ contact?.name }}</div>
+            <div class="item-chip">
+              <span class="chip-text">{{ contact?.role }}</span>
+            </div>
+          </div>
+          <div class="col-right">
+            <a class="call-link" href="tel://{{contact?.phone?.split(' ')?.join()}}">
+              <ion-img src="assets/img/icon-call.png"></ion-img>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <ion-button class="custom-button bg-mail" expand="block" (click)="openPhotoReportModal('share')">
+        <ion-img slot="start" class="btn-icon" src="assets/img/Mail.png"></ion-img>
+        Envoyez le rapport au client
+      </ion-button>
+      <ion-button class="custom-button bg-link" expand="block" (click)="openPhotoReportModal('link')">
+        <ion-img slot="start" class="btn-icon" src="assets/img/Link.png"></ion-img>
+        Partager le lien du rapport
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

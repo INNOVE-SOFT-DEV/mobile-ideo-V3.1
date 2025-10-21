@@ -1,0 +1,203 @@
+.modal-content {
+  padding: 20px;
+  animation: modal-slide-up 0.3s ease-in-out;
+}
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+  text-align: center;
+}
+.cls-label-p {
+  font-size: 18px;
+  font-weight: 700;
+  color: #233341;
+  text-align: center;
+  margin-top: 25px;
+}
+.center-container {
+  padding: 20px;
+}
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  padding: 12px;
+  padding-right: 100px;
+  width: 100%;
+  font-size: 16px;
+  background-color: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  z-index: 2;
+  position: relative;
+  cursor: pointer;
+}
+.custom-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #000;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  pointer-events: none;
+}
+.center-icon-block {
+  position: relative;
+  width: 120px;
+  height: 80px;
+  background: #dedede;
+  border: 1px dashed #4a80b2;
+  border-radius: 80px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto;
+  margin-top: 10px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+.main-icon {
+  width: 24px;
+  height: 24px;
+}
+.plus-icon {
+  width: 10px;
+  height: 20px;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.custom-button-send {
+  --background: #00a2e1;
+  --background-hover: #00a2e1;
+  --background-activated: #00a2e1;
+  --border-radius: 50px;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content !important;
+  min-width: 120px;
+}
+.micro-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.micro-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.m-10 {
+  margin-top: 10px;
+}
+.custom-button-update {
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #233341;
+}
+.bg-record-lisen {
+  --border-radius: 50px;
+  --background: #ffceaa;
+  --background-hover: #ffceaa;
+  --background-activated: #ffceaa;
+  width: 100%;
+}
+.bg-update {
+  --border-radius: 50px;
+  --background: #cdffed;
+  --background-hover: #cdffed;
+  --background-activated: #cdffed;
+  float: right;
+}
+.custom-button-update-cancel {
+  --border-radius: 50px;
+  --background: #ffcdcd;
+  --background-hover: #ffcdcd;
+  --background-activated: #ffcdcd;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: none;
+  color: #233341;
+}
+#waveform {
+  width: 100%;
+  height: 128px;
+}
+.cls-btn-stop {
+  font-size: 120px;
+  cursor: pointer;
+  color: #ff6666;
+}
+.cls-timer {
+  color: red;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
+.full-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.icon-delete {
+  position: absolute;
+  top: 8px; 
+  right: 8px;
+  color: rgb(235, 92, 111);
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 1;
+}
+#waveform ::part(cursor):before {
+  content: "🏄";
+}
+#waveform ::part(region) {
+  font-family: fantasy;
+  height: 100px;
+}

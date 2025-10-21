@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Send to customer' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <ion-card>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col><img [src]="planning?.logo?.url" /></ion-col>
+            <ion-col size="8">
+              <div class="cls-title">
+                <p class="cls-p-title">{{planning?.intervention_name.split('-')[0]}}</p>
+              </div>
+              <div class="cls-address">
+                <p class="cls-p-address">{{planning?.intervention_name.split('-')[1]}}</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <div class="not-regular-date col-left user-info" *ngIf="planning?.type != 'regular'">
+      <div class="chip-wrapper">
+        <div class="user-chip-date">
+          <span class="chip-text-date">{{`${nonRegularDay} le ${planning?.date}`}}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="planning?.type != 'regular'">
+      <div class="custom-user-card" *ngFor="let agent of team">
+        <div class="card-grid">
+          <div class="col-left">
+            <div class="user-info">
+              <img class="avatar" [src]="agent?.photo" alt="avatar" />
+              <div class="user-name">{{agent?.first_name}} {{agent?.last_name}}</div>
+            </div>
+            <div class="chip-wrapper">
+              <div class="user-chip">
+                <span class="chip-text">{{agent?.role}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-right">
+            <app-pointing-status-indicators [agent]="agent"></app-pointing-status-indicators>
+            <div class="time-info">
+              <div class="time-text">Arrivé : {{ agent?.first_pointing_internal?.length == 1 ? '--:--' : agent?.hour_start}}</div>
+              <div class="time-text">Départ : {{ agent?.second_pointing_internal?.length == 1 ? '--:--' : agent?.hour_end}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ion-card *ngIf="planning?.type == 'regular'">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <div class="custom-select-container">
+              <div class="left">
+                <span class="selected-text">{{ selectedOption }}</span>
+              </div>
+              <div class="right">
+                <span class="select-label">Choisir</span>
+                <ion-icon name="chevron-down-outline" class="select-icon"></ion-icon>
+              </div>
+              <select [(ngModel)]="selectedOption" (change)="onChange($event)" class="select-native">
+                <option *ngFor="let agent of planning?.team" value="{{`${agent?.first_name} ${agent?.last_name}`}}">{{`${agent?.first_name} ${agent?.last_name}`}}</option>
+              </select>
+            </div>
+            <div class="month-block" (click)="openPopover($event)">
+              <span class="month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
+              <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+            </div>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <div class="not-regular-date col-left user-info" *ngIf="planning?.type == 'regular' && selectedUserRole != ''">
+      <div class="chip-wrapper">
+        <div class="user-chip-date">
+          <span class="chip-text-date">{{selectedUserRole}}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="planning?.type == 'regular'">
+      <ng-container *ngFor="let agent of team">
+        <div class="custom-user-card" [ngStyle]="{'display': agent?.first_name +' '+agent?.last_name == selectedOption ? '' : 'none'}">
+          <div class="card-grid">
+            <div class="col-left">
+              <div class="user-info">
+                <img class="avatar" [src]="agent?.photo" alt="avatar" />
+                <div class="user-name">{{agent?.first_name}} {{agent?.last_name}}</div>
+              </div>
+              <div class="chip-wrapper">
+                <div class="user-chip">
+                  <span class="chip-text">{{`${agent.day} le ${agent?.date}`}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-right">
+              <app-pointing-status-indicators [agent]="agent"></app-pointing-status-indicators>
+              <div class="time-info">
+                <div class="time-text">Arrivé : {{ agent?.first_pointing_internal?.length == 1 ? '--:--' : agent?.hour_start}}</div>
+                <div class="time-text">Départ : {{ agent?.second_pointing_internal?.length == 1 ? '--:--' : agent?.hour_end}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</ion-content>

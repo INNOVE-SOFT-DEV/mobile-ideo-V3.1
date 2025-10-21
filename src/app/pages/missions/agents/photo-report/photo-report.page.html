@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Photo report' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ng-container>
+    <div *ngIf="(isSyncing$ | async) && isConneted" class="status-box syncing">
+      <ion-spinner name="bubbles"></ion-spinner>
+      {{'Syncing' | translate}}
+    </div>
+
+    <div *ngIf="!(isSyncing$ | async)  && isConneted" class="status-box synced">✅ Votre rapport est à jour</div>
+
+    <div *ngIf="isConneted == false" class="status-box offline">❌ Vous êtes hors ligne</div>
+  </ng-container>
+
+  <ng-container *ngIf="!isSliderOpen && !isLoading">
+    <ion-card class="photo-card">
+      <ion-card-content>
+        <p class="photo-title">{{'Presentation photos' | translate}}</p>
+        <div *ngFor="let group_photos of grouped_presentation_photos; let i = index" class="photo-container">
+          <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != '' " [ngStyle]="{ 'background-image': 'url(\'' + group_photos[0]?.photo?.url + '\')' }">
+            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_before',i)"></ion-icon>
+            <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_before',i)"></ion-icon>
+          </div>
+          <div *ngIf="group_photos[0]?.photo?.url == '' || group_photos[0]?.photo?.url == undefined" (click)="takePicture('photo_before' , i)" class="photo-block add-photo before">
+            <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+            <ion-icon name="add-outline" class="plus"></ion-icon>
+            <span class="photo-number">{{'Before' | translate}}</span>
+          </div>
+          <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''" [ngStyle]="{ 'background-image': 'url(\'' + group_photos[1]?.photo?.url + '\')' }">
+            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_after',i)"></ion-icon>
+            <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_after',i)"></ion-icon>
+          </div>
+          <div *ngIf="group_photos[1]?.photo?.url == '' || group_photos[1]?.photo?.url == undefined" (click)="takePicture('photo_after' , i)" class="photo-block add-photo after">
+            <ion-icon name="camera-outline" class="add-icon"></ion-icon>
+            <ion-icon name="add-outline" class="plus"></ion-icon>
+            <span class="photo-number">{{'After' | translate}}</span>
+          </div>
+        </div>
+        <div class="button-container">
+          <ion-button (click)="addPhotoPrestation()" class="custom-button-send">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>{{'Add more photos' | translate}}</span>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="photo-card">
+      <ion-card-content>
+        <p class="photo-title">{{'Truck photos' | translate}}</p>
+        <div *ngFor="let photo of photos_truck; let i = index" class="photo-container">
+          <div class="photo-block" *ngIf="photo?.url != ''  && photo?.url != null && photo?.url != undefined " [ngStyle]="{ 'background-image': 'url(\'' + photo?.url + '\')' }">
+            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_truck' ,i)"></ion-icon>
+            <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_truck',i)"></ion-icon>
+          </div>
+          <div *ngIf="photo?.url == '' || photo?.url == undefined || photo?.url == null" (click)="takePicture('photo_truck' , i )" class="photo-block add-photo before">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22" fill="none">
+              <path
+                d="M1 11.1289H19M18 17.1289V11.808C18 11.5545 18.0001 11.4277 17.9844 11.3031C17.9704 11.1924 17.947 11.0829 17.9148 10.9761C17.8786 10.8558 17.827 10.7401 17.724 10.5084L16.1777 7.0293C15.8442 6.27889 15.537 5.54463 14.7116 5.24728C14.383 5.12891 14.0063 5.12891 13.2536 5.12891H6.74609C5.99336 5.12891 5.61716 5.12891 5.28857 5.24728C4.99813 5.35191 4.73604 5.52232 4.52246 5.74524C4.28084 5.99743 4.12785 6.34144 3.82214 7.0293L2.27588 10.5084C2.17291 10.7401 2.12122 10.8558 2.08496 10.9761C2.05276 11.0829 2.02969 11.1924 2.01572 11.3031C2 11.4277 2 11.5545 2 11.808V17.1289M18 17.1289L2 17.1289M18 17.1289L17 18.1289C17 19.2335 16.1046 20.1289 15 20.1289C13.8954 20.1289 13 19.2335 13 18.1289V17.1289M2 17.1289L3 18.1289C3 19.2335 3.89543 20.1289 5 20.1289C6.10457 20.1289 7 19.2335 7 18.1289V17.1289"
+                stroke="#233341"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M2 11.1289V2.12891C2 1.57662 2.44772 1.12891 3 1.12891H17C17.5523 1.12891 18 1.57662 18 2.12891V10.6026"
+                stroke="#233341"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <ion-icon name="add-outline" class="plus"></ion-icon>
+          </div>
+        </div>
+        <div class="button-container">
+          <ion-button (click)="addPhotoCamion()" class="custom-button-send">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>{{'Add more photos' | translate}}</span>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="photo-card">
+      <ion-card-content>
+        <div class="btn-container">
+          <ion-button class="custom-button" expand="block" (click)="downloadZip()">
+            <ion-img slot="start" class="btn-icon" src="assets/img/Download.png"></ion-img>
+            Télécharger les photos
+          </ion-button>
+          <ion-button class="custom-button" expand="block" (click)="shareWithSupervisor()">
+            <ion-icon name="mail-outline"></ion-icon>
+            Emailler au superviseur
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-alert
+      [isOpen]="isOffLineAlertOpen"
+      header="Pas d'internet"
+      message="Vous aver besoin de connexion internet pour supprimer cette photo"
+      [buttons]="alertButtons"
+      (didDismiss)="setOpen(false)"
+    ></ion-alert>
+  </ng-container>
+  <app-glide *ngIf="isSliderOpen" [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Return Missions' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="cls-details">
+    <p class="cls-label-p">Remarque de jour</p>
+    <textarea [(ngModel)]="note" class="styled-textarea" [placeholder]="'Add a note' | translate"></textarea>
+
+    <div class="custom-card">
+      <div id="waveform"></div>
+      <div *ngIf="isRecording || recording" class="cls-timer">{{ durationDisplay }}</div>
+      <div class="micro-container m-10">
+        <img *ngIf="!recording " src="assets/img/micro.png" alt="micro" class="micro-image" (click)="startRecording()" />
+        <ion-icon *ngIf="recording" name="stop-circle-outline" class="stop-icon red-icon cls-btn-stop" (click)="stopRecording()"></ion-icon>
+      </div>
+      <ion-button *ngIf="blobUrl " class="custom-button-update bg-record-lisen" (click)="playRecordingAgain()">
+        <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+        {{ 'Listen to the recording again' | translate }}
+      </ion-button>
+    </div>
+
+    <div class="btn-container">
+      <ion-button class="custom-button-update bg-update" (click)="goToReturnRecurringMissionAgentModal()">
+        <span class="button-content">
+          <ion-icon name="person-outline"></ion-icon>
+          <span>Faire un constat</span>
+        </span>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

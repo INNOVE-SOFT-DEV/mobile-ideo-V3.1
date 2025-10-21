@@ -1,0 +1,228 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.center-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+}
+.cls-details {
+  padding: 20px;
+  margin-top: 20px;
+}
+ion-card {
+  border-radius: 14px;
+}
+.cls-title {
+  width: 100%;
+  text-align: center;
+}
+.cls-address {
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+}
+.cls-img {
+  margin-top: 15px;
+}
+.cls-p-address {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17.07px;
+  color: #233341;
+}
+.cls-p-title {
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19.5px;
+  color: #233341;
+}
+.cls-chip {
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  border: none;
+  display: flex;
+  align-items: center;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 5px 10px;
+  background-color: white;
+}
+.cls-chip-sp {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17.07px;
+  color: #233341;
+  margin-left: 5px;
+}
+.cls-title-contact {
+  padding-left: 10px;
+}
+.cls-p-contact {
+  font-family: Montserrat, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-card-light {
+  border: none;
+  background-color: #ffffff;
+  border-radius: 14px;
+}
+.cls-card-title {
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #233341;
+}
+.chip-job {
+  background-color: #cdf3ff;
+}
+.cls-title-job {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-tr {
+  text-align: right;
+}
+.align-center {
+  display: flex;
+  align-items: center;
+}
+.mission-text {
+  margin: 0;
+  font-family: Montserrat, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-ionc-card-mission {
+  background-color: #f8fdff;
+  border: none;
+  margin-top: 20px;
+}
+.cls-in-progress {
+  background-color: #cdffed;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-chip-agent-name {
+  background-color: #ffceaa;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-chip-m-name {
+  background-color: #cdf3ff;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-chip-f-name {
+  background-color: #d6bdff;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #233341;
+}
+.cls-desc {
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #233341;
+}
+.cls-ion-card-notice {
+  background-color: #fff8f2;
+  border: none;
+  margin-top: 20px;
+}
+.cls-ion-crad-c {
+  margin-top: 20px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: px;
+  background-color: white;
+}
+.title-c-txt {
+  width: 100%;
+}
+.c-text {
+  margin: 0;
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #233341;
+}
+ion-item::part(native) {
+  border-bottom: 1px solid #dadada;
+}
+ion-item:last-child::part(native) {
+  border-bottom: none;
+}
+.cls-ion-list-c {
+  border-radius: 15px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  background-color: white;
+}
+.cls-list-c-b {
+  padding: 10px;
+}
+.call-link:active img {
+  scale: 1.3;
+}
+ion-grid,
+ion-row {
+  padding: 0 !important;
+}
+.custom-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+ion-col.custom-block {
+  padding: 4px;
+  max-width: 33.3333%;
+  flex: 0 0 33.3333%;
+  box-sizing: border-box;
+}
+.block-content {
+  width: 100%;
+  height: 120px;
+  border-radius: 14px;
+  border: 0.4px solid rgba(74, 128, 178, 0.2);
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 2px;
+}
+.block-image {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.block-text {
+  margin-top: 6px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #233341;
+  text-align: center;
+}

@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goToProfile()">
+        <ion-icon name="person-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{'Materials' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="center-container">
+    <p class="cls-title">{{'Mes demandes' | translate}}</p>
+    <ion-card class="custom-card" (click)="goToMaterialRequestAgent()">
+      <ion-card-content>
+        <div class="card-header">
+          <ion-icon name="time-outline" class="icon"></ion-icon>
+          <h2 class="title">{{'Current requests' | translate}}</h2>
+        </div>
+        <div class="card-footer">
+          <p class="subtitle">{{pendingCount}} {{'pending requests' | translate}}</p>
+          <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <div class="border-solid-2"></div>
+
+    <p class="cls-title">{{'Materials To Manage' | translate}}</p>
+    <ion-card class="custom-card" (click)="goToMaterialRequest()" *ngIf="pendingCount > 0">
+      <ion-card-content>
+        <div class="card-header">
+          <ion-icon name="time-outline" class="icon"></ion-icon>
+          <h2 class="title">{{'Current requests' | translate}}</h2>
+        </div>
+        <div class="card-footer">
+          <p class="subtitle">{{pendingCount}} {{'pending requests' | translate}}</p>
+          <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="custom-card" (click)="goToMaterialRequestProcessed()">
+      <ion-card-content>
+        <div class="card-header">
+          <ion-icon name="checkmark-outline" class="icon"></ion-icon>
+          <h2 class="title">{{'Requests processed' | translate}}</h2>
+        </div>
+        <div class="card-footer">
+          <p class="subtitle">{{'See the list' | translate}}</p>
+          <ion-icon name="chevron-forward-outline" class="icon"></ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

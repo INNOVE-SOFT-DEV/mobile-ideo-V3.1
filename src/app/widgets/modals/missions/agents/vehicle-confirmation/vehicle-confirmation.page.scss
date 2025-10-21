@@ -1,0 +1,114 @@
+::ng-deep .custom-centered-modal .modal-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+::ng-deep .custom-centered-modal .modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  width: 320px;
+  height: 265.76px;
+  z-index: 10;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+}
+.center-container-503 {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+}
+.modal-content {
+  width: 90%;
+  min-height: 330px;
+  border-radius: 14px;
+  background: #fafafa;
+  border: 1px solid #4a80b2;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.cls-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+  text-align: center;
+}
+.cls-label-p {
+  font-size: 16px;
+  font-weight: 700;
+  color: #233341;
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 0;
+}
+.cls-label-p-2 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+  text-align: center;
+  margin-top: 2px;
+}
+.center-container {
+  padding: 20px;
+}
+.plate-wrapper {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 6 / 1;
+  background-image: url("/assets/img/plate.png");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.plate-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.plate-number {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: #000;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  margin-top: 5px;
+}
+.custom-button {
+  --border-radius: 50px;
+  --background: #d7d7d7;
+  --background-hover: #D7D7D7d;
+  --background-activated: #d7d7d7;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: none;
+  color: #233341;
+}

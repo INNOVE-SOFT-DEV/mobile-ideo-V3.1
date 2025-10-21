@@ -1,0 +1,60 @@
+.center-title {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+.center-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+}
+.cls-docs {
+  padding: 20px;
+  margin-top: 20px;
+}
+ion-card {
+  border-radius: 50px;
+  margin-top: 20px;
+}
+.card-success {
+  background-color: #cdffed;
+}
+.card-not-success {
+  background-color: #ffffff;
+}
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.align-center {
+  justify-content: flex-start;
+}
+
+.align-end {
+  justify-content: flex-end;
+}
+
+.cls-title {
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #233341;
+  margin-left: 5px;
+}
+
+.cls-title-icon {
+  width: 21px;
+  height: 21px;
+  color: #233341;
+}
+
+.show {
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #233341;
+}
