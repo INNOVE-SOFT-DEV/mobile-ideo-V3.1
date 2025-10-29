@@ -12,6 +12,9 @@ import {LoadingControllerService} from "src/app/widgets/loading-controller/loadi
   standalone: false
 })
 export class MaterialsRequestsSupervisorPage implements OnInit {
+goScanner() {
+    this.router.navigate(["ocr-scanner"]);
+}
   pendingCount: any;
 
   constructor(

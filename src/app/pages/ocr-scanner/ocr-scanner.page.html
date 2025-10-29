@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Scanner un reçu</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <!-- Button to choose source -->
+  <ion-button expand="block" (click)="chooseSource()">
+    Select Image (Camera / Gallery)
+  </ion-button>
+
+  <!-- Image Preview -->
+  <div *ngIf="imageUrl" class="image-preview">
+    <ion-card>
+      <img [src]="imageUrl" alt="Selected image" />
+    </ion-card>
+  </div>
+
+  <!-- Detected Texts -->
+  <ion-list *ngIf="detectedTexts.length > 0">
+    <ion-list-header>
+      <ion-label>Detected Text</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let text of detectedTexts">
+      <ion-label>{{ text }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
