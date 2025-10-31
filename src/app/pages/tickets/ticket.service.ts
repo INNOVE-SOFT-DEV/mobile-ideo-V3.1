@@ -23,8 +23,8 @@ export class TicketService implements TicketInterface {
   archiveTask(data: any): Observable<any> {
     return this.ticketRepo.archiveTask(data);
   }
-  getAllTasksByKanban(id: any): Observable<any> {
-    return this.ticketRepo.getAllTasksByKanban(id);
+  getAllTasksByKanban(id: any , email: any): Observable<any> {
+    return this.ticketRepo.getAllTasksByKanban(id , email);
   }
   updateTask(data: any, id: any): Observable<any> {
     return this.ticketRepo.updateTask(data, id);

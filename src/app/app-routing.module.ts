@@ -266,6 +266,10 @@ const routes: Routes = [
   {
     path: "add-ticket",
     loadChildren: () => import("./pages/tickets/add-ticket/add-ticket.module").then(m => m.AddTicketPageModule)
+  },
+  {
+    path: 'ocr-scanner',
+    loadChildren: () => import('./pages/ocr-scanner/ocr-scanner.module').then( m => m.OcrScannerPageModule)
   }
 ];
 @NgModule({

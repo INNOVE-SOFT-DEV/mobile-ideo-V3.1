@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Scanner un reçu</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-content class="ion-padding">
+    <div class="ocr-preview">
+      <ion-card>
+        <img [src]="imageUrl" alt="Prévisualisation du reçu" *ngIf="imageUrl" />
+      </ion-card>
+    </div>
+
+    <form [formGroup]="form" class="ocr-form">
+      <ion-item>
+        <ion-label position="stacked">Prix (€)</ion-label>
+        <ion-input formControlName="price" type="number" inputmode="decimal"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Date</ion-label>
+        <ion-input formControlName="date" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Article</ion-label>
+        <ion-textarea formControlName="item" autoGrow="true"></ion-textarea>
+      </ion-item>
+
+      <ion-button class="master-button-large" fill="clear" expand="block" (click)="confirm()">
+        <div class="button-content">
+          <div class="text-wrapper">
+            <span class="confirm-text">Confirmer</span>
+          </div>
+        </div>
+      </ion-button>
+    </form>
+  </ion-content>
+</ion-content>

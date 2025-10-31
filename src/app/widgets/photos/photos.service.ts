@@ -31,6 +31,7 @@ export class PhotosService {
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera
       });
+      
     } else {
       this.lastImage = await Camera.getPhoto({
         quality: quality,
@@ -40,6 +41,7 @@ export class PhotosService {
         resultType: CameraResultType.Base64,
         source: CameraSource.Photos
       });
+      console.log("Gallery Image: ", this.lastImage.path);
     }
   }
 

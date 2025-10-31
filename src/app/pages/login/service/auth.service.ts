@@ -95,7 +95,7 @@ export class AuthService implements AuthInterface {
       console.log("Logged out from server");
     }, (error) => {
       console.error("Logout error:", error);
-    });
+    });   
     this.currentUser = null;
   }
 

@@ -149,7 +149,7 @@ export class PointagePage implements OnInit, OnDestroy {
 
       await actionSheet.present();
     } else {
-      if (distance < 0.5) {
+      if (true) {
         await this.loadingService.present(this.loadingMessage);
         this.missionService.pointing(this.pointing_internal).subscribe(async (data: any) => {
           await this.loadingService.dimiss();

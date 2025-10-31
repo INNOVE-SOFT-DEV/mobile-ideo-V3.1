@@ -29,9 +29,9 @@ export class AppComponent implements OnInit {
   ) {
     this.translate.setDefaultLang("fr");
     this.geolocationService.init();
-    setInterval(() => {
-      this.logAllCapacitorPreferences();
-    }, 10000); // Log every 60 seconds
+    // setInterval(() => {
+    //   this.logAllCapacitorPreferences();
+    // }, 10000); // Log every 60 seconds
   }
 
   async ngOnInit() {
