@@ -3,6 +3,7 @@ import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject, Subscription, switchMap, takeUntil} from "rxjs";
 import {TicketService} from "src/app/pages/tickets/ticket.service";
+import {AuthService} from "../../login/service/auth.service";
 @Component({
   selector: "app-task-list",
   templateUrl: "./task-list.page.html",
@@ -14,7 +15,8 @@ export class TaskListPage implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
-    private taskmanagerService: TicketService
+    private taskmanagerService: TicketService,
+    private authService: AuthService
   ) {}
   tasks: any = [];
   data: any[] = [];
@@ -25,7 +27,8 @@ export class TaskListPage implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   ngOnInit() {
-    this.taskmanagerService.getAllTasksByKanban("superviseur mobile").subscribe((res: any) => {
+    const email = this.authService.getCurrentUser()?.email;
+    this.taskmanagerService.getAllTasksByKanban("superviseur mobile", email).subscribe((res: any) => {
       this.boards = res.kanban.boards;
       this.kanban = res.kanban;
       this.data = res.kanban.boards.flatMap((board: any) => board.tasks);
@@ -33,7 +36,10 @@ export class TaskListPage implements OnInit, OnDestroy {
     });
     this.taskmanagerService.refresh_event
       .pipe(
-        switchMap(() => this.taskmanagerService.getAllTasksByKanban(this.kanban.name)),
+        switchMap(() => {
+          const email = this.authService.getCurrentUser()?.email;
+          return this.taskmanagerService.getAllTasksByKanban(this.kanban.name, email);
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe({

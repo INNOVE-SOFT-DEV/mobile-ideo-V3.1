@@ -4,11 +4,16 @@ import {LoadingControllerService} from "../../../widgets/loading-controller/load
 import {TranslateService} from "@ngx-translate/core";
 import {Location} from "@angular/common";
 import {environment} from "src/environments/environment";
-import {ModalController} from "@ionic/angular";
+import {ActionSheetController, LoadingController, ModalController} from "@ionic/angular";
 import {MissionReturnsPage} from "src/app/widgets/modals/mission-returns/mission-returns.page";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {MapService} from "src/app/widgets/map/map.service";
 import {GdcPage} from "src/app/widgets/modals/gdc/gdc.page";
+import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
+import {Ocr} from "@capacitor-community/image-to-text";
+import {OcrService} from "../../ocr-scanner/ocr-service/ocr.service";
+import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
+import { OcrScannerPage } from "../../ocr-scanner/ocr-scanner.page";
 
 @Component({
   selector: "app-details",
@@ -17,6 +22,9 @@ import {GdcPage} from "src/app/widgets/modals/gdc/gdc.page";
   standalone: false
 })
 export class DetailsPage implements OnInit {
+  openScanner() {
+    throw new Error("Method not implemented.");
+  }
   planning: any;
   planningType: string = "";
   loadingMessage: string = "";
@@ -24,16 +32,26 @@ export class DetailsPage implements OnInit {
   urlApi: string = environment.urlAPI;
   webUrl: string = environment.url_web;
   supervisors: any[] = [];
+  extractedText: string = "";
+  loading: boolean = false;
+  imageUrl: string | any = null;
+  detectedTexts: string[] = [];
+  generatedJson: any = {};
 
   constructor(
     private route: ActivatedRoute,
     private loadingService: LoadingControllerService,
     public translateService: TranslateService,
-    private location: Location,
     private modalController: ModalController,
     private router: Router,
     private missionService: MissionService,
-    private mapService: MapService
+    private mapService: MapService,
+    private actionSheetCtrl: ActionSheetController,
+    private loadingCtrl: LoadingController,
+    private location: Location,
+    private ocrService: OcrService,
+    private toast: ToastControllerService,
+    private modalCtrl: ModalController
   ) {}
 
   async ngOnInit() {
@@ -74,6 +92,7 @@ export class DetailsPage implements OnInit {
     }
     return frenchDate;
   }
+
   async missionReturns() {
     if (this.planningType === "regular") {
       this.router.navigate(["/return-recurring-mission-agent", {data: JSON.stringify(this.planning), type: this.planningType}]);
@@ -124,5 +143,79 @@ export class DetailsPage implements OnInit {
       showBackdrop: true
     });
     return await modal.present();
+  }
+
+  async chooseSource() {
+    const sheet = await this.actionSheetCtrl.create({
+      header: "Select Image Source",
+      buttons: [
+        {
+          text: "📷 Camera",
+          handler: () => this.takePhoto(CameraSource.Camera)
+        },
+        {
+          text: "🖼️ Gallery",
+          handler: () => this.takePhoto(CameraSource.Photos)
+        },
+        {text: "Cancel", role: "cancel"}
+      ]
+    });
+
+    await sheet.present();
+  }
+
+  async takePhoto(source: CameraSource) {
+    try {
+      const photo: any = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: true,
+        resultType: CameraResultType.Uri,
+        source
+      });
+      if (!photo.path && !photo.webPath) return;
+
+      this.imageUrl = photo.webPath || photo.path;
+      const response = await fetch(this.imageUrl);
+      const blob = await response.blob();
+
+      const loading = await this.loadingCtrl.create({
+        message: "Detecting text...",
+        spinner: "crescent"
+      });
+      await loading.present();
+      const result: any = await Ocr.detectText({filename: photo.path});
+      this.detectedTexts = result.textDetections.map((d: any) => d.text);
+      this.extractedText = this.detectedTexts.join(" | ");
+      const formData = new FormData();
+      formData.append("extracted_text", this.extractedText);
+      formData.append("image", blob, new Date().getTime() + ".jpg");
+      formData.append("planning_id", this.planning.id);
+      formData.append("planning_type", this.planningType);
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      formData.append("user_id", user.id); // Example user ID
+      this.ocrService.extractText(formData).subscribe({
+        next: async (res: any) => {
+          this.generatedJson = res.data || {};
+
+          await loading.dismiss();
+          await this.toast.presentToast("Reçu scanné avec succès", "success");
+                  const modal = await this.modalCtrl.create({
+          component: OcrScannerPage,
+          componentProps: {
+            result: res // Pass full response here
+          }
+        });
+        await modal.present();
+        },
+        error: async err => {
+          await this.toast.presentToast("Une erreur s'est produite", "danger");
+          await loading.dismiss();
+        }
+      });
+
+      await loading.dismiss();
+    } catch (error) {
+      console.error("OCR Error:", error);
+    }
   }
 }

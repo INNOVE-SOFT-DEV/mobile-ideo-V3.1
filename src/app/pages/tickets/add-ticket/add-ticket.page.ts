@@ -77,6 +77,8 @@ export class AddTicketPage implements OnInit {
     this.task_from_bord = this.route.snapshot.paramMap.get("task_from_bord") === "true";
     this.kanban = this.route.snapshot.paramMap.get("kanban");
     this.boards = JSON.parse(this.route.snapshot.paramMap.get("boards") || "[]");
+    console.log("Boards:", this.boards);
+    this.kanban 
     if (this.kanban) {
       this.boards =
         this.boards.length > 0

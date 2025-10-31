@@ -8,6 +8,9 @@ import {OcrRepository} from "src/app/repositories/ocr/ocr-repository";
 })
 export class OcrService implements OcrInterface {
   constructor(private ocrRepository: OcrRepository) {}
+  updateRecipe(recipeData: any): Observable<any> {
+    return this.ocrRepository.updateRecipe(recipeData);
+  }
   extractText(formData: any): Observable<{formData: any}> {
     return this.ocrRepository.extractText(formData);
   }
