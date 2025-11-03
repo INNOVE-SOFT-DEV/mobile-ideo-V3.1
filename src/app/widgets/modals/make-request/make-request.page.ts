@@ -196,7 +196,8 @@ export class MakeRequestPage implements OnInit {
   isDateRangeAvailable(date_start: string, date_end: string, id?: number): boolean {
     const newStart = new Date(date_start);
     const newEnd = new Date(date_end);
-    let allAbsences = [...this.absences.pending, ...this.absences.allowed];
+    let allAbsences = [...(this.absences?.pending || []), ...(this.absences?.allowed || [])];
+
     if (id) {
       allAbsences = allAbsences.filter(absence => absence.id !== id);
     }

@@ -16,11 +16,8 @@ import {AuthService} from "../../login/service/auth.service";
   standalone: false
 })
 export class AgentAbsencePage implements OnInit {
-  async goUpdate(absence: any) {
-    await this.openModal(true, absence);
-  }
   isEmpty: boolean = false;
-  absences: any;
+  absences: any = {pending: [], allowed: []};
   loadingMessage: string = "";
   user: User | null = this.authService.getCurrentUser();
   isSuperVisor: boolean = false;
@@ -33,13 +30,29 @@ export class AgentAbsencePage implements OnInit {
     private authService: AuthService,
     private location: Location
   ) {}
+
+  async goUpdate(absence: any) {
+    await this.openModal(true, absence);
+  }
+
   async ngOnInit() {
     this.isSuperVisor = this.authService.isSuperVisor();
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     await this.loadingCtrl.present(this.loadingMessage);
     this.absenceService.getAbsencesFromapi().subscribe({
       next: async data => {
-        this.absences = data;
+        //this.absences = data;
+        console.log(data);
+        const cleanData = data.filter((item: any) => item && Object.keys(item).length > 0);
+
+        // group by state
+        this.absences = {
+          pending: cleanData.filter((a: any) => a.state === "pending"),
+          allowed: cleanData.filter((a: any) => a.state === "allowed"),
+          refused: cleanData.filter((a: any) => a.state === "refused")
+        };
+
+        console.log("Grouped absences:", this.absences);
         await this.loadingCtrl.dimiss();
       },
       error: async error => {
@@ -56,6 +69,7 @@ export class AgentAbsencePage implements OnInit {
   async openModal(update?: any, pending?: any) {
     const props: any = {absences: this.absences};
     if (update) props.update = pending;
+
     const modal = await this.modalController.create({
       component: MakeRequestPage,
       cssClass: "make-request",
@@ -63,17 +77,19 @@ export class AgentAbsencePage implements OnInit {
       showBackdrop: true,
       componentProps: props
     });
+
     await modal.present();
 
     const {data} = await modal.onDidDismiss();
 
     if (data && data.isUpdate) {
       this.absences.pending = this.absences.pending.map((item: any) => {
-        if (item.id === data.update.id) {
-          return {...item, ...data.update};
-        } else return item;
+        return item.id === data.update.id ? {...item, ...data.update} : item;
       });
     } else if (data) {
+      console.log("okkkkk");
+      console.log(data);
+      this.absences.pending ??= [];
       this.absences.pending.push(data);
     }
   }

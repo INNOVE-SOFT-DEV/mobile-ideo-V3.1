@@ -19,14 +19,14 @@
 <ion-content [fullscreen]="true">
   <div class="center-container">
     <p class="cls-title">{{'My absence requests' | translate}}</p>
-    <ng-container *ngIf="absences?.pending.length == 0  && absences?.refused.length == 0  && absences?.allowed.length == 0  ">
+    <ng-container *ngIf="absences?.pending?.length == 0  && absences?.refused?.length == 0  && absences?.allowed?.length == 0  ">
       <div class="empty-container">
         <img src="assets/img/emty-icon.png" />
         <p class="cls-empty-title">{{'No requests found' | translate}}</p>
         <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
       </div>
     </ng-container>
-    <ion-card *ngIf="absences?.pending.length > 0" class="custom-card">
+    <ion-card *ngIf="absences?.pending?.length > 0" class="custom-card">
       <ion-card-content>
         <h2 class="cls-course">{{'In treatment course' | translate}}</h2>
         <ng-container *ngFor="let pending of absences.pending">
@@ -37,7 +37,7 @@
         </ng-container>
       </ion-card-content>
     </ion-card>
-    <ion-card *ngIf="absences?.allowed.length > 0" class="custom-card">
+    <ion-card *ngIf="absences?.allowed?.length > 0" class="custom-card">
       <ion-card-content>
         <h2 class="cls-course">{{'Absence granted' | translate}}</h2>
         <ng-container *ngFor="let allowed of absences.allowed">
@@ -48,7 +48,7 @@
         </ng-container>
       </ion-card-content>
     </ion-card>
-    <ion-card *ngIf="absences?.refused.length > 0" class="custom-card">
+    <ion-card *ngIf="absences?.refused?.length > 0" class="custom-card">
       <ion-card-content>
         <h2 class="cls-course">{{'Absence refused' | translate}}</h2>
         <ng-container *ngFor="let refused of absences.refused">
