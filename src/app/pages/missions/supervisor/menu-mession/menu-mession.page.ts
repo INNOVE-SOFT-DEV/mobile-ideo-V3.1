@@ -11,6 +11,7 @@ import {CameraSource, Camera, CameraResultType} from "@capacitor/camera";
 import {OcrScannerPage} from "src/app/pages/ocr-scanner/ocr-scanner.page";
 import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
+import { LoadingControllerService } from "src/app/widgets/loading-controller/loading-controller.service";
 
 @Component({
   selector: "app-menu-mession",
@@ -38,7 +39,7 @@ export class MenuMessionPage implements OnInit {
     private mapService: MapService,
     private taskmanagerService: TicketService,
     private actionSheetCtrl: ActionSheetController,
-    private loadingCtrl: LoadingController,
+    private loadingCtrl: LoadingControllerService,
     private ocrService: OcrService,
     private toast: ToastControllerService,
     private modalCtrl: ModalController
@@ -138,11 +139,7 @@ export class MenuMessionPage implements OnInit {
       const response = await fetch(this.imageUrl);
       const blob = await response.blob();
 
-      const loading = await this.loadingCtrl.create({
-        message: "Detecting text...",
-        spinner: "crescent"
-      });
-      await loading.present();
+       await this.loadingCtrl.present("analyse de reçu...");
       const result: any = await Ocr.detectText({filename: photo.path});
       this.detectedTexts = result.textDetections.map((d: any) => d.text);
       this.extractedText = this.detectedTexts.join(" | ");
@@ -156,8 +153,7 @@ export class MenuMessionPage implements OnInit {
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {
           this.generatedJson = res.data || {};
-
-          await loading.dismiss();
+          await this.loadingCtrl.dimiss();
           await this.toast.presentToast("Reçu scanné avec succès", "success");
           const modal = await this.modalCtrl.create({
             component: OcrScannerPage,
@@ -169,11 +165,11 @@ export class MenuMessionPage implements OnInit {
         },
         error: async err => {
           await this.toast.presentToast("Une erreur s'est produite", "danger");
-          await loading.dismiss();
+          await this.loadingCtrl.dimiss();
         }
       });
 
-      await loading.dismiss();
+      // await loading.dismiss();
     } catch (error) {
       console.error("OCR Error:", error);
     }

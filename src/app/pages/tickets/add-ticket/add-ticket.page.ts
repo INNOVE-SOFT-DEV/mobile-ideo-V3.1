@@ -50,6 +50,7 @@ export class AddTicketPage implements OnInit {
   planning: any;
   kanban: any;
   task_from_bord: boolean = false;
+  kanbanId: any;
   ticketOptions = [
     {img: "assets/img/icon-1-1.png", label: "1"},
     {img: "assets/img/icon-1-2.png", label: "2"},
@@ -76,10 +77,16 @@ export class AddTicketPage implements OnInit {
     this.task = JSON.parse(this.route.snapshot.paramMap.get("task")!);
     this.task_from_bord = this.route.snapshot.paramMap.get("task_from_bord") === "true";
     this.kanban = this.route.snapshot.paramMap.get("kanban");
-    this.boards = JSON.parse(this.route.snapshot.paramMap.get("boards") || "[]");
-    console.log("Boards:", this.boards);
-    this.kanban 
+    
+    // this.selectedTableau = this.kanban ? JSON.parse(this.kanban).name : null;
+    console.log(JSON.parse(this.kanban));
+    
+    this.boards = JSON.parse(this.kanban).boards || '[]'
+
+    
     if (this.kanban) {
+      console.log(this.boards);
+      
       this.boards =
         this.boards.length > 0
           ? this.boards
@@ -88,7 +95,8 @@ export class AddTicketPage implements OnInit {
               {status: "en cours", id: "2"},
               {status: "terminé", id: "3"}
             ];
-      this.selectedTableau = this.kanban;
+      this.selectedTableau = JSON.parse(this.kanban).id
+      
       this.selectedBoard = this.boards[0]?.id;
     }
     this.TaskManagerService.getTables().subscribe((res: any) => {
