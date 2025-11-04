@@ -7,7 +7,9 @@ import {App} from "@capacitor/app";
 import {Network} from "@capacitor/network";
 import {TrackingService} from "src/app/widgets/tracking/tracking.service";
 import {ChatService} from "./tab2/chatService/chat.service";
-import { Preferences } from "@capacitor/preferences";
+import {Preferences} from "@capacitor/preferences";
+import {SqliteServiceTs} from "src/app/widgets/storage/sqlite.service.ts";
+import {Platform} from "@ionic/angular";
 
 @Component({
   selector: "app-root",
@@ -25,7 +27,9 @@ export class AppComponent implements OnInit {
     private photoReportService: PhotoReportService,
     private googleMapsLoader: GoogleMapsLoaderService,
     // private trackingService: TrackingService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private platform: Platform,
+    private sqliteService: SqliteServiceTs
   ) {
     this.translate.setDefaultLang("fr");
     this.geolocationService.init();
@@ -36,6 +40,11 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = true;
+
+    await this.platform.ready();
+    await this.sqliteService.initDB();
+    await this.sqliteService.listTables();
+
     // this.trackingService.startTracking();
     // Start network status listener (should not call checkAndSyncPhotos directly)
     await this.photoReportService.detectNetworksStatusChange();
@@ -62,12 +71,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-async  logAllCapacitorPreferences() {
-  // Get all keys
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    const value = localStorage.getItem(key!);
-    console.log(`${key}:`, value);
+  async logAllCapacitorPreferences() {
+    // Get all keys
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key!);
+      console.log(`${key}:`, value);
+    }
   }
-}
 }

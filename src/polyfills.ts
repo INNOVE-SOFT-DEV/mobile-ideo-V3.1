@@ -41,6 +41,11 @@
  *  (window as any).__Zone_enable_cross_context_check = true;
  *
  */
+(window as any).exports = window.exports || {};
+
+(window as any).global = window;
+(window as any).process = {env: {}};
+(window as any).Buffer = [];
 
 import "./zone-flags";
 

@@ -1,10 +1,25 @@
 import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
-import {defineCustomElements} from "@ionic/pwa-elements/loader";
-
 import {AppModule} from "./app/app.module";
+import "jeep-sqlite/dist/components/jeep-sqlite.js";
+import {defineCustomElements as jeepSqlite} from "jeep-sqlite/loader";
 
-defineCustomElements(window);
+// ⚡ On attend que le DOM soit chargé avant de lancer Angular
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("🚀 DOM prêt — définition du composant jeep-sqlite");
+  jeepSqlite(window);
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+  // On s’assure qu’il est bien défini
+  await customElements.whenDefined("jeep-sqlite");
+
+  // On le crée dans le DOM si nécessaire
+  if (!document.querySelector("jeep-sqlite")) {
+    const el = document.createElement("jeep-sqlite");
+    document.body.appendChild(el);
+    console.log("✅ Composant <jeep-sqlite> ajouté au DOM manuellement");
+  }
+
+  // Ensuite on démarre Angular
+  platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .catch(err => console.error(err));
+});
