@@ -4,6 +4,7 @@ import {OcrService} from "./ocr-service/ocr.service";
 import {LoadingController, ModalController} from "@ionic/angular";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ToastControllerService } from "src/app/widgets/toast-controller/toast-controller.service";
+import { LoadingControllerService } from "src/app/widgets/loading-controller/loading-controller.service";
 
 @Component({
   selector: "app-ocr-scanner",
@@ -51,16 +52,16 @@ ngOnInit() {
 
   formData.append('recipe_id', this.result?.data?.id || '');
 
-  const loading = await this.loadingCtrl.create(
-    { message: 'confirmation...' }
-  );
-  await loading.present();
+ const loading = await this.loadingCtrl.create({
+    message: 'Mise à jour du reçu...',
+    spinner: 'crescent'
+  });
   this.ocrService.updateRecipe(formData).subscribe({
     next: async  (response) => {
       console.log('Recipe updated successfully:', response);
-      await loading.dismiss();
-      await this.toast.presentToast('Reçu confirmer', 'success');
+      await this.toast.presentToast('Confirmation effectuée avec succès', 'success');
       await this.modalCtrl.dismiss(this.form.value, 'confirm');
+      await loading.dismiss();
     },
     error: async (error) => {
       console.error('Error updating recipe:', error);

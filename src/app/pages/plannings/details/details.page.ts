@@ -178,11 +178,7 @@ export class DetailsPage implements OnInit {
       const response = await fetch(this.imageUrl);
       const blob = await response.blob();
 
-      const loading = await this.loadingCtrl.create({
-        message: "Detecting text...",
-        spinner: "crescent"
-      });
-      await loading.present();
+
       const result: any = await Ocr.detectText({filename: photo.path});
       this.detectedTexts = result.textDetections.map((d: any) => d.text);
       this.extractedText = this.detectedTexts.join(" | ");
@@ -193,27 +189,35 @@ export class DetailsPage implements OnInit {
       formData.append("planning_type", this.planningType);
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       formData.append("user_id", user.id); // Example user ID
+      await this.loadingService.present(
+        'analyse de reçu...'
+      );
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {
           this.generatedJson = res.data || {};
 
-          await loading.dismiss();
           await this.toast.presentToast("Reçu scanné avec succès", "success");
-                  const modal = await this.modalCtrl.create({
+          const modal = await this.modalCtrl.create({
           component: OcrScannerPage,
           componentProps: {
             result: res // Pass full response here
           }
         });
+        modal.onDidDismiss().then(async result => {
+          if (result.role === 'confirm') {
+            // Handle confirmed data if needed
+            await this.loadingService.dimiss();
+          }
+        })
         await modal.present();
         },
         error: async err => {
           await this.toast.presentToast("Une erreur s'est produite", "danger");
-          await loading.dismiss();
+          await this.loadingService.dimiss();
         }
       });
 
-      await loading.dismiss();
+    
     } catch (error) {
       console.error("OCR Error:", error);
     }
