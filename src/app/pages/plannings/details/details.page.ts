@@ -55,11 +55,17 @@ export class DetailsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
+    // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
+    this.supervisors = []
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     try {
       await this.refreshLocalData();
       this.setupPhotos();
+      console.log("#######################################################");
+
+      console.log(this.planning ,this.planningType );
+      console.log("#######################################################");
+      
     } catch (error) {
       console.error("Erreur lors du chargement des détails :", error);
     } finally {
@@ -75,14 +81,15 @@ export class DetailsPage implements OnInit {
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
     this.planningType = cached.planningType;
+    console.log(this.planning.team);    
     this.setupPhotos();
     await this.loadingService.dimiss();
   }
 
   transform(): string {
     let frenchDate: string = "";
-    if (this.planning?.date) {
-      const date = new Date(this.planning.date);
+    if (this.planning?.today_schedule?.date) {
+      const date = new Date(this.planning?.today_schedule?.date);
       frenchDate = date.toLocaleDateString("fr-FR", {
         weekday: "long",
         day: "numeric",

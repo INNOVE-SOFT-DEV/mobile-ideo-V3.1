@@ -12,14 +12,27 @@ import {Router} from "@angular/router";
 export class RegularComponent implements OnInit {
   @Input() data: any[] = [];
   @Input() supervisors: any[] = [];
+  @Input() date : string = new Date().toISOString();
   env = environment;
+  team : any[] = [];
+  schedule : any = {}
 
   urlApi: string = environment.urlAPI;
   webUrl: string = environment.url_web;
   today: string = new Date().toISOString();
 
   constructor(private router: Router) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.data.forEach((element: any) => {
+    //   element["showDetails"] = false;
+    //   element["today_schedule"] = element.schedules.find((s : any) => s.date == this.date)
+    //   element["team"] = [...element["today_schedule"]["agents"], ...element["today_schedule"]["subcontractors"]]      
+    // })
+    
+
+
+
+  }
 
   toggleDetails(planning: Intervention) {
     planning.showDetails = !planning.showDetails;

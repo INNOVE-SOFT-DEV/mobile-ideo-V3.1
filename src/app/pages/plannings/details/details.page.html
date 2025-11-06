@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title class="center-title">{{ planning?.date ? transform() : "" }}</ion-title>
+    <ion-title class="center-title">{{ planning?.today_schedule?.date ? transform() : "planning?.today_schedule?.date" }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button>
@@ -23,11 +23,11 @@
         <ion-grid>
           <ion-row>
             <ion-col>
-              <img
+              <!-- <img
                 src="{{
               planning?.logo?.url
             }}"
-              />
+              /> -->
             </ion-col>
             <ion-col size="8">
               <div class="cls-title">
@@ -166,10 +166,10 @@
           <ion-row class="align-center">
             <ion-col size="9">
               <div class="title-c-txt">
-                <p class="cls-card-title">{{ contact.lastname ? contact.name + " " +contact.last_name : contact.name}}</p>
+                <p class="cls-card-title">{{ `${contact.first_name} ${contact.last_name}` }}</p>
               </div>
               <div class="title-c-txt">
-                <ion-chip class="chip-job"><span class="cls-title-job">{{contact.role}}</span></ion-chip>
+                <ion-chip class="chip-job"><span class="cls-title-job">{{contact.job}}</span></ion-chip>
               </div>
             </ion-col>
             <ion-col size="3">
@@ -197,7 +197,7 @@
         </ion-card-title>
         <ion-card-subtitle><ion-chip class="cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content class="cls-desc" [innerHTML]="planning?.mission"></ion-card-content>
+      <ion-card-content class="cls-desc" [innerHTML]="planning?.note"></ion-card-content>
     </ion-card>
     <ion-card class="cls-ion-card-notice">
       <ion-card-header>
@@ -229,18 +229,19 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
-    <ng-container *ngIf="planning?.team.length >0">
-      <div class="cls-list-c-b" *ngIf="planningType == 'punctual' ||  planningType == 'forfaitaire'">
+
+        <ng-container *ngIf="planning?.team.length >0">
+      <div class="cls-list-c-b">
         <ion-list class="cls-ion-list-c">
-          <ion-item *ngFor="let agent of planning?.team" lines="none">
-            <ion-grid *ngIf="agent?.subcontractor_agent">
+          <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? '' : 'none' }">
+            <ion-grid *ngIf="agent?.manager && !agent.platform">
               <ion-row class="align-center">
                 <ion-col size="6">
                   <div class="title-c-txt">
-                    <p class="c-text">{{ agent?.subcontractor_agent?.first_name}} {{agent?.subcontractor_agent?.last_name }}</p>
+                    <p class="c-text">{{ agent?.first_name}} {{ agent?.last_name}} </p>
                   </div>
                   <div class="title-c-txt">
-                    <ion-chip class="cls-chip-f-name">{{agent?.subcontractor_agent?.subcontractor.company}}</ion-chip>
+                    <ion-chip class="cls-chip-f-name">{{agent?.company_name}}</ion-chip>
                   </div>
                 </ion-col>
                 <ion-col size="6">
@@ -259,7 +260,17 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-            <ion-grid *ngIf="!agent?.subcontractor_agent">
+        
+          </ion-item>
+        </ion-list>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="planning?.team.length >0">
+      <div class="cls-list-c-b">
+        <ion-list class="cls-ion-list-c">
+          <ion-item *ngFor="let agent of planning?.team" lines="none"[ngStyle]="{ 'display': agent.manager ? 'none' : '' }">
+    
+            <ion-grid *ngIf="!agent.manager">
               <ion-row class="align-center">
                 <ion-col size="9">
                   <div class="title-c-txt">
@@ -280,28 +291,5 @@
         </ion-list>
       </div>
     </ng-container>
-    <div class="cls-list-c-b" *ngIf="planningType == 'regular'">
-      <ion-list class="cls-ion-list-c">
-        <ion-item *ngFor="let agent of planning?.team" lines="none">
-          <ion-grid>
-            <ion-row class="align-center">
-              <ion-col size="9">
-                <div class="title-c-txt">
-                  <p class="c-text">{{agent.first_name}} {{agent.last_name}}</p>
-                </div>
-                <div class="title-c-txt">
-                  <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
-                </div>
-              </ion-col>
-              <ion-col size="3">
-                <a class="call-link" href="tel://{{agent?.phone.split(' ').join()}}">
-                  <img src="../../../../assets/img/icon-call.png" />
-                </a>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-      </ion-list>
-    </div>
   </div>
 </ion-content>

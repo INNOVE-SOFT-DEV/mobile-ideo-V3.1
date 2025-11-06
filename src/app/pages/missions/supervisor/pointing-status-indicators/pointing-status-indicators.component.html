@@ -1,4 +1,4 @@
-<div *ngIf="agent?.first_pointing_internal?.length == 0 && agent?.second_pointing_internal.length == 0" class="status-indicator green">
+<div *ngIf="agent?.pointing_internal?.started_on != null && agent?.pointing_internal?.finished_on != null" class="status-indicator green">
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M21 10.3115L17 14.3115L15 12.3115M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
@@ -9,7 +9,7 @@
     />
   </svg>
 </div>
-<div *ngIf="agent?.first_pointing_internal?.length == 1 && agent?.second_pointing_internal.length == 1" class="status-indicator red">
+<div *ngIf="agent?.pointing_internal?.started_on == null && agent?.pointing_internal?.finished_on == null"  class="status-indicator red">
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M17 14.3115L21 10.3115M17 10.3115L21 14.3115M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
@@ -20,7 +20,7 @@
     />
   </svg>
 </div>
-<div *ngIf="agent?.first_pointing_internal?.length == 0 && agent?.second_pointing_internal.length == 1" class="status-indicator yellow">
+<div *ngIf="agent?.pointing_internal?.started_on != null && agent?.pointing_internal?.finished_on == null"  class="status-indicator yellow">
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M15 13.3115H21M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"

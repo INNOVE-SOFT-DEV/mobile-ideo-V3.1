@@ -104,10 +104,10 @@ export class AbsenceRepository implements AbsenceInterface {
 
     let promise: Promise<any>;
     if (isOnline) {
-      console.log("🌐 En ligne → enregistrement avec FormData");
+      // console.log("🌐 En ligne → enregistrement avec FormData");
       promise = this.sqlite.smartSave("absences", "user/absence", data, "create");
     } else {
-      console.log("📴 Hors ligne → enregistrement local JSON");
+      // console.log("📴 Hors ligne → enregistrement local JSON");
       promise = this.sqlite.smartSave("absences", "user/absence", absence, "create");
     }
     return from(promise);

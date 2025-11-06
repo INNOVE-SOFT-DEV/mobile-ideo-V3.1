@@ -20,7 +20,10 @@
               "get-blob-duration",
               "background-foreground-service",
               "jszip",
-              "jeep-sqlite"
+              "jeep-sqlite",
+              "loadash",
+              "localforage",
+              "actioncable"
             ],
             "outputPath": "www",
             "index": "src/index.html",

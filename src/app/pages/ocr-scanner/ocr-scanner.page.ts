@@ -58,7 +58,7 @@ ngOnInit() {
   });
   this.ocrService.updateRecipe(formData).subscribe({
     next: async  (response) => {
-      console.log('Recipe updated successfully:', response);
+      // console.log('Recipe updated successfully:', response);
       await this.toast.presentToast('Confirmation effectuée avec succès', 'success');
       await this.modalCtrl.dismiss(this.form.value, 'confirm');
       await loading.dismiss();

@@ -42,7 +42,7 @@ export class AgentAbsencePage implements OnInit {
     this.absenceService.getAbsencesFromapi().subscribe({
       next: async data => {
         //this.absences = data;
-        console.log(data);
+        // console.log(data);
         const cleanData = data.filter((item: any) => item && Object.keys(item).length > 0);
 
         // group by state
@@ -52,7 +52,7 @@ export class AgentAbsencePage implements OnInit {
           refused: cleanData.filter((a: any) => a.state === "refused")
         };
 
-        console.log("Grouped absences:", this.absences);
+        // console.log("Grouped absences:", this.absences);
         await this.loadingCtrl.dimiss();
       },
       error: async error => {
@@ -87,8 +87,8 @@ export class AgentAbsencePage implements OnInit {
         return item.id === data.update.id ? {...item, ...data.update} : item;
       });
     } else if (data) {
-      console.log("okkkkk");
-      console.log(data);
+      // console.log("okkkkk");
+      // console.log(data);
       this.absences.pending ??= [];
       this.absences.pending.push(data);
     }

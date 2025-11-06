@@ -14,3 +14,16 @@
   font-size: 14px;
   color: #233341;
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;  /* horizontally center */
+  align-items: center;      /* vertically center */
+  height: 60vh;             /* controls vertical centering area */
+  // margin-top: 20px;         /* adds top spacing if needed */
+}
+
+ion-spinner {
+  width: 60px;
+  height: 60px;
+}

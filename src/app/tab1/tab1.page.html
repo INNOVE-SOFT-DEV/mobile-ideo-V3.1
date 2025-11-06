@@ -14,25 +14,32 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-
-  <ng-container *ngIf="isLoaded; ">
-    <div class="header-container-agent" *ngIf="!isSuperVisor">
+  <ng-container *ngIf="!isSuperVisor">
+    <div class="header-container-agent">
       <div class="month-block" (click)="openPopover($event)">
         <span class="month-text">{{ currentDate | capitalizeFirstLetter }}</span>
         <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
       </div>
       <ion-button expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button>
     </div>
-    <ng-container *ngIf="punctuals?.length === 0 && regulars.length === 0 && forfaitaires.length === 0">
+    <div class="spinner-container" *ngIf="isLoaded == false">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+    <ng-container
+      *ngIf="(punctuals.length === 0 && regulars.length === 0 && forfaitaires.length === 0) && isLoaded==true">
       <div class="empty-container">
         <img src="assets/img/emty-icon.png" />
         <p class="cls-empty-title">{{'No data found' | translate}}</p>
         <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
       </div>
     </ng-container>
-    <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-forfaitaire>
-    <app-punctual [data]="punctuals" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-punctual>
-    <app-regular [data]="regulars" [supervisors]="superVisors"></app-regular>
+    <ng-container *ngIf="isLoaded==true">
+      <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [date]="date"
+        [supervisors]="superVisors"></app-forfaitaire>
+      <app-punctual [data]="punctuals" [date]="date" [isTodayPlannings]="isToDayPlannings"
+        [supervisors]="superVisors"></app-punctual>
+      <app-regular [data]="regulars" [date]="date" [supervisors]="superVisors"></app-regular>
+    </ng-container>
   </ng-container>
 </ion-content>
 <ion-content *ngIf="isSuperVisor" [fullscreen]="true">
@@ -51,5 +58,5 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <app-main *ngIf="loaded" [counts]="counts"></app-main>
+  <app-main [counts]="counts"></app-main>
 </ion-content>

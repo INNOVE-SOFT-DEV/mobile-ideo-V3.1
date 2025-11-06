@@ -106,6 +106,7 @@ ion-card {
   font-size: 22px;
   font-weight: 700;
   color: #233341;
+  text-wrap: nowrap;
 }
 .cls-ionc-card-mission {
   background-color: #f8fdff;
@@ -166,6 +167,7 @@ ion-card {
   font-size: 18px;
   font-weight: 700;
   color: #233341;
+  text-wrap: nowrap;
 }
 ion-item::part(native) {
   border-bottom: 1px solid #dadada;

@@ -1,194 +1,295 @@
-<div *ngFor="let item of data" class="item-missions">
-  <div class="center-container">
-    <ion-badge color="warning" class="time-badge">{{ "default hour" | translate }}</ion-badge>
-  </div>
-  <ion-card class="card">
-    <ion-card-header class="card-header">
-      <ion-card-title>
-        <ion-grid>
-          <ion-row>
+<div class="item-missions">
+  @for (item of data; track $index) {
+    @if (item["team"]?.length > 0) {
+      <div class="center-container">
+        <ion-badge color="warning" class="time-badge">{{ "default hour" | translate }}</ion-badge>
+      </div>
+
+      <ion-card class="card">
+        <ion-card-header class="card-header">
+          <ion-card-title>
+            <ion-grid>
+              <ion-row>
             <ion-col size="9" push="3">
               <p class="name-campany">{{ item.intervention_name }}</p>
             </ion-col>
-            <ion-col class="logo" size="3" pull="9">
+            <!-- <ion-col class="logo" size="3" pull="9">
               <img class="logo"
                   src="{{!item?.logo?.url?.includes('default-company') ? item?.logo?.url  : 'https://backend.ideogroupe.com/assets/img/default-company.png'}}"
                style="min-height: 60px" />
-            </ion-col>
+            </ion-col> -->
           </ion-row>
-        </ion-grid>
-        <ion-chip color="tertiary" class="custom-chip">
-          <ion-icon name="people-outline"></ion-icon>
-          {{ "team" | translate }}
-        </ion-chip>
-      </ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content class="card-content" (click)="goToDetails(item)">
-      <ion-list class="list">
-        <ion-item *ngFor="let agent of item.team.slice(0, 2); let last = last" [attr.lines]="item.team.length <= 2 && last ? 'none' : null">
-          <ion-thumbnail *ngIf="agent.is_driver" slot="start">
-            <div class="avatar-container">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
-                  stroke="#233341"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </ion-thumbnail>
-          <ion-grid *ngIf="agent.is_driver" class="custom-grid">
-            <ion-row>
-              <ion-col size="12">
-                <p class="name-agent wrap-text">
-                  {{ agent.first_name }} {{ agent.last_name }}
-                  <br />
-                  <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
-                </p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-
-          <ion-thumbnail *ngIf="!agent.is_driver" slot="start">
-            <div class="avatar-container">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
-                  stroke="#233341"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </ion-thumbnail>
-          <ion-grid *ngIf="!agent.is_driver" class="custom-grid">
-            <ion-row>
-              <ion-col size="12">
-                <p class="name-agent wrap-text">
-                  {{ agent.first_name }} {{ agent.last_name }}
-                  <br />
-                  <span class="job-agent wrap-text">{{ "company name" | translate }}</span>
-                </p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-
-        <div class="expandable-content" [class.expanded]="item.showDetails" *ngIf="item.team.length > 2">
-          <ion-item *ngFor="let agent of item.team.slice(2); let last = last" [attr.lines]="last ? 'none' : null" class="expandable-item">
-            <ion-thumbnail *ngIf="agent.role == 'teamleader'" slot="start">
-              <div class="avatar-container">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20 21C20 18.2386 16.4183 16 12 16C7.58172 16 4 18.2386 4 21" stroke="#233341" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  <path
-                    d="M12.0001 5V2M6 7.89999H18M7.52728 9C7.63637 11.2 9.6 13 12 13C14.5091 13 16.4727 11.2 16.4727 8.9V7.1C16.4727 4.8 14.5091 3 12 3C9.6 3 7.63637 4.8 7.52728 7V9Z"
-                    stroke="#233341"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-            </ion-thumbnail>
-            <ion-grid *ngIf="agent.role == 'teamleader'" class="custom-grid">
-              <ion-row>
-                <ion-col size="12">
-                  <p class="name-agent wrap-text">
-                    {{ agent.first_name }} {{ agent.last_name }}
-                    <br />
-                    <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
-                  </p>
-                </ion-col>
-              </ion-row>
             </ion-grid>
-            <ion-thumbnail *ngIf="agent.vehicule" slot="start">
-              <div class="avatar-container">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
-                    stroke="#233341"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-            </ion-thumbnail>
-            <ion-grid *ngIf="agent.vehicule" class="custom-grid">
-              <ion-row>
-                <ion-col size="12">
-                  <p class="name-agent wrap-text">
-                    {{ agent.first_name }} {{ agent.last_name }}
-                    <br />
-                    <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
-                  </p>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+            <ion-chip color="tertiary" class="custom-chip">
+              <ion-icon name="people-outline"></ion-icon>
+              {{ "team" | translate }}
+            </ion-chip>
+          </ion-card-title>
+        </ion-card-header>
 
-            <ion-thumbnail *ngIf="!agent.vehicule && agent.role != 'teamleader' && !agent?.subcontractor_agent_id" slot="start">
-              <div class="avatar-container">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
-                    stroke="#233341"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-            </ion-thumbnail>
-            <ion-grid *ngIf="!agent.vehicule && agent.role != 'teamleader' && !agent?.subcontractor_agent_id" class="custom-grid">
-              <ion-row>
-                <ion-col size="12">
-                  <p class="name-agent wrap-text">
-                    {{ agent.first_name }} {{ agent.last_name }}
-                    <br />
-                    <span class="job-agent wrap-text">{{ "company name" | translate }}</span>
-                  </p>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-            <ion-thumbnail *ngIf="agent?.subcontractor_agent_id" slot="start">
-              <div class="avatar-container">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
-                    stroke="#233341"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-            </ion-thumbnail>
-            <ion-grid *ngIf="agent?.subcontractor_agent_id" class="custom-grid">
-              <ion-row>
-                <ion-col size="12">
-                  <p class="name-agent wrap-text">
-                    {{ agent.subcontractor_agent.first_name }} {{ agent.subcontractor_agent.last_name }}
-                    <br />
-                    <span class="job-agent wrap-text">{{ agent.subcontractor_agent.subcontractor.company }}</span>
-                  </p>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-        </div>
-      </ion-list>
-    </ion-card-content>
+        <ion-card-content class="card-content" (click)="goToDetails(item)">
+          <ion-list class="list">
+            @for (agent of item.team.slice(0, 2); track $index) {
+              <ion-item [attr.lines]="item.team.length <= 2 && $last ? 'none' : null">
+                @if (agent.role == "teamleader" || agent?.is_teamleader) {
+                  <ion-thumbnail slot="start">
+                    <div class="avatar-container">
+                      <!-- TEAMLEADER ICON -->
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 21C20 18.2386 16.4183 16 12 16C7.58172 16 4 18.2386 4 21" stroke="#233341" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                          d="M12.0001 5V2M6 7.89999H18M7.52728 9C7.63637 11.2 9.6 13 12 13C14.5091 13 16.4727 11.2 16.4727 8.9V7.1C16.4727 4.8 14.5091 3 12 3C9.6 3 7.63637 4.8 7.52728 7V9Z"
+                          stroke="#233341"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </ion-thumbnail>
+                  <ion-grid class="custom-grid">
+                    <ion-row>
+                      <ion-col size="12">
+                        <p class="name-agent wrap-text">
+                          {{ agent.first_name }} {{ agent.last_name }}
+                          <br />
+                          @if (agent.vehicule) {
+                            <span class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                          }
+                        </p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                }
 
-    <div class="show-more-container" *ngIf="item.team.length > 2" (click)="toggleDetails(item); $event.stopPropagation()">
-      <p class="show-more-text">
-        {{ item.showDetails ? ("Show less" | translate) : ("Show more" | translate) }}
-      </p>
-      <ion-icon class="icon-show-more" [class.rotated]="item.showDetails" [name]="item.showDetails ? 'caret-up-circle-outline' : 'caret-down-circle-outline'"></ion-icon>
-    </div>
-  </ion-card>
+                @if (agent.is_driver && !agent.is_teamleader) {
+                  <ion-thumbnail slot="start">
+                    <div class="avatar-container">
+                      <!-- DRIVER ICON -->
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
+                          stroke="#233341"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </ion-thumbnail>
+                  <ion-grid class="custom-grid">
+                    <ion-row>
+                      <ion-col size="12">
+                        <p class="name-agent wrap-text">
+                          {{ agent.first_name }} {{ agent.last_name }}
+                          <br />
+                          @if (agent.vehicule) {
+                            <span class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                          }
+                        </p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                }
+                @if (!agent.is_driver && !agent.is_teamleader && !agent.manager) {
+                  <ion-thumbnail slot="start">
+                    <div class="avatar-container">
+                      <!-- DEFAULT PERSON ICON -->
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
+                          stroke="#233341"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </ion-thumbnail>
+                  <ion-grid class="custom-grid">
+                    <ion-row>
+                      <ion-col size="12">
+                        <p class="name-agent wrap-text">
+                          {{ agent.first_name }} {{ agent.last_name }}
+                          <br />
+                          <span class="job-agent wrap-text">{{ "company name" | translate }}</span>
+                        </p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                }
+                @if (agent?.manager && !agent.platform) {
+                  <ion-thumbnail slot="start">
+                    <div class="avatar-container">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
+                          stroke="#233341"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </ion-thumbnail>
+                  <ion-grid class="custom-grid">
+                    <ion-row>
+                      <ion-col size="12">
+                        <p class="name-agent wrap-text">
+                          <!-- {{ agent.subcontractor_agent.first_name }} {{ agent.subcontractor_agent.last_name }} <br /> -->
+                                                      {{ agent.manager }} <br />
+
+                          <span class="job-agent wrap-text">{{ agent.company_name }}</span>
+                        </p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                }
+              </ion-item>
+            }
+
+            @if (item.team.length > 2) {
+              <div class="expandable-content" [class.expanded]="item.showDetails">
+                @for (agent of item.team.slice(2); track $index) {
+                  <ion-item [attr.lines]="$last ? 'none' : null" class="expandable-item">
+                    @if (agent.role == "teamleader" || agent.is_teamleader) {
+                      <ion-thumbnail slot="start">
+                        <div class="avatar-container">
+                          <!-- TEAMLEADER ICON -->
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M20 21C20 18.2386 16.4183 16 12 16C7.58172 16 4 18.2386 4 21"
+                              stroke="#233341"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M12.0001 5V2M6 7.89999H18M7.52728 9C7.63637 11.2 9.6 13 12 13C14.5091 13 16.4727 11.2 16.4727 8.9V7.1C16.4727 4.8 14.5091 3 12 3C9.6 3 7.63637 4.8 7.52728 7V9Z"
+                              stroke="#233341"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </ion-thumbnail>
+                      <ion-grid class="custom-grid">
+                        <ion-row>
+                          <ion-col size="12">
+                            <p class="name-agent wrap-text">
+                              {{ agent.first_name }} {{ agent.last_name }}
+                              <br />
+                              @if (agent.vehicule) {
+                                <span class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                              }
+                            </p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    }
+
+                    @if (agent.vehicule && !agent?.is_teamleader) {
+                      <ion-thumbnail slot="start">
+                        <div class="avatar-container">
+                          <!-- VEHICLE ICON -->
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
+                              stroke="#233341"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </ion-thumbnail>
+                      <ion-grid class="custom-grid">
+                        <ion-row>
+                          <ion-col size="12">
+                            <p class="name-agent wrap-text">
+                              {{ agent.first_name }} {{ agent.last_name }}
+                              <br />
+                              <span class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                            </p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    }
+
+                    @if (!agent.vehicule && !agent?.is_teamleader && !agent?.manager) {
+                      <ion-thumbnail slot="start">
+                        <div class="avatar-container">
+                          <!-- PERSON ICON -->
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
+                              stroke="#233341"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </ion-thumbnail>
+                      <ion-grid class="custom-grid">
+                        <ion-row>
+                          <ion-col size="12">
+                            <p class="name-agent wrap-text">
+                              {{ agent.first_name }} {{ agent.last_name }}
+                              <br />
+                              <span class="job-agent wrap-text">{{ "company name" | translate }}</span>
+                            </p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    }
+
+                    @if (agent?.manager) {
+                      <ion-thumbnail slot="start">
+                        <div class="avatar-container">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
+                              stroke="#233341"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </ion-thumbnail>
+                      <ion-grid class="custom-grid">
+                        <ion-row>
+                          <ion-col size="12">
+                            <p class="name-agent wrap-text">
+                              
+                                                                                    {{ agent.first_name }} {{ agent.last_name }} <br />
+
+                              <span class="job-agent wrap-text">{{ agent.company_name }}</span></p>
+                              <!-- {{ agent.subcontractor_agent.first_name }} {{ agent.subcontractor_agent.last_name }} <br /> -->
+                              <!-- <span class="job-agent wrap-text">{{ agent.company_name }}</span> -->
+                            <!-- </p> -->
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    }
+                  </ion-item>
+                }
+              </div>
+            }
+          </ion-list>
+        </ion-card-content>
+
+        @if (item.team.length > 2) {
+          <div class="show-more-container" (click)="toggleDetails(item); $event.stopPropagation()">
+            <p class="show-more-text">
+              {{ item.showDetails ? ("Show less" | translate) : ("Show more" | translate) }}
+            </p>
+            <ion-icon class="icon-show-more" [class.rotated]="item.showDetails" [name]="item.showDetails ? 'caret-up-circle-outline' : 'caret-down-circle-outline'"></ion-icon>
+          </div>
+        }
+      </ion-card>
+    }
+  }
 </div>
