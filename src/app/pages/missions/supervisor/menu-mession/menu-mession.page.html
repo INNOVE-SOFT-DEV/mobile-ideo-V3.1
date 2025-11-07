@@ -209,7 +209,7 @@
         <ion-row class="align-center" *ngFor="let item of supervisors">
           <ion-col size="9">
             <div class="title-c-txt">
-              <p class="c-text">{{item.first_name}} {{item.last_name}}</p>
+              <p class="c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
             </div>
             <div class="title-c-txt">
               <ion-chip class="cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
@@ -232,7 +232,7 @@
             <ion-row class="align-center">
               <ion-col size="6">
                 <div class="title-c-txt">
-                  <p class="c-text">{{ agent?.subcontractor_agent?.first_name}} {{agent?.subcontractor_agent?.last_name }}</p>
+                  <p class="c-text wrap-text">{{ agent?.subcontractor_agent?.first_name}} {{agent?.subcontractor_agent?.last_name }}</p>
                 </div>
                 <div class="title-c-txt">
                   <ion-chip class="cls-chip-f-name">{{agent?.subcontractor_agent?.subcontractor.company}}</ion-chip>
@@ -257,7 +257,7 @@
             <ion-row class="align-center">
               <ion-col size="9">
                 <div class="title-c-txt">
-                  <p class="c-text">{{agent.first_name}} {{agent.last_name}}</p>
+                  <p class="c-text wrap-text" >{{agent.first_name}} {{agent.last_name}}</p>
                 </div>
                 <div class="title-c-txt">
                   <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
@@ -281,7 +281,7 @@
           <ion-row class="align-center">
             <ion-col size="9">
               <div class="title-c-txt">
-                <p class="c-text">{{agent.first_name}} {{agent.last_name}}</p>
+                <p class="c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
               </div>
               <div class="title-c-txt">
                 <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
