@@ -23,18 +23,19 @@
         <ion-grid>
           <ion-row>
             <ion-col>
-              <!-- <img
+              <img
                 src="{{
-              planning?.logo?.url
+             planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'
             }}"
-              /> -->
+            class="logo"
+              />
             </ion-col>
             <ion-col size="8">
               <div class="cls-title">
-                <p class="cls-p-title">{{planning?.intervention_name?.split('-')[0]}}</p>
+                <p class="cls-p-title">{{planning?.intervention.name?.split('-')[0]}}</p>
               </div>
               <div class="cls-address">
-                <p class="cls-p-address">{{planning?.intervention_name?.split('-')[1]}}</p>
+                <p class="cls-p-address">{{planning?.intervention.name?.split('-')[1]}}</p>
               </div>
             </ion-col>
             <ion-col>

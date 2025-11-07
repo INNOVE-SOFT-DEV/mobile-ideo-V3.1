@@ -262,7 +262,8 @@ export class MissionRepository implements MissionInterface {
     );
   }
 
-  pointing(pointing_internal: Pointing_Internal): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}interventions/pointing`, pointing_internal);
+  pointing(id: any, type: string, pointing_internal: any): Observable<any> {
+
+    return this.http.post<any>(`${environment.newApiUrl}pointing_internals/${id}/${type}`, pointing_internal);
   }
 }

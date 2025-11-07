@@ -61,10 +61,6 @@ export class DetailsPage implements OnInit {
     try {
       await this.refreshLocalData();
       this.setupPhotos();
-      console.log("#######################################################");
-
-      console.log(this.planning ,this.planningType );
-      console.log("#######################################################");
       
     } catch (error) {
       console.error("Erreur lors du chargement des détails :", error);
@@ -81,7 +77,6 @@ export class DetailsPage implements OnInit {
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
     this.planningType = cached.planningType;
-    console.log(this.planning.team);    
     this.setupPhotos();
     await this.loadingService.dimiss();
   }

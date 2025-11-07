@@ -20,13 +20,13 @@
       <ion-card-content>
         <ion-grid>
           <ion-row>
-            <ion-col><img [src]="planning?.logo?.url" /></ion-col>
+            <ion-col><img [src]="planning?.intervention.logos.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'" /></ion-col>
             <ion-col size="8">
               <div class="cls-title">
-                <p class="cls-p-title">{{planning?.intervention_name.split('-')[0]}}</p>
+                <p class="cls-p-title">{{planning?.intervention.name.split('-')[0]}}</p>
               </div>
               <div class="cls-address">
-                <p class="cls-p-address">{{planning?.intervention_name.split('-')[1]}}</p>
+                <p class="cls-p-address">{{planning?.intervention.name.split('-')[1]}}</p>
               </div>
             </ion-col>
           </ion-row>
@@ -36,12 +36,12 @@
     <div class="not-regular-date col-left user-info" *ngIf="planning?.type != 'regular'">
       <div class="chip-wrapper">
         <div class="user-chip-date">
-          <span class="chip-text-date">{{`${nonRegularDay} le ${planning?.date}`}}</span>
+          <span class="chip-text-date">{{`${nonRegularDay} le ${planning?.today_schedule.date}`}}</span>
         </div>
       </div>
     </div>
 
-    <ng-container *ngIf="planning?.type != 'regular'">
+    <ng-container>
       <div class="custom-user-card" *ngFor="let agent of team">
         <div class="card-grid">
           <div class="col-left">
@@ -59,8 +59,14 @@
           <div class="col-right">
             <app-pointing-status-indicators [agent]="agent"></app-pointing-status-indicators>
             <div class="time-info">
-              <div class="time-text">Arrivé : {{ agent?.first_pointing_internal?.length == 1 ? '--:--' : agent?.hour_start}}</div>
-              <div class="time-text">Départ : {{ agent?.second_pointing_internal?.length == 1 ? '--:--' : agent?.hour_end}}</div>
+              <div class="time-text">
+                Arrivé : {{ !agent?.pointing_internal[0].started_on ? '--:--' :
+                agent?.pointing_internal[0].started_on.split('T')[1].split(':')[0]+':'+agent?.pointing_internal[0].started_on.split('T')[1].split(':')[1] }}
+              </div>
+              <div class="time-text">
+                Départ : {{ !agent?.pointing_internal[0].finished_on ? '--:--' :
+                agent?.pointing_internal[0].finished_on.split('T')[1].split(':')[0]+':'+agent?.pointing_internal[0].finished_on.split('T')[1].split(':')[1]}}
+              </div>
             </div>
           </div>
         </div>
@@ -90,15 +96,15 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
-    <div class="not-regular-date col-left user-info" *ngIf="planning?.type == 'regular' && selectedUserRole != ''">
+    <!-- <div class="not-regular-date col-left user-info" *ngIf="planning?.type == 'regular' && selectedUserRole != ''">
       <div class="chip-wrapper">
         <div class="user-chip-date">
           <span class="chip-text-date">{{selectedUserRole}}</span>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <ng-container *ngIf="planning?.type == 'regular'">
+    <!-- <ng-container *ngIf="planning?.type == 'regular'">
       <ng-container *ngFor="let agent of team">
         <div class="custom-user-card" [ngStyle]="{'display': agent?.first_name +' '+agent?.last_name == selectedOption ? '' : 'none'}">
           <div class="card-grid">
@@ -124,6 +130,6 @@
           </div>
         </div>
       </ng-container>
-    </ng-container>
+    </ng-container> -->
   </div>
 </ion-content>
