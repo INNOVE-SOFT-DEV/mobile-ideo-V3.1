@@ -18,6 +18,8 @@ export class PunctualComponent implements OnInit {
   @Input() data: any[] = [];
   @Input() isToDayPlannings: boolean = true;
   @Input() supervisors: any[] = [];
+  @Input() date : string = new Date().toISOString();
+
   urlApi: string = environment.urlAPI;
   webUrl: string = environment.url_web;
   User: User | null = this.autService.getCurrentUser();
@@ -32,7 +34,17 @@ export class PunctualComponent implements OnInit {
     private missionService: MissionService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.data.forEach((element: any) => {
+    //   console.log(element);
+      
+    //   element["showDetails"] = false;
+    //   element["today_schedule"] = element.schedule.find((s : any) => s.date == this.date)
+    //   element["team"] = [...element["today_schedule"]["agents"], ...element["today_schedule"]["subcontractors"]]      
+    // })
+    
+
+  }
 
   toggleDetails(planning: Intervention) {
     planning.showDetails = !planning.showDetails;

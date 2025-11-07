@@ -39,7 +39,7 @@ export class httpInterceptor implements HttpInterceptor {
         return throwError(() => error);
       }),
       finalize(async () => {
-        await this.loadingService.dimiss();
+        // await this.loadingService.dimiss();
       })
     );
   }

@@ -79,13 +79,13 @@ export class AddTicketPage implements OnInit {
     this.kanban = this.route.snapshot.paramMap.get("kanban");
     
     // this.selectedTableau = this.kanban ? JSON.parse(this.kanban).name : null;
-    console.log(JSON.parse(this.kanban));
+    // console.log(JSON.parse(this.kanban));
     
     this.boards = JSON.parse(this.kanban).boards || '[]'
 
     
     if (this.kanban) {
-      console.log(this.boards);
+      // console.log(this.boards);
       
       this.boards =
         this.boards.length > 0

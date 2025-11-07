@@ -18,7 +18,7 @@ export class AuthRepository implements AuthInterface {
 
   getUserById(id: any): Observable<any> {
     this.http.get<any>(`${environment.newApiUrl}users/${7}`).subscribe((res) => {
-      console.log("Get User response:", res);
+      // console.log("Get User response:", res);
     }, (error) => {
       console.error("Get User error:", error);
     });
@@ -52,8 +52,8 @@ export class AuthRepository implements AuthInterface {
   }
 
   login(payload: any): Observable<AuthResponse> {
-    this.http.post<AuthResponse>(`${environment.newApiUrl}login`, {email: "michel@doyle.test" , password: "password"}).subscribe((res) => {
-      console.log("Login response:", res);
+    this.http.post<AuthResponse>(`${environment.newApiUrl}login`, {email: "robena@wuckert-jones.example" , password: "password"}).subscribe((res) => {
+      // console.log("Login response:", res);
       localStorage.setItem("token-v3", res.token);
       localStorage.setItem("user-v3", JSON.stringify(res.user));
     }, (error) => {

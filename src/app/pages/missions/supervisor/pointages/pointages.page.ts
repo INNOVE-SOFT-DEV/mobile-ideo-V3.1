@@ -40,87 +40,26 @@ export class PointagesPage implements OnInit {
   async ngOnInit() {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
+    
     this.planning = data;
+    this.team = this.planning.team.filter((member: any) => !member?.manager);
+    
 
-    if (this.planning.type != "regular") this.nonRegularDay = new Intl.DateTimeFormat("fr-FR", {weekday: "long"})?.format(new Date(this.planning.date));
+
+    if (this.planning.type != "regular") this.nonRegularDay = new Intl.DateTimeFormat("fr-FR", {weekday: "long"})?.format(new Date(this.planning.today_schedule.date));
     this.setDate();
     await this.prepareData();
   }
 
   async prepareData() {
-    await this.loadingService.present(this.laodingMessage);
+
     this.missionService.getPointAgents({id: this.planning.id, type: this.planning.type, date: this.date}).subscribe(async data => {
-      this.team = data.map((member: any) => {
-        const foundMember = this.planning.team.find((u: any) => u.id === member.user.id);
-        if (foundMember?.vehicule && foundMember.role == "teamleader") {
-          member.role = "Chauffeur/Chef d'équipe";
-        } else if (foundMember?.vehicule && foundMember.role != "driver") {
-          member.role = "Chauffeur";
-        } else if (!foundMember?.vehicule && foundMember.role == "teamleader") {
-          member.role = "Chef d'équipe";
-        } else if (foundMember.role == "agent") {
-          member.role = "Agent";
-        } else if (foundMember.role == "supervisor" && !foundMember?.vehicule) {
-          member.role = "Superviseur";
-        } else if (foundMember.role == "supervisor" && foundMember?.vehicule) {
-          member.role = "Superviseur/Chauffeur";
-        }
-
-        if (this.planning.type == "regular") {
-          this.setCurrentMonth();
-          this.selectedOption = `${this.planning.team[0].first_name} ${this.planning.team[0].last_name}`;
-          if (this.selectedOption == `${foundMember?.first_name} ${foundMember?.last_name}`) this.selectedUserRole = member.role;
-        }
-
-        if (member.lat == null && member.lat_2 == null) {
-          return {
-            first_name: foundMember.first_name,
-            last_name: foundMember.last_name,
-            first_pointing_internal: [member],
-            second_pointing_internal: [member],
-            hour_start: member.hour_start,
-            hour_end: member.hour_end,
-            role: member.role,
-            date: member.date,
-            photo: member.user.photo.url,
-            day: new Intl.DateTimeFormat("fr-FR", {weekday: "long"}).format(new Date(member.date))
-          };
-        } else if (member.lat != null && member.lat_2 == null) {
-          return {
-            first_name: foundMember.first_name,
-            last_name: foundMember.last_name,
-            first_pointing_internal: [],
-            second_pointing_internal: [member],
-            hour_start: member.hour_start,
-            hour_end: member.hour_end,
-            role: member.role,
-            date: member.date,
-            photo: member.user.photo.url,
-            day: new Intl.DateTimeFormat("fr-FR", {weekday: "long"}).format(new Date(member.date))
-          };
-        } else {
-          member.lat != null && member.lat_2 != null;
-          return {
-            first_name: foundMember.first_name,
-            last_name: foundMember.last_name,
-            first_pointing_internal: [],
-            second_pointing_internal: [],
-            hour_start: member.hour_start,
-            hour_end: member.hour_end,
-            role: member.role,
-            date: member.date,
-            photo: member.user.photo.url,
-            day: new Intl.DateTimeFormat("fr-FR", {weekday: "long"}).format(new Date(member.date))
-          };
-        }
-      });
 
       await this.loadingService.dimiss();
     });
   }
 
   setDate() {
-    if (this.planning.type == "regular") {
       const dateStart = new Date(this.planning.date_start);
       const dateEnd = new Date(this.planning.date_end);
       const currentDate = new Date();
@@ -147,9 +86,7 @@ export class PointagesPage implements OnInit {
       const yyyy = selectedYear.toString();
       const mm = selectedMonth.toString().padStart(2, "0");
       this.date = `${yyyy}-${mm}`;
-    } else {
-      this.date = this.planning.date;
-    }
+      this.date = this.planning.today_schedule.date;
   }
 
   onChange(event: any) {

@@ -37,8 +37,9 @@ export class MissionDetailsPage implements OnInit {
   laodingMessage: string = "Loading...";
   searchControl = new FormControl();
   planningsCached: any[] = [];
-  date: string = "";
-  supervisors :any[] = [];
+  date: string = new Date().toISOString().split("T")[0];
+  supervisors: any[] = [];
+  noSchedule:number = 0
 
   constructor(
     private popoverController: PopoverController,
@@ -60,12 +61,12 @@ export class MissionDetailsPage implements OnInit {
   async ngOnInit() {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
     this.setCurrentDay();
-    this.type == "regular" ? this.setCurrentMonth() : this.setCurrentDay();
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(false, this.punctualDate, this.type).subscribe(async (data: any) => {
-      this.plannings = data[`${this.type}s`];
-      this.planningsCached = data[`${this.type}s`];
-      this.supervisors = data.supervisors_contact
+    this.missionService.getPlannings(false, this.punctualDate, this.type == 'forfaitaire' ? 'flat_rate' : this.type).subscribe(async (data: any) => {
+      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data['flat_rates']) : this.foramtplannings(data[`${this.type}s`]);      
+    
+      this.planningsCached = this.plannings;
+      this.supervisors = data.supervisors_contact;
       await this.loadingService.dimiss();
     });
 
@@ -88,15 +89,36 @@ export class MissionDetailsPage implements OnInit {
     });
   }
 
+  foramtplannings(data: any) {
+    this.noSchedule = 0
+    return data.map((element: any) => {
+      element["showDetails"] = false;
+      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null
+      
+      let subcontractors: any[] = [];
+      if (element["today_schedule"] == null) {
+        this.noSchedule++
+        return element;
+      }
+      element["today_schedule"]["subcontractors"].forEach((subcontractor: any, index: number) => {
+        subcontractor.agents.forEach((agent: any) => {
+          subcontractors.push({
+            ...subcontractor,
+            ...agent
+          });
+        });
+      });
+      element["team"] = [...element["today_schedule"]["agents"], ...subcontractors];
+      return element;
+    });
+  }
+
   setCurrentDay() {
     const now = new Date();
-
     const parisNow = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Paris"}));
-
     if (parisNow.getHours() >= 21) {
       parisNow.setDate(parisNow.getDate() + 1);
     }
-
     this.currentMonth = parisNow.toLocaleDateString("fr-FR", {
       month: "long",
       year: "numeric",
@@ -115,6 +137,7 @@ export class MissionDetailsPage implements OnInit {
       day: "numeric"
     });
     this.selectedDate = selectedDate.toISOString();
+    this.date = selectedDate.toISOString().split("T")[0];
     this.punctualDate = selectedDate.toISOString().split("T")[0];
   }
 
@@ -125,6 +148,7 @@ export class MissionDetailsPage implements OnInit {
       year: "numeric"
     });
     this.selectedDate = date.toISOString();
+    this.date = date.toISOString().split("T")[0];
   }
 
   async updateMonth(event: any) {
@@ -142,29 +166,29 @@ export class MissionDetailsPage implements OnInit {
   }
 
   async openPopover(event: Event) {
-    if (this.type == "regular") {
-      const popover = await this.popoverController.create({
-        component: IonDatetime,
-        componentProps: {
-          presentation: "month-year",
-          value: this.selectedDate,
-          min: this.minDate,
-          locale: "fr-FR"
-        },
-        cssClass: "custom-picker-popover",
-        mode: "ios",
-        event
-      });
+    // if (this.type == "regular") {
+    //   const popover = await this.popoverController.create({
+    //     component: IonDatetime,
+    //     componentProps: {
+    //       presentation: "month-year",
+    //       value: this.selectedDate,
+    //       min: this.minDate,
+    //       locale: "fr-FR"
+    //     },
+    //     cssClass: "custom-picker-popover",
+    //     mode: "ios",
+    //     event
+    //   });
 
-      await popover.present();
-      const datetimeElement = popover.querySelector("ion-datetime");
-      if (datetimeElement) {
-        datetimeElement.addEventListener("ionChange", (event: any) => {
-          this.updateMonth(event);
-          this.closePopover();
-        });
-      }
-    } else {
+    //   await popover.present();
+    //   const datetimeElement = popover.querySelector("ion-datetime");
+    //   if (datetimeElement) {
+    //     datetimeElement.addEventListener("ionChange", (event: any) => {
+    //       this.updateMonth(event);
+    //       this.closePopover();
+    //     });
+    //   }
+    // } else {
       const popover = await this.popoverController.create({
         component: IonDatetime,
         componentProps: {
@@ -187,7 +211,7 @@ export class MissionDetailsPage implements OnInit {
           this.closePopover();
         });
       }
-    }
+    // }
   }
 
   closePopover() {
@@ -204,8 +228,8 @@ export class MissionDetailsPage implements OnInit {
 
   async getByDate() {
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(false, this.type == "regular" ? this.regularDate : this.punctualDate, this.type).subscribe(async (data: any) => {
-      this.plannings = data[`${this.type}s`];
+    this.missionService.getPlannings(false, this.date, this.type == 'forfaitaire' ? 'flat_rate' : this.type).subscribe(async (data: any) => {
+          this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data['flat_rates']) : this.foramtplannings(data[`${this.type}s`]);      
       if (this.isAgent) {
         this.planningsPerAgent = this.groupTeamMembersByPlanning(this.plannings);
       }

@@ -1,12 +1,12 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
-import {Intervention} from "src/app/models/intervention/mission/mission";
-import {environment} from "src/environments/environment";
-import {Router} from "@angular/router";
-import {User} from "src/app/models/auth/user";
-import {ModalController} from "@ionic/angular";
-import {AuthService} from "src/app/pages/login/service/auth.service";
-import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
-import {VehicleAllocationPage} from "../../modals/missions/agents/vehicle-allocation/vehicle-allocation.page";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Intervention } from "src/app/models/intervention/mission/mission";
+import { environment } from "src/environments/environment";
+import { Router } from "@angular/router";
+import { User } from "src/app/models/auth/user";
+import { ModalController } from "@ionic/angular";
+import { AuthService } from "src/app/pages/login/service/auth.service";
+import { MissionService } from "src/app/tab1/service/intervention/mission/mission.service";
+import { VehicleAllocationPage } from "../../modals/missions/agents/vehicle-allocation/vehicle-allocation.page";
 
 @Component({
   selector: "app-forfaitaire",
@@ -14,15 +14,16 @@ import {VehicleAllocationPage} from "../../modals/missions/agents/vehicle-alloca
   styleUrls: ["./forfaitaire.component.scss"],
   standalone: false
 })
-export class ForfaitaireComponent implements OnInit {
+export class ForfaitaireComponent implements OnInit, OnChanges {
   @Input() data: any[] = [];
   @Input() isToDayPlannings: boolean = true;
   @Input() supervisors: any[] = [];
+  @Input() date: string = new Date().toISOString();
 
   urlApi: string = environment.urlAPI;
   webUrl: string = environment.url_web;
   User: User | null = this.autService.getCurrentUser();
-  env = environment
+  env = environment;
 
   constructor(
     private router: Router,
@@ -31,38 +32,63 @@ export class ForfaitaireComponent implements OnInit {
     private missionService: MissionService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("Component initialized with data:", this.data);
+  }
+
+  /**
+   * Fired whenever one or more @Input() values change
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      console.log("🌀 Input 'data' changed:", changes['data'].currentValue);
+      // Perform any refresh, filtering, or logic you need
+    }
+
+    if (changes['supervisors']) {
+      console.log("🧭 Input 'supervisors' changed:", changes['supervisors'].currentValue);
+    }
+
+    if (changes['date']) {
+      console.log("📅 Input 'date' changed:", changes['date'].currentValue);
+    }
+
+    if (changes['isToDayPlannings']) {
+      console.log("📋 Input 'isToDayPlannings' changed:", changes['isToDayPlannings'].currentValue);
+    }
+  }
 
   toggleDetails(planning: Intervention) {
     planning.showDetails = !planning.showDetails;
   }
 
   async goToDetails(planning: any) {
-    localStorage.setItem("currentPlanning", JSON.stringify({planningType: "forfaitaire", planning}));
+    localStorage.setItem("currentPlanning", JSON.stringify({ planningType: "forfaitaire", planning }));
+
     if (this.isToDayPlannings) {
       const user = planning.team.find((u: User) => u.id == this.User?.id);
 
       if (this.User?.is_driver || this.User?.is_teamleader) {
         if (user?.vehicule_returns) {
           this.missionService.currentPlanning = planning;
-          this.router.navigate(["tabs/tab1/details", {data: JSON.stringify(planning), type: "forfaitaire" , supervisors: JSON.stringify(this.supervisors)}]);
+          this.router.navigate(["tabs/tab1/details", { data: JSON.stringify(planning), type: "forfaitaire", supervisors: JSON.stringify(this.supervisors) }]);
         } else if (user?.vehicule && !user?.vehicule_returns) {
           const modal = await this.modalController.create({
             component: VehicleAllocationPage,
-            componentProps: {data: {planning, teamMember: user}}
+            componentProps: { data: { planning, teamMember: user } }
           });
-          modal.onDidDismiss().then(data => {
+          modal.onDidDismiss().then(() => {
             this.missionService.refreshEvent.emit("vehicleAllocation");
           });
           return await modal.present();
         } else {
-          this.router.navigate(["tabs/tab1/details", {data: JSON.stringify(planning), type: "forfaitaire", supervisors: JSON.stringify(this.supervisors)}]);
+          this.router.navigate(["tabs/tab1/details", { data: JSON.stringify(planning), type: "forfaitaire", supervisors: JSON.stringify(this.supervisors) }]);
         }
       } else {
-        this.router.navigate(["tabs/tab1/details", {data: JSON.stringify(planning), type: "forfaitaire" , supervisors: JSON.stringify(this.supervisors)}]);
+        this.router.navigate(["tabs/tab1/details", { data: JSON.stringify(planning), type: "forfaitaire", supervisors: JSON.stringify(this.supervisors) }]);
       }
     } else {
-      this.router.navigate(["tabs/tab1/details", {data: JSON.stringify(planning), type: "forfaitaire", supervisors: JSON.stringify(this.supervisors)}]);
+      this.router.navigate(["tabs/tab1/details", { data: JSON.stringify(planning), type: "forfaitaire", supervisors: JSON.stringify(this.supervisors) }]);
     }
   }
 }

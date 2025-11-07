@@ -55,11 +55,13 @@ export class DetailsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
+    // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
+    this.supervisors = []
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     try {
       await this.refreshLocalData();
       this.setupPhotos();
+      
     } catch (error) {
       console.error("Erreur lors du chargement des détails :", error);
     } finally {
@@ -81,8 +83,8 @@ export class DetailsPage implements OnInit {
 
   transform(): string {
     let frenchDate: string = "";
-    if (this.planning?.date) {
-      const date = new Date(this.planning.date);
+    if (this.planning?.today_schedule?.date) {
+      const date = new Date(this.planning?.today_schedule?.date);
       frenchDate = date.toLocaleDateString("fr-FR", {
         weekday: "long",
         day: "numeric",

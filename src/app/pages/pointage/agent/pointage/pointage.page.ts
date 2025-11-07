@@ -32,7 +32,7 @@ export class PointagePage implements OnInit, OnDestroy {
   sliderX = 0;
   startX = 0;
   maxSlide = window.innerWidth - 110;
-  pointing_internal: Pointing_Internal = new Pointing_Internal();
+  pointing_internal: any = {};
   type: any;
   pointingType: string = "";
   loadingMessage: string = "";
@@ -53,11 +53,10 @@ export class PointagePage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.user = this.authService.getCurrentUser();
+    const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
-    this.planning = JSON.parse(this.route.snapshot.paramMap.get("data")!);
-    this.teamMember = this.planning.team.find((user: any) => user.id == this.user.id);
-    this.planning.first_pointing_internal = this.teamMember.first_pointing_internal;
-    this.planning.second_pointing_internal = this.teamMember.second_pointing_internal;
+    this.planning =JSON.parse(localStorage.getItem("currentPlanning")!).planning;
+    this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id).pointing_internal[0];
     this.type = this.route.snapshot.paramMap.get("type");
     this.user = this.authService.getCurrentUser();
     this.updateTime();
@@ -75,11 +74,10 @@ export class PointagePage implements OnInit, OnDestroy {
   }
 
   async initMapAndUserPosition() {
-    const planningLat = parseFloat(this.planning.lat);
-    const planningLng = parseFloat(this.planning.long);
+    const planningLat = parseFloat("30.8219776");
+    const planningLng = parseFloat("10.6266624");
     await this.mapService.initMap(this.mapElement, planningLat, planningLng);
     this.mapService.addMarker({lat: planningLat, lng: planningLng}, "Lieu d'intervention", "assets/img/building_marker.png", {width: 30, height: 30});
-
     this.mapService.addCircle(planningLat, planningLng);
     await this.updateUserPosition();
     this.intervalPositionId = setInterval(() => this.updateUserPosition(), 15000);
@@ -103,22 +101,38 @@ export class PointagePage implements OnInit, OnDestroy {
   }
 
   async setPointing() {
-    this.pointing_internal.planning_type = this.type;
-    this.pointing_internal.planning_punctual_id = this.planning.id;
-    this.pointing_internal.planning_regular_id = this.planning.id;
-    this.pointing_internal.intervention_id = this.planning.intervention_id;
-    this.pointing_internal.user_id = this.user.id;
-    this.pointing_internal.date = new Date();
+    // this.pointing_internal.planning_type = this.type;
+    // this.pointing_internal.planning_punctual_id = this.planning.id;
+    // this.pointing_internal.planning_regular_id = this.planning.id;
+    // this.pointing_internal.intervention_id = this.planning.intervention_id;
+    // this.pointing_internal.user_id = this.user.id;
+    // this.pointing_internal.date = new Date();
+    // this.pointing_internal.lat = this.userCoordinates.latitude + "";
+    // this.pointing_internal.long = this.userCoordinates.longitude + "";
+    // const distance = this.geolocationService.getDistanceFromCurrentLoaction({
+    //   longitude: parseFloat(this.planning.long),
+    //   latitude: parseFloat(this.planning.lat)
+    // });
+
+    // console.log(this.pointing_internal);
+
     await this.geolocationService.getCurrentLocation();
     this.userCoordinates = this.geolocationService.coordinates;
-    this.pointing_internal.lat = this.userCoordinates.latitude + "";
-    this.pointing_internal.long = this.userCoordinates.longitude + "";
-    const distance = this.geolocationService.getDistanceFromCurrentLoaction({
-      longitude: parseFloat(this.planning.long),
-      latitude: parseFloat(this.planning.lat)
-    });
 
-    if (this.planning?.first_pointing_internal?.length == 0 && this.planning?.second_pointing_internal?.length == 1) {
+    let body: any = {
+      point: {
+        longitude: this.userCoordinates.longitude,
+        latitude: this.userCoordinates.latitude,
+        recorder_at: new Date().toISOString()
+      }
+    };
+    console.log(body);
+
+    if (this.pointing_internal?.started_on != null && this.pointing_internal?.finished_on == null) {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      body["finished_on"] = `${hours}:${minutes}`;
       const actionSheet = await this.actionSheetController.create({
         header: "Vous êtes sur le point de terminer votre mission, assurez-vous d'avoir fait le point avec le pilote et que toutes les tâches sont terminées.",
         cssClass: "header_actionSheet",
@@ -128,9 +142,15 @@ export class PointagePage implements OnInit, OnDestroy {
             cssClass: "btn_actionSheet",
             handler: async () => {
               await this.loadingService.present(this.loadingMessage);
-              this.missionService.pointing(this.pointing_internal).subscribe(async (data: any) => {
+              const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+              console.log(this.pointing_internal.id, "finish", body);
+              this.missionService.pointing(this.pointing_internal.id, "finish", body).subscribe(async (data: any) => {
+                console.log(data);
+                this.pointing_internal = data;
+                
                 await this.loadingService.dimiss();
-                this.planning.second_pointing_internal = [];
+                this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
+                this.teamMember = this.planning.team.find((u: any) => u.id === user_v3.id);
                 this.pointingType = "second";
                 this.updateLoaclPlaningData();
                 await this.toastController.presentToast("Pointage fin réalisé avec succès. Bon courage !", "success");
@@ -147,14 +167,25 @@ export class PointagePage implements OnInit, OnDestroy {
         ]
       });
 
-      await actionSheet.present();
+       await actionSheet.present();
     } else {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      body["started_on"] = `${hours}:${minutes}`;
+
       if (true) {
+        console.log(this.pointing_internal.id, "start", body);
+
         await this.loadingService.present(this.loadingMessage);
-        this.missionService.pointing(this.pointing_internal).subscribe(async (data: any) => {
+        const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+        this.missionService.pointing(this.pointing_internal.id, "start", body).subscribe(async (data: any) => {
           await this.loadingService.dimiss();
-          this.planning.first_pointing_internal = [];
-          this.pointingType = "first";
+          console.log(data);
+
+           this.pointing_internal = data
+          this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
+
           this.updateLoaclPlaningData();
           await this.toastController.presentToast("Pointage début réalisé avec succès. Bon courage !", "success");
         });
@@ -165,13 +196,6 @@ export class PointagePage implements OnInit, OnDestroy {
   }
 
   updateLoaclPlaningData() {
-    const member = this.planning.team.find((u: any) => u.id === this.user.id);
-    if (member) {
-      if (this.pointingType === "first") {
-        member.first_pointing_internal = [];
-      } else {
-        member.second_pointing_internal = [];
-      }
       localStorage.setItem(
         "currentPlanning",
         JSON.stringify({
@@ -179,7 +203,7 @@ export class PointagePage implements OnInit, OnDestroy {
           planning: this.planning
         })
       );
-    }
+    
   }
 
   onTouchStart(event: TouchEvent) {

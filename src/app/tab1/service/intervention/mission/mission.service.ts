@@ -113,8 +113,8 @@ export class MissionService implements MissionInterface {
     return this.missionRepo.createMissionReturn(data);
   }
 
-  pointing(data: Pointing_Internal): Observable<any> {
-    return this.missionRepo.pointing(data);
+  pointing(id : any , type:string , body :any ): Observable<any> {
+    return this.missionRepo.pointing(id , type , body);
   }
 
   private backDataSubject = new Subject<any>();

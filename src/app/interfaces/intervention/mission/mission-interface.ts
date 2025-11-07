@@ -15,7 +15,7 @@ export interface MissionInterface {
   reportVehiculeDefect(data: any): Observable<any>;
   createReportPhoto(data: any): Observable<any>;
   getPhotoReport(id: number, type: string): Observable<any>;
-  pointing(pointing_internal: Pointing_Internal): Observable<any>;
+  pointing(id: any, type: string, body: any): Observable<any>;
   deletePhoto(id: string, type: string): Observable<any>;
   getPlannings(isAgent: boolean, date?: string, type?: string): Observable<any>;
   getSuperVisorPlanningCounts(date?: string): Observable<any>;

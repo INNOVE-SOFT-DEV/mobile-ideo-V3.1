@@ -30,9 +30,10 @@ export class Tab1Page implements OnInit, OnDestroy {
   executed: boolean = false;
   isLoaded: boolean = false;
   currentDate: any;
-  date: string | undefined;
+  date: string = new Date().toISOString().split("T")[0];
   isPopoverOpen: boolean = false;
   isToDayPlannings: boolean = false;
+  noSchedule: number = 0
 
   constructor(
     private missionService: MissionService,
@@ -51,6 +52,9 @@ export class Tab1Page implements OnInit, OnDestroy {
   async ngOnInit() {
     this.setCurrentDay();
     this.isSuperVisor = this.authService.isSuperVisor();
+    console.log("isSuperVisor", this.isSuperVisor);
+    const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+    console.log(user_v3.role);
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.setCurrentDay();
     await this.getAllMissions();
@@ -62,42 +66,57 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   async getAllMissions() {
     this.executed = true;
-    if (!this.isSuperVisor) {
-      await this.loadingService.present(this.loadingMessage);
-      this.missionService.getPlannings(true, this.date, "all").subscribe({
-        next: async value => {
-          this.punctuals = value.punctuals;
-          this.regulars = value.regulars;
-          this.forfaitaires = value.forfaitaires;
-          this.superVisors = value.supervisors_contact;
-          await this.loadingService.dimiss();
-          this.isLoaded = true;
-        },
-        error: async err => {
-          console.error("Error:", err);
-          await this.loadingService.dimiss();
-        }
+    console.log(this.date , this.isSuperVisor);  
+    // await this.loadingService.present("loading");
+    this.isLoaded = false;
+    this.missionService.getPlannings(true, this.date, "all").subscribe({
+      next: async value => {
+        console.log(value);
+        this.isLoaded = true;
+
+        console.log("🚀 ~ file: tab1.page.ts:83 ~ Tab1Page ~ getAllMissions ~ value", value , this.isToDayPlannings);
+        this.punctuals = this.foramtplannings(value.punctuals);
+        this.regulars =  this.foramtplannings(value.regulars);
+        this.forfaitaires = this.foramtplannings(value.flat_rates);
+        console.table({
+          punctuals: this.punctuals,
+          regulars: this.regulars,
+          forfaitaires: this.forfaitaires
+        })
+        // this.counts = value.counts;
+        this.superVisors = value.supervisors_contact;
+        // await this.loadingService.dimiss();
+      },
+      error: async err => {
+        console.error("Error:", err);
+        await this.loadingService.dimiss();
+      }
+    });
+
+  }
+
+  foramtplannings(data: any) {
+    this.noSchedule = 0
+    return data.map((element: any) => {
+      element["showDetails"] = false;
+      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null
+      
+      let subcontractors: any[] = [];
+      if (element["today_schedule"] == null) {
+        this.noSchedule++
+        return element;
+      }
+      element["today_schedule"]["subcontractors"].forEach((subcontractor: any, index: number) => {
+        subcontractor.agents.forEach((agent: any) => {
+          subcontractors.push({
+            ...subcontractor,
+            ...agent
+          });
+        });
       });
-    } else {
-      await this.loadingService.present(this.loadingMessage);
-      this.missionService.getSuperVisorPlanningCounts(this.date).subscribe({
-        next: async value => {
-          this.counts = value;
-          this.loaded = true;
-          await this.loadingService.dimiss();
-        },
-        error: async err => {
-          console.error("Error:", err);
-          await this.loadingService.dimiss();
-          this.counts = {
-            punctuals: 0,
-            regulars: 0,
-            forfaitaires: 0
-          };
-          this.loaded = true;
-        }
-      });
-    }
+      element["team"] = [...element["today_schedule"]["agents"], ...subcontractors];
+      return element;
+    });
   }
 
   goToProfile() {
@@ -105,10 +124,11 @@ export class Tab1Page implements OnInit, OnDestroy {
   }
 
   getByDate() {
-    this.missionService.getPlannings(true, this.date, "all").subscribe((data: any) => {
-      this.punctuals = data.punctuals;
-      this.regulars = data.regulars;
-      this.forfaitaires = data.forfaitaires;
+    this.isLoaded = false;
+    this.missionService.getPlannings(true, this.date, "all").subscribe((value: any) => {
+     this.punctuals = this.foramtplannings(value.punctuals);
+        this.regulars =  this.foramtplannings(value.regulars);
+        this.forfaitaires = this.foramtplannings(value.flat_rates);
       this.isLoaded = true;
     });
   }

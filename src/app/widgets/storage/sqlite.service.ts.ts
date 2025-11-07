@@ -28,7 +28,7 @@ export class SqliteServiceTs {
 
   async initDB() {
     if (this.initialized) {
-      console.log("SQLite déjà initialisé, on ignore.");
+      // console.log("SQLite déjà initialisé, on ignore.");
       return;
     }
 
@@ -65,7 +65,7 @@ export class SqliteServiceTs {
       `);
 
       this.initialized = true;
-      console.log("SQLite initialisé et prêt !");
+      // console.log("SQLite initialisé et prêt !");
     } catch (err) {
       console.error("❌ Erreur SQLite init:", err);
     }
@@ -78,7 +78,7 @@ export class SqliteServiceTs {
         return;
       }
       const res = await this.db.query("SELECT name FROM sqlite_master WHERE type='table';");
-      console.log("📋 Tables dans la base :", res.values);
+      // console.log("📋 Tables dans la base :", res.values);
     } catch (e) {
       console.error("❌ Erreur lors de la récupération des tables :", e);
     }
@@ -241,7 +241,7 @@ export class SqliteServiceTs {
         );
       }
       await this.setSyncMeta(table, "pull");
-      console.log(`✅ Sync terminée pour ${table}`);
+      // console.log(`✅ Sync terminée pour ${table}`);
     } catch (err) {
       console.error(`Erreur pull ${table}`, err);
     }
