@@ -27,21 +27,21 @@
     <div class="time-display">{{ currentTime }}</div>
     <div
       class="slide-confirm-container"
-      *ngIf="planning?.first_pointing_internal?.length == 1 || planning?.second_pointing_internal?.length == 1"
+      *ngIf="planning?.pointing_internal?.started_on == null || planning?.pointing_internal?.finished_on == null"
       (touchstart)="onTouchStart($event)"
       (touchmove)="onTouchMove($event)"
       (touchend)="onTouchEnd()"
     >
       <ion-grid
         class="slide-track"
-        [ngClass]="{'slide-track-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1  }"
+        [ngClass]="{'slide-track-pointage': planning?.pointing_internal?.started_on != null && planning?.pointing_internal?.finished_on == null}"
         *ngIf="shouldShowSlider()"
       >
         <ion-row class="ion-align-items-center" style="height: 48px">
           <ion-col size="2" class="icon-col">
             <ion-fab-button
               class="slider-button"
-              [ngClass]="{'slider-button-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1 }"
+              [ngClass]="{'slider-button-pointage': planning?.pointing_internal?.started_on != null && planning?.pointing_internal?.finished_on == null}"
               [ngStyle]="{ transform: 'translateX(' + sliderX + 'px)' }"
               (touchstart)="onTouchStart($event)"
               (touchmove)="onTouchMove($event)"
@@ -54,21 +54,21 @@
                 viewBox="0 0 24 24"
                 fill="none"
                 class="slider-icon"
-                [ngClass]="{'slider-icon-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1 }"
+                [ngClass]="{'slider-icon-pointage': planning?.pointing_internal?.started_on != null && planning?.pointing_internal?.finished_on == null}"
               >
                 <path d="M13.5 8L17.5 12L13.5 16M7.5 8L11.5 12L7.5 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </ion-fab-button>
           </ion-col>
           <ion-col size="10" class="slide-text-col">
-            <div class="slide-text" [ngClass]="{'slide-text-pointage': planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 1 }">
+            <div class="slide-text" [ngClass]="{'slide-text-pointage': planning?.pointing_internal?.started_on != null && planning?.pointing_internal?.finished_on == null}">
               {{ getConfirmationText() }}
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
-    <ion-grid class="grid" *ngIf="planning?.first_pointing_internal?.length == 0 && planning?.second_pointing_internal?.length == 0">
+    <ion-grid class="grid" *ngIf="planning?.pointing_internal?.started_on != null && planning?.pointing_internal?.finished_on != null">
       <ion-row class="row">
         <ion-col>Pointage réalisé avec succès</ion-col>
       </ion-row>
