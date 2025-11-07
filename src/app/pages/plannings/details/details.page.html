@@ -167,7 +167,7 @@
           <ion-row class="align-center">
             <ion-col size="9">
               <div class="title-c-txt">
-                <p class="cls-card-title">{{ `${contact.first_name} ${contact.last_name}` }}</p>
+                <p class="cls-card-title wrap-text">{{ `${contact.first_name} ${contact.last_name}` }}</p>
               </div>
               <div class="title-c-txt">
                 <ion-chip class="chip-job"><span class="cls-title-job">{{contact.job}}</span></ion-chip>
@@ -215,7 +215,7 @@
           <ion-row class="align-center" *ngFor="let item of supervisors">
             <ion-col size="9">
               <div class="title-c-txt">
-                <p class="c-text">{{item.first_name}} {{item.last_name}}</p>
+                <p class="c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
               </div>
               <div class="title-c-txt">
                 <ion-chip class="cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
@@ -239,7 +239,7 @@
               <ion-row class="align-center">
                 <ion-col size="6">
                   <div class="title-c-txt">
-                    <p class="c-text">{{ agent?.first_name}} {{ agent?.last_name}} </p>
+                    <p class="c-text wrap-text">{{ agent?.first_name}} {{ agent?.last_name}} </p>
                   </div>
                   <div class="title-c-txt">
                     <ion-chip class="cls-chip-f-name">{{agent?.company_name}}</ion-chip>
@@ -248,14 +248,13 @@
                 <ion-col size="6">
                   <ion-grid>
                     <ion-row>
-                      <ion-col size="6">
-                        <img src="../../../../assets/img/btn-notice.png" />
-                      </ion-col>
-                      <ion-col size="6">
+                      <ion-col size="12">
+                        <img src="../../../../assets/img/btn-notice.png" class="cls-t-icon" />
                         <a class="call-link" href="tel://{{agent?.phone?.split(' ')?.join()}}">
-                          <img src="../../../../assets/img/icon-call.png" />
+                          <img src="../../../../assets/img/icon-call.png" class="cls-t-icon" />
                         </a>
                       </ion-col>
+                     
                     </ion-row>
                   </ion-grid>
                 </ion-col>
@@ -275,7 +274,7 @@
               <ion-row class="align-center">
                 <ion-col size="9">
                   <div class="title-c-txt">
-                    <p class="c-text">{{agent.first_name}} {{agent.last_name}}</p>
+                    <p class="c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
                   </div>
                   <div class="title-c-txt">
                     <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
