@@ -10,7 +10,7 @@ export const environment = {
   urlAPI: "https://apideo.webo.tn/",
   url_web: "https://ideo.webo.tn/",
 
-  newApiUrl: "https://206d311c9b3b.ngrok-free.app/api/v1/",
+  newApiUrl: "https://demo.ssp-protection.fr/api/v1/",
 
 
   mattermost_ws_url: "wss://chat.ideogroupe.com/api/v4/websocket",

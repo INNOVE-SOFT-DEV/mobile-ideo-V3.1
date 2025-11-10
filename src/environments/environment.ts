@@ -9,7 +9,7 @@ export const environment = {
   // urlAPI: "https://api.ideogroupe.com/",
   // url_web: "https://backend.ideogroupe.com/",
 
-  newApiUrl: "https://44874385fb06.ngrok-free.app/api/v1/",
+  newApiUrl: "https://demo.ssp-protection.fr/api/v1/",
 
   ws_api_url: "wss://apideo.webo.tn/cable",
   urlAPI: "https://apideo.webo.tn/",

@@ -52,7 +52,7 @@ export class AuthRepository implements AuthInterface {
   }
 
   login(payload: any): Observable<AuthResponse> {
-    this.http.post<AuthResponse>(`${environment.newApiUrl}login`, {email: "robena@wuckert-jones.example" , password: "password"}).subscribe((res) => {
+    this.http.post<AuthResponse>(`${environment.newApiUrl}login`, {email: "vida.spencer@rice.test" , password: "password"}).subscribe((res) => {
       // console.log("Login response:", res);
       localStorage.setItem("token-v3", res.token);
       localStorage.setItem("user-v3", JSON.stringify(res.user));
