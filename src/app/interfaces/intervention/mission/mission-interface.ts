@@ -13,7 +13,7 @@ export interface MissionInterface {
   createNotFunctionalReturn(data: any): Observable<any>;
   agentGetVehicule(data: any): Observable<any>;
   reportVehiculeDefect(data: any): Observable<any>;
-  createReportPhoto(data: any): Observable<any>;
+  createReportPhoto(data: any, id: any): Observable<any>;
   getPhotoReport(id: number, type: string): Observable<any>;
   pointing(id: any, type: string, body: any): Observable<any>;
   deletePhoto(id: string, type: string): Observable<any>;

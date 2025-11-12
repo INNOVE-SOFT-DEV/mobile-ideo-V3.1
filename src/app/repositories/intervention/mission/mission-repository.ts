@@ -13,6 +13,7 @@ import {Network} from "@capacitor/network";
 })
 export class MissionRepository implements MissionInterface {
   private apiUrl = `${environment.urlAPI}`;
+  private newApiUrl = `${environment.newApiUrl}`;
   private backendUrl = `${environment.url_web}`;
   connected: boolean = false;
 
@@ -209,8 +210,9 @@ export class MissionRepository implements MissionInterface {
   getPhotoReport(id: number, type: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
   }
-  createReportPhoto(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}interventions/photos`, data);
+  createReportPhoto(data: any, id: any): Observable<any> {
+    return this.http.post<any>(`${this.newApiUrl}pointing_internals/${id}/upload_photo`, data);
+    // return this.http.post<any>(`${this.apiUrl}interventions/photos`, data);
   }
   reportVehiculeDefect(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}interventions/create_has_issue_vehicule_return`, data);
@@ -263,7 +265,6 @@ export class MissionRepository implements MissionInterface {
   }
 
   pointing(id: any, type: string, pointing_internal: any): Observable<any> {
-
     return this.http.post<any>(`${environment.newApiUrl}pointing_internals/${id}/${type}`, pointing_internal);
   }
 }

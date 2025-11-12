@@ -10,24 +10,20 @@ export class httpInterceptor implements HttpInterceptor {
     const tokenV3 = localStorage.getItem("token-v3");
     let val = request.url.includes("/api/v1/") ? `Bearer ${tokenV3}` : token;
 
-
-   
-    if(!request.url.includes("login")) {
+    if (!request.url.includes("login")) {
       if (request.body instanceof FormData) {
         request = request.clone({
           setHeaders: {
-            "Authorization": `${val}`,
-                "ngrok-skip-browser-warning": "true"
-
+            Authorization: `${val}`,
+            "ngrok-skip-browser-warning": "true"
           }
         });
       } else {
         request = request.clone({
           setHeaders: {
             "Content-Type": "application/json",
-            "Authorization": `${val}`,
+            Authorization: `${val}`,
             "ngrok-skip-browser-warning": "true"
-
           }
         });
       }

@@ -1,7 +1,7 @@
 import {AuthInterface} from "src/app/interfaces/auth/auth-interface";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, switchMap, tap} from "rxjs";
 import {environment} from "src/environments/environment";
 import {AuthResponse, User} from "src/app/models/auth/user";
 
@@ -17,20 +17,26 @@ export class AuthRepository implements AuthInterface {
   }
 
   getUserById(id: any): Observable<any> {
-    this.http.get<any>(`${environment.newApiUrl}users/${7}`).subscribe((res) => {
-      // console.log("Get User response:", res);
-    }, (error) => {
-      console.error("Get User error:", error);
-    });
+    this.http.get<any>(`${environment.newApiUrl}users/${7}`).subscribe(
+      res => {
+        // console.log("Get User response:", res);
+      },
+      error => {
+        console.error("Get User error:", error);
+      }
+    );
     return this.http.get<any>(`${this.apiUrl}user/get_user_by_id/${id}`);
   }
 
   getAllAgents(): Observable<any> {
-        this.http.get<any>(`${environment.newApiUrl}users`).subscribe((res) => {
-      console.log("Get User response:", res);
-    }, (error) => {
-      console.error("Get User error:", error);
-    });
+    this.http.get<any>(`${environment.newApiUrl}users`).subscribe(
+      res => {
+        console.log("Get User response:", res);
+      },
+      error => {
+        console.error("Get User error:", error);
+      }
+    );
     return this.http.get<any>(`${this.apiUrl}user/all_agents`);
   }
 
@@ -46,19 +52,27 @@ export class AuthRepository implements AuthInterface {
     return this.http.patch<User>(`${this.apiUrl}user`, doc);
   }
 
-
   updateProfile(data: any): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}user/update_user_data`, data);
   }
-
   login(payload: any): Observable<AuthResponse> {
-    this.http.post<AuthResponse>(`${environment.newApiUrl}login`, {email: "vida.spencer@rice.test" , password: "password"}).subscribe((res) => {
-      // console.log("Login response:", res);
-      localStorage.setItem("token-v3", res.token);
-      localStorage.setItem("user-v3", JSON.stringify(res.user));
-    }, (error) => {
-      console.error("Login error:", error);
-    });
-    return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, payload);
+    const acessAagent = {email: "c@c.com", password: "123456"};
+    const acessSupervisor = {email: "faidi@mail.com", password: "123456"};
+
+    return this.http.post<AuthResponse>(`${environment.newApiUrl}login`, payload).pipe(
+      tap(res => {
+        console.log("Login response:", res);
+        localStorage.setItem("token-v3", res.token);
+        localStorage.setItem("user-v3", JSON.stringify(res.user));
+      }),
+      switchMap(res => {
+        console.log(res.user);
+        if (res?.user?.role === "supervisor") {
+          return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, acessSupervisor);
+        } else {
+          return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, acessAagent);
+        }
+      })
+    );
   }
 }

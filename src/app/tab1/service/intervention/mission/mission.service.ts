@@ -78,8 +78,8 @@ export class MissionService implements MissionInterface {
   getPhotoReport(id: number, type: string): Observable<any> {
     return this.missionRepo.getPhotoReport(id, type);
   }
-  createReportPhoto(data: any): Observable<any> {
-    return this.missionRepo.createReportPhoto(data);
+  createReportPhoto(data: any, id: any): Observable<any> {
+    return this.missionRepo.createReportPhoto(data, id);
   }
   reportVehiculeDefect(data: any): Observable<any> {
     return this.missionRepo.reportVehiculeDefect(data);
@@ -113,8 +113,8 @@ export class MissionService implements MissionInterface {
     return this.missionRepo.createMissionReturn(data);
   }
 
-  pointing(id : any , type:string , body :any ): Observable<any> {
-    return this.missionRepo.pointing(id , type , body);
+  pointing(id: any, type: string, body: any): Observable<any> {
+    return this.missionRepo.pointing(id, type, body);
   }
 
   private backDataSubject = new Subject<any>();

@@ -13,6 +13,7 @@ import {Subscription} from "rxjs";
 import {EmailComposer} from "capacitor-email-composer";
 import JSZip from "jszip";
 import {AuthService} from "src/app/pages/login/service/auth.service";
+import {Capacitor} from "@capacitor/core";
 
 @Component({
   selector: "app-photo-report",
@@ -45,6 +46,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   isLoading: boolean = true;
   win: any;
   user: any = this.authServie.getCurrentUser();
+  baseUrl = `${environment.newWebUrl}`;
+
   setOpen(isOpen: boolean) {
     this.isOffLineAlertOpen = isOpen;
   }
@@ -146,21 +149,29 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.prestation_id) {
         prestation_id = this.grouped_presentation_photos[i][0].photo.prestation_id;
       }
-      const form = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate);
-      if (prestation_id != null) form.append("prestation_id", prestation_id);
+      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate);
+      const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
+      let form = data;
+      if (hasAfterOrBefore) {
+        form = this.service.updateClientUuidFromGroupedPhotos(data, this.grouped_presentation_photos, i);
+      }
+      const pointageId = this.service.getPointageId();
+      //  if (prestation_id != null) form.append("prestation_id", prestation_id);
       await this.loadingService.present(this.loadingMessage);
-      this.missionsService.createReportPhoto(form).subscribe({
+      this.missionsService.createReportPhoto(form, pointageId).subscribe({
         next: async value => {
-          if (value.photo_type == "photo_before") {
-            this.grouped_presentation_photos[i][0].photo.url = value.photo.url;
-            this.grouped_presentation_photos[i][0].photo.prestation_id = value.prestation_id;
+          console.log(this.baseUrl + value[0].image_url);
+          if (value[0].photo_type == "before") {
+            this.grouped_presentation_photos[i][0].photo.url = this.baseUrl + value[0].image_url;
+            this.grouped_presentation_photos[i][0].photo.prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
-          } else if (value.photo_type == "photo_after") {
-            this.grouped_presentation_photos[i][1].photo.url = value.photo.url;
-            this.grouped_presentation_photos[i][1].photo.prestation_id = value.prestation_id;
+          } else if (value[0].photo_type == "after") {
+            this.grouped_presentation_photos[i][1].photo.url = this.baseUrl + value[0].image_url;
+            this.grouped_presentation_photos[i][1].photo.prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else {
-            this.photos_truck[i].url = value.photo.url;
+            console.log("photos_truck", this.photos_truck[i]);
+            this.photos_truck[i].url = this.baseUrl + value[0].image_url;
             this.service.updateLocalPhotos(photo_type, this.photos_truck);
           }
           await this.loadingService.dimiss();
@@ -172,32 +183,35 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       });
     } else {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
+      console.log("url", url);
       if (url) {
-        let prestation_id = null;
+        /* let prestation_id = null;
         if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.prestation_id) {
           prestation_id = this.grouped_presentation_photos[i][1].photo.prestation_id;
         } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.prestation_id) {
           prestation_id = this.grouped_presentation_photos[i][0].photo.prestation_id;
         } else {
           prestation_id = Date.now();
-        }
+        }*/
+
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][0].photo.path = url.path;
-          this.grouped_presentation_photos[i][0].photo.prestation_id = prestation_id;
+          this.grouped_presentation_photos[i][0].photo.prestation_id = this.service.getUpdatedClientUuid(this.data, this.grouped_presentation_photos, i);
           this.grouped_presentation_photos[i][0].photo.date = currentDate;
+          console.log("grouped_presentation_photos", this.grouped_presentation_photos[i]);
           this.service.updateLocalPhotos("photo_before", this.grouped_presentation_photos);
         } else if (photo_type == "photo_after") {
           this.grouped_presentation_photos[i][1].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][1].photo.path = url.path;
-          this.grouped_presentation_photos[i][1].photo.prestation_id = prestation_id;
+          this.grouped_presentation_photos[i][1].photo.prestation_id = this.service.getUpdatedClientUuid(this.data, this.grouped_presentation_photos, i);
           this.grouped_presentation_photos[i][1].photo.date = currentDate;
           this.service.updateLocalPhotos("photo_after", this.grouped_presentation_photos);
         } else {
           this.photos_truck[i].url = url.displayUri;
           this.photos_truck[i].path = url.path;
           this.photos_truck[i].date = currentDate;
-          this.photos_truck[i].prestation_id = Date.now();
+          this.photos_truck[i].prestation_id = this.service.generateUniqueId();
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
         }
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);

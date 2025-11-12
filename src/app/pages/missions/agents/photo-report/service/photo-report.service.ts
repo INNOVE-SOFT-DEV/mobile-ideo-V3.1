@@ -11,6 +11,7 @@ import {MissionService} from "src/app/tab1/service/intervention/mission/mission.
 import {FileSystemService} from "src/app/widgets/file-system/file-system.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
+import {v4 as uuidv4} from "uuid";
 
 @Injectable({
   providedIn: "root"
@@ -169,7 +170,7 @@ export class PhotoReportService {
   }
 
   async uploadImage(form: any, i: number, grouped_presentation_photos?: any, photos_truck?: any) {
-    this.missionsService.createReportPhoto(form).subscribe({
+    this.missionsService.createReportPhoto(form, this.getPlanningId()).subscribe({
       next: async value => {
         if (value.photo_type == "photo_before") {
           grouped_presentation_photos[i][0].photo.url = value.photo.url;
@@ -272,7 +273,90 @@ export class PhotoReportService {
     });
   }
 
+  generateUniqueId() {
+    const id = uuidv4();
+    return id;
+  }
+  getPlanningId() {
+    return this.data.planning.id;
+  }
+
+  getPointageId() {
+    const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+    const currentId = user_v3?.id;
+    if (!this.data || !this.data.planning || !Array.isArray(this.data.planning.schedule)) {
+      console.warn("Schedule non défini ou données non chargées");
+      return null;
+    }
+    const agent = this.data.planning.schedule.flatMap((s: any) => s.agents || []).find((a: any) => a.id === currentId);
+    return agent.pointing_internal[0].id || null;
+  }
+
+  updateClientUuidFromGroupedPhotos(data: any, grouped_presentation_photos: any, index: number) {
+    if (!data || !Array.isArray(data.photo) || !Array.isArray(grouped_presentation_photos) || !Array.isArray(grouped_presentation_photos[index])) {
+      console.warn("⚠️ Données invalides pour updateClientUuidFromGroupedPhotos");
+      return data;
+    }
+    const hasValidPhotoType = data.photo.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
+
+    if (!hasValidPhotoType) {
+      console.warn("⏩ Aucun photo_type 'after' ou 'before', aucune mise à jour effectuée.");
+      return data;
+    }
+
+    const group = grouped_presentation_photos[index];
+    data.photo = data.photo.map((p: any, i: number) => {
+      const match = group[i]?.photo?.prestation_id;
+
+      if (match) {
+        return {
+          ...p,
+          client_uuid: match
+        };
+      }
+
+      return p;
+    });
+
+    return data;
+  }
+
+  getUpdatedClientUuid(data: any, grouped_presentation_photos: any, index: number) {
+    // Vérifie que les paramètres sont valides
+    if (!data || !Array.isArray(data.photo) || !Array.isArray(grouped_presentation_photos) || !Array.isArray(grouped_presentation_photos[index])) {
+      console.warn("⚠️ Données invalides pour getUpdatedClientUuid");
+      return [];
+    }
+
+    const group = grouped_presentation_photos[index];
+
+    // Retourne uniquement les client_uuid mis à jour
+    const updatedClientUuids = data.photo.map((p: any, i: number) => {
+      const match = group[i]?.photo?.prestation_id;
+      return match || p.client_uuid || null;
+    });
+
+    return updatedClientUuids;
+  }
+
   uploadImagetoApi(base64String: any, type: string, currentDate: any) {
+    const uniqueId = this.generateUniqueId();
+    type = type === "photo_before" ? "before" : type === "photo_truck" ? "truck" : "after";
+
+    const imageBase64 = base64String.startsWith("data:image") ? base64String : `data:image/jpeg;base64,${base64String}`;
+
+    const payload = {
+      photo: [
+        {
+          photo_type: type,
+          client_uuid: uniqueId,
+          image_base64: imageBase64
+        }
+      ]
+    };
+    return payload;
+
+    /*
     const fileName = new Date().getTime() + ".jpeg";
     const base64Data = base64String + "";
     const byteCharacters = atob(base64Data);
@@ -284,7 +368,10 @@ export class PhotoReportService {
     const blob = new Blob([byteArray], {type: "image/jpeg"});
     const uploadData = new FormData();
     uploadData.append("photo", blob, fileName);
-    if (this.planningType == "punctual") {
+    uploadData.append("planning_type", this.planningType);
+    uploadData.append("planning_id", this.data.planning.id);
+    uploadData.append("uuid", this.generateUniqueId());
+     if (this.planningType == "punctual") {
       uploadData.append("planning_punctual_id", this.data.planning.id);
     } else if (this.planningType == "regular") {
       uploadData.append("planning_regular_id", this.data.planning.id);
@@ -292,7 +379,8 @@ export class PhotoReportService {
       uploadData.append("forfaitaire_item_id", this.data.planning.id);
     }
     uploadData.append("photo_type", type);
-    uploadData.append("date", currentDate + "");
-    return uploadData;
+    //uploadData.append("date", currentDate + "");
+
+    return uploadData;*/
   }
 }
