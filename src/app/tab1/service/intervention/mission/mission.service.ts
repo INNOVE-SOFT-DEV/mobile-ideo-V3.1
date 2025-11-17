@@ -72,8 +72,8 @@ export class MissionService implements MissionInterface {
   getPlannings(isAgent: boolean, date?: string, type?: string): Observable<any> {
     return this.missionRepo.getPlannings(isAgent, date, type);
   }
-  deletePhoto(id: string, type: string): Observable<any> {
-    return this.missionRepo.deletePhoto(id, type);
+  deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any> {
+    return this.missionRepo.deletePhoto(id, type, uuid, typePhoroto);
   }
   getPhotoReport(id: number, type: string): Observable<any> {
     return this.missionRepo.getPhotoReport(id, type);

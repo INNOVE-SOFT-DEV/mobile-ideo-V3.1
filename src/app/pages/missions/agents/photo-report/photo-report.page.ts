@@ -160,18 +160,20 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       await this.loadingService.present(this.loadingMessage);
       this.missionsService.createReportPhoto(form, pointageId).subscribe({
         next: async value => {
-          console.log(this.baseUrl + value[0].image_url);
+          console.log("image_url", value[0]?.image_url?.url);
           if (value[0].photo_type == "before") {
-            this.grouped_presentation_photos[i][0].photo.url = this.baseUrl + value[0].image_url;
+            this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
             this.grouped_presentation_photos[i][0].photo.prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
-            this.grouped_presentation_photos[i][1].photo.url = this.baseUrl + value[0].image_url;
+            this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
             this.grouped_presentation_photos[i][1].photo.prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else {
             console.log("photos_truck", this.photos_truck[i]);
-            this.photos_truck[i].url = this.baseUrl + value[0].image_url;
+            this.photos_truck[i].url = value[0]?.image_url?.url;
+
+            this.photos_truck[i].prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.photos_truck);
           }
           await this.loadingService.dimiss();
@@ -288,7 +290,15 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     }
   }
 
-  private async performDeletePhoto(photo: any, photosArray: any, type: string, index: number, checkGroupedRemoval?: () => boolean): Promise<void> {
+  private async performDeletePhoto(
+    photo: any,
+    photosArray: any,
+    type: string,
+    index: number,
+    typePhoroto: string,
+    uuid: string,
+    checkGroupedRemoval?: () => boolean
+  ): Promise<void> {
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
       message: "Voulez-vous vraiment supprimer cette photo ?",
@@ -300,30 +310,32 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         {
           text: "Supprimer",
           handler: async () => {
-            if (!photo || (!photo.url && !photo.path)) {
+            /* if (!photo || (!photo.url && !photo.path)) {
               console.warn(`Attempted to delete a photo object at index ${index} of type ${type} that is missing 'url' and 'path'.`);
               return;
+            }*/
+
+            if (!this.isConneted) {
+              this.setOpen(true);
+              return;
             }
+            const photoId = this.getPhotoIdFromUrl(photo.url);
+            await this.loadingService.present(this.loadingMessage);
 
-            const isServerPhoto = photo.url && photo.url.includes(environment.urlAPI);
-            if (isServerPhoto) {
-              if (!this.isConneted) {
-                this.setOpen(true);
-                return;
+            this.missionsService.deletePhoto(photoId, this.planningType, uuid, typePhoroto).subscribe({
+              next: async () => {
+                await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
+                await this.loadingService.dimiss();
+              },
+              error: async (err: any) => {
+                await this.loadingService.dimiss();
+                console.error(`Error deleting photo from API (${type}, ID: ${photoId}):`, err);
               }
-              const photoId = this.getPhotoIdFromUrl(photo.url);
-              await this.loadingService.present(this.loadingMessage);
+            });
 
-              this.missionsService.deletePhoto(photoId, this.planningType).subscribe({
-                next: async () => {
-                  await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
-                  await this.loadingService.dimiss();
-                },
-                error: async (err: any) => {
-                  await this.loadingService.dimiss();
-                  console.error(`Error deleting photo from API (${type}, ID: ${photoId}):`, err);
-                }
-              });
+            /*const isServerPhoto = photo.url && photo.url.includes(environment.urlAPI);
+            if (isServerPhoto) {
+              
             } else {
               if (photo.path) {
                 try {
@@ -337,7 +349,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
                 console.warn(`Local photo at index ${index} of type ${type} has no path to delete. Updating local state.`);
                 await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
               }
-            }
+            }*/
           }
         }
       ]
@@ -458,23 +470,28 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     });
   }
 
-  async deletePhoto(type: string, i: number) {
+  async deletePhoto(type: string, i: number, uuid: string) {
+    console.log("deletePhoto", uuid);
     let targetPhoto: any;
     let photosArray: any;
+    let typePhoroto: string = "";
     let checkGroupedRemoval: (() => boolean) | undefined;
     switch (type) {
       case "photo_truck":
         targetPhoto = this.photos_truck[i];
         photosArray = this.photos_truck;
+        typePhoroto = "truck";
         break;
       case "photo_before":
         targetPhoto = this.grouped_presentation_photos[i]?.[0]?.photo;
         photosArray = this.grouped_presentation_photos;
+        typePhoroto = "before";
         checkGroupedRemoval = () => this.grouped_presentation_photos[i]?.[0]?.photo?.url === "" && this.grouped_presentation_photos[i]?.[1]?.photo?.url === "";
         break;
       case "photo_after":
         targetPhoto = this.grouped_presentation_photos[i]?.[1]?.photo;
         photosArray = this.grouped_presentation_photos;
+        typePhoroto = "after";
         checkGroupedRemoval = () => this.grouped_presentation_photos[i]?.[0]?.photo?.url === "" && this.grouped_presentation_photos[i]?.[1]?.photo?.url === "";
         break;
       default:
@@ -487,6 +504,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       return;
     }
 
-    await this.performDeletePhoto(targetPhoto, photosArray, type, i, checkGroupedRemoval);
+    await this.performDeletePhoto(targetPhoto, photosArray, type, i, typePhoroto, uuid, checkGroupedRemoval);
   }
 }

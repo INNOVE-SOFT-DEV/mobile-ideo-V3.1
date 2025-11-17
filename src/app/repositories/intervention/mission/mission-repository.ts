@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {catchError, from, map, Observable, of, switchMap} from "rxjs";
 import {environment} from "src/environments/environment";
 import {PlanningData} from "src/app/models/intervention/mission/mission";
@@ -204,8 +204,11 @@ export class MissionRepository implements MissionInterface {
     );
   }
 
-  deletePhoto(id: string, type: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
+  deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any> {
+    const params = new HttpParams().set("photo_type", typePhoroto).set("client_uuid", uuid);
+    return this.http.delete(`${this.newApiUrl}pointing_internals/delete_photo`, {params});
+
+    //return this.http.delete<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
   }
   getPhotoReport(id: number, type: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);

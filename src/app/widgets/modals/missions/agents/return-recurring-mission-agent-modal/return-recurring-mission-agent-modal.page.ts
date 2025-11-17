@@ -167,7 +167,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
 
             switch (type) {
               case "key_cache_initial_photo":
-                this.missionService.deletePhoto(id, "regular_declaration").subscribe({
+                /*this.missionService.deletePhoto(id, "regular_declaration").subscribe({
                   next: async value => {
                     this.clearGroupSlot("key_cache_initial_photo", i, j);
                     this.persistImages();
@@ -177,11 +177,11 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
                     await this.loadingController.dimiss();
                     console.error(err);
                   }
-                });
+                });*/
                 break;
 
               case "key_cache_apartment_num":
-                this.missionService.deletePhoto(id, "regular_declaration").subscribe({
+                /*  this.missionService.deletePhoto(id, "regular_declaration").subscribe({
                   next: async value => {
                     this.clearSingleSlot("key_cache_apartment_num", i);
                     this.persistImages();
@@ -191,11 +191,11 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
                     await this.loadingController.dimiss();
                     console.error(err);
                   }
-                });
+                });*/
                 break;
 
               case "key_receipt":
-                this.missionService.deletePhoto(id, "regular_declaration").subscribe({
+                /*this.missionService.deletePhoto(id, "regular_declaration").subscribe({
                   next: async value => {
                     this.clearGroupSlot("key_receipt", i, j);
                     this.persistImages();
@@ -205,7 +205,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
                     await this.loadingController.dimiss();
                     console.error(err);
                   }
-                });
+                });*/
                 break;
             }
           }

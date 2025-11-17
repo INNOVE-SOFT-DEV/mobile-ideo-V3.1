@@ -31,7 +31,7 @@
         <p class="photo-title">{{'Presentation photos' | translate}}</p>
         <div *ngFor="let group_photos of grouped_presentation_photos; let i = index" class="photo-container">
           <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != '' " [ngStyle]="{ 'background-image': 'url(\'' + group_photos[0]?.photo?.url + '\')' }">
-            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_before',i)"></ion-icon>
+            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_before',i,group_photos[0]?.photo?.prestation_id)"></ion-icon>
             <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_before',i)"></ion-icon>
           </div>
           <div *ngIf="group_photos[0]?.photo?.url == '' || group_photos[0]?.photo?.url == undefined" (click)="takePicture('photo_before' , i)" class="photo-block add-photo before">
@@ -40,7 +40,7 @@
             <span class="photo-number">{{'Before' | translate}}</span>
           </div>
           <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''" [ngStyle]="{ 'background-image': 'url(\'' + group_photos[1]?.photo?.url + '\')' }">
-            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_after',i)"></ion-icon>
+            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_after',i,group_photos[1]?.photo?.prestation_id)"></ion-icon>
             <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_after',i)"></ion-icon>
           </div>
           <div *ngIf="group_photos[1]?.photo?.url == '' || group_photos[1]?.photo?.url == undefined" (click)="takePicture('photo_after' , i)" class="photo-block add-photo after">
@@ -63,7 +63,7 @@
         <p class="photo-title">{{'Truck photos' | translate}}</p>
         <div *ngFor="let photo of photos_truck; let i = index" class="photo-container">
           <div class="photo-block" *ngIf="photo?.url != ''  && photo?.url != null && photo?.url != undefined " [ngStyle]="{ 'background-image': 'url(\'' + photo?.url + '\')' }">
-            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_truck' ,i)"></ion-icon>
+            <ion-icon style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px" name="trash" (click)="deletePhoto('photo_truck' ,i,photo?.prestation_id)"></ion-icon>
             <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_truck',i)"></ion-icon>
           </div>
           <div *ngIf="photo?.url == '' || photo?.url == undefined || photo?.url == null" (click)="takePicture('photo_truck' , i )" class="photo-block add-photo before">
