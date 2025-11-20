@@ -12,7 +12,6 @@ export class GlideComponent implements OnInit {
   ngOnInit() {}
   @Input() images: any[] = [];
   @Input() index: number = 0;
-
   glide: any = new Glide(".glide", {
     type: "slider",
     perView: 1,

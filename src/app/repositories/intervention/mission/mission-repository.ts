@@ -136,8 +136,8 @@ export class MissionRepository implements MissionInterface {
   }
 
   getPhotoReportsSupervisor(type: string, id: number): Observable<any> {
-    const cacheKey = `photo_reports_supervisor_${type}_${id}`;
-    return this.http.get<any>(`${this.apiUrl}photos_report/photos_report_supervisor/${type}/${id}`).pipe(
+    const cacheKey = `photo_reports_supervisor_${id}`;
+    return this.http.get<any>(`${this.newApiUrl}/schedules/${id}/photos/all`).pipe(
       switchMap(async data => {
         await Preferences.set({
           key: cacheKey,
@@ -156,6 +156,26 @@ export class MissionRepository implements MissionInterface {
         );
       })
     );
+
+    /*return this.http.get<any>(`${this.apiUrl}photos_report/photos_report_supervisor/${type}/${id}`).pipe(
+      switchMap(async data => {
+        await Preferences.set({
+          key: cacheKey,
+          value: JSON.stringify(data)
+        });
+        return data;
+      }),
+      catchError(() => {
+        return from(Preferences.get({key: cacheKey})).pipe(
+          switchMap(storedData => {
+            if (storedData.value) {
+              return of(JSON.parse(storedData.value));
+            }
+            return of(null);
+          })
+        );
+      })
+    );*/
   }
 
   getMissionReturn(planning_id: number, type_planning: string): Observable<any> {

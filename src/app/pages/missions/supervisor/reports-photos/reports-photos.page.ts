@@ -44,18 +44,24 @@ export class ReportsPhotosPage implements OnInit {
 
   onChange(event: any) {
     this.selectedOption = event.target.value;
-    this.team.find(u => {
-      if (`${u.first_name} ${u.last_name}` == this.selectedOption) {
-        this.pickedAgent = u;
-      }
-    });
 
-    if (this.selectedOption == "Tous les agents") {
+    // Trouver l'agent sélectionné
+    this.pickedAgent = this.team.find(u => `${u.first_name} ${u.last_name}` === this.selectedOption);
+
+    if (this.selectedOption === "Tous les agents") {
+      // Récupérer toutes les images
       this.images = this.imagesCache;
       this.imagesCamions = this.imagesCamionsCache;
+    } else if (this.pickedAgent) {
+      // Filtrer images before/after par agent
+      this.images = this.imagesCache.filter((pair: any) => pair.agent === this.pickedAgent.first_name + " " + this.pickedAgent.last_name);
+
+      // Filtrer images camion par agent
+      this.imagesCamions = this.imagesCamionsCache.filter((camion: any) => camion.agent === this.pickedAgent.first_name + " " + this.pickedAgent.last_name);
     } else {
-      this.images = this.imagesCache.filter((image: any) => image[0]?.user_id == this.pickedAgent.id || image[1]?.user_id == this.pickedAgent.id);
-      this.imagesCamions = this.imagesCamionsCache.filter((image: any) => image.user_id == this.pickedAgent.id);
+      // Si agent non trouvé, vider les images
+      this.images = [];
+      this.imagesCamions = [];
     }
   }
 
@@ -63,7 +69,7 @@ export class ReportsPhotosPage implements OnInit {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
     const data = (await JSON.parse(this.route.snapshot.paramMap.get("data")!)) || {};
     this.planning = data;
-
+    const scheduleId = this.planning.today_schedule.id;
     this.team = this.planning.team.filter((member: any) => member.first_name || member.last_name);
     await this.loadingService.present(this.laodingMessage);
     Network.getStatus().then(status => {
@@ -74,19 +80,72 @@ export class ReportsPhotosPage implements OnInit {
       this.isConnected = status.connected;
     });
 
-    this.missionService.getPhotoReportsSupervisor(this.planning.type, this.planning.id).subscribe(
+    //this.missionService.getPhotoReportsSupervisor(this.planning.type, this.planning.id).subscribe(
+    /*this.missionService.getPhotoReportsSupervisor(this.planning.type, scheduleId).subscribe(
       async data => {
-        this.images = Object.values(data.grouped_photos_prestation);
-        this.imagesCache = Object.values(data.grouped_photos_prestation);
-        this.imagesCamions = data.photos_truck;
-        this.imagesCamionsCache = data.photos_truck;
-        this.images = Object.values(this.images).map((group: any) => {
-          const before = group.find((p: any) => p.photo_type === "photo_before");
-          const after = group.find((p: any) => p.photo_type === "photo_after");
+        this.images = Array.isArray(data.images) ? data.images : [];
+        this.imagesCache = this.images;
+
+        this.imagesCamions = Array.isArray(data.photos_truck) ? data.photos_truck : [];
+        this.imagesCamionsCache = this.imagesCamions;
+
+        // Maintenant tu peux mapper sans erreur
+        this.images = this.images.map((group: any[]) => {
+          if (!Array.isArray(group)) group = [];
+
+          const before = group.find((p: any) => p.photo_type === "before");
+          const after = group.find((p: any) => p.photo_type === "after");
+
           return [before || null, after || null];
         });
+
         await this.loadingService.dimiss();
       },
+      async err => {
+        this.images = [];
+        this.imagesCamions = [];
+        this.imagesCache = [];
+        this.imagesCamionsCache = [];
+        await this.loadingService.dimiss();
+        console.error(err);
+      }
+    );*/
+
+    this.missionService.getPhotoReportsSupervisor(this.planning.type, scheduleId).subscribe(
+      async (data: any[]) => {
+        this.images = [];
+        this.imagesCamions = [];
+
+        data.forEach(agent => {
+          if (Array.isArray(agent.images)) {
+            agent.images.forEach((group: any[]) => {
+              const item = group[0];
+
+              if (item) {
+                this.images.push({
+                  before: item.before || null,
+                  after: item.after || null,
+                  agent: agent.agent
+                });
+              }
+            });
+          }
+
+          if (Array.isArray(agent.photos_truck)) {
+            agent.photos_truck.forEach((photo: any) => {
+              this.imagesCamions.push({
+                url: photo.image_url?.url || null,
+                agent: agent.agent
+              });
+            });
+          }
+        });
+
+        this.imagesCache = [...this.images];
+        this.imagesCamionsCache = [...this.imagesCamions];
+        await this.loadingService.dimiss();
+      },
+
       async err => {
         this.images = [];
         this.imagesCamions = [];
@@ -99,20 +158,23 @@ export class ReportsPhotosPage implements OnInit {
   }
 
   openSlides(type: string, i: number) {
-    if (type == "photo_before") {
-      this.initialIndexPhoto = i * 2;
-      this.sliderPhotos = this.images.flat();
-      this.isSliderOpen = true;
-    } else if (type == "photo_after") {
-      this.initialIndexPhoto = i * 2 + 1;
-      this.sliderPhotos = this.images.flat();
-      this.isSliderOpen = true;
+    if (type === "photo_before" || type === "photo_after") {
+      this.sliderPhotos = this.images.flatMap(pair => {
+        const arr: any[] = [];
+        if (pair.before?.image_url?.url) arr.push({photo: {url: pair.before.image_url.url}});
+        if (pair.after?.image_url?.url) arr.push({photo: {url: pair.after.image_url.url}});
+        return arr;
+      });
+
+      this.initialIndexPhoto = type === "photo_before" ? i * 2 : i * 2 + 1;
     } else {
+      this.sliderPhotos = this.imagesCamions.map(camion => ({photo: {url: camion.url}}));
       this.initialIndexPhoto = i;
-      this.sliderPhotos = this.imagesCamions;
-      this.isSliderOpen = true;
     }
+
+    this.isSliderOpen = true;
   }
+
   setActiveTab(tab: "prestation" | "Camion") {
     this.activeTab = tab;
   }
