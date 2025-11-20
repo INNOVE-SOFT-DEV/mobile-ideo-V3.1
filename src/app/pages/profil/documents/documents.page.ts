@@ -16,7 +16,7 @@ import {DocumentsModalPage} from "src/app/widgets/modals/documents-modal/documen
   standalone: false
 })
 export class DocumentsPage implements OnInit {
-  user:  any = null;
+  user: any = null;
   loadingMessage: string = "";
 
   constructor(
@@ -31,7 +31,7 @@ export class DocumentsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.user =  this.authServie.getCurrentUser()
+    this.user = this.authServie.getCurrentUser();
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.loadingCtrl.present(this.loadingMessage);
     this.authServie.getUserById(this.user.id).subscribe({

@@ -39,7 +39,7 @@ export class MissionDetailsPage implements OnInit {
   planningsCached: any[] = [];
   date: string = new Date().toISOString().split("T")[0];
   supervisors: any[] = [];
-  noSchedule:number = 0
+  noSchedule: number = 0;
 
   constructor(
     private popoverController: PopoverController,
@@ -62,9 +62,9 @@ export class MissionDetailsPage implements OnInit {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
     this.setCurrentDay();
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(false, this.punctualDate, this.type == 'forfaitaire' ? 'flat_rate' : this.type).subscribe(async (data: any) => {
-      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data['flat_rates']) : this.foramtplannings(data[`${this.type}s`]);      
-    
+    this.missionService.getPlannings(false, this.punctualDate, this.type == "forfaitaire" ? "flat_rate" : this.type).subscribe(async (data: any) => {
+      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data["flat_rates"]) : this.foramtplannings(data[`${this.type}s`]);
+
       this.planningsCached = this.plannings;
       this.supervisors = data.supervisors_contact;
       await this.loadingService.dimiss();
@@ -90,14 +90,14 @@ export class MissionDetailsPage implements OnInit {
   }
 
   foramtplannings(data: any) {
-    this.noSchedule = 0
+    this.noSchedule = 0;
     return data.map((element: any) => {
       element["showDetails"] = false;
-      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null
-      
+      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null;
+
       let subcontractors: any[] = [];
       if (element["today_schedule"] == null) {
-        this.noSchedule++
+        this.noSchedule++;
         return element;
       }
       element["today_schedule"]["subcontractors"].forEach((subcontractor: any, index: number) => {
@@ -189,28 +189,28 @@ export class MissionDetailsPage implements OnInit {
     //     });
     //   }
     // } else {
-      const popover = await this.popoverController.create({
-        component: IonDatetime,
-        componentProps: {
-          presentation: "day",
-          value: this.selectedDate,
-          min: this.minDate,
-          locale: "fr-FR"
-        },
-        cssClass: "custom-picker-popover",
-        event,
-        mode: "ios"
-      });
+    const popover = await this.popoverController.create({
+      component: IonDatetime,
+      componentProps: {
+        presentation: "day",
+        value: this.selectedDate,
+        min: this.minDate,
+        locale: "fr-FR"
+      },
+      cssClass: "custom-picker-popover",
+      event,
+      mode: "ios"
+    });
 
-      await popover.present();
-      const datetimeElement = popover.querySelector("ion-datetime");
-      if (datetimeElement) {
-        datetimeElement.addEventListener("ionChange", (event: any) => {
-          this.selectedDate = event.detail.value;
-          this.updateDay(event);
-          this.closePopover();
-        });
-      }
+    await popover.present();
+    const datetimeElement = popover.querySelector("ion-datetime");
+    if (datetimeElement) {
+      datetimeElement.addEventListener("ionChange", (event: any) => {
+        this.selectedDate = event.detail.value;
+        this.updateDay(event);
+        this.closePopover();
+      });
+    }
     // }
   }
 
@@ -228,8 +228,8 @@ export class MissionDetailsPage implements OnInit {
 
   async getByDate() {
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(false, this.date, this.type == 'forfaitaire' ? 'flat_rate' : this.type).subscribe(async (data: any) => {
-          this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data['flat_rates']) : this.foramtplannings(data[`${this.type}s`]);      
+    this.missionService.getPlannings(false, this.date, this.type == "forfaitaire" ? "flat_rate" : this.type).subscribe(async (data: any) => {
+      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data["flat_rates"]) : this.foramtplannings(data[`${this.type}s`]);
       if (this.isAgent) {
         this.planningsPerAgent = this.groupTeamMembersByPlanning(this.plannings);
       }

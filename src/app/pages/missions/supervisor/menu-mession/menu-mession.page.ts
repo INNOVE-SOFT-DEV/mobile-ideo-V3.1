@@ -11,7 +11,7 @@ import {CameraSource, Camera, CameraResultType} from "@capacitor/camera";
 import {OcrScannerPage} from "src/app/pages/ocr-scanner/ocr-scanner.page";
 import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
-import { LoadingControllerService } from "src/app/widgets/loading-controller/loading-controller.service";
+import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 
 @Component({
   selector: "app-menu-mession",
@@ -29,7 +29,7 @@ export class MenuMessionPage implements OnInit {
   imageUrl: string | any = null;
   detectedTexts: string[] = [];
   generatedJson: any = {};
-   user: any = JSON.parse(localStorage.getItem("user") || "{}");
+  user: any = JSON.parse(localStorage.getItem("user") || "{}");
 
   constructor(
     private location: Location,
@@ -50,7 +50,7 @@ export class MenuMessionPage implements OnInit {
     this.planning = data;
     // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
     this.planningType = data.type || "";
-    this.taskmanagerService.getAllTasksByKanban("superviseur mobile" , this.user.email).subscribe((res: any) => {
+    this.taskmanagerService.getAllTasksByKanban("superviseur mobile", this.user.email).subscribe((res: any) => {
       this.kanban = res.kanban;
     });
   }
@@ -139,7 +139,7 @@ export class MenuMessionPage implements OnInit {
       const response = await fetch(this.imageUrl);
       const blob = await response.blob();
 
-       await this.loadingCtrl.present("analyse de reçu...");
+      await this.loadingCtrl.present("analyse de reçu...");
       const result: any = await Ocr.detectText({filename: photo.path});
       this.detectedTexts = result.textDetections.map((d: any) => d.text);
       this.extractedText = this.detectedTexts.join(" | ");

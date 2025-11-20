@@ -10,16 +10,13 @@
           <ion-card-title>
             <ion-grid>
               <ion-row>
-            <ion-col size="9" push="3">
-              <p class="name-campany">{{ item.intervention.name }}</p>
-            </ion-col>
-            <ion-col class="logo" size="3" pull="9">
-                     <img class="logo"
-        src="{{
-             item?.intervention?.logos?.thumb || 'https://backend.ideogroupe.com/assets/img/default-company.png'
-            }}"               style="min-height: 60px" />
-            </ion-col>
-          </ion-row>
+                <ion-col size="9" push="3">
+                  <p class="name-campany">{{ item.intervention.name }}</p>
+                </ion-col>
+                <ion-col class="logo" size="3" pull="9">
+                  <img class="logo" src="{{ item?.intervention?.logos?.thumb || 'https://backend.ideogroupe.com/assets/img/default-company.png' }}" style="min-height: 60px" />
+                </ion-col>
+              </ion-row>
             </ion-grid>
             <ion-chip color="tertiary" class="custom-chip">
               <ion-icon name="people-outline"></ion-icon>
@@ -137,10 +134,10 @@
                     <ion-row>
                       <ion-col size="12">
                         <p class="name-agent wrap-text">
-                           {{ agent.first_name }} {{ agent.last_name }}
-                                                     <br />
+                          {{ agent.first_name }} {{ agent.last_name }}
+                          <br />
 
-                          <span class="job-agent wrap-text"> {{agent.company_name}}</span>
+                          <span class="job-agent wrap-text">{{ agent.company_name }}</span>
                         </p>
                       </ion-col>
                     </ion-row>
@@ -263,12 +260,12 @@
                       <ion-grid class="custom-grid">
                         <ion-row>
                           <ion-col size="12">
-                     <p class="name-agent wrap-text">
-                           {{ agent.first_name }} {{ agent.last_name }}
-                                                     <br />
+                            <p class="name-agent wrap-text">
+                              {{ agent.first_name }} {{ agent.last_name }}
+                              <br />
 
-                          <span class="job-agent wrap-text"> {{agent.company_name}}</span>
-                        </p>
+                              <span class="job-agent wrap-text">{{ agent.company_name }}</span>
+                            </p>
                           </ion-col>
                         </ion-row>
                       </ion-grid>

@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { OcrScannerPage } from './ocr-scanner.page';
+import {ComponentFixture, TestBed} from "@angular/core/testing";
+import {OcrScannerPage} from "./ocr-scanner.page";
 
-describe('OcrScannerPage', () => {
+describe("OcrScannerPage", () => {
   let component: OcrScannerPage;
   let fixture: ComponentFixture<OcrScannerPage>;
 
@@ -11,7 +11,7 @@ describe('OcrScannerPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

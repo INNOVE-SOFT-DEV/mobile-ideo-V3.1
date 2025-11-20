@@ -5,6 +5,8 @@ import {PhotosService} from "src/app/widgets/photos/photos.service";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
+import {v4 as uuidv4} from "uuid";
+
 
 @Component({
   selector: "app-return-recurring-mission-agent-modal",
@@ -15,13 +17,17 @@ import {TranslateService} from "@ngx-translate/core";
 export class ReturnRecurringMissionAgentModalPage implements OnInit {
   planning: any;
   images: any = {
-    key_cache_initial_photos: [],
+    key_cache_initial_photo: [
+
+    ],
     key_cache_apartment_num: [],
     key_receipt: []
   };
   isSliderOpen: boolean = false;
   sliderPhotos: any[] = [];
   initialIndexPhoto: number = 0;
+  internal_id: any
+  uuid = uuidv4();
 
   constructor(
     private modalController: ModalController,
@@ -35,18 +41,19 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.planning = this.navParams.get("data");
-    if (!localStorage.getItem(`return_mission_declaration_photos_${this.planning.date}`))
-      localStorage.setItem(
-        `return_mission_declaration_photos_${this.planning.date}`,
-        JSON.stringify({
-          key_cache_initial_photo: [],
-          key_cache_apartment_num: [],
-          key_receipt: []
-        })
-      );
-
-    this.images = JSON.parse(localStorage.getItem(`return_mission_declaration_photos_${this.planning.date}`)!);
+      this.planning = this.navParams.get("data");
+      this.internal_id = this.navParams.get("internal_id");
+    // if (!localStorage.getItem(`return_mission_declaration_photos_${this.planning.date}`))
+    //   localStorage.setItem(
+    //     `return_mission_declaration_photos_${this.planning.date}`,
+    //     JSON.stringify({
+    //       key_cache_initial_photo: [],
+    //       key_cache_apartment_num: [],
+    //       key_receipt: []
+    //     })
+    //   );
+// this.addPhotoMaterial()
+    // this.images = JSON.parse(localStorage.getItem(`return_mission_declaration_photos_${this.planning.date}`)!);
   }
 
   addSinglePhotoSlot() {
@@ -54,11 +61,24 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   }
 
   addPhotoMaterial() {
+    // if(this.images["key_cache_initial_photo"].length >= 1 ) {
+    //   console.log(this.images['key_cache_initial_photo'][0]);
+      
+    // }
+
+    console.log(this.images);
+    
+
+    // debugger
+    
     this.images["key_cache_initial_photo"].push([
-      {id: this.generateId(), photo: {}},
+      {id: this.generateId(), photo: {} },
       {id: this.generateId(), photo: {}},
       {id: this.generateId(), photo: {}}
     ]);
+    
+    console.log(this.images['key_cache_initial_photo'][0]);    // debugger;
+
   }
   addPhotoGroupKeyDelivery() {
     this.images.key_receipt.push([
@@ -68,6 +88,10 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
     ]);
   }
 
+  generateUuid() {
+    this.uuid = uuidv4();
+  }
+  
   async takePicture(type: string, i: number, j: number) {
     try {
       const actionSheet = await this.actionSheetController.create({
@@ -103,33 +127,73 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
     }
   }
   async saveNewPhoto(type: string, photo: any, i: number, j: number) {
-    const blob = this.photosService.base64ToBlob(photo.base64String);
-    let uploadData = new FormData();
-    let fileName = new Date().getTime() + ".jpeg";
-    uploadData.append("photo", blob, fileName);
-    uploadData.append("planning_regular_id", this.planning.id);
-    uploadData.append("photo_type", type);
-    const loadingMessage = await this.translateService.get("loading.uploading_photo").toPromise();
-    await this.loadingController.present(loadingMessage);
+    const base64_image = `data:${photo.format};base64,${photo.base64String}`;
+    // let uploadData = new FormData();
+    // let fileName = new Date().getTime() + ".jpeg";
+    // uploadData.append("photo", blob, fileName);
+    // uploadData.append("planning_regular_id", this.planning.id);
+    // uploadData.append("photo_type", type);
+    // const loadingMessage = await this.translateService.get("loading.uploading_photo").toPromise();
+    // await this.loadingController.present(loadingMessage);
 
-    this.missionService.createMissionReturn(uploadData).subscribe({
+    // this.missionService.createMissionReturn(uploadData).subscribe({
+    //   next: async data => {
+    //     switch (data["photo_type"]) {
+    //       case "key_cache_initial_photo":
+    //         this.images["key_cache_initial_photo"][i][j] = data;
+    //         break;
+    //       case "key_cache_apartment_num":
+    //         this.images["key_cache_apartment_num"][i] = data;
+    //         break;
+    //       case "key_receipt":
+    //         this.images["key_receipt"][i][j] = data;
+    //         break;
+    //     }
+    //     localStorage.setItem(`return_mission_declaration_photos_${this.planning.date}`, JSON.stringify(this.images));
+    //     await this.loadingController.dimiss();
+    //   },
+    //   error: async err => {
+    //     await this.loadingController.dimiss();
+    //     console.error(err);
+    //   }
+    // });
+
+    const payload = {
+      photo: [
+        {
+          photo_type: type,
+          client_uuid: uuidv4(),
+          image_base64: base64_image
+        }
+      ]
+    };
+
+
+    this.missionService.createReportPhoto(payload, this.internal_id).subscribe({
       next: async data => {
-        switch (data["photo_type"]) {
+        console.log(data);
+        
+        
+        switch (data[0]["photo_type"]) {
           case "key_cache_initial_photo":
-            this.images["key_cache_initial_photo"][i][j] = data;
+
+            this.images["key_cache_initial_photo"][i][j] = data[0]
+            console.log(i,j);
+            
+             console.log(this.images['key_cache_initial_photo'][i][j]);
+            debugger
+
             break;
           case "key_cache_apartment_num":
-            this.images["key_cache_apartment_num"][i] = data;
+            this.images["key_cache_apartment_num"][i] = data[0];
             break;
           case "key_receipt":
-            this.images["key_receipt"][i][j] = data;
+            this.images["key_receipt"][i][j] = data[0];
             break;
         }
-        localStorage.setItem(`return_mission_declaration_photos_${this.planning.date}`, JSON.stringify(this.images));
-        await this.loadingController.dimiss();
+        localStorage.setItem(`return_mission_declaration_photos_${this.planning.date}`, JSON.stringify(this.images));        
       },
       error: async err => {
-        await this.loadingController.dimiss();
         console.error(err);
       }
     });

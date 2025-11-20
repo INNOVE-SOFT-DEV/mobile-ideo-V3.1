@@ -28,65 +28,64 @@
   }
 }
 
-
 :host {
-        display: contents;
-      }
+  display: contents;
+}
 
-      .master-button-large {
-        --background: rgba(0, 162, 225, 1);
-        --background-activated: rgba(0, 146, 203, 1);
-        --background-hover: rgba(0, 146, 203, 1);
-        --color: white;
-        --border-radius: 50px;
-        --padding-start: 20px;
-        --padding-end: 20px;
-        --padding-top: 0;
-        --padding-bottom: 0;
-        --box-shadow: none;
-        --ripple-color: rgba(255, 255, 255, 0.2);
+.master-button-large {
+  --background: rgba(0, 162, 225, 1);
+  --background-activated: rgba(0, 146, 203, 1);
+  --background-hover: rgba(0, 146, 203, 1);
+  --color: white;
+  --border-radius: 50px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --box-shadow: none;
+  --ripple-color: rgba(255, 255, 255, 0.2);
 
-        border-radius: 50px;
-        background-color: rgba(0, 162, 225, 1);
-        min-height: 41px;
-        margin: 0;
-        height: 41px;
-        font-size: inherit;
-        font-weight: inherit;
-        text-transform: none;
-      }
+  border-radius: 50px;
+  background-color: rgba(0, 162, 225, 1);
+  min-height: 41px;
+  margin: 0;
+  height: 41px;
+  font-size: inherit;
+  font-weight: inherit;
+  text-transform: none;
+}
 
-      .master-button-large::part(native) {
-        border-radius: 50px;
-        background-color: rgba(0, 162, 225, 1);
-        min-height: 41px;
-        height: 41px;
-        padding: 0 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+.master-button-large::part(native) {
+  border-radius: 50px;
+  background-color: rgba(0, 162, 225, 1);
+  min-height: 41px;
+  height: 41px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-      .button-content {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-      }
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 
-      .text-wrapper {
-        align-self: stretch;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        justify-content: start;
-        margin: auto 0;
-      }
+.text-wrapper {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: start;
+  margin: auto 0;
+}
 
-      .confirm-text {
-        align-self: stretch;
-        margin: auto 0;
-        color: white;
-      }
+.confirm-text {
+  align-self: stretch;
+  margin: auto 0;
+  color: white;
+}

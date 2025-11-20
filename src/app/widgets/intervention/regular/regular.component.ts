@@ -12,10 +12,10 @@ import {Router} from "@angular/router";
 export class RegularComponent implements OnInit {
   @Input() data: any[] = [];
   @Input() supervisors: any[] = [];
-  @Input() date : string = new Date().toISOString();
+  @Input() date: string = new Date().toISOString();
   env = environment;
-  team : any[] = [];
-  schedule : any = {}
+  team: any[] = [];
+  schedule: any = {};
 
   urlApi: string = environment.urlAPI;
   webUrl: string = environment.url_web;
@@ -26,12 +26,8 @@ export class RegularComponent implements OnInit {
     // this.data.forEach((element: any) => {
     //   element["showDetails"] = false;
     //   element["today_schedule"] = element.schedules.find((s : any) => s.date == this.date)
-    //   element["team"] = [...element["today_schedule"]["agents"], ...element["today_schedule"]["subcontractors"]]      
+    //   element["team"] = [...element["today_schedule"]["agents"], ...element["today_schedule"]["subcontractors"]]
     // })
-    
-
-
-
   }
 
   toggleDetails(planning: Intervention) {
@@ -40,6 +36,6 @@ export class RegularComponent implements OnInit {
   goToDetails(planning: any) {
     planning.type = "regular";
     localStorage.setItem("currentPlanning", JSON.stringify({planningType: "regular", planning}));
-    this.router.navigate(["tabs/tab1/details", {data: JSON.stringify(planning), type: "regular" , supervisors: JSON.stringify(this.supervisors)}]);
+    this.router.navigate(["tabs/tab1/details", {data: JSON.stringify(planning), type: "regular", supervisors: JSON.stringify(this.supervisors)}]);
   }
 }

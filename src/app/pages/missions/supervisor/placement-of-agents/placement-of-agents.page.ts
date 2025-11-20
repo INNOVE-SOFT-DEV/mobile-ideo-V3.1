@@ -5,7 +5,7 @@ import {MissionService} from "src/app/tab1/service/intervention/mission/mission.
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs";
-import { environment } from "src/environments/environment";
+import {environment} from "src/environments/environment";
 
 @Component({
   selector: "app-placement-of-agents",
@@ -18,7 +18,7 @@ export class PlacementOfAgentsPage implements OnInit, OnDestroy {
   agents: any[] = [];
   tommorrow: string = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0];
   refreshEvent!: Subscription;
-  env = environment
+  env = environment;
 
   constructor(
     private location: Location,

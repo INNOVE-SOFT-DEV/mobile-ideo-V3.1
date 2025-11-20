@@ -7,6 +7,21 @@ import {BehaviorSubject} from "rxjs";
   providedIn: "root"
 })
 export class AudioRecorderService {
+  blobToBase64(audioBlob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64data = reader.result as string;
+        // base64data already includes: data:audio/ogg;base64,...
+        resolve(base64data);
+      };
+
+      reader.onerror = reject;
+      reader.readAsDataURL(audioBlob);
+    });
+  }
+
   private duration = 0;
   private durationDisplaySubject = new BehaviorSubject<string>("");
   public durationDisplay$ = this.durationDisplaySubject.asObservable();
@@ -58,7 +73,7 @@ export class AudioRecorderService {
         recursive: true
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
 
     await Filesystem.writeFile({

@@ -18,11 +18,10 @@ import {ToastControllerService} from "../../toast-controller/toast-controller.se
 export class MainComponent implements OnInit {
   @Input() counts: any;
   user = this.authService.getCurrentUser();
-    imageUrl: string | any = null;
+  imageUrl: string | any = null;
   detectedTexts: string[] = [];
   generatedJson: any = {};
-    extractedText: string = "";
-
+  extractedText: string = "";
 
   constructor(
     private router: Router,

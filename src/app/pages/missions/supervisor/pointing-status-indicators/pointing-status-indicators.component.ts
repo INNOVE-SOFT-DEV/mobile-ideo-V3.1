@@ -14,6 +14,5 @@ export class PointingStatusIndicatorsComponent implements OnInit {
 
   ngOnInit() {
     // console.log(this.agent);
-    
   }
 }

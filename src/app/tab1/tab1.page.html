@@ -25,8 +25,7 @@
     <div class="spinner-container" *ngIf="isLoaded == false">
       <ion-spinner name="crescent"></ion-spinner>
     </div>
-    <ng-container
-      *ngIf="(punctuals.length === 0 && regulars.length === 0 && forfaitaires.length === 0) && isLoaded==true">
+    <ng-container *ngIf="(punctuals.length === 0 && regulars.length === 0 && forfaitaires.length === 0) && isLoaded==true">
       <div class="empty-container">
         <img src="assets/img/emty-icon.png" />
         <p class="cls-empty-title">{{'No data found' | translate}}</p>
@@ -34,10 +33,8 @@
       </div>
     </ng-container>
     <ng-container *ngIf="isLoaded==true">
-      <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [date]="date"
-        [supervisors]="superVisors"></app-forfaitaire>
-      <app-punctual [data]="punctuals" [date]="date" [isTodayPlannings]="isToDayPlannings"
-        [supervisors]="superVisors"></app-punctual>
+      <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [date]="date" [supervisors]="superVisors"></app-forfaitaire>
+      <app-punctual [data]="punctuals" [date]="date" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-punctual>
       <app-regular [data]="regulars" [date]="date" [supervisors]="superVisors"></app-regular>
     </ng-container>
   </ng-container>

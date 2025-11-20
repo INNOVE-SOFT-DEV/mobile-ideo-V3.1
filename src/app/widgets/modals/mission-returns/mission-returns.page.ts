@@ -7,6 +7,8 @@ import {MissionService} from "src/app/tab1/service/intervention/mission/mission.
 import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "../../loading-controller/loading-controller.service";
 import {ToastControllerService} from "../../toast-controller/toast-controller.service";
+import {v4 as uuidv4} from "uuid";
+import { Preferences } from "@capacitor/preferences";
 
 @Component({
   selector: "app-mission-returns",
@@ -30,6 +32,10 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
   returnTypes: string[] = [];
   isSubmitted: boolean = false;
   returnTime: string = "";
+  base64Audio: string = "";
+  uuid: string = "";
+  user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+  internal: any;
 
   private durationSub?: Subscription;
   loadingMessage: string = "";
@@ -45,7 +51,8 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
-
+    // this.user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+    this.internal = this.planning.team.find((u: any) => u.id === this.user_v3.id).pointing_internal[0];
     this.getReturns();
   }
 
@@ -106,6 +113,8 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
     this.recording = false;
     const audioBlob = await this.audioRecorderService.stopRecording();
     this.audioRecording = audioBlob;
+    this.base64Audio = await this.audioRecorderService.blobToBase64(audioBlob);
+    this.uuid = uuidv4();
     this.blobUrl = URL.createObjectURL(audioBlob);
     this.waveSurfer?.load(this.blobUrl);
   }
@@ -115,27 +124,36 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
       await this.toastCtrl.presentToast("Veuillez choisir le type de retour ou bien d'enregistrer un message audio", "danger");
     }
     if ((this.returnTypes.length > 0 || this.audioRecording) && this.isSubmitted == false) {
-      const uploadData = new FormData();
+      let body: any = {
+        internal_id: this.internal.id,
+        audio_report: {
+          return_types: this.returnTypes,
+          client_uuid: this.uuid,
+          important: this.important,
+          recorded_at: Date.now()
+        }
+      };
       if (this.audioRecording) {
-        let fileName = new Date().getTime() + ".wav";
-        uploadData.append("file", this.audioRecording, fileName);
+        body["audio_report"]["audio_base64"] = this.base64Audio;
       }
-      uploadData.append("planning_punctual_id", this.planning.id);
-      uploadData.append("important", this.important + "");
-      uploadData.append("return_type", this.returnTypes.join(","));
-      uploadData.append(
-        "return_time",
-        new Date()
-          .toLocaleString("fr-FR", {
-            timeZone: "Europe/Paris"
-          })
-          .split(" ")[1] + ""
-      );
-      uploadData.append("date", new Date() + "");
-      this.isSubmitted = true;
-      await this.loadingService.present(this.loadingMessage);
-      this.missionService.createMissionReturn(uploadData).subscribe({
+
+      // uploadData.append("return_type", this.returnTypes.join(","));
+
+      // uploadData.append("return_type", this.returnTypes.join(","));
+
+      // this.isSubmitted = true;
+      // await this.loadingService.present(this.loadingMessage);
+      console.log(body);
+      this.missionService.createMissionReturn(body).subscribe({
         next: async data => {
+        //   console.log(data);
+        //   await Preferences.set({
+        //   key: "forfaitaires_agent",
+        //   value: JSON.stringify(data)
+        // });
+        // return data;
+
+
           await this.toastCtrl.presentToast("Votre demande a été envoyé avec succés", "success");
           await this.loadingService.dimiss();
           this.dismiss();
@@ -158,48 +176,37 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
   }
 
   setReturnTypes(object: any) {
-    object.return_type.includes("empty_truck") ? (this.truckToEmpty = true) : null;
-    object.return_type.includes("accident") ? (this.accident = true) : null;
-    object.return_type.includes("rescheduling") ? (this.replanification = true) : null;
-    object.return_type.includes("agent_absence") ? (this.agentAbsence = true) : null;
+    object.return_types.includes("empty_truck") ? (this.truckToEmpty = true) : null;
+    object.return_types.includes("accident") ? (this.accident = true) : null;
+    object.return_types.includes("rescheduling") ? (this.replanification = true) : null;
+    object.return_types.includes("agent_absence") ? (this.agentAbsence = true) : null;
   }
 
   async getReturns() {
     await this.loadingService.present(this.loadingMessage);
-    this.missionService.getMissionReturnAudio(this.planning.id, "punctual").subscribe({
+    this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
-        if (value.length > 0) {
-          this.setReturnTypes(value[0]);
-          this.returnTime = value[0].return_time.split(":")[0] + ":" + value[0].return_time.split(":")[1];
-          this.important = value[0].important;
-          this.blobUrl = value[0].file.url;
+        console.log(value);
+        this.setReturnTypes(value);
+        this.important = value.important;
+        if (value.audio_url) {
+          this.blobUrl = value.audio_url;
           this.isRecording = true;
           await this.loadingService.dimiss();
           this.createWaves();
-          this.waveSurfer?.load(value[0].file.url);
-        } else {
-          this.missionService.getMissionReturn(this.planning.id, "punctual").subscribe({
-            next: async value => {
-              if (value.length > 0) {
-                this.returnTime = value[0].return_time.split(":")[0] + ":" + value[0].return_time.split(":")[1];
-                this.important = value[0].important;
-                this.setReturnTypes(value[0]);
-              }
-
-              await this.loadingService.dimiss();
-            },
-            error: async err => {
-              await this.loadingService.dimiss();
-              console.error(err);
-            }
-          });
+          this.waveSurfer?.load(value.audio_url);
         }
+                await this.loadingService.dimiss();
+
+
       },
       error: async err => {
         await this.loadingService.dimiss();
         console.error(err);
       }
     });
+    console.log(this);
+    
   }
 
   playRecordingAgain() {

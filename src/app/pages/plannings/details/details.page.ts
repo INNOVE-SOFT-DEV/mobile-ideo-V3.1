@@ -13,7 +13,7 @@ import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {Ocr} from "@capacitor-community/image-to-text";
 import {OcrService} from "../../ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
-import { OcrScannerPage } from "../../ocr-scanner/ocr-scanner.page";
+import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
 
 @Component({
   selector: "app-details",
@@ -56,12 +56,11 @@ export class DetailsPage implements OnInit {
 
   async ngOnInit() {
     // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
-    this.supervisors = []
+    this.supervisors = [];
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     try {
       await this.refreshLocalData();
       this.setupPhotos();
-      
     } catch (error) {
       console.error("Erreur lors du chargement des détails :", error);
     } finally {
@@ -180,7 +179,6 @@ export class DetailsPage implements OnInit {
       const response = await fetch(this.imageUrl);
       const blob = await response.blob();
 
-
       const result: any = await Ocr.detectText({filename: photo.path});
       this.detectedTexts = result.textDetections.map((d: any) => d.text);
       this.extractedText = this.detectedTexts.join(" | ");
@@ -191,35 +189,31 @@ export class DetailsPage implements OnInit {
       formData.append("planning_type", this.planningType);
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       formData.append("user_id", user.id); // Example user ID
-      await this.loadingService.present(
-        'analyse de reçu...'
-      );
+      await this.loadingService.present("analyse de reçu...");
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {
           this.generatedJson = res.data || {};
 
           await this.toast.presentToast("Reçu scanné avec succès", "success");
           const modal = await this.modalCtrl.create({
-          component: OcrScannerPage,
-          componentProps: {
-            result: res // Pass full response here
-          }
-        });
-        modal.onDidDismiss().then(async result => {
-          if (result.role === 'confirm') {
-            // Handle confirmed data if needed
-            await this.loadingService.dimiss();
-          }
-        })
-        await modal.present();
+            component: OcrScannerPage,
+            componentProps: {
+              result: res // Pass full response here
+            }
+          });
+          modal.onDidDismiss().then(async result => {
+            if (result.role === "confirm") {
+              // Handle confirmed data if needed
+              await this.loadingService.dimiss();
+            }
+          });
+          await modal.present();
         },
         error: async err => {
           await this.toast.presentToast("Une erreur s'est produite", "danger");
           await this.loadingService.dimiss();
         }
       });
-
-    
     } catch (error) {
       console.error("OCR Error:", error);
     }

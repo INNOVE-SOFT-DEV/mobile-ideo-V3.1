@@ -55,7 +55,7 @@ export class PointagePage implements OnInit, OnDestroy {
     this.user = this.authService.getCurrentUser();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
-    this.planning =JSON.parse(localStorage.getItem("currentPlanning")!).planning;
+    this.planning = JSON.parse(localStorage.getItem("currentPlanning")!).planning;
     this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id).pointing_internal[0];
     this.type = this.route.snapshot.paramMap.get("type");
     this.user = this.authService.getCurrentUser();
@@ -147,7 +147,7 @@ export class PointagePage implements OnInit, OnDestroy {
               this.missionService.pointing(this.pointing_internal.id, "finish", body).subscribe(async (data: any) => {
                 console.log(data);
                 this.pointing_internal = data;
-                
+
                 await this.loadingService.dimiss();
                 this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
                 this.teamMember = this.planning.team.find((u: any) => u.id === user_v3.id);
@@ -167,7 +167,7 @@ export class PointagePage implements OnInit, OnDestroy {
         ]
       });
 
-       await actionSheet.present();
+      await actionSheet.present();
     } else {
       const now = new Date();
       const hours = now.getHours();
@@ -183,7 +183,7 @@ export class PointagePage implements OnInit, OnDestroy {
           await this.loadingService.dimiss();
           console.log(data);
 
-           this.pointing_internal = data
+          this.pointing_internal = data;
           this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
 
           this.updateLoaclPlaningData();
@@ -196,14 +196,13 @@ export class PointagePage implements OnInit, OnDestroy {
   }
 
   updateLoaclPlaningData() {
-      localStorage.setItem(
-        "currentPlanning",
-        JSON.stringify({
-          planningType: this.type,
-          planning: this.planning
-        })
-      );
-    
+    localStorage.setItem(
+      "currentPlanning",
+      JSON.stringify({
+        planningType: this.type,
+        planning: this.planning
+      })
+    );
   }
 
   onTouchStart(event: TouchEvent) {

@@ -40,11 +40,9 @@ export class PointagesPage implements OnInit {
   async ngOnInit() {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
-    
+
     this.planning = data;
     this.team = this.planning.team.filter((member: any) => !member?.manager);
-    
-
 
     if (this.planning.type != "regular") this.nonRegularDay = new Intl.DateTimeFormat("fr-FR", {weekday: "long"})?.format(new Date(this.planning.today_schedule.date));
     this.setDate();
@@ -52,41 +50,39 @@ export class PointagesPage implements OnInit {
   }
 
   async prepareData() {
-
     this.missionService.getPointAgents({id: this.planning.id, type: this.planning.type, date: this.date}).subscribe(async data => {
-
       await this.loadingService.dimiss();
     });
   }
 
   setDate() {
-      const dateStart = new Date(this.planning.date_start);
-      const dateEnd = new Date(this.planning.date_end);
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth() + 1;
-      const startMonth = dateStart.getMonth() + 1;
-      const endMonth = dateEnd.getMonth() + 1;
-      let selectedMonth: number;
-      let selectedYear: number;
-      if (currentMonth === startMonth || currentMonth === endMonth) {
-        selectedMonth = currentMonth;
-        selectedYear = currentYear;
+    const dateStart = new Date(this.planning.date_start);
+    const dateEnd = new Date(this.planning.date_end);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const startMonth = dateStart.getMonth() + 1;
+    const endMonth = dateEnd.getMonth() + 1;
+    let selectedMonth: number;
+    let selectedYear: number;
+    if (currentMonth === startMonth || currentMonth === endMonth) {
+      selectedMonth = currentMonth;
+      selectedYear = currentYear;
+    } else {
+      const diffToStart = Math.abs(currentMonth - startMonth);
+      const diffToEnd = Math.abs(currentMonth - endMonth);
+      if (diffToStart <= diffToEnd) {
+        selectedMonth = startMonth;
+        selectedYear = dateStart.getFullYear();
       } else {
-        const diffToStart = Math.abs(currentMonth - startMonth);
-        const diffToEnd = Math.abs(currentMonth - endMonth);
-        if (diffToStart <= diffToEnd) {
-          selectedMonth = startMonth;
-          selectedYear = dateStart.getFullYear();
-        } else {
-          selectedMonth = endMonth;
-          selectedYear = dateEnd.getFullYear();
-        }
+        selectedMonth = endMonth;
+        selectedYear = dateEnd.getFullYear();
       }
-      const yyyy = selectedYear.toString();
-      const mm = selectedMonth.toString().padStart(2, "0");
-      this.date = `${yyyy}-${mm}`;
-      this.date = this.planning.today_schedule.date;
+    }
+    const yyyy = selectedYear.toString();
+    const mm = selectedMonth.toString().padStart(2, "0");
+    this.date = `${yyyy}-${mm}`;
+    this.date = this.planning.today_schedule.date;
   }
 
   onChange(event: any) {

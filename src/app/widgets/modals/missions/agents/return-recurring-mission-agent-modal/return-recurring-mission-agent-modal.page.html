@@ -26,12 +26,12 @@
                   <div *ngFor="let group_photos of images.key_cache_initial_photo; let i = index">
                     <ion-row class="image-row">
                       <ng-container *ngFor="let photo of group_photos; let j = index">
-                        <ion-col class="btn_pic" *ngIf="photo.photo?.url">
+                        <ion-col class="btn_pic" *ngIf="photo.image_url?.url">
                           <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_cache_initial_photo', photo.id, i, j)"></ion-icon>
-                          <img [src]="photo.photo?.url" alt="" lightbox class="mhi" />
+                          <img [src]="photo.image_url?.thumb" alt="" lightbox class="mhi" />
                           <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_cache_initial_photo', i, j)"></ion-icon>
                         </ion-col>
-                        <ion-col class="btn_upload" *ngIf="!photo.photo?.url" (click)="takePicture('key_cache_initial_photo' , i , j)">
+                        <ion-col class="btn_upload" *ngIf="!photo.image_url?.url" (click)="takePicture('key_cache_initial_photo' , i , j)">
                           <ion-row>
                             <ion-col>
                               <ion-icon name="camera-outline" class="icon-tag"></ion-icon>

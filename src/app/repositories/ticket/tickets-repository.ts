@@ -23,7 +23,7 @@ export class TicketsRepository implements TicketInterface {
   archiveTask(data: any): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}taskmanager/archive_task`, data);
   }
-  getAllTasksByKanban(id: any ,email: any): Observable<any> {
+  getAllTasksByKanban(id: any, email: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}taskmanager/get_all_tasks_by_kanban/${id}/${email}`);
   }
   updateTask(data: any, id: any): Observable<any> {

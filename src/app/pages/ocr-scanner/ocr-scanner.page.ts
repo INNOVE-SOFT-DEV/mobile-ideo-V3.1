@@ -2,9 +2,9 @@ import {Component, Input, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {OcrService} from "./ocr-service/ocr.service";
 import {LoadingController, ModalController} from "@ionic/angular";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ToastControllerService } from "src/app/widgets/toast-controller/toast-controller.service";
-import { LoadingControllerService } from "src/app/widgets/loading-controller/loading-controller.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
+import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 
 @Component({
   selector: "app-ocr-scanner",
@@ -13,10 +13,9 @@ import { LoadingControllerService } from "src/app/widgets/loading-controller/loa
   standalone: false
 })
 export class OcrScannerPage implements OnInit {
-    @Input() result: any; 
-      form!: FormGroup;
-  imageUrl: string = '';
-
+  @Input() result: any;
+  form!: FormGroup;
+  imageUrl: string = "";
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -24,58 +23,51 @@ export class OcrScannerPage implements OnInit {
     private modalCtrl: ModalController,
     private fb: FormBuilder,
     private toast: ToastControllerService
-
   ) {}
-ngOnInit() {
+  ngOnInit() {
     const recipe = this.result?.data?.recipe || {};
-    this.imageUrl = this.result?.data?.file_url || '';
+    this.imageUrl = this.result?.data?.file_url || "";
 
     this.form = this.fb.group({
-      price: [recipe.price || ''],
-      date: [recipe.date || ''],
-      item: [recipe.item || '']
+      price: [recipe.price || ""],
+      date: [recipe.date || ""],
+      item: [recipe.item || ""]
     });
   }
 
-
   async confirm() {
-     if (!this.form.valid) return;
+    if (!this.form.valid) return;
 
-  const payload = this.form.value; // edited fields only
+    const payload = this.form.value; // edited fields only
 
-  // ✅ Prepare your FormData (if backend expects multipart/form-data)
-  const formData = new FormData();
-  Object.entries(payload).forEach(([key, value]) => {
-    formData.append(key, value as string);
-  });
+    // ✅ Prepare your FormData (if backend expects multipart/form-data)
+    const formData = new FormData();
+    Object.entries(payload).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
 
+    formData.append("recipe_id", this.result?.data?.id || "");
 
-  formData.append('recipe_id', this.result?.data?.id || '');
-
- const loading = await this.loadingCtrl.create({
-    message: 'Mise à jour du reçu...',
-    spinner: 'crescent'
-  });
-  this.ocrService.updateRecipe(formData).subscribe({
-    next: async  (response) => {
-      // console.log('Recipe updated successfully:', response);
-      await this.toast.presentToast('Confirmation effectuée avec succès', 'success');
-      await this.modalCtrl.dismiss(this.form.value, 'confirm');
-      await loading.dismiss();
-    },
-    error: async (error) => {
-      console.error('Error updating recipe:', error);
-      await loading.dismiss();
-      await this.toast.presentToast('Une erreur est survenue', 'danger');
-    }
-  });
-}
-
- 
+    const loading = await this.loadingCtrl.create({
+      message: "Mise à jour du reçu...",
+      spinner: "crescent"
+    });
+    this.ocrService.updateRecipe(formData).subscribe({
+      next: async response => {
+        // console.log('Recipe updated successfully:', response);
+        await this.toast.presentToast("Confirmation effectuée avec succès", "success");
+        await this.modalCtrl.dismiss(this.form.value, "confirm");
+        await loading.dismiss();
+      },
+      error: async error => {
+        console.error("Error updating recipe:", error);
+        await loading.dismiss();
+        await this.toast.presentToast("Une erreur est survenue", "danger");
+      }
+    });
+  }
 
   async goBack() {
     await this.modalCtrl.dismiss();
   }
-
-
 }

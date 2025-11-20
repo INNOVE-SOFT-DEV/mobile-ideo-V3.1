@@ -34,9 +34,11 @@
         <ion-grid>
           <ion-row class="ion-align-items-center ion-justify-content-between">
             <ion-col size="2" class="avatar-col">
-              <img [src]="!item.user.photo.url.includes('default-user') ? item.user.photo.url.replace(env.urlAPI , env.url_web) : 'https://backend.ideogroupe.com/assets/img/default-user.png'"
-              
-              alt="Avatar" class="avatar-img" />
+              <img
+                [src]="!item.user.photo.url.includes('default-user') ? item.user.photo.url.replace(env.urlAPI , env.url_web) : 'https://backend.ideogroupe.com/assets/img/default-user.png'"
+                alt="Avatar"
+                class="avatar-img"
+              />
             </ion-col>
             <ion-col size="8" class="info-col">
               <ion-row class="name-row">{{item.user.first_name + ' ' + item.user.last_name}}</ion-row>

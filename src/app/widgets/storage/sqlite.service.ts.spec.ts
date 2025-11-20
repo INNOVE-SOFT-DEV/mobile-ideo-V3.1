@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from "@angular/core/testing";
 
-import { SqliteServiceTs } from './sqlite.service.ts';
+import {SqliteServiceTs} from "./sqlite.service.ts";
 
-describe('SqliteServiceTs', () => {
+describe("SqliteServiceTs", () => {
   let service: SqliteServiceTs;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('SqliteServiceTs', () => {
     service = TestBed.inject(SqliteServiceTs);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

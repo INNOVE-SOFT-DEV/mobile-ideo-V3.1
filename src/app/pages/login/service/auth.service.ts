@@ -3,7 +3,7 @@ import {AuthRepository} from "src/app/repositories/auth/auth-repository";
 import {AuthInterface} from "src/app/interfaces/auth/auth-interface";
 import {Observable, tap} from "rxjs";
 import {AuthResponse, User} from "src/app/models/auth/user";
-import { Preferences } from "@capacitor/preferences";
+import {Preferences} from "@capacitor/preferences";
 
 @Injectable({
   providedIn: "root"
@@ -62,7 +62,6 @@ export class AuthService implements AuthInterface {
     );
   }
 
-
   updateProfile(data: any): Observable<User> {
     return this.authRepo.updateProfile(data).pipe(
       tap((response: any) => {
@@ -80,8 +79,8 @@ export class AuthService implements AuthInterface {
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         Preferences.set({
-          key:'user',
-          value:JSON.stringify(response.user)
+          key: "user",
+          value: JSON.stringify(response.user)
         });
         this.currentUser = response.user;
       })
@@ -91,11 +90,14 @@ export class AuthService implements AuthInterface {
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    this.authRepo.logOut().subscribe(() => {
-      console.log("Logged out from server");
-    }, (error) => {
-      console.error("Logout error:", error);
-    });   
+    this.authRepo.logOut().subscribe(
+      () => {
+        console.log("Logged out from server");
+      },
+      error => {
+        console.error("Logout error:", error);
+      }
+    );
     this.currentUser = null;
   }
 
@@ -114,5 +116,4 @@ export class AuthService implements AuthInterface {
   isSuperVisor(): boolean {
     return this.currentUser?.role == "supervisor";
   }
-  
 }

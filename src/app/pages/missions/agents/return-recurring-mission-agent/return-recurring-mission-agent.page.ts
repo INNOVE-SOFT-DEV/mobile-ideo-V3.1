@@ -8,6 +8,7 @@ import {ReturnRecurringMissionAgentModalPage} from "src/app/widgets/modals/missi
 import {ModalController} from "@ionic/angular";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
+import {v4 as uuidv4} from "uuid";
 
 @Component({
   selector: "app-return-recurring-mission-agent",
@@ -28,6 +29,10 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   noteCache: string = "";
   returnTime: any;
   loadingMessage: string | undefined;
+  audioBase64: string = "";
+  uuid: string = "";
+  user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+  internal: any;
 
   constructor(
     private location: Location,
@@ -42,36 +47,15 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
 
     this.planning = data;
-    this.getReturns();
+    // this.getReturns();
+    this.internal = this.planning.team.find((u: any) => u.id === this.user_v3.id).pointing_internal[0];
   }
 
   async getReturns() {
     await this.loadingService.present(this.loadingMessage);
-    this.missionService.getMissionReturnAudio(this.planning.id, "regular").subscribe({
+    this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
-        if (value.length > 0) {
-          this.returnTime = value[0].return_time;
-          this.blobUrl = value[0].file.url;
-          await this.loadingService.dimiss();
-          this.createWaves();
-          this.waveSurfer?.load(value[0].file.url);
-        } else {
-          this.missionService.getMissionReturn(this.planning.id, "regular").subscribe({
-            next: async value => {
-              if (value.length > 0) {
-                this.returnTime = value[0].return_time;
-                this.note = value[0].note;
-                this.noteCache = value[0].note;
-              }
-
-              await this.loadingService.dimiss();
-            },
-            error: async err => {
-              await this.loadingService.dimiss();
-              console.error(err);
-            }
-          });
-        }
+        console.log(value);
       },
       error: async err => {
         await this.loadingService.dimiss();
@@ -104,6 +88,9 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   async stopRecording() {
     this.recording = false;
     const audioBlob = await this.audioRecorderService.stopRecording();
+    this.audioBase64 = await this.audioRecorderService.blobToBase64(audioBlob);
+    this.uuid = uuidv4();
+
     this.audioRecording = new File([audioBlob], this.audioRecorderService.fileName, {type: "audio/mp3"});
     this.blobUrl = URL.createObjectURL(audioBlob);
     this.waveSurfer?.load(this.blobUrl);
@@ -116,44 +103,41 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   }
 
   async makeDeclaration() {
-    const uploadData = new FormData();
-    uploadData.append("planning_regular_id", this.planning.id);
-    uploadData.append("date", new Date() + "");
-    uploadData.append(
-      "return_time",
-      new Date()
-        .toLocaleString("fr-FR", {
-          timeZone: "Europe/Paris"
-        })
-        .split(" ")[1] + ""
-    );
+    let body: any = {
+      internal_id: this.internal.id,
+      audio_report: {
+        client_uuid: this.uuid,
+        recorded_at: Date.now()
+      }
+    };
+
     if (this.audioRecording) {
-      let fileName = new Date().getTime() + ".wav";
-      const blob = new Blob([this.audioRecording], {type: "audio/wav"});
-      uploadData.append("file", blob, fileName);
-      this.missionService.createMissionReturn(uploadData).subscribe({
-        next: async value => {
-          this.audioRecording = undefined;
-        },
-        error: async err => {
-          console.error(err);
-        }
-      });
+      body.audio_report["audio_base64"] = this.audioBase64;
     }
+
     if (this.note != this.noteCache) {
-      uploadData.append("note", this.note);
-      await this.loadingService.present("Enregistrement de la déclaration...");
-      this.missionService.createMissionReturn(uploadData).subscribe({
-        next: async value => {
-          this.noteCache = value.note;
+      body.audio_report["note"] = this.note;
+    }
+
+    console.log(body);
+    
+
+    await this.loadingService.present(this.loadingMessage);
+    return new Promise((resolve, reject) => {
+      this.missionService.createMissionReturn(body).subscribe({
+        next: async data => {
+          console.log(data);
           await this.loadingService.dimiss();
-        },
-        error: async err => {
+          resolve(data);
+        }
+        ,
+        error: async error => {
           await this.loadingService.dimiss();
-          console.error(err);
+          console.error(error);
+          reject(error);
         }
       });
-    }
+    });
   }
 
   createWaves() {
@@ -167,11 +151,14 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   }
 
   async goToReturnRecurringMissionAgentModal() {
-    await this.makeDeclaration();
+    
+   const res =  await this.makeDeclaration();
+   console.log(res);
+   
     const modal = await this.modalController.create({
       component: ReturnRecurringMissionAgentModalPage,
       cssClass: "materials-modal",
-      componentProps: {data: this.planning}
+      componentProps: {data: this.planning , internal_id: this.internal.id}
     });
     return await modal.present();
   }

@@ -14,11 +14,8 @@
                   <p class="name-campany">{{ item.intervention.name }}</p>
                 </ion-col>
                 <ion-col class="logo" size="3" pull="9">
-              <img class="logo"
-        src="{{
-             item?.intervention?.logos?.thumb || 'https://backend.ideogroupe.com/assets/img/default-company.png'
-            }}"               style="min-height: 60px" />
-            </ion-col>
+                  <img class="logo" src="{{ item?.intervention?.logos?.thumb || 'https://backend.ideogroupe.com/assets/img/default-company.png' }}" style="min-height: 60px" />
+                </ion-col>
               </ion-row>
             </ion-grid>
             <ion-chip color="tertiary" class="custom-chip">

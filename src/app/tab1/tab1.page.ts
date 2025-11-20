@@ -33,7 +33,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   date: string = new Date().toISOString().split("T")[0];
   isPopoverOpen: boolean = false;
   isToDayPlannings: boolean = false;
-  noSchedule: number = 0
+  noSchedule: number = 0;
 
   constructor(
     private missionService: MissionService,
@@ -66,7 +66,7 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   async getAllMissions() {
     this.executed = true;
-    console.log(this.date , this.isSuperVisor);  
+    console.log(this.date, this.isSuperVisor);
     // await this.loadingService.present("loading");
     this.isLoaded = false;
     this.missionService.getPlannings(true, this.date, "all").subscribe({
@@ -74,15 +74,15 @@ export class Tab1Page implements OnInit, OnDestroy {
         console.log(value);
         this.isLoaded = true;
 
-        console.log("🚀 ~ file: tab1.page.ts:83 ~ Tab1Page ~ getAllMissions ~ value", value , this.isToDayPlannings);
+        console.log("🚀 ~ file: tab1.page.ts:83 ~ Tab1Page ~ getAllMissions ~ value", value, this.isToDayPlannings);
         this.punctuals = this.foramtplannings(value.punctuals);
-        this.regulars =  this.foramtplannings(value.regulars);
+        this.regulars = this.foramtplannings(value.regulars);
         this.forfaitaires = this.foramtplannings(value.flat_rates);
         console.table({
           punctuals: this.punctuals,
           regulars: this.regulars,
           forfaitaires: this.forfaitaires
-        })
+        });
         // this.counts = value.counts;
         this.superVisors = value.supervisors_contact;
         // await this.loadingService.dimiss();
@@ -92,18 +92,17 @@ export class Tab1Page implements OnInit, OnDestroy {
         await this.loadingService.dimiss();
       }
     });
-
   }
 
   foramtplannings(data: any) {
-    this.noSchedule = 0
+    this.noSchedule = 0;
     return data.map((element: any) => {
       element["showDetails"] = false;
-      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null
-      
+      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null;
+
       let subcontractors: any[] = [];
       if (element["today_schedule"] == null) {
-        this.noSchedule++
+        this.noSchedule++;
         return element;
       }
       element["today_schedule"]["subcontractors"].forEach((subcontractor: any, index: number) => {
@@ -126,9 +125,9 @@ export class Tab1Page implements OnInit, OnDestroy {
   getByDate() {
     this.isLoaded = false;
     this.missionService.getPlannings(true, this.date, "all").subscribe((value: any) => {
-     this.punctuals = this.foramtplannings(value.punctuals);
-        this.regulars =  this.foramtplannings(value.regulars);
-        this.forfaitaires = this.foramtplannings(value.flat_rates);
+      this.punctuals = this.foramtplannings(value.punctuals);
+      this.regulars = this.foramtplannings(value.regulars);
+      this.forfaitaires = this.foramtplannings(value.flat_rates);
       this.isLoaded = true;
     });
   }
