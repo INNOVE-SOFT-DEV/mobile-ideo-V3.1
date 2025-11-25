@@ -27,7 +27,7 @@
                     <ion-row class="image-row">
                       <ng-container *ngFor="let photo of group_photos; let j = index">
                         <ion-col class="btn_pic" *ngIf="photo.image_url?.url">
-                          <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_cache_initial_photo', photo.id, i, j)"></ion-icon>
+                          <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_cache_initial_photo', photo.client_uuid, i, j)"></ion-icon>
                           <img [src]="photo.image_url?.thumb" alt="" lightbox class="mhi" />
                           <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_cache_initial_photo', i, j)"></ion-icon>
                         </ion-col>
@@ -70,12 +70,12 @@
           <ng-container *ngIf="images?.key_cache_apartment_num?.length > 0">
             <div *ngFor="let item of images.key_cache_apartment_num; let i = index" class="single-photo-wrapper">
               <div class="single-photo-container">
-                <div class="single-btn_pic" *ngIf="item.photo?.url">
+                <div class="single-btn_pic" *ngIf="item.image_url?.url">
                   <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_cache_apartment_num', item.id, i, 0)"></ion-icon>
-                  <img [src]="item.photo?.url" class="single-full-img" />
+                  <img [src]="item.image_url?.url" class="single-full-img" />
                   <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_cache_apartment_num', i ,0)"></ion-icon>
                 </div>
-                <div class="single-btn_upload" *ngIf="!item.photo?.url" (click)="takePicture('key_cache_apartment_num' , i , 0 )">
+                <div class="single-btn_upload" *ngIf="!item.image_url?.url" (click)="takePicture('key_cache_apartment_num' , i , 0 )">
                   <ion-icon name="camera-outline" class="icon-tag"></ion-icon>
                   <div class="sub_title">{{ i + 1 }}</div>
                 </div>
@@ -108,12 +108,12 @@
                   <div *ngFor="let group_photos of images.key_receipt; let i = index">
                     <ion-row class="image-row">
                       <ng-container *ngFor="let photo of group_photos; let j = index">
-                        <ion-col class="btn_pic" *ngIf="photo.photo?.url">
-                          <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_receipt', photo.id, i, j)"></ion-icon>
-                          <img [src]="photo.photo?.url" alt="" lightbox class="mhi" />
+                        <ion-col class="btn_pic" *ngIf="photo.image_url?.url">
+                          <ion-icon name="trash" class="trash-icon" (click)="openConfirmRemovePhotoModal($event, 'key_receipt', photo.client_uuid, i, j)"></ion-icon>
+                          <img [src]="photo.image_url?.url" alt="" lightbox class="mhi" />
                           <ion-icon name="eye" class="eye-icon" (click)="openSlider('key_receipt', i, j)"></ion-icon>
                         </ion-col>
-                        <ion-col class="btn_upload" *ngIf="!photo.photo?.url" (click)="takePicture('key_receipt' , i , j)">
+                        <ion-col class="btn_upload" *ngIf="!photo.image_url?.url" (click)="takePicture('key_receipt' , i , j)">
                           <ion-row>
                             <ion-col>
                               <ion-icon name="camera-outline" class="icon-tag"></ion-icon>

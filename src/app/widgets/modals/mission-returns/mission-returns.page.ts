@@ -194,7 +194,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
           this.isRecording = true;
           await this.loadingService.dimiss();
           this.createWaves();
-          this.waveSurfer?.load(value.audio_url);
+          this.waveSurfer?.load(value.audio_url.url);
         }
                 await this.loadingService.dimiss();
 

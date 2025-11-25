@@ -33,6 +33,7 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   uuid: string = "";
   user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
   internal: any;
+  isnewRecording: boolean = false;
 
   constructor(
     private location: Location,
@@ -47,7 +48,7 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
 
     this.planning = data;
-    // this.getReturns();
+    this.getReturns();
     this.internal = this.planning.team.find((u: any) => u.id === this.user_v3.id).pointing_internal[0];
   }
 
@@ -56,6 +57,15 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
     this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
         console.log(value);
+        this.note = value.note || "";
+        this.noteCache = this.note;
+        if(value.audio_url){
+          this.blobUrl = value.audio_url;
+          this.isRecording = true;
+          this.createWaves();
+          this.waveSurfer?.load(value.audio_url.url);
+        }
+        await this.loadingService.dimiss();
       },
       error: async err => {
         await this.loadingService.dimiss();
@@ -90,6 +100,7 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
     const audioBlob = await this.audioRecorderService.stopRecording();
     this.audioBase64 = await this.audioRecorderService.blobToBase64(audioBlob);
     this.uuid = uuidv4();
+    this.isnewRecording = true;
 
     this.audioRecording = new File([audioBlob], this.audioRecorderService.fileName, {type: "audio/mp3"});
     this.blobUrl = URL.createObjectURL(audioBlob);
@@ -107,7 +118,8 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
       internal_id: this.internal.id,
       audio_report: {
         client_uuid: this.uuid,
-        recorded_at: Date.now()
+        recorded_at: Date.now(),
+        note: this.note
       }
     };
 
@@ -115,11 +127,7 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
       body.audio_report["audio_base64"] = this.audioBase64;
     }
 
-    if (this.note != this.noteCache) {
-      body.audio_report["note"] = this.note;
-    }
 
-    console.log(body);
     
 
     await this.loadingService.present(this.loadingMessage);
@@ -151,15 +159,19 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   }
 
   async goToReturnRecurringMissionAgentModal() {
-    
-   const res =  await this.makeDeclaration();
-   console.log(res);
-   
+    if(this.isnewRecording){
+      await this.makeDeclaration();
+    }
+
     const modal = await this.modalController.create({
       component: ReturnRecurringMissionAgentModalPage,
       cssClass: "materials-modal",
       componentProps: {data: this.planning , internal_id: this.internal.id}
     });
+
+    modal.onDidDismiss().then(result => {
+      this.isnewRecording = false;
+    })
     return await modal.present();
   }
 

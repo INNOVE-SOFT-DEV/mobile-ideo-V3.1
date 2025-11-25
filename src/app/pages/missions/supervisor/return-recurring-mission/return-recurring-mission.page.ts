@@ -46,18 +46,20 @@ export class ReturnRecurringMissionPage implements OnInit, AfterViewChecked {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
     this.planning = data;
     this.updateFormattedDate();
+    console.log(this.planning);
+    
     await this.loadingService.present(this.loadingMessage);
-    this.missionService.getRegularReturns(this.planning.id, "regular", false).subscribe({
+    this.missionService.getMissionReturnAudio(this.planning.today_schedule.id).subscribe({
       next: async value => {
         this.returns = value;
 
-        this.display = this.returns.mission_return_declarations.filter(
-          (declaration: any) => declaration.photo_type === "key_cache_initial_photo" && declaration.created_at.split("T")[0] == this.selectedDate.split("T")[0]
-        );
+          // this.display = this.returns.mission_return_declarations.filter(
+          //   (declaration: any) => declaration.photo_type === "key_cache_initial_photo" && declaration.created_at.split("T")[0] == this.selectedDate.split("T")[0]
+          // );
 
-        this.notes = this.returns.mission_returns.filter((declaration: any) => declaration.created_at.split("T")[0] == this.selectedDate.split("T")[0]);
+        // this.notes = this.returns.mission_returns.filter((declaration: any) => declaration.created_at.split("T")[0] == this.selectedDate.split("T")[0]);
 
-        this.voices = this.returns.mission_return_audios.filter((declaration: any) => declaration.created_at.split("T")[0] == this.selectedDate.split("T")[0]);
+        // this.voices = this.returns.mission_return_audios.filter((declaration: any) => declaration.created_at.split("T")[0] == this.selectedDate.split("T")[0]);
 
         this.clearWaveSurfers();
 

@@ -43,17 +43,17 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   ngOnInit() {
       this.planning = this.navParams.get("data");
       this.internal_id = this.navParams.get("internal_id");
-    // if (!localStorage.getItem(`return_mission_declaration_photos_${this.planning.date}`))
-    //   localStorage.setItem(
-    //     `return_mission_declaration_photos_${this.planning.date}`,
-    //     JSON.stringify({
-    //       key_cache_initial_photo: [],
-    //       key_cache_apartment_num: [],
-    //       key_receipt: []
-    //     })
-    //   );
-// this.addPhotoMaterial()
-    // this.images = JSON.parse(localStorage.getItem(`return_mission_declaration_photos_${this.planning.date}`)!);
+    if (!localStorage.getItem(`return_mission_declaration_photos_${this.internal_id}`))
+      localStorage.setItem(
+        `return_mission_declaration_photos_${this.internal_id}`,
+        JSON.stringify({
+          key_cache_initial_photo: [],
+          key_cache_apartment_num: [],
+          key_receipt: []
+        })
+      );
+    this.addPhotoMaterial()
+    this.images = JSON.parse(localStorage.getItem(`return_mission_declaration_photos_${this.internal_id}`)!);
   }
 
   addSinglePhotoSlot() {
@@ -178,10 +178,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
           case "key_cache_initial_photo":
 
             this.images["key_cache_initial_photo"][i][j] = data[0]
-            console.log(i,j);
             
-             console.log(this.images['key_cache_initial_photo'][i][j]);
-            debugger
 
             break;
           case "key_cache_apartment_num":
@@ -191,7 +188,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
             this.images["key_receipt"][i][j] = data[0];
             break;
         }
-        localStorage.setItem(`return_mission_declaration_photos_${this.planning.date}`, JSON.stringify(this.images));        
+        localStorage.setItem(`return_mission_declaration_photos_${this.internal_id}`, JSON.stringify(this.images));        
       },
       error: async err => {
         console.error(err);
@@ -216,6 +213,8 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   }
 
   async openConfirmRemovePhotoModal(event: any, type: string, id: any, i: any, j: number) {
+    console.log(type,id,i,j);
+    
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
       message: "Voulez-vous vraiment supprimer cette photo ?",
@@ -231,17 +230,17 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
 
             switch (type) {
               case "key_cache_initial_photo":
-                /*this.missionService.deletePhoto(id, "regular_declaration").subscribe({
+                this.missionService.deletePhoto(id, type,id, type).subscribe({
                   next: async value => {
-                    this.clearGroupSlot("key_cache_initial_photo", i, j);
-                    this.persistImages();
+                    // this.clearGroupSlot("key_cache_initial_photo", i, j);
+                    // this.persistImages();
                     await this.loadingController.dimiss();
                   },
                   error: async err => {
                     await this.loadingController.dimiss();
                     console.error(err);
                   }
-                });*/
+                });
                 break;
 
               case "key_cache_apartment_num":
@@ -312,6 +311,6 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   }
 
   private persistImages() {
-    localStorage.setItem(`return_mission_declaration_photos_${this.planning.date}`, JSON.stringify(this.images));
+    localStorage.setItem(`return_mission_declaration_photos_${this.internal_id}`, JSON.stringify(this.images));
   }
 }
