@@ -158,27 +158,16 @@ export class MakeRequestPage implements OnInit {
         else {
           this.loading = true;
           const uploadData = new FormData();
-          /*uploadData.append("type_absence", this.absenceType);
-           uploadData.append("date_start", this.selectedStartDate);
-          uploadData.append("date_end", this.selectedEndDate);
-          uploadData.append("motif", this.absenceType);
-        */
           uploadData.append("absence[date_start]", this.selectedStartDate);
           uploadData.append("absence[date_end]", this.selectedEndDate);
           uploadData.append("absence[absence_type]", this.absenceType || "");
           uploadData.append("absence[motif]", this.absenceType || "");
-
           if (this.isPdf) {
             if (this.filePreview instanceof File) {
-              // 👌 c’est bien un fichier uploadé
               const fileName = new Date().getTime() + "." + this.filePreview.name.split(".").pop();
               uploadData.append("absence[document]", this.filePreview, fileName);
             }
           } else if (this.imagePreview != "") {
-            /* const fileName = new Date().getTime() + "." + this.photosService.lastImage.format;
-            const file = this.base64ToFile(this.photosService.lastImage.base64String, fileName, this.photosService.lastImage.format);
-            uploadData.append("absence[document]", file, fileName);*/
-
             if (this.isUploadedFile()) {
               const fileName = new Date().getTime() + "." + this.photosService.lastImage.format;
               const file = this.base64ToFile(this.photosService.lastImage.base64String, fileName, this.photosService.lastImage.format);
