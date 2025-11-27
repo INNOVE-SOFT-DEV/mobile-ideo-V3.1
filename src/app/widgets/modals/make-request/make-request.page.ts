@@ -53,17 +53,18 @@ export class MakeRequestPage implements OnInit {
   ngOnInit() {
     this.absences = this.navParams.get("absences");
     this.absenceToUpdate = this.navParams.get("update");
+    console.log("this.absenceToUpdate ", this.absenceToUpdate);
     if (this.absenceToUpdate) {
       this.selectedEndDate = this.absenceToUpdate.date_end;
       this.selectedStartDate = this.absenceToUpdate.date_start;
-      if (this.absenceToUpdate.document.url && this.absenceToUpdate.document.url.includes("pdf")) {
-        this.filePreview = this.absenceToUpdate.document.url;
+      if (this.absenceToUpdate.document_url && this.absenceToUpdate.document_url.includes("pdf")) {
+        this.filePreview = this.absenceToUpdate.document_url;
         this.isPdf = true;
-      } else if (this.absenceToUpdate.document.url && !this.absenceToUpdate.document.url.includes("pdf")) {
-        this.imagePreview = this.absenceToUpdate.document.url;
+      } else if (this.absenceToUpdate.document_url && !this.absenceToUpdate.document_url.includes("pdf")) {
+        this.imagePreview = this.absenceToUpdate.document_url;
         this.isPdf = false;
       }
-      this.absenceType = this.absenceToUpdate.type_absence;
+      this.absenceType = this.absenceToUpdate.absence_type;
     }
   }
 
@@ -132,6 +133,19 @@ export class MakeRequestPage implements OnInit {
     }
   }
 
+  isUploadedFile(): boolean {
+    const value: any = this.imagePreview;
+    return value instanceof File;
+  }
+
+  isBase64Image(): boolean {
+    return typeof this.imagePreview === "string" && this.imagePreview.startsWith("data:image");
+  }
+
+  isUrlImage(): boolean {
+    return typeof this.imagePreview === "string" && (this.imagePreview.startsWith("http://") || this.imagePreview.startsWith("https://"));
+  }
+
   async saveRequest() {
     if (!this.absenceType) {
       await this.toastCtrl.presentToast(this.reasonRequired, "danger");
@@ -144,16 +158,38 @@ export class MakeRequestPage implements OnInit {
         else {
           this.loading = true;
           const uploadData = new FormData();
-          uploadData.append("type_absence", this.absenceType);
-          uploadData.append("date_start", this.selectedStartDate);
+          /*uploadData.append("type_absence", this.absenceType);
+           uploadData.append("date_start", this.selectedStartDate);
           uploadData.append("date_end", this.selectedEndDate);
+          uploadData.append("motif", this.absenceType);
+        */
+          uploadData.append("absence[date_start]", this.selectedStartDate);
+          uploadData.append("absence[date_end]", this.selectedEndDate);
+          uploadData.append("absence[absence_type]", this.absenceType || "");
+          uploadData.append("absence[motif]", this.absenceType || "");
+
           if (this.isPdf) {
-            const fileName = new Date().getTime() + "." + "pdf";
-            uploadData.append("document", this.filePreview, fileName);
+            if (this.filePreview instanceof File) {
+              // 👌 c’est bien un fichier uploadé
+              const fileName = new Date().getTime() + "." + this.filePreview.name.split(".").pop();
+              uploadData.append("absence[document]", this.filePreview, fileName);
+            }
           } else if (this.imagePreview != "") {
-            const fileName = new Date().getTime() + "." + this.photosService.lastImage.format;
+            /* const fileName = new Date().getTime() + "." + this.photosService.lastImage.format;
             const file = this.base64ToFile(this.photosService.lastImage.base64String, fileName, this.photosService.lastImage.format);
-            uploadData.append("document", file, fileName);
+            uploadData.append("absence[document]", file, fileName);*/
+
+            if (this.isUploadedFile()) {
+              const fileName = new Date().getTime() + "." + this.photosService.lastImage.format;
+              const file = this.base64ToFile(this.photosService.lastImage.base64String, fileName, this.photosService.lastImage.format);
+              uploadData.append("absence[document]", file, fileName);
+            } else if (this.isBase64Image()) {
+              const fileName = new Date().getTime() + "." + this.photosService.lastImage.format;
+              const file = this.base64ToFile(this.photosService.lastImage.base64String, fileName, this.photosService.lastImage.format);
+              uploadData.append("absence[document]", file, fileName);
+            } else if (this.isUrlImage()) {
+              console.log("Image déjà existante (URL), on ne renvoie pas de document");
+            }
           }
           if (this.absenceToUpdate) {
             this.absenceService.updateAbsenceRequest(uploadData, this.absenceToUpdate.id).subscribe({
