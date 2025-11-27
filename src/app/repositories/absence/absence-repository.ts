@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {from, Observable} from "rxjs";
+import {from, Observable, switchMap} from "rxjs";
 import {environment} from "src/environments/environment";
 import {AbsenceInterface} from "src/app/interfaces/absence/absence-interface";
 import {SqliteServiceTs} from "src/app/widgets/storage/sqlite.service.ts";
@@ -11,6 +11,7 @@ import {AuthService} from "src/app/pages/login/service/auth.service";
 })
 export class AbsenceRepository implements AbsenceInterface {
   private apiUrl = `${environment.urlAPI}`;
+  private newApiUrl = `${environment.newApiUrl}`;
 
   constructor(
     private http: HttpClient,
@@ -26,11 +27,11 @@ export class AbsenceRepository implements AbsenceInterface {
   getPendingAbsencesCount(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}user/supervisor_absences_count`);
   }
-  /* updateAbsenceRequest(data: any, id: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}user/agent_absence_update/${id}`, data);
-  }*/
-
   updateAbsenceRequest(data: any, id: number): Observable<any> {
+    return this.http.put<any>(`${this.newApiUrl}absences/${id}`, data);
+  }
+
+  /*updateAbsenceRequest(data: any, id: number): Observable<any> {
     const isOnline = false;
     let converted: any = {};
     if (data instanceof FormData) {
@@ -65,20 +66,43 @@ export class AbsenceRepository implements AbsenceInterface {
     }
 
     return from(promise);
-  }
-
-  getAbsencesFromapi(): Observable<any> {
-    return from(this.sqlite.smartFetch("absences", "user/absences"));
-
-    //return this.http.get<any>(`${this.apiUrl}user/absences`);
-  }
-  /*sendAbsenceRequest(data: any): Observable<any> {
-    return from(this.sqlite.smartSave("absences", "user/absence", data, "create"));
-
-    //  return this.http.post<any>(`${this.apiUrl}user/absence`, data);
   }*/
 
+  getAbsencesFromapi(): Observable<any> {
+    //return from(this.sqlite.smartFetch("absences", "user/absences"));
+
+    return this.http.get<any>(`${this.newApiUrl}absences`);
+  }
   sendAbsenceRequest(data: any): Observable<any> {
+    /* let converted: any = {};
+    if (data instanceof FormData) {
+      data.forEach((v, k) => (converted[k] = v));
+    } else {
+      converted = data;
+    }
+
+    const file: File = converted.document; // ton fichier binaire
+
+    return from(file.arrayBuffer()).pipe(
+      switchMap((buffer: ArrayBuffer) => {
+        const uint8Array = new Uint8Array(buffer);
+
+        const absence = {
+          id: Date.now(),
+          date_start: converted.date_start,
+          date_end: converted.date_end,
+          motif: null,
+          type_absence: converted.type_absence,
+          document: Array.from(uint8Array) // 👈 tableau de nombres
+        };
+
+        return this.http.post<any>(`${this.newApiUrl}absences`, data);
+      })
+    );*/
+    return this.http.post<any>(`${this.newApiUrl}absences`, data);
+  }
+
+  /*sendAbsenceRequest(data: any): Observable<any> {
     const isOnline = false;
     let converted: any = {};
     if (data instanceof FormData) {
@@ -111,5 +135,5 @@ export class AbsenceRepository implements AbsenceInterface {
       promise = this.sqlite.smartSave("absences", "user/absence", absence, "create");
     }
     return from(promise);
-  }
+  }*/
 }
