@@ -178,7 +178,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.log("❌ Impossible de lire les EXIF", error);
     }
-    /*  if (this.isConneted) {
+    if (this.isConneted) {
       let prestation_id = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.prestation_id) {
         prestation_id = this.grouped_presentation_photos[i][1].photo.prestation_id;
@@ -222,7 +222,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
       console.log("url", url);
       if (url) {
-
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][0].photo.path = url.path;
@@ -250,7 +249,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
         }
       }
-    }*/
+    }
   }
 
   goBack() {
