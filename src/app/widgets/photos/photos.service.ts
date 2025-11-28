@@ -44,6 +44,18 @@ export class PhotosService {
     }
   }
 
+  getInfoBase64ToBlob(base64: string, contentType = "image/jpeg") {
+    const byteChars = atob(base64);
+    const byteNumbers = new Array(byteChars.length);
+
+    for (let i = 0; i < byteChars.length; i++) {
+      byteNumbers[i] = byteChars.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], {type: contentType});
+  }
+
   async pickImages() {
     const list = await Camera.pickImages({
       quality: 40,

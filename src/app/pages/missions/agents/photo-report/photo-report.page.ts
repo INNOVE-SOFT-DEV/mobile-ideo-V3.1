@@ -14,6 +14,8 @@ import {EmailComposer} from "capacitor-email-composer";
 import JSZip from "jszip";
 import {AuthService} from "src/app/pages/login/service/auth.service";
 import {Capacitor} from "@capacitor/core";
+import exifr from "exifr";
+import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
 
 @Component({
   selector: "app-photo-report",
@@ -63,6 +65,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     private service: PhotoReportService,
     private datePipe: DatePipe,
     private missionsService: MissionService,
+    private geolocationService: GeolocationService,
     private alertController: AlertController
   ) {}
   ngOnDestroy(): void {
@@ -142,7 +145,38 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
-    if (this.isConneted) {
+    console.log("planning data", this.service.data);
+    if (this.service.startedOn() == null) {
+      await this.geolocationService.getCurrentLocation();
+      let userCoordinates = this.geolocationService.coordinates;
+      let pointageInternalId = this.service.getPointageId();
+      let body: any = {
+        point: {
+          longitude: userCoordinates.longitude,
+          latitude: userCoordinates.latitude,
+          recorder_at: new Date().toISOString()
+        }
+      };
+
+      this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
+        next: async () => {
+          console.log("Pointage début réalisé ");
+        },
+        error: () => {
+          console.error("Erreur lors du pointage ");
+        }
+      });
+    }
+
+    const base64 = this.photosService.lastImage.base64String;
+    const blob = this.photosService.getInfoBase64ToBlob(base64);
+    try {
+      const exifData = await exifr.parse(blob);
+      console.log("📸 EXIF DATA:", exifData);
+    } catch (error) {
+      console.log("❌ Impossible de lire les EXIF", error);
+    }
+    /*  if (this.isConneted) {
       let prestation_id = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.prestation_id) {
         prestation_id = this.grouped_presentation_photos[i][1].photo.prestation_id;
@@ -156,7 +190,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         form = this.service.updateClientUuidFromGroupedPhotos(data, this.grouped_presentation_photos, i);
       }
       const pointageId = this.service.getPointageId();
-      //  if (prestation_id != null) form.append("prestation_id", prestation_id);
       await this.loadingService.present(this.loadingMessage);
       this.missionsService.createReportPhoto(form, pointageId).subscribe({
         next: async value => {
@@ -187,14 +220,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
       console.log("url", url);
       if (url) {
-        /* let prestation_id = null;
-        if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.prestation_id) {
-          prestation_id = this.grouped_presentation_photos[i][1].photo.prestation_id;
-        } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.prestation_id) {
-          prestation_id = this.grouped_presentation_photos[i][0].photo.prestation_id;
-        } else {
-          prestation_id = Date.now();
-        }*/
 
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
@@ -223,7 +248,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
         }
       }
-    }
+    }*/
   }
 
   goBack() {

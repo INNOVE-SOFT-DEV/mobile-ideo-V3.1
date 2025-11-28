@@ -61,6 +61,7 @@
     "capacitor-email-composer": "^7.0.0",
     "capacitor-voice-recorder": "^7.0.5",
     "crypto-browserify": "^3.12.1",
+    "exifr": "^7.1.3",
     "install": "^0.13.0",
     "ionicons": "^7.0.0",
     "jeep-sqlite": "^2.8.0",

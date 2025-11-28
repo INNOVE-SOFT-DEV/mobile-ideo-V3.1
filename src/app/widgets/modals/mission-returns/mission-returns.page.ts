@@ -8,7 +8,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "../../loading-controller/loading-controller.service";
 import {ToastControllerService} from "../../toast-controller/toast-controller.service";
 import {v4 as uuidv4} from "uuid";
-import { Preferences } from "@capacitor/preferences";
+import {Preferences} from "@capacitor/preferences";
 
 @Component({
   selector: "app-mission-returns",
@@ -146,13 +146,12 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
       console.log(body);
       this.missionService.createMissionReturn(body).subscribe({
         next: async data => {
-        //   console.log(data);
-        //   await Preferences.set({
-        //   key: "forfaitaires_agent",
-        //   value: JSON.stringify(data)
-        // });
-        // return data;
-
+          //   console.log(data);
+          //   await Preferences.set({
+          //   key: "forfaitaires_agent",
+          //   value: JSON.stringify(data)
+          // });
+          // return data;
 
           await this.toastCtrl.presentToast("Votre demande a été envoyé avec succés", "success");
           await this.loadingService.dimiss();
@@ -176,10 +175,13 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
   }
 
   setReturnTypes(object: any) {
-    object.return_types.includes("empty_truck") ? (this.truckToEmpty = true) : null;
-    object.return_types.includes("accident") ? (this.accident = true) : null;
-    object.return_types.includes("rescheduling") ? (this.replanification = true) : null;
-    object.return_types.includes("agent_absence") ? (this.agentAbsence = true) : null;
+    console.log(object);
+    if (object.return_types?.length > 0) {
+      object.return_types.includes("empty_truck") ? (this.truckToEmpty = true) : null;
+      object.return_types.includes("accident") ? (this.accident = true) : null;
+      object.return_types.includes("rescheduling") ? (this.replanification = true) : null;
+      object.return_types.includes("agent_absence") ? (this.agentAbsence = true) : null;
+    }
   }
 
   async getReturns() {
@@ -196,9 +198,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
           this.createWaves();
           this.waveSurfer?.load(value.audio_url.url);
         }
-                await this.loadingService.dimiss();
-
-
+        await this.loadingService.dimiss();
       },
       error: async err => {
         await this.loadingService.dimiss();
@@ -206,7 +206,6 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
       }
     });
     console.log(this);
-    
   }
 
   playRecordingAgain() {

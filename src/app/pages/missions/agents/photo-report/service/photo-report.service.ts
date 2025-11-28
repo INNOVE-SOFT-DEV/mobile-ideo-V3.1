@@ -292,6 +292,17 @@ export class PhotoReportService {
     return agent.pointing_internal[0].id || null;
   }
 
+  startedOn() {
+    const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
+    const currentId = user_v3?.id;
+    if (!this.data || !this.data.planning || !Array.isArray(this.data.planning.schedule)) {
+      console.warn("Schedule non défini ou données non chargées");
+      return null;
+    }
+    const agent = this.data.planning.schedule.flatMap((s: any) => s.agents || []).find((a: any) => a.id === currentId);
+    return agent.pointing_internal[0].started_on || null;
+  }
+
   updateClientUuidFromGroupedPhotos(data: any, grouped_presentation_photos: any, index: number) {
     if (!data || !Array.isArray(data.photo) || !Array.isArray(grouped_presentation_photos) || !Array.isArray(grouped_presentation_photos[index])) {
       console.warn("⚠️ Données invalides pour updateClientUuidFromGroupedPhotos");
