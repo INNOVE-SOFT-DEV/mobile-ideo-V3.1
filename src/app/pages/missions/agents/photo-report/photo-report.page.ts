@@ -25,6 +25,7 @@ import {GeolocationService} from "src/app/widgets/geolocation/geolocation.servic
 })
 export class PhotoReportPage implements OnInit, OnDestroy {
   isDeviceReady: boolean = false;
+  isPointed: boolean = false;
   shareWithSupervisor() {
     this.openEmail();
   }
@@ -146,7 +147,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
     console.log("planning data", this.service.data);
-    if (this.service.startedOn() == null) {
+    if (this.service.startedOn() == null && !this.isPointed) {
       await this.geolocationService.getCurrentLocation();
       let userCoordinates = this.geolocationService.coordinates;
       let pointageInternalId = this.service.getPointageId();
@@ -160,6 +161,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
       this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
         next: async () => {
+          this.isPointed = true;
           console.log("Pointage début réalisé ");
         },
         error: () => {
