@@ -18,7 +18,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
   returnType: any = "";
   important: boolean = true;
   vocal: boolean = true;
-  audioUrl: any;
+  audioUrl: any =""
   recordedAudios: any[] = [];
   returnTime: any;
   waveSurfer?: WaveSurfer;
@@ -31,40 +31,29 @@ export class MissionReturnsSupervisorPage implements OnInit {
     private translateService: TranslateService,
     private loadingService: LoadingControllerService
   ) {}
-
+  
   async ngOnInit() {
     this.loadingMessage = await this.translateService.get("loading").toPromise();
 
     await this.loadingService.present(this.loadingMessage);
-    // this.missionService.getMissionReturnAudio(this.planning.id, this.planning.type).subscribe(async (data: any) => {
-    //   if (data.length > 0) {
-    //     this.returnType = data[0].return_type;
-    //     if (data[0].return_time != null) {
-    //       this.returnTime = data[0]?.return_time?.split(":")[0] + ":" + data[0]?.return_time?.split(":")[1];
-    //     } else {
-    //       // this.returnTime = data[0]?.cre
-    //       let time = data[0]?.created_at?.split(":")[0] + ":" + data[0]?.created_at?.split(":")[1];
+    const id = this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
+    console.log(id);
+    
+    this.missionService.getMissionReturnAudio(id).subscribe(async (data: any) => {
 
-    //       this.returnTime = time.split("T")[1];
-    //     }
-    //     this.important = data[0].important;
-    //     this.audioUrl = data[0].file.url;
-    //     this.recordedAudios = data;
-    //     this.createWaves();
-    //     this.waveSurfer?.load(data[0].file.url);
-    //     await this.loadingService.dimiss();
-    //   } else {
-    //     this.missionService.getMissionReturn(this.planning.id, this.planning.type).subscribe(async (data01: any) => {
-    //       if (data01.length > 0) {
-    //         this.returnType = data01[0].return_type;
-    //         this.returnTime = data01[0]?.return_time.split(":")[0] + ":" + data01[0]?.return_time.split(":")[1];
-    //         this.important = data01[0].important;
-    //       }
+      console.log(data);
+      this.returnType = data.return_types
+      this.important = data.important;
+       if (data?.audio_url) {
+          this.audioUrl = data.audio_url;
+          await this.loadingService.dimiss();
+          this.createWaves();
+          this.waveSurfer?.load(data.audio_url.url);
+        }
+        await this.loadingService.dimiss();
+      
 
-    //       await this.loadingService.dimiss();
-    //     });
-    //   }
-    // });
+    });
   }
 
   dismiss() {
@@ -72,9 +61,9 @@ export class MissionReturnsSupervisorPage implements OnInit {
   }
 
   getAudioDurationWithFetch() {
-    if (!this.audioUrl) return;
+    if (!this.audioUrl?.url) return;
 
-    fetch(this.audioUrl)
+    fetch(this.audioUrl.url)
       .then(response => response.arrayBuffer())
       .then(arrayBuffer => {
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -117,7 +106,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
   }
 
   playRecordingAgain() {
-    if (this.waveSurfer && this.recordedAudios[0].file.url) {
+    if (this.waveSurfer && this.audioUrl?.url) {
       this.waveSurfer.playPause();
     }
   }

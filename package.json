@@ -12,6 +12,7 @@
     "build:ci": "ng build --configuration ci",
     "start:prod": "ng serve --configuration production",
     "watch": "ng build --watch --configuration development",
+    "ios": "ionic capacitor run ios --livereload --external",
     "test": "ng test",
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,scss,js,json}\""

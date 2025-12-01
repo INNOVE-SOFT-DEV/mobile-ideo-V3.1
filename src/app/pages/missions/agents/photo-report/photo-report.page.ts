@@ -13,10 +13,8 @@ import {Subscription} from "rxjs";
 import {EmailComposer} from "capacitor-email-composer";
 import JSZip from "jszip";
 import {AuthService} from "src/app/pages/login/service/auth.service";
-import {Capacitor} from "@capacitor/core";
 import exifr from "exifr";
 import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
-
 @Component({
   selector: "app-photo-report",
   templateUrl: "./photo-report.page.html",

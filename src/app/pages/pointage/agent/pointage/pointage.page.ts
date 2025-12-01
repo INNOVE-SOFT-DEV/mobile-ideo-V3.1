@@ -5,10 +5,8 @@ import {AuthService} from "src/app/pages/login/service/auth.service";
 import {GoogleMapsLoaderService} from "../../../../widgets/location-load/google-maps-loader.service";
 import {MapService} from "../../services/map.service";
 import {PointageService} from "../../services/pointage.service";
-import {Pointing_Internal} from "src/app/models/intervention/pointage/pointing-internal.model";
-import {Geolocation, Position} from "@capacitor/geolocation";
 import {GeolocationService} from "../../../../widgets/geolocation/geolocation.service";
-import {ActionSheetController, NavController, PopoverController, ToastController} from "@ionic/angular";
+import {ActionSheetController} from "@ionic/angular";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
@@ -56,7 +54,9 @@ export class PointagePage implements OnInit, OnDestroy {
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.planning = JSON.parse(localStorage.getItem("currentPlanning")!).planning;
-    this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id).pointing_internal[0];
+    console.log(this.planning.team);
+    
+    this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id)?.pointing_internal[0];
     this.type = this.route.snapshot.paramMap.get("type");
     this.user = this.authService.getCurrentUser();
     this.updateTime();
@@ -66,6 +66,9 @@ export class PointagePage implements OnInit, OnDestroy {
         await this.initMapAndUserPosition();
       }
     });
+
+
+
   }
 
   ngOnDestroy(): void {
@@ -99,25 +102,29 @@ export class PointagePage implements OnInit, OnDestroy {
     const minutes = now.getMinutes().toString().padStart(2, "0");
     this.currentTime = `${hours}:${minutes}`;
   }
+  async getLocation() {
 
-  async setPointing() {
-    // this.pointing_internal.planning_type = this.type;
-    // this.pointing_internal.planning_punctual_id = this.planning.id;
-    // this.pointing_internal.planning_regular_id = this.planning.id;
-    // this.pointing_internal.intervention_id = this.planning.intervention_id;
-    // this.pointing_internal.user_id = this.user.id;
-    // this.pointing_internal.date = new Date();
-    // this.pointing_internal.lat = this.userCoordinates.latitude + "";
-    // this.pointing_internal.long = this.userCoordinates.longitude + "";
-    // const distance = this.geolocationService.getDistanceFromCurrentLoaction({
-    //   longitude: parseFloat(this.planning.long),
-    //   latitude: parseFloat(this.planning.lat)
-    // });
+    console.log(this.pointing_internal);
 
-    // console.log(this.pointing_internal);
-
+    if( this.pointing_internal?.started_on != null ){
+      console.log('skip');
+      
+    }else {
+        await this.loadingService.present(this.loadingMessage);
     await this.geolocationService.getCurrentLocation();
     this.userCoordinates = this.geolocationService.coordinates;
+    await this.loadingService.dimiss();
+
+    }
+    
+  
+  }
+  async setPointing() {
+ 
+                     await this.getLocation();
+
+                     
+
 
     let body: any = {
       point: {
@@ -127,8 +134,10 @@ export class PointagePage implements OnInit, OnDestroy {
       }
     };
     console.log(body);
+    
 
-    if (this.pointing_internal?.started_on != null && this.pointing_internal?.finished_on == null) {
+     if (this.pointing_internal?.started_on != null && this.pointing_internal?.finished_on == null) {
+
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
@@ -141,13 +150,12 @@ export class PointagePage implements OnInit, OnDestroy {
             text: "Oui",
             cssClass: "btn_actionSheet",
             handler: async () => {
-              await this.loadingService.present(this.loadingMessage);
               const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
               console.log(this.pointing_internal.id, "finish", body);
+              await this.loadingService.present(this.loadingMessage);
               this.missionService.pointing(this.pointing_internal.id, "finish", body).subscribe(async (data: any) => {
                 console.log(data);
                 this.pointing_internal = data;
-
                 await this.loadingService.dimiss();
                 this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
                 this.teamMember = this.planning.team.find((u: any) => u.id === user_v3.id);
@@ -174,18 +182,18 @@ export class PointagePage implements OnInit, OnDestroy {
       const minutes = now.getMinutes();
       body["started_on"] = `${hours}:${minutes}`;
 
-      if (true) {
+      const distance =  this.geolocationService.getDistanceFromCurrentLoaction({ latitude: parseFloat(this.planning.intervention.address.latitude), longitude: parseFloat(this.planning.intervention.address.longitude) });
+
+
+      if (distance <= 500 || true ) {
         console.log(this.pointing_internal.id, "start", body);
 
         await this.loadingService.present(this.loadingMessage);
         const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
         this.missionService.pointing(this.pointing_internal.id, "start", body).subscribe(async (data: any) => {
           await this.loadingService.dimiss();
-          console.log(data);
-
           this.pointing_internal = data;
           this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
-
           this.updateLoaclPlaningData();
           await this.toastController.presentToast("Pointage début réalisé avec succès. Bon courage !", "success");
         });

@@ -22,9 +22,7 @@ import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
   standalone: false
 })
 export class DetailsPage implements OnInit {
-  openScanner() {
-    throw new Error("Method not implemented.");
-  }
+
   planning: any;
   planningType: string = "";
   loadingMessage: string = "";
@@ -37,9 +35,9 @@ export class DetailsPage implements OnInit {
   imageUrl: string | any = null;
   detectedTexts: string[] = [];
   generatedJson: any = {};
+  agent : any;
 
   constructor(
-    private route: ActivatedRoute,
     private loadingService: LoadingControllerService,
     public translateService: TranslateService,
     private modalController: ModalController,
@@ -47,7 +45,6 @@ export class DetailsPage implements OnInit {
     private missionService: MissionService,
     private mapService: MapService,
     private actionSheetCtrl: ActionSheetController,
-    private loadingCtrl: LoadingController,
     private location: Location,
     private ocrService: OcrService,
     private toast: ToastControllerService,
@@ -55,7 +52,6 @@ export class DetailsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
     this.supervisors = [];
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     try {
@@ -77,6 +73,10 @@ export class DetailsPage implements OnInit {
     this.planning = cached.planning;
     this.planningType = cached.planningType;
     this.setupPhotos();
+    const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
+    this.agent = this.planning.team.find((user: any) => user.id == user_v3.id);
+    console.log(this.agent);
+    
     await this.loadingService.dimiss();
   }
 

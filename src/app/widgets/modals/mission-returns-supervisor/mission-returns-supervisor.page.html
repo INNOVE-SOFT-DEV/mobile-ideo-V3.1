@@ -48,7 +48,7 @@
       </div>
 
       <div id="waveform"></div>
-      <div *ngIf="audioUrl?.includes('http')" class="cls-timer">{{ durationDisplay }}</div>
+      <div *ngIf="audioUrl?.url?.includes('http')" class="cls-timer">{{ durationDisplay }}</div>
 
       <ion-button *ngIf="audioUrl" class="custom-button-update bg-record-lisen" (click)="playRecordingAgain()">
         <ion-icon name="play-circle-outline" slot="start"></ion-icon>
