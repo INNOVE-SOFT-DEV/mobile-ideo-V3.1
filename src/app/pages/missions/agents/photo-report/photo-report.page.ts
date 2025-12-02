@@ -176,6 +176,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.log("❌ Impossible de lire les EXIF", error);
     }
+    // this.isConneted = false
     if (this.isConneted) {
       let prestation_id = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.prestation_id) {
@@ -243,7 +244,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
         const index = reportNeedSync.findIndex((item: any) => item.id === this.data.planning.id && item.type === this.planningType);
         if (index == -1) {
-          reportNeedSync.push({id: this.data.planning.id, type: this.planningType});
+          reportNeedSync.push({id: this.data.planning.id, type: this.planningType , internal :    this.service.getPointageId()});
           localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
         }
       }

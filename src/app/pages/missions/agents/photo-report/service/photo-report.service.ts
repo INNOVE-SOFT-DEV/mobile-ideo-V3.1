@@ -61,86 +61,104 @@ export class PhotoReportService {
     this.isSyncingSubject.next(true);
     try {
       const reportsToSync = JSON.parse(localStorage.getItem("report_need_sync")!) || [];
+
       for (const report of reportsToSync) {
-        const zip = new JSZip();
-        const reportFolder = zip.folder(`${report.type}_${report.id}`);
-        if (!reportFolder) continue;
-        const truckFolder: any = reportFolder.folder("truck");
-        const presentationFolder: any = reportFolder.folder("presentation");
         const groupedPresentationPhotos = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`)!) || [];
-        const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
         for (const group of groupedPresentationPhotos) {
+
+          const uuid = group[0]?.photo?.client_uuid || group[1]?.photo?.client_uuid || this.generateUniqueId();
+          let body: any = {};
           if (group[0]?.photo?.path && group[0].photo.path.includes("v3")) {
             const fileDataBefore = await this.fs.readSecretFile(group[0].photo.path);
-            const dateBefore = group[0].photo.date;
-            const filenameBefore = `photo_before_${group[0].photo.prestation_id}_${dateBefore}.jpeg`;
-            const binaryBefore = await this.base64ToArrayBuffer(fileDataBefore);
-            presentationFolder.file(filenameBefore, binaryBefore);
+
           }
           if (group[1]?.photo?.path && group[1].photo.path.includes("v3")) {
             const fileDataAfter = await this.fs.readSecretFile(group[1].photo.path);
-            const dateAfter = group[1].photo.date;
-            const filenameAfter = `photo_after_${group[1].photo.prestation_id}_${dateAfter}.jpeg`;
-            const binaryAfter = await this.base64ToArrayBuffer(fileDataAfter);
-            presentationFolder.file(filenameAfter, binaryAfter);
           }
         }
-
-        for (const photo of photosTruck) {
-          if (!photo.path || !photo.date) continue;
-          const fileData = await this.fs.readSecretFile(photo.path);
-          const dateTruck = photo.date;
-          const originalFilename = photo.path.split("/").pop() || `truck_photo_${photo.id}.jpeg`;
-          const filenameParts = originalFilename.split(".");
-          const filenameWithDate = `${filenameParts[0]}_${dateTruck}_${photo.prestation_id}.${filenameParts[1] || "jpeg"}`;
-          const binary = await this.base64ToArrayBuffer(fileData);
-          truckFolder.file(filenameWithDate, binary);
-        }
-        const zipBlob = await zip.generateAsync({type: "blob"});
-        const formData = new FormData();
-        formData.append("zip_file", zipBlob, `${report.type}_${report.id}.zip`);
-        this.missionsService.syncPhotos(formData).subscribe({
-          next: async () => {
-            this.missionsService.getAgentReport(report.id, report.type).subscribe({
-              next: async (res: any) => {
-                let empty: any = {
-                  id: null,
-                  photo_type: null,
-                  photo: {
-                    url: ""
-                  }
-                };
-                const grouped = Object.values(res.grouped_photos_prestation).map((group: any, i: number) => {
-                  const before = group.find((p: any) => p.photo_type === "photo_before");
-                  const after = group.find((p: any) => p.photo_type === "photo_after");
-                  if (before && after) {
-                    return [before, after];
-                  } else if (before && !after) {
-                    empty.id = i + 1;
-                    empty.photo_type = "photo_after";
-                    return [before, empty];
-                  } else {
-                    empty.id = i + 1;
-                    empty.photo_type = "photo_before";
-                    return [empty, after];
-                  }
-                });
-                localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(grouped));
-                localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(res.photos_truck.map((photo: any) => photo.photo)));
-                reportsToSync.splice(reportsToSync.indexOf(report), 1);
-                localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
-                this.doneEvent.emit(res);
-              },
-              error: async error => {
-                console.error("Error syncing photos:", error);
-              }
-            });
-          },
-          error: async error => {
-            console.error("Error syncing photos:", error);
-          }
-        });
+        const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
       }
+
+      // for (const report of reportsToSync) {
+      //   const zip = new JSZip();
+      //   const reportFolder = zip.folder(`${report.type}_${report.id}`);
+      //   if (!reportFolder) continue;
+      //   const truckFolder: any = reportFolder.folder("truck");
+      //   const presentationFolder: any = reportFolder.folder("presentation");
+      //   const groupedPresentationPhotos = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`)!) || [];
+      //   const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
+      //   for (const group of groupedPresentationPhotos) {
+      //     if (group[0]?.photo?.path && group[0].photo.path.includes("v3")) {
+      //       const fileDataBefore = await this.fs.readSecretFile(group[0].photo.path);
+      //       const dateBefore = group[0].photo.date;
+      //       const filenameBefore = `photo_before_${group[0].photo.prestation_id}_${dateBefore}.jpeg`;
+      //       const binaryBefore = await this.base64ToArrayBuffer(fileDataBefore);
+      //       presentationFolder.file(filenameBefore, binaryBefore);
+      //     }
+      //     if (group[1]?.photo?.path && group[1].photo.path.includes("v3")) {
+      //       const fileDataAfter = await this.fs.readSecretFile(group[1].photo.path);
+      //       const dateAfter = group[1].photo.date;
+      //       const filenameAfter = `photo_after_${group[1].photo.prestation_id}_${dateAfter}.jpeg`;
+      //       const binaryAfter = await this.base64ToArrayBuffer(fileDataAfter);
+      //       presentationFolder.file(filenameAfter, binaryAfter);
+      //     }
+      //   }
+
+      //   for (const photo of photosTruck) {
+      //     if (!photo.path || !photo.date) continue;
+      //     const fileData = await this.fs.readSecretFile(photo.path);
+      //     const dateTruck = photo.date;
+      //     const originalFilename = photo.path.split("/").pop() || `truck_photo_${photo.id}.jpeg`;
+      //     const filenameParts = originalFilename.split(".");
+      //     const filenameWithDate = `${filenameParts[0]}_${dateTruck}_${photo.prestation_id}.${filenameParts[1] || "jpeg"}`;
+      //     const binary = await this.base64ToArrayBuffer(fileData);
+      //     truckFolder.file(filenameWithDate, binary);
+      //   }
+      //   const zipBlob = await zip.generateAsync({type: "blob"});
+      //   const formData = new FormData();
+      //   formData.append("zip_file", zipBlob, `${report.type}_${report.id}.zip`);
+      //   this.missionsService.syncPhotos(formData).subscribe({
+      //     next: async () => {
+      //       this.missionsService.getAgentReport(report.id, report.type).subscribe({
+      //         next: async (res: any) => {
+      //           let empty: any = {
+      //             id: null,
+      //             photo_type: null,
+      //             photo: {
+      //               url: ""
+      //             }
+      //           };
+      //           const grouped = Object.values(res.grouped_photos_prestation).map((group: any, i: number) => {
+      //             const before = group.find((p: any) => p.photo_type === "photo_before");
+      //             const after = group.find((p: any) => p.photo_type === "photo_after");
+      //             if (before && after) {
+      //               return [before, after];
+      //             } else if (before && !after) {
+      //               empty.id = i + 1;
+      //               empty.photo_type = "photo_after";
+      //               return [before, empty];
+      //             } else {
+      //               empty.id = i + 1;
+      //               empty.photo_type = "photo_before";
+      //               return [empty, after];
+      //             }
+      //           });
+      //           localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(grouped));
+      //           localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(res.photos_truck.map((photo: any) => photo.photo)));
+      //           reportsToSync.splice(reportsToSync.indexOf(report), 1);
+      //           localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
+      //           this.doneEvent.emit(res);
+      //         },
+      //         error: async error => {
+      //           console.error("Error syncing photos:", error);
+      //         }
+      //       });
+      //     },
+      //     error: async error => {
+      //       console.error("Error syncing photos:", error);
+      //     }
+      //   });
+      // }
     } catch (err) {
       console.error("Error syncing photos:", err);
     } finally {
