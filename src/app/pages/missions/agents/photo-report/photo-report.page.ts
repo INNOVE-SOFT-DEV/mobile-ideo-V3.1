@@ -176,13 +176,12 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.log("❌ Impossible de lire les EXIF", error);
     }
-    // this.isConneted = false
     if (this.isConneted) {
-      let prestation_id = null;
-      if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.prestation_id) {
-        prestation_id = this.grouped_presentation_photos[i][1].photo.prestation_id;
-      } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.prestation_id) {
-        prestation_id = this.grouped_presentation_photos[i][0].photo.prestation_id;
+      let client_uuid = null;
+      if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
+        client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
+      } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
+        client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
       }
       const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate);
       const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
@@ -197,17 +196,15 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           console.log("image_url", value[0]?.image_url?.url);
           if (value[0].photo_type == "before") {
             this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
-            this.grouped_presentation_photos[i][0].photo.prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
             this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
-            this.grouped_presentation_photos[i][1].photo.prestation_id = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else {
             console.log("photos_truck", this.photos_truck[i]);
             this.photos_truck[i].url = value[0]?.image_url?.url;
 
-            this.photos_truck[i].prestation_id = value[0].client_uuid;
+            this.photos_truck[i].client_uuid = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.photos_truck);
           }
           await this.loadingService.dimiss();
@@ -224,27 +221,28 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][0].photo.path = url.path;
-          this.grouped_presentation_photos[i][0].photo.prestation_id = this.service.getUpdatedClientUuid(this.data, this.grouped_presentation_photos, i);
+          this.grouped_presentation_photos[i][0].photo.remote = true;
           this.grouped_presentation_photos[i][0].photo.date = currentDate;
           console.log("grouped_presentation_photos", this.grouped_presentation_photos[i]);
           this.service.updateLocalPhotos("photo_before", this.grouped_presentation_photos);
         } else if (photo_type == "photo_after") {
           this.grouped_presentation_photos[i][1].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][1].photo.path = url.path;
-          this.grouped_presentation_photos[i][1].photo.prestation_id = this.service.getUpdatedClientUuid(this.data, this.grouped_presentation_photos, i);
+          this.grouped_presentation_photos[i][1].photo.remote = true;
           this.grouped_presentation_photos[i][1].photo.date = currentDate;
           this.service.updateLocalPhotos("photo_after", this.grouped_presentation_photos);
         } else {
           this.photos_truck[i].url = url.displayUri;
           this.photos_truck[i].path = url.path;
+          this.photos_truck[i].remote = true;
           this.photos_truck[i].date = currentDate;
-          this.photos_truck[i].prestation_id = this.service.generateUniqueId();
+          this.photos_truck[i].client_uuid = this.service.generateUniqueId();
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
         }
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
         const index = reportNeedSync.findIndex((item: any) => item.id === this.data.planning.id && item.type === this.planningType);
         if (index == -1) {
-          reportNeedSync.push({id: this.data.planning.id, type: this.planningType , internal :    this.service.getPointageId()});
+          reportNeedSync.push({id: this.data.planning.id, type: this.planningType, internal: this.service.getPointageId()});
           localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
         }
       }
@@ -257,9 +255,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   addPhotoPrestation() {
+    const client_uuid = this.service.generateUniqueId();
     this.grouped_presentation_photos.push([
-      {id: this.grouped_presentation_photos.length + 1, photo_type: "photo_before", photo: {url: ""}},
-      {id: this.grouped_presentation_photos.length + 1, photo_type: "photo_after", photo: {url: ""}}
+      {id: this.grouped_presentation_photos.length + 1, client_uuid: client_uuid, photo_type: "photo_before", photo: {url: ""}},
+      {id: this.grouped_presentation_photos.length + 1, client_uuid: client_uuid, photo_type: "photo_after", photo: {url: ""}}
     ]);
   }
 
