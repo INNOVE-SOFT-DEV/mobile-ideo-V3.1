@@ -127,6 +127,7 @@ export class PhotoReportService {
 
           indexGroupe++;
         }
+        
 
         let photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
         for (let i = 0; i < photosTruck.length; i++) {
