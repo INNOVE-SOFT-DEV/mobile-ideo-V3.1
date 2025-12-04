@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = true;
-    this.initializeApp();
+    await this.initializeApp();
     await this.platform.ready();
     await this.sqliteService.initDB();
     await this.sqliteService.listTables();
@@ -60,8 +60,10 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  initializeApp() {
+  async initializeApp() {
+    await this.trackingService.initStorage();
     this.trackingService.startTracking();
+    await this.trackingService.logStorage();
   }
 
   async logAllCapacitorPreferences() {

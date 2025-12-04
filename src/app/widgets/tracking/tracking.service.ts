@@ -29,8 +29,22 @@ export class TrackingService {
   }
 
   async initStorage() {
-    this.db = await this.storage.create();
-    this.storageReady = true;
+    if (!this.db) {
+      this.db = await this.storage.create();
+      this.storageReady = true;
+      console.log("Storage initialisé !");
+    }
+  }
+
+  async logStorage() {
+    if (!this.db) return;
+    const keys = await this.db.keys();
+    console.log("************************************");
+    for (const key of keys) {
+      const value = await this.db.get(key);
+      console.log(`${key}:`, value);
+    }
+    console.log("************************************");
   }
 
   async startTracking() {
