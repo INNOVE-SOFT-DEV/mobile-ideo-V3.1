@@ -10,6 +10,7 @@ import {ChatService} from "./tab2/chatService/chat.service";
 import {Preferences} from "@capacitor/preferences";
 import {SqliteServiceTs} from "src/app/widgets/storage/sqlite.service.ts";
 import {Platform} from "@ionic/angular";
+import {PointageService} from "./pages/pointage/services/pointage.service";
 
 @Component({
   selector: "app-root",
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit {
     private trackingService: TrackingService,
     private chatService: ChatService,
     private platform: Platform,
-    private sqliteService: SqliteServiceTs
+    private sqliteService: SqliteServiceTs,
+    private pointageService: PointageService
   ) {
     this.translate.setDefaultLang("fr");
     this.geolocationService.init();
