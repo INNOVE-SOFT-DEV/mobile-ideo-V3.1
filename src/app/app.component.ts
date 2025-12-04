@@ -26,36 +26,25 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     private photoReportService: PhotoReportService,
     private googleMapsLoader: GoogleMapsLoaderService,
-    // private trackingService: TrackingService,
+    private trackingService: TrackingService,
     private chatService: ChatService,
     private platform: Platform,
     private sqliteService: SqliteServiceTs
   ) {
     this.translate.setDefaultLang("fr");
     this.geolocationService.init();
-    // setInterval(() => {
-    //   this.logAllCapacitorPreferences();
-    // }, 10000); // Log every 60 seconds
   }
 
   async ngOnInit() {
     this.loaded = true;
-
+    this.initializeApp();
     await this.platform.ready();
     await this.sqliteService.initDB();
     await this.sqliteService.listTables();
-
-    // this.trackingService.startTracking();
-    // Start network status listener (should not call checkAndSyncPhotos directly)
     await this.photoReportService.detectNetworksStatusChange();
-
-    // Run a single initial sync attempt — safe because guarded by lock
     this.photoReportService.checkAndSyncPhotos();
-
-    // Get initial network status
     this.isConnected = (await Network.getStatus()).connected;
     this.chatService.loadUsers();
-    // Listen for foreground event — safe because guarded by lock
     App.addListener("appStateChange", ({isActive}) => {
       if (isActive) {
         if (this.isConnected) {
@@ -63,16 +52,17 @@ export class AppComponent implements OnInit {
         }
       }
     });
-
     this.geolocationService.getApiKey().subscribe((res: any) => {
       if (res) {
         this.googleMapsLoader.load(res);
       }
     });
   }
+  initializeApp() {
+    this.trackingService.startTracking();
+  }
 
   async logAllCapacitorPreferences() {
-    // Get all keys
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       const value = localStorage.getItem(key!);

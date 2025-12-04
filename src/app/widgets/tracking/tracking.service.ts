@@ -1,119 +1,126 @@
-import {Injectable} from "@angular/core";
+import {Injectable, NgZone} from "@angular/core";
 import {Storage} from "@ionic/storage-angular";
 import {HttpClient} from "@angular/common/http";
 import {Network} from "@capacitor/network";
-import {BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse} from "@ionic-native/background-geolocation/ngx";
+import {lastValueFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
+
+import {registerPlugin} from "@capacitor/core";
+import type {BackgroundGeolocationPlugin, WatcherOptions} from "@capacitor-community/background-geolocation";
+
+const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>("BackgroundGeolocation");
 
 @Injectable({
   providedIn: "root"
 })
 export class TrackingService {
-  private _storage: Storage | null = null;
+  private storageReady = false;
+  private db: Storage | null = null;
+  private storageKey = "positions";
+  private watchers: string[] = [];
 
   constructor(
     private storage: Storage,
     private http: HttpClient,
-    private backgroundGeolocation: BackgroundGeolocation
+    private zone: NgZone
   ) {
     this.initStorage();
     this.monitorNetwork();
   }
+
   async initStorage() {
-    this._storage = await this.storage.create();
+    this.db = await this.storage.create();
+    this.storageReady = true;
   }
 
-  startTracking() {
-    const config: BackgroundGeolocationConfig = {
-      desiredAccuracy: 10,
-      stationaryRadius: 20,
+  async startTracking() {
+    const options: WatcherOptions = {
+      requestPermissions: true,
+      backgroundTitle: "Tracking actif",
+      backgroundMessage: "L’application collecte votre position",
       distanceFilter: 30,
-      debug: true,
-      stopOnTerminate: false,
-      startOnBoot: true,
-      interval: 10000,
-      fastestInterval: 5000,
-      activitiesInterval: 10000
+      stale: false
     };
 
-    this.backgroundGeolocation.configure(config).then(() => {
-      this.backgroundGeolocation.on("location" as any).subscribe(async (location: BackgroundGeolocationResponse) => {
-        const position = {
+    const id = await BackgroundGeolocation.addWatcher(options, async (location, error) => {
+      if (error) {
+        console.error("BG error", error);
+        if (error.code === "NOT_AUTHORIZED") {
+          BackgroundGeolocation.openSettings();
+        }
+        return;
+      }
+
+      // CORRECTION ICI
+      this.zone.run(async () => {
+        // Vérifier que location existe
+        if (!location) {
+          console.warn("Location is undefined");
+          return;
+        }
+
+        const timestampValue = location.time ?? Date.now();
+        // Si location.time est null → on utilise Date.now()
+
+        const pos = {
           lat: location.latitude,
           lng: location.longitude,
-          timestamp: new Date(location.time).toISOString()
+          timestamp: new Date(timestampValue).toISOString()
         };
 
-        const connected = await this.isConnected();
-        if (connected) {
-          await this.sendToBackend(position);
-        } else {
-          await this.saveLocally(position);
-        }
+        const status = await Network.getStatus();
+        status.connected ? await this.sendToBackend(pos) : await this.saveLocally(pos);
       });
     });
 
-    this.backgroundGeolocation.start();
+    this.watchers.push(id);
   }
 
-  stopTracking() {
-    this.backgroundGeolocation.stop();
+  async stopTracking() {
+    for (const id of this.watchers) {
+      await BackgroundGeolocation.removeWatcher({id});
+    }
+    this.watchers = [];
   }
 
-  async saveLocally(position: any) {
-    if (!this._storage) return;
-    const positions = (await this._storage.get("positions")) || [];
-    positions.push(position);
-    await this._storage.set("positions", positions);
-    console.log("Position sauvegardée localement:", position);
+  private async saveLocally(pos: any) {
+    if (!this.storageReady || !this.db) return;
+    const list = (await this.db.get(this.storageKey)) || [];
+    list.push(pos);
+    await this.db.set(this.storageKey, list);
   }
 
-  async sendToBackend(position: any) {
-    console.log(`position == ${position}`);
-    /* try {
-      await this.http.post(`${environment.apiUrl}/positions`, position).toPromise();
-      console.log("Position envoyée au backend:", position);
-    } catch (error) {
-      console.error("Erreur envoi backend, sauvegarde local", error);
-      await this.saveLocally(position);
-    }*/
-  }
-
-  async syncStoredPositions() {
-    const connected = await this.isConnected();
-    console.log(`connected == ${connected}`);
-    if (!connected) return;
-    if (!this._storage) return;
-
-    const stored = await this._storage.get("positions");
-    if (stored && stored.length > 0) {
-      console.log(`Envoi de ${stored.length} positions stockées`);
-      for (const pos of stored) {
-        console.log(`pos == ${pos}`);
-        /* try {
-          await this.http.post(`${environment.apiUrl}/positions`, pos).toPromise();
-          console.log("Position synchronisée:", pos);
-        } catch (e) {
-          console.error("Erreur sync backend", e);
-          break;
-        }*/
-      }
-      await this._storage.set("positions", []);
-      console.log("Positions synchronisées et stockage local vidé");
+  async sendToBackend(pos: any) {
+    try {
+      console.log(pos);
+      //await lastValueFrom(this.http.post(`${environment.urlAPI}/positions`, pos));
+    } catch {
+      await this.saveLocally(pos);
     }
   }
 
-  monitorNetwork() {
-    Network.addListener("networkStatusChange", async status => {
-      if (status.connected) {
-        console.log("Connexion réseau détectée, synchronisation des positions");
-        await this.syncStoredPositions();
+  async syncStored() {
+    const status = await Network.getStatus();
+    if (!status.connected || !this.storageReady || !this.db) return;
+
+    const local = await this.db.get(this.storageKey);
+    if (!local?.length) return;
+
+    for (const pos of local) {
+      try {
+        console.log(pos);
+        //  await lastValueFrom(this.http.post(`${environment.urlAPI}/positions`, pos));
+      } catch {
+        break;
       }
-    });
+    }
+
+    await this.db.set(this.storageKey, []);
   }
 
-  async isConnected(): Promise<boolean> {
-    const status = await Network.getStatus();
-    return status.connected;
+  monitorNetwork() {
+    Network.addListener("networkStatusChange", async st => {
+      if (st.connected) await this.syncStored();
+    });
   }
 }
