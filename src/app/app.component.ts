@@ -10,6 +10,7 @@ import {ChatService} from "./tab2/chatService/chat.service";
 import {Preferences} from "@capacitor/preferences";
 import {SqliteServiceTs} from "src/app/widgets/storage/sqlite.service.ts";
 import {Platform} from "@ionic/angular";
+import { PointageService } from "./pages/pointage/services/pointage.service";
 
 @Component({
   selector: "app-root",
@@ -26,16 +27,18 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     private photoReportService: PhotoReportService,
     private googleMapsLoader: GoogleMapsLoaderService,
-    // private trackingService: TrackingService,
+    private trackingService: TrackingService,
     private chatService: ChatService,
     private platform: Platform,
-    private sqliteService: SqliteServiceTs
+    private sqliteService: SqliteServiceTs,
+    private pointageService: PointageService
   ) {
     this.translate.setDefaultLang("fr");
     this.geolocationService.init();
     // setInterval(() => {
     //   this.logAllCapacitorPreferences();
     // }, 10000); // Log every 60 seconds
+    
   }
 
   async ngOnInit() {
@@ -44,8 +47,9 @@ export class AppComponent implements OnInit {
     await this.platform.ready();
     await this.sqliteService.initDB();
     await this.sqliteService.listTables();
+      this.pointageService.testSave();
 
-    // this.trackingService.startTracking();
+     this.trackingService.startTracking();
     // Start network status listener (should not call checkAndSyncPhotos directly)
     await this.photoReportService.detectNetworksStatusChange();
 

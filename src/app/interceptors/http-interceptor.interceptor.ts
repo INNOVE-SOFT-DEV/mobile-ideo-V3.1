@@ -1,10 +1,10 @@
 import {Injectable} from "@angular/core";
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, finalize, Observable, throwError} from "rxjs";
-import {LoadingControllerService} from "../widgets/loading-controller/loading-controller.service";
+import {HttpErrorResponse, HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
+import {catchError, finalize, Observable, tap, throwError} from "rxjs";
 @Injectable()
 export class httpInterceptor implements HttpInterceptor {
-  constructor(private loadingService: LoadingControllerService) {}
+  api :any = {};
+  constructor() {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem("token");
     const tokenV3 = localStorage.getItem("token-v3");
@@ -14,22 +14,46 @@ export class httpInterceptor implements HttpInterceptor {
       if (request.body instanceof FormData) {
         request = request.clone({
           setHeaders: {
-            Authorization: `${val}`,
-            "ngrok-skip-browser-warning": "true"
+            Authorization: `${val}`
           }
         });
       } else {
         request = request.clone({
           setHeaders: {
             "Content-Type": "application/json",
-            Authorization: `${val}`,
-            "ngrok-skip-browser-warning": "true"
+            Authorization: `${val}`
           }
         });
       }
     }
 
+    if (request.url.includes("/api/v1/")) {
+      this.api.url = request.url;
+      this.api.method = request.method;
+      if (request.body) this.api.body = request.body;
+      this.api.headers = {};
+      for (const key of request.headers.keys()) {
+        this.api.headers[key] = request.headers.get(key);
+      }
+
+      
+    }
+
     return next.handle(request).pipe(
+      tap(event => {
+        if (event.type === HttpEventType.Response &&request.url.includes("/api/v1/")) {
+          this.api.response = {
+            status: event.status,
+            body: event.body,
+          };
+
+          console.log(this.api);
+
+        }
+
+
+      }),
+
       catchError((error: HttpErrorResponse) => {
         console.error("HTTP Error:", error);
         return throwError(() => error);
