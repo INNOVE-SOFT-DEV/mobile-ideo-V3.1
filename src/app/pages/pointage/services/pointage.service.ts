@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import { BackgroundRunner } from '@capacitor/background-runner';
+import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
 
 @Injectable({
   providedIn: "root"
@@ -24,25 +24,40 @@ export class PointageService {
   }
 
     async init() {
-    try {
-      const permissions = await BackgroundRunner.requestPermissions({
-        apis: ['notifications', 'geolocation'],
-      });
-      console.log('permissions', permissions);
-    } catch (err) {
-      console.log(`ERROR: ${err}`);
-    }
+    // try {
+    //   const permissions = await BackgroundRunner.requestPermissions({
+    //     apis: ['notifications', 'geolocation'],
+    //   });
+    // } catch (err) {
+    //   console.error(`ERROR: ${err}`);
+    // }
   }
 
-  async testSave() {
-    const result = await BackgroundRunner.dispatchEvent({
-      label: 'com.ideogroupev3.app.task',
-      event: 'pointingTask',
-      details: {
-        testData: 'This is a test data for pointage task'
-      },
+ async readLocations() {
+  // setInterval(async () => {
+
+  //   const locations = await this.readLocationsFile();
+  //   console.log('📍 Locations read every 15s:', JSON.stringify(locations));
+
+  // }, 15000);
+}
+async readLocationsFile() {
+  try {
+    const file :any = await Filesystem.readFile({
+      path: 'locations.json',
+      directory: Directory.External,
+            encoding: Encoding.UTF8   // ✅ THIS disables Base64
+
     });
-    console.log('save result', result);
+
+
+    return file;
+
+  } catch (err) {
+    console.error('❌ Failed to read locations file', err);
+    return [];
   }
+}
+
 
 }

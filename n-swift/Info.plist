@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>IDEO Mobile</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>com.ideogroupev3.app.task</string>
+</array>
+
+	
+	<key>NSCameraUsageDescription</key>
+<string>Cette application utilise votre appareil photo pour permettre aux agents de prendre des photos nécessaires aux rapports de mission, aux constats et aux justificatifs d’absence.</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Cette application accède à votre bibliothèque afin que vous puissiez sélectionner ou joindre des photos à vos rapports de mission et justificatifs.</string>
+
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>Cette application a besoin d’enregistrer des photos dans votre bibliothèque lorsque vous prenez des clichés pour vos missions ou constats.</string>
+
+<key>NSMicrophoneUsageDescription</key>
+<string>Cette application utilise le microphone pour vous permettre d’enregistrer ou de dicter des messages vocaux lors de la création  du retour de mission et dans le chat intégré.</string>
+
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Cette application utilise votre position uniquement lorsque vous l’utilisez afin de vous permettre de faire le pointage sur le lieu de mission.</string>
+
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Cette application peut accéder à votre position même en arrière-plan afin de vous pointer automatiquement sur le lieu de mission si vous oubliez de le faire manuellement.</string>
+
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+		<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>location</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+		<string>audio</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+</dict>
+</plist>

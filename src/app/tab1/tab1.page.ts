@@ -52,9 +52,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   async ngOnInit() {
     this.setCurrentDay();
     this.isSuperVisor = this.authService.isSuperVisor();
-    console.log("isSuperVisor", this.isSuperVisor);
     const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
-    console.log(user_v3.role);
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.setCurrentDay();
     await this.getAllMissions();
@@ -66,15 +64,11 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   async getAllMissions() {
     this.executed = true;
-    console.log(this.date, this.isSuperVisor);
     // await this.loadingService.present("loading");
     this.isLoaded = false;
     this.missionService.getPlannings(true, this.date, "all").subscribe({
       next: async value => {
-        console.log(value);
         this.isLoaded = true;
-
-        console.log("🚀 ~ file: tab1.page.ts:83 ~ Tab1Page ~ getAllMissions ~ value", value, this.isToDayPlannings);
         this.punctuals = this.foramtplannings(value.punctuals);
         this.regulars = this.foramtplannings(value.regulars);
         this.forfaitaires = this.foramtplannings(value.flat_rates);
