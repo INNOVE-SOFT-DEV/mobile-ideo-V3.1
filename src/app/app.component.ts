@@ -39,7 +39,13 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = true;
-    await this.initializeApp();
+
+    setInterval(() => {
+      console.log("Exécuté toutes les 5 secondes");
+      this.pointageService.readLocations();
+    }, 5000);
+
+    // await this.initializeApp();
     await this.platform.ready();
     await this.sqliteService.initDB();
     await this.sqliteService.listTables();

@@ -32,6 +32,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 public class BackgroundLocationService extends Service {
 
     public static final String TAG = "BG_LOC_SERVICE";
@@ -160,17 +163,41 @@ public class BackgroundLocationService extends Service {
     }
 
     private void queueLocation(JSONObject item) {
-        synchronized (queueLock) {
-            try {
-                JSONArray queue = new JSONArray(prefs.getString(QUEUE_KEY, "[]"));
-                queue.put(item);
-                prefs.edit().putString(QUEUE_KEY, queue.toString()).apply();
-                Log.d(TAG, "Queued item. Total: " + queue.length());
-            } catch (Exception e) {
-                Log.e(TAG, "queueLocation failed", e);
-            }
+    synchronized (queueLock) {
+        try {
+            JSONArray queue = new JSONArray(prefs.getString(QUEUE_KEY, "[]"));
+            queue.put(item);
+            prefs.edit().putString(QUEUE_KEY, queue.toString()).apply();
+
+            // 🔹 Écriture dans fichier pour Ionic
+            saveQueueToFile(queue);
+
+            Log.d(TAG, "Queued item. Total555: " + queue.length());
+        } catch (Exception e) {
+            Log.e(TAG, "queueLocation failed", e);
         }
     }
+}
+
+
+private void saveQueueToFile(JSONArray queue) {
+    try {
+        String filename = "queue.json";
+        String data = queue.toString();
+        File file = new File(getFilesDir(), filename);
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data.getBytes(StandardCharsets.UTF_8));
+        }
+        Log.i(TAG, "Queue file written to " + file.getAbsolutePath());
+    } catch (Exception e) {
+        Log.e(TAG, "Failed to save queue", e);
+    }
+}
+
+
+
+
+
 
     private void broadcastLocation(JSONObject item) {
         Intent i = new Intent(ACTION_LOCATION);
