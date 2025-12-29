@@ -54,8 +54,6 @@ export class PointagePage implements OnInit, OnDestroy {
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.planning = JSON.parse(localStorage.getItem("currentPlanning")!).planning;
-    console.log(this.planning.team);
-    
     this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id)?.pointing_internal[0];
     this.type = this.route.snapshot.paramMap.get("type");
     this.user = this.authService.getCurrentUser();
@@ -66,9 +64,6 @@ export class PointagePage implements OnInit, OnDestroy {
         await this.initMapAndUserPosition();
       }
     });
-
-
-
   }
 
   ngOnDestroy(): void {
@@ -77,8 +72,10 @@ export class PointagePage implements OnInit, OnDestroy {
   }
 
   async initMapAndUserPosition() {
-    const planningLat = parseFloat("30.8219776");
-    const planningLng = parseFloat("10.6266624");
+    // console.log("Initializing map...", this.planning);
+
+    const planningLat = parseFloat(this.planning.intervention.address.latitude);
+    const planningLng = parseFloat(this.planning.intervention.address.longitude);
     await this.mapService.initMap(this.mapElement, planningLat, planningLng);
     this.mapService.addMarker({lat: planningLat, lng: planningLng}, "Lieu d'intervention", "assets/img/building_marker.png", {width: 30, height: 30});
     this.mapService.addCircle(planningLat, planningLng);
@@ -103,28 +100,16 @@ export class PointagePage implements OnInit, OnDestroy {
     this.currentTime = `${hours}:${minutes}`;
   }
   async getLocation() {
-
-    console.log(this.pointing_internal);
-
-    if( this.pointing_internal?.started_on != null ){
-      console.log('skip');
-      
-    }else {
-        await this.loadingService.present(this.loadingMessage);
-    await this.geolocationService.getCurrentLocation();
-    this.userCoordinates = this.geolocationService.coordinates;
-    await this.loadingService.dimiss();
-
+    if (this.pointing_internal?.started_on != null) {
+    } else {
+      await this.loadingService.present(this.loadingMessage);
+      await this.geolocationService.getCurrentLocation();
+      this.userCoordinates = this.geolocationService.coordinates;
+      await this.loadingService.dimiss();
     }
-    
-  
   }
   async setPointing() {
- 
-                     await this.getLocation();
-
-                     
-
+    await this.getLocation();
 
     let body: any = {
       point: {
@@ -133,11 +118,8 @@ export class PointagePage implements OnInit, OnDestroy {
         recorder_at: new Date().toISOString()
       }
     };
-    console.log(body);
-    
 
-     if (this.pointing_internal?.started_on != null && this.pointing_internal?.finished_on == null) {
-
+    if (this.pointing_internal?.started_on != null && this.pointing_internal?.finished_on == null) {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
@@ -151,10 +133,8 @@ export class PointagePage implements OnInit, OnDestroy {
             cssClass: "btn_actionSheet",
             handler: async () => {
               const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
-              console.log(this.pointing_internal.id, "finish", body);
               await this.loadingService.present(this.loadingMessage);
               this.missionService.pointing(this.pointing_internal.id, "finish", body).subscribe(async (data: any) => {
-                console.log(data);
                 this.pointing_internal = data;
                 await this.loadingService.dimiss();
                 this.planning.team.find((u: any) => u.id === user_v3.id).pointing_internal[0] = this.pointing_internal;
@@ -182,11 +162,13 @@ export class PointagePage implements OnInit, OnDestroy {
       const minutes = now.getMinutes();
       body["started_on"] = `${hours}:${minutes}`;
 
-      const distance =  this.geolocationService.getDistanceFromCurrentLoaction({ latitude: parseFloat(this.planning.intervention.address.latitude), longitude: parseFloat(this.planning.intervention.address.longitude) });
+      const distance = this.geolocationService.getDistanceFromCurrentLoaction({
+        latitude: parseFloat(this.planning.intervention.address.latitude),
+        longitude: parseFloat(this.planning.intervention.address.longitude)
+      });
 
-
-      if (distance <= 500 || true ) {
-        console.log(this.pointing_internal.id, "start", body);
+      if (distance <= 500) {
+        // console.log(this.pointing_internal.id, "start", body);
 
         await this.loadingService.present(this.loadingMessage);
         const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");

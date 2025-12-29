@@ -3,14 +3,16 @@ export const environment = {
   /*ws_api_url: "ws://localhost:3001/cable",
   urlAPI: "http://localhost:3001/",
   url_web: "http://localhost:3000/",*/
+  newApiUrl: "http://localhost:3000/api/v1/",
+  newWebUrl: "http://localhost:3000/",
   //server DEV
 
   // ws_api_url: "wss://api.ideogroupe.com/cable",
   // urlAPI: "https://api.ideogroupe.com/",
   // url_web: "https://backend.ideogroupe.com/",
 
-  newApiUrl: "https://demo.ssp-protection.fr/api/v1/",
-  newWebUrl: "https://demo.ssp-protection.fr",
+  // newApiUrl: "https://demo.ssp-protection.fr/api/v1/",
+  // newWebUrl: "https://demo.ssp-protection.fr/",
   ws_api_url: "wss://apideo.webo.tn/cable",
   urlAPI: "https://apideo.webo.tn/",
   url_web: "https://ideo.webo.tn/",

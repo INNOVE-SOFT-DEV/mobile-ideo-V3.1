@@ -30,7 +30,7 @@ export class ChatService implements ChatInterface {
     private router: Router
   ) {
     this.current_user = this.authService.getCurrentUser();
-    this.cable = ActionCable.createConsumer(environment.ws_api_url);
+    this.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
     this.channel = this.cable.subscriptions.create(
       {channel: "ChatChannel", userId: this.current_user?.id},
       {
@@ -154,10 +154,6 @@ export class ChatService implements ChatInterface {
 
   loadMoreMessages(room_id: any, last_message_id: any): Observable<any> {
     return this.chatRepository.loadMoreMessages(room_id, last_message_id);
-  }
-
-  setReadsAt(formData: any): Observable<any> {
-    return this.chatRepository.setReadsAt(formData);
   }
 
   checkReadsAt(data: any): Observable<any> {

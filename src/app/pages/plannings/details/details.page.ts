@@ -22,7 +22,6 @@ import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
   standalone: false
 })
 export class DetailsPage implements OnInit {
-
   planning: any;
   planningType: string = "";
   loadingMessage: string = "";
@@ -35,7 +34,7 @@ export class DetailsPage implements OnInit {
   imageUrl: string | any = null;
   detectedTexts: string[] = [];
   generatedJson: any = {};
-  agent : any;
+  agent: any;
 
   constructor(
     private loadingService: LoadingControllerService,
@@ -75,8 +74,7 @@ export class DetailsPage implements OnInit {
     this.setupPhotos();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.agent = this.planning.team.find((user: any) => user.id == user_v3.id);
-    console.log(this.agent);
-    
+
     await this.loadingService.dimiss();
   }
 

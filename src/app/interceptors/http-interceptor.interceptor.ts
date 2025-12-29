@@ -3,7 +3,7 @@ import {HttpErrorResponse, HttpEvent, HttpEventType, HttpHandler, HttpIntercepto
 import {catchError, finalize, Observable, tap, throwError} from "rxjs";
 @Injectable()
 export class httpInterceptor implements HttpInterceptor {
-  api :any = {};
+  api: any = {};
   constructor() {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem("token");
@@ -14,14 +14,16 @@ export class httpInterceptor implements HttpInterceptor {
       if (request.body instanceof FormData) {
         request = request.clone({
           setHeaders: {
-            Authorization: `${val}`
+            Authorization: `${val}`,
+            "ngrok-skip-browser-warning": "true"
           }
         });
       } else {
         request = request.clone({
           setHeaders: {
             "Content-Type": "application/json",
-            Authorization: `${val}`
+            Authorization: `${val}`,
+            "ngrok-skip-browser-warning": "true"
           }
         });
       }
@@ -35,23 +37,18 @@ export class httpInterceptor implements HttpInterceptor {
       for (const key of request.headers.keys()) {
         this.api.headers[key] = request.headers.get(key);
       }
-
-      
     }
 
     return next.handle(request).pipe(
       tap(event => {
-        if (event.type === HttpEventType.Response &&request.url.includes("/api/v1/")) {
+        if (event.type === HttpEventType.Response && request.url.includes("/api/v1/")) {
           this.api.response = {
             status: event.status,
-            body: event.body,
+            body: event.body
           };
 
-          console.log(this.api);
-
+          console.table(this.api);
         }
-
-
       }),
 
       catchError((error: HttpErrorResponse) => {

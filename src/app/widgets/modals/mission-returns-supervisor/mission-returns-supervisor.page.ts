@@ -18,7 +18,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
   returnType: any = "";
   important: boolean = true;
   vocal: boolean = true;
-  audioUrl: any =""
+  audioUrl: any = "";
   recordedAudios: any[] = [];
   returnTime: any;
   waveSurfer?: WaveSurfer;
@@ -31,28 +31,22 @@ export class MissionReturnsSupervisorPage implements OnInit {
     private translateService: TranslateService,
     private loadingService: LoadingControllerService
   ) {}
-  
+
   async ngOnInit() {
     this.loadingMessage = await this.translateService.get("loading").toPromise();
 
     await this.loadingService.present(this.loadingMessage);
     const id = this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
-    console.log(id);
-    
     this.missionService.getMissionReturnAudio(id).subscribe(async (data: any) => {
-
-      console.log(data);
-      this.returnType = data.return_types
+      this.returnType = data.return_types;
       this.important = data.important;
-       if (data?.audio_url) {
-          this.audioUrl = data.audio_url;
-          await this.loadingService.dimiss();
-          this.createWaves();
-          this.waveSurfer?.load(data.audio_url.url);
-        }
+      if (data?.audio_url) {
+        this.audioUrl = data.audio_url;
         await this.loadingService.dimiss();
-      
-
+        this.createWaves();
+        this.waveSurfer?.load(data.audio_url.url);
+      }
+      await this.loadingService.dimiss();
     });
   }
 

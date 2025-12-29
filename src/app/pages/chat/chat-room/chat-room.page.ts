@@ -110,6 +110,7 @@ export class ChatRoomPage implements OnInit {
   }
 
   goBack() {
+    this.chatService.loadUsers();
     if (this.isSliderOpen) {
       this.isSliderOpen = false;
       this.scrollToBottomSmoothly();
@@ -229,6 +230,8 @@ export class ChatRoomPage implements OnInit {
     for (let i = 0; i < this.photoService.multipleImages.length; i++) {
       const photo = this.photoService.multipleImages[i];
       const response = await fetch(photo.webPath);
+      console.log(response);
+
       const blob = await response.blob();
       formData.append("images[]", blob, `image_${Date.now()}_${i}.${photo.format}`);
     }

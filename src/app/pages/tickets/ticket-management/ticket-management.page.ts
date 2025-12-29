@@ -44,7 +44,7 @@ export class TicketManagementPage implements OnInit {
         await this.loadingService.dimiss();
       },
       error: async err => {
-        console.log(err);
+        console.error(err);
         await this.loadingService.dimiss();
       }
     });

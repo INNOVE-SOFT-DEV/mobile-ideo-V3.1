@@ -32,29 +32,23 @@ export class ForfaitaireComponent implements OnInit, OnChanges {
     private missionService: MissionService
   ) {}
 
-  ngOnInit(): void {
-    console.log("Component initialized with data:", this.data);
-  }
+  ngOnInit(): void {}
 
   /**
    * Fired whenever one or more @Input() values change
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["data"]) {
-      console.log("🌀 Input 'data' changed:", changes["data"].currentValue);
       // Perform any refresh, filtering, or logic you need
     }
 
     if (changes["supervisors"]) {
-      console.log("🧭 Input 'supervisors' changed:", changes["supervisors"].currentValue);
     }
 
     if (changes["date"]) {
-      console.log("📅 Input 'date' changed:", changes["date"].currentValue);
     }
 
     if (changes["isToDayPlannings"]) {
-      console.log("📋 Input 'isToDayPlannings' changed:", changes["isToDayPlannings"].currentValue);
     }
   }
 

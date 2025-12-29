@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, switchMap, tap} from "rxjs";
 import {environment} from "src/environments/environment";
 import {AuthResponse, User} from "src/app/models/auth/user";
+import {Preferences} from "@capacitor/preferences";
 
 @Injectable({
   providedIn: "root"
@@ -30,9 +31,7 @@ export class AuthRepository implements AuthInterface {
 
   getAllAgents(): Observable<any> {
     this.http.get<any>(`${environment.newApiUrl}users`).subscribe(
-      res => {
-        console.log("Get User response:", res);
-      },
+      res => {},
       error => {
         console.error("Get User error:", error);
       }
@@ -60,10 +59,13 @@ export class AuthRepository implements AuthInterface {
     const acessSupervisor = {email: "faidi@mail.com", password: "123456"};
 
     return this.http.post<AuthResponse>(`${environment.newApiUrl}login`, payload).pipe(
-      tap(res => {
-        console.log("Login response:", res);
+      tap(async res => {
         localStorage.setItem("token-v3", res.token);
         localStorage.setItem("user-v3", JSON.stringify(res.user));
+        await Preferences.set({
+          key: "access_token",
+          value: res.token
+        });
       }),
       switchMap(res => {
         console.log(res.user);

@@ -127,7 +127,6 @@ export class PhotoReportService {
 
           indexGroupe++;
         }
-        
 
         let photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
         for (let i = 0; i < photosTruck.length; i++) {
@@ -155,7 +154,7 @@ export class PhotoReportService {
             localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(photosTruck));
             this.doneEvent.emit(photosTruck);
 
-            console.log("✔️ Truck photo synchronisée:", newUrl);
+            // console.log("✔️ Truck photo synchronisée:", newUrl);
           }
         }
       }

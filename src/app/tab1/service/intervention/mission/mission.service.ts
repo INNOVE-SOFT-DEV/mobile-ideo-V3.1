@@ -103,7 +103,7 @@ export class MissionService implements MissionInterface {
   getFreeVehicules(planning_id: number, type_planning: string, user_id: number): Observable<any> {
     return this.missionRepo.getFreeVehicules(planning_id, type_planning, user_id);
   }
-  getMissionReturnAudio(id:number): Observable<any> {
+  getMissionReturnAudio(id: number): Observable<any> {
     return this.missionRepo.getMissionReturnAudio(id);
   }
   getMissionReturn(planning_id: number, type_planning: string): Observable<any> {

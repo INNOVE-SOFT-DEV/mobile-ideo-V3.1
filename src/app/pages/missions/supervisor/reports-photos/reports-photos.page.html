@@ -54,26 +54,19 @@
           </ng-container>
           <div class="image-grid">
             <div class="grid-item" *ngFor="let pair of images; let i = index ">
+              <div class="image-pair">
+                <div class="image-column" *ngIf="pair?.before?.image_url?.url">
+                  <img [src]="pair.before.image_url.url" alt="Before" (click)="openSlides('photo_before', i)" />
+                  <div class="label">Before</div>
+                </div>
 
-                  <div class="image-pair">
-                  
-                    <div class="image-column" *ngIf="pair?.before?.image_url?.url">
-                      <img [src]="pair.before.image_url.url" alt="Before" (click)="openSlides('photo_before', i)" />
-                      <div class="label">Before</div>
-                    </div>
-                  
-                    <div class="image-column" *ngIf="pair?.after?.image_url?.url">
-                      <img [src]="pair.after.image_url.url" alt="After" (click)="openSlides('photo_after', i)" />
-                      <div class="label">After</div>
-                    </div>
-                  
-                  </div>
+                <div class="image-column" *ngIf="pair?.after?.image_url?.url">
+                  <img [src]="pair.after.image_url.url" alt="After" (click)="openSlides('photo_after', i)" />
+                  <div class="label">After</div>
+                </div>
+              </div>
 
-
-
-
-
-            <!--<div class="checkbox-container">
+              <!--<div class="checkbox-container">
                 <label class="checkbox-label">
                   <input name="checkbox" type="checkbox" (change)="onToggleInclude(pair , 'photo' , i)" class="hidden-checkbox" />
                   <span class="custom-checkbox" [class.checked]="pair[0]?.no_include == true || pair[1]?.no_include == true">
@@ -118,7 +111,7 @@
               <div class="camion-item" *ngFor="let obj of imagesCamions; let i = index">
                 <img [src]="obj?.url" alt="Camion" (click)="openSlides('photo_truck', i)" />
               </div>
-             <!--<div class="checkbox-container">
+              <!--<div class="checkbox-container">
                 <label class="checkbox-label">
                   <input type="checkbox" name="no_include" (change)="onToggleInclude(obj , 'truck' , i)" class="hidden-checkbox" />
                   <span class="custom-checkbox" [class.checked]="obj?.no_include == true">

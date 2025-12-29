@@ -7,7 +7,6 @@ export interface ChatInterface {
   images(data: FormData): Observable<any>;
   file(data: FormData): Observable<any>;
   loadMoreMessages(room_id: any, last_message_id: any): Observable<any>;
-  setReadsAt(formData: any): Observable<any>;
   checkReadsAt(data: any): Observable<any>;
   updateReadsAt(data: any): Observable<any>;
 }

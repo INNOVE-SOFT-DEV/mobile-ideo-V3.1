@@ -12,7 +12,6 @@ import {httpInterceptor} from "./interceptors/http-interceptor.interceptor";
 import {FormsModule} from "@angular/forms";
 import {DatePipe} from "@angular/common";
 import {IonicStorageModule} from "@ionic/storage-angular";
-import {BackgroundGeolocation} from "@ionic-native/background-geolocation/ngx";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -35,7 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, BackgroundGeolocation, {provide: HTTP_INTERCEPTORS, useClass: httpInterceptor, multi: true}, DatePipe],
+  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, {provide: HTTP_INTERCEPTORS, useClass: httpInterceptor, multi: true}, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

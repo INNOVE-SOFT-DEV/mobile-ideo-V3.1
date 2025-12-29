@@ -75,12 +75,16 @@ export class AuthService implements AuthInterface {
 
   login(payload: any): Observable<AuthResponse> {
     return this.authRepo.login(payload).pipe(
-      tap(response => {
+      tap(async response => {
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         Preferences.set({
           key: "user",
           value: JSON.stringify(response.user)
+        });
+        await Preferences.set({
+          key: "token",
+          value: response.token
         });
         this.currentUser = response.user;
       })
@@ -90,20 +94,20 @@ export class AuthService implements AuthInterface {
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    this.authRepo.logOut().subscribe(
-      () => {
-        console.log("Logged out from server");
-      },
-      error => {
-        console.error("Logout error:", error);
-      }
-    );
+    // this.authRepo.logOut().subscribe(
+    //   () => {
+    //     // console.log("Logged out from server");
+    //   },
+    //   error => {
+    //     console.error("Logout error:", error);
+    //   }
+    // );
     this.currentUser = null;
   }
 
   getCurrentUser(): User | null {
     if (!this.currentUser) {
-      const userData = localStorage.getItem("user");
+      const userData = localStorage.getItem("user-v3");
       this.currentUser = userData ? JSON.parse(userData) : null;
     }
     return this.currentUser;

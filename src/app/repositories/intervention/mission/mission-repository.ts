@@ -203,8 +203,6 @@ export class MissionRepository implements MissionInterface {
 
   getMissionReturnAudio(id: number): Observable<any> {
     const cacheKey = `mission_return_audio_${id}`;
-    console.log(`${this.newApiUrl}pointing_internals/${id}/get_audio_report`);
-    
     return this.http.get<any>(`${this.newApiUrl}pointing_internals/${id}/get_audio_report`).pipe(
       switchMap(async data => {
         await Preferences.set({
@@ -264,7 +262,7 @@ export class MissionRepository implements MissionInterface {
   }
 
   createMissionReturn(data: any): Observable<any> {
-    return this.http.post<any>(`${this.newApiUrl}pointing_internals/${data.internal_id}/upload_audio_report`, { audio_report :data.audio_report});
+    return this.http.post<any>(`${this.newApiUrl}pointing_internals/${data.internal_id}/upload_audio_report`, {audio_report: data.audio_report});
   }
 
   getAgentForfaitaireIntervention(): Observable<PlanningData> {

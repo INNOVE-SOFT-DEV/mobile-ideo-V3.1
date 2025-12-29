@@ -56,10 +56,9 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
     await this.loadingService.present(this.loadingMessage);
     this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
-        console.log(value);
         this.note = value.note || "";
         this.noteCache = this.note;
-        if(value.audio_url){
+        if (value.audio_url) {
           this.blobUrl = value.audio_url;
           this.isRecording = true;
           this.createWaves();
@@ -127,18 +126,13 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
       body.audio_report["audio_base64"] = this.audioBase64;
     }
 
-
-    
-
     await this.loadingService.present(this.loadingMessage);
     return new Promise((resolve, reject) => {
       this.missionService.createMissionReturn(body).subscribe({
         next: async data => {
-          console.log(data);
           await this.loadingService.dimiss();
           resolve(data);
-        }
-        ,
+        },
         error: async error => {
           await this.loadingService.dimiss();
           console.error(error);
@@ -159,19 +153,19 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
   }
 
   async goToReturnRecurringMissionAgentModal() {
-    if(this.isnewRecording){
+    if (this.isnewRecording) {
       await this.makeDeclaration();
     }
 
     const modal = await this.modalController.create({
       component: ReturnRecurringMissionAgentModalPage,
       cssClass: "materials-modal",
-      componentProps: {data: this.planning , internal_id: this.internal.id}
+      componentProps: {data: this.planning, internal_id: this.internal.id}
     });
 
     modal.onDidDismiss().then(result => {
       this.isnewRecording = false;
-    })
+    });
     return await modal.present();
   }
 

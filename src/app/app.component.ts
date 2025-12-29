@@ -5,12 +5,9 @@ import {PhotoReportService} from "./pages/missions/agents/photo-report/service/p
 import {GoogleMapsLoaderService} from "./widgets/location-load/google-maps-loader.service";
 import {App} from "@capacitor/app";
 import {Network} from "@capacitor/network";
-import {TrackingService} from "src/app/widgets/tracking/tracking.service";
 import {ChatService} from "./tab2/chatService/chat.service";
-import {Preferences} from "@capacitor/preferences";
-import {SqliteServiceTs} from "src/app/widgets/storage/sqlite.service.ts";
+
 import {Platform} from "@ionic/angular";
-import {PointageService} from "./pages/pointage/services/pointage.service";
 
 @Component({
   selector: "app-root",
@@ -27,22 +24,17 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     private photoReportService: PhotoReportService,
     private googleMapsLoader: GoogleMapsLoaderService,
-    private trackingService: TrackingService,
     private chatService: ChatService,
-    private platform: Platform,
-    private sqliteService: SqliteServiceTs,
-    private pointageService: PointageService
+    private platform: Platform
   ) {
     this.translate.setDefaultLang("fr");
-    this.geolocationService.init();
   }
 
   async ngOnInit() {
     this.loaded = true;
-    await this.initializeApp();
     await this.platform.ready();
-    await this.sqliteService.initDB();
-    await this.sqliteService.listTables();
+    // await this.sqliteService.initDB();
+    // await this.sqliteService.listTables();
     await this.photoReportService.detectNetworksStatusChange();
     this.photoReportService.checkAndSyncPhotos();
     this.isConnected = (await Network.getStatus()).connected;
@@ -59,18 +51,5 @@ export class AppComponent implements OnInit {
         this.googleMapsLoader.load(res);
       }
     });
-  }
-  async initializeApp() {
-    await this.trackingService.initStorage();
-    this.trackingService.startTracking();
-    await this.trackingService.logStorage();
-  }
-
-  async logAllCapacitorPreferences() {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      const value = localStorage.getItem(key!);
-      console.log(`${key}:`, value);
-    }
   }
 }

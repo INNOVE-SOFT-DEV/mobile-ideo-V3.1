@@ -143,7 +143,6 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
 
       // this.isSubmitted = true;
       // await this.loadingService.present(this.loadingMessage);
-      console.log(body);
       this.missionService.createMissionReturn(body).subscribe({
         next: async data => {
           //   console.log(data);
@@ -175,7 +174,6 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
   }
 
   setReturnTypes(object: any) {
-    console.log(object);
     if (object.return_types?.length > 0) {
       object.return_types.includes("empty_truck") ? (this.truckToEmpty = true) : null;
       object.return_types.includes("accident") ? (this.accident = true) : null;
@@ -188,7 +186,6 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
     await this.loadingService.present(this.loadingMessage);
     this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
-        console.log(value);
         this.setReturnTypes(value);
         this.important = value.important;
         if (value.audio_url) {
@@ -205,7 +202,6 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
         console.error(err);
       }
     });
-    console.log(this);
   }
 
   playRecordingAgain() {

@@ -7,7 +7,6 @@ import {LoadingControllerService} from "src/app/widgets/loading-controller/loadi
 import {TranslateService} from "@ngx-translate/core";
 import {v4 as uuidv4} from "uuid";
 
-
 @Component({
   selector: "app-return-recurring-mission-agent-modal",
   templateUrl: "./return-recurring-mission-agent-modal.page.html",
@@ -17,16 +16,14 @@ import {v4 as uuidv4} from "uuid";
 export class ReturnRecurringMissionAgentModalPage implements OnInit {
   planning: any;
   images: any = {
-    key_cache_initial_photo: [
-
-    ],
+    key_cache_initial_photo: [],
     key_cache_apartment_num: [],
     key_receipt: []
   };
   isSliderOpen: boolean = false;
   sliderPhotos: any[] = [];
   initialIndexPhoto: number = 0;
-  internal_id: any
+  internal_id: any;
   uuid = uuidv4();
 
   constructor(
@@ -41,8 +38,8 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.planning = this.navParams.get("data");
-      this.internal_id = this.navParams.get("internal_id");
+    this.planning = this.navParams.get("data");
+    this.internal_id = this.navParams.get("internal_id");
     if (!localStorage.getItem(`return_mission_declaration_photos_${this.internal_id}`))
       localStorage.setItem(
         `return_mission_declaration_photos_${this.internal_id}`,
@@ -52,7 +49,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
           key_receipt: []
         })
       );
-    this.addPhotoMaterial()
+    this.addPhotoMaterial();
     this.images = JSON.parse(localStorage.getItem(`return_mission_declaration_photos_${this.internal_id}`)!);
   }
 
@@ -63,22 +60,16 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   addPhotoMaterial() {
     // if(this.images["key_cache_initial_photo"].length >= 1 ) {
     //   console.log(this.images['key_cache_initial_photo'][0]);
-      
+
     // }
 
-    console.log(this.images);
-    
-
     // debugger
-    
+
     this.images["key_cache_initial_photo"].push([
-      {id: this.generateId(), photo: {} },
+      {id: this.generateId(), photo: {}},
       {id: this.generateId(), photo: {}},
       {id: this.generateId(), photo: {}}
     ]);
-    
-    console.log(this.images['key_cache_initial_photo'][0]);    // debugger;
-
   }
   addPhotoGroupKeyDelivery() {
     this.images.key_receipt.push([
@@ -91,7 +82,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   generateUuid() {
     this.uuid = uuidv4();
   }
-  
+
   async takePicture(type: string, i: number, j: number) {
     try {
       const actionSheet = await this.actionSheetController.create({
@@ -168,17 +159,11 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
       ]
     };
 
-
     this.missionService.createReportPhoto(payload, this.internal_id).subscribe({
       next: async data => {
-        console.log(data);
-        
-        
         switch (data[0]["photo_type"]) {
           case "key_cache_initial_photo":
-
-            this.images["key_cache_initial_photo"][i][j] = data[0]
-            
+            this.images["key_cache_initial_photo"][i][j] = data[0];
 
             break;
           case "key_cache_apartment_num":
@@ -188,7 +173,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
             this.images["key_receipt"][i][j] = data[0];
             break;
         }
-        localStorage.setItem(`return_mission_declaration_photos_${this.internal_id}`, JSON.stringify(this.images));        
+        localStorage.setItem(`return_mission_declaration_photos_${this.internal_id}`, JSON.stringify(this.images));
       },
       error: async err => {
         console.error(err);
@@ -213,8 +198,6 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
   }
 
   async openConfirmRemovePhotoModal(event: any, type: string, id: any, i: any, j: number) {
-    console.log(type,id,i,j);
-    
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
       message: "Voulez-vous vraiment supprimer cette photo ?",
@@ -230,7 +213,7 @@ export class ReturnRecurringMissionAgentModalPage implements OnInit {
 
             switch (type) {
               case "key_cache_initial_photo":
-                this.missionService.deletePhoto(id, type,id, type).subscribe({
+                this.missionService.deletePhoto(id, type, id, type).subscribe({
                   next: async value => {
                     // this.clearGroupSlot("key_cache_initial_photo", i, j);
                     // this.persistImages();

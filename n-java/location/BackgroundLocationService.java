@@ -27,9 +27,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BackgroundLocationService extends Service {
@@ -38,17 +43,25 @@ public class BackgroundLocationService extends Service {
     public static final String ACTION_LOCATION = "com.ideogroupev3.app.LOCATION_UPDATE";
     private static final String ACTION_PROCESS_UPDATES = "com.ideogroupev3.app.PROCESS_UPDATES";
 
+    private static final String PREFS_NAME = "BG_LOC_PREFS";
+    private static final String QUEUE_KEY = "unsent_locations";
+
+    private static final int LOCATION_NOTIFICATION_ID = 1001;
+
     private FusedLocationProviderClient fusedClient;
     private PendingIntent locationPendingIntent;
 
     private final AtomicBoolean syncRunning = new AtomicBoolean(false);
     private final Object queueLock = new Object();
+
     private BroadcastReceiver networkReceiver;
+
     private final ExecutorService syncExecutor = Executors.newSingleThreadExecutor();
+    private ScheduledExecutorService periodicSyncExecutor;
 
     private SharedPreferences prefs;
-    private static final String PREFS_NAME = "BG_LOC_PREFS";
-    private static final String QUEUE_KEY = "unsent_locations";
+
+    // ------------------------------------------------------------------------
 
     @Override
     public void onCreate() {
@@ -58,23 +71,17 @@ public class BackgroundLocationService extends Service {
         fusedClient = LocationServices.getFusedLocationProviderClient(this);
 
         createNotificationChannelIfNeeded();
+        startForeground(LOCATION_NOTIFICATION_ID, createNotification("Waiting for location..."));
+
         requestLocationUpdates();
         registerNetworkReceiver();
+        startPeriodicSync();
 
-        Log.d(TAG, "Service onCreate and initialized");
-
-        // Attempt initial sync if online
-        if (isOnline()) {
-            syncExecutor.submit(this::syncQueue);
-        }
+        Log.d(TAG, "BackgroundLocationService started");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand received");
-
-        startForeground(1001, createNotification());
-
         if (intent != null && ACTION_PROCESS_UPDATES.equals(intent.getAction())) {
             LocationResult result = LocationResult.extractResult(intent);
             if (result != null) {
@@ -83,81 +90,93 @@ public class BackgroundLocationService extends Service {
                 }
             }
         }
-
         return START_STICKY;
     }
 
+    // ------------------------------------------------------------------------
+    // LOCATION
+    // ------------------------------------------------------------------------
 
     private void requestLocationUpdates() {
         try {
-            Log.d(TAG, "Requesting location updates");
-            fusedClient.requestLocationUpdates(createLocationRequest(), getLocationPendingIntent());
-        } catch (SecurityException ex) {
-            Log.e(TAG, "Missing location permission. Could not request updates.", ex);
+            LocationRequest request = new LocationRequest.Builder(
+                    Priority.PRIORITY_HIGH_ACCURACY,
+                    60000 // 1 minute
+            )
+                    .setMinUpdateIntervalMillis(60000)
+                    .setMaxUpdateDelayMillis(60000)
+                    .setWaitForAccurateLocation(false)
+                    .build();
+
+            fusedClient.requestLocationUpdates(request, getLocationPendingIntent());
+        } catch (SecurityException e) {
+            Log.e(TAG, "Missing location permission", e);
             stopSelf();
         }
     }
 
-    private LocationRequest createLocationRequest() {
-        return new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 30000) // 30 second interval
-                .setMinUpdateDistanceMeters(5) // 5 meters displacement
-                .build();
-    }
-
     private PendingIntent getLocationPendingIntent() {
-        if (locationPendingIntent != null) {
-            return locationPendingIntent;
-        }
+        if (locationPendingIntent != null) return locationPendingIntent;
+
         Intent intent = new Intent(this, BackgroundLocationService.class);
         intent.setAction(ACTION_PROCESS_UPDATES);
+
         locationPendingIntent = PendingIntent.getService(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+        );
         return locationPendingIntent;
     }
 
     private void onNewLocation(Location loc) {
-        Log.d(TAG, "New location: " + loc.getLatitude() + ", " + loc.getLongitude());
         try {
-            JSONObject item = buildLocationObject(loc);
-            queueLocation(item);
-            broadcastLocation(item);
-            // Trigger a sync if online. The sync itself is debounced.
+            JSONObject point = buildLocationObject(loc);
+
+            queueLocation(point);
+            broadcastLocation(point);
+            updateLocationNotification(point);
+
             if (isOnline()) {
                 syncExecutor.submit(this::syncQueue);
             }
+
+            Log.d(TAG, "Location recorded: " + point.toString());
+
         } catch (Exception e) {
             Log.e(TAG, "onNewLocation error", e);
         }
     }
+    private void broadcastLocation(JSONObject point) {
+        try {
+            Intent intent = new Intent(ACTION_LOCATION);
+            intent.putExtra("data", point.toString());
+            sendBroadcast(intent);
 
-    private void createNotificationChannelIfNeeded() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "location", "Location Tracking", NotificationManager.IMPORTANCE_LOW);
-            getSystemService(NotificationManager.class).createNotificationChannel(channel);
+            Log.d(TAG, "Location broadcasted");
+        } catch (Exception e) {
+            Log.e(TAG, "broadcastLocation failed", e);
         }
-    }
-
-    private Notification createNotification() {
-        return new NotificationCompat.Builder(this, "location")
-                .setContentTitle("Location tracking")
-                .setContentText("Tracking location in background")
-                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .build();
     }
 
     private JSONObject buildLocationObject(Location loc) {
         JSONObject item = new JSONObject();
         try {
-            item.put("id", System.currentTimeMillis());
-            item.put("lat", loc.getLatitude());
-            item.put("lng", loc.getLongitude());
-            item.put("acc", loc.getAccuracy());
-            item.put("time", System.currentTimeMillis());
+            item.put("latitude", loc.getLatitude());
+            item.put("longitude", loc.getLongitude());
+
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US
+            );
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            item.put("recorded_at", sdf.format(new Date(loc.getTime())));
         } catch (Exception ignored) {}
         return item;
     }
+
+    // ------------------------------------------------------------------------
+    // OFFLINE QUEUE
+    // ------------------------------------------------------------------------
 
     private void queueLocation(JSONObject item) {
         synchronized (queueLock) {
@@ -165,48 +184,57 @@ public class BackgroundLocationService extends Service {
                 JSONArray queue = new JSONArray(prefs.getString(QUEUE_KEY, "[]"));
                 queue.put(item);
                 prefs.edit().putString(QUEUE_KEY, queue.toString()).apply();
-                Log.d(TAG, "Queued item. Total: " + queue.length());
             } catch (Exception e) {
                 Log.e(TAG, "queueLocation failed", e);
             }
         }
     }
 
-    private void broadcastLocation(JSONObject item) {
-        Intent i = new Intent(ACTION_LOCATION);
-        i.putExtra("payload", item.toString());
-        sendBroadcast(i);
+    private void syncQueue() {
+        if (!syncRunning.compareAndSet(false, true)) return;
+
+        try {
+            JSONArray queue;
+            synchronized (queueLock) {
+                if (!isOnline()) return;
+                queue = new JSONArray(prefs.getString(QUEUE_KEY, "[]"));
+                if (queue.length() == 0) return;
+            }
+
+            if (uploadBatch(queue)) {
+                synchronized (queueLock) {
+                    prefs.edit().putString(QUEUE_KEY, "[]").apply();
+                    Log.d(TAG, "Queue synced and cleared");
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "syncQueue error", e);
+        } finally {
+            syncRunning.set(false);
+        }
     }
 
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
-        Network network = cm.getActiveNetwork();
-        if (network == null) return false;
-        NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
-        return capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
-    }
-
-    private String getAccessToken() {
-        SharedPreferences capacitorPrefs = getApplicationContext().getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
-        String token = capacitorPrefs.getString("token", null);
-        if (token == null) token = capacitorPrefs.getString("access_token", null);
-        return token;
-    }
+    // ------------------------------------------------------------------------
+    // NETWORK
+    // ------------------------------------------------------------------------
 
     private boolean uploadBatch(JSONArray batch) {
         String token = getAccessToken();
-        if (token == null) {
-            Log.w(TAG, "Cannot upload batch: no token available");
-            return false;
-        }
-        if (batch.length() == 0) {
-            return true; // Nothing to upload
-        }
+        if (token == null || batch.length() == 0) return false;
 
         try {
-            java.net.URL url = new java.net.URL("https://apideo.webo.tn/missions/auto_sync_gps");
-            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            JSONObject body = new JSONObject();
+            body.put("points", batch);
+
+            Log.d(TAG, "Uploading payload: " + body.toString());
+
+            java.net.URL url = new java.net.URL(
+                    "https://demo.ssp-protection.fr/api/v1/pointing_internals/auto_point"
+            );
+            java.net.HttpURLConnection conn =
+                    (java.net.HttpURLConnection) url.openConnection();
+
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(15000);
             conn.setReadTimeout(15000);
@@ -214,96 +242,137 @@ public class BackgroundLocationService extends Service {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 
-            String payload = batch.toString();
-            Log.d(TAG, "Uploading batch of " + batch.length() + " items.");
-
             try (java.io.OutputStream os = conn.getOutputStream()) {
-                os.write(payload.getBytes(StandardCharsets.UTF_8));
+                os.write(body.toString().getBytes(StandardCharsets.UTF_8));
             }
+
             int code = conn.getResponseCode();
-            Log.d(TAG, "Upload batch response code: " + code);
+            Log.d(TAG, "Upload response code: " + code);
+
             return code >= 200 && code < 300;
+
         } catch (Exception e) {
             Log.e(TAG, "uploadBatch failed", e);
             return false;
         }
     }
 
-    private void syncQueue() {
-        if (!syncRunning.compareAndSet(false, true)) {
-            Log.d(TAG, "Sync already running, skipping.");
-            return;
-        }
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
 
-        JSONArray queueToUpload;
+        Network net = cm.getActiveNetwork();
+        if (net == null) return false;
 
+        NetworkCapabilities caps = cm.getNetworkCapabilities(net);
+        return caps != null &&
+                (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                        || caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
+    }
+
+    private String getAccessToken() {
+        SharedPreferences cap =
+                getSharedPreferences("CapacitorStorage", MODE_PRIVATE);
+        return cap.getString("access_token", null);
+    }
+
+    // ------------------------------------------------------------------------
+    // PERIODIC SYNC (EVERY MINUTE)
+    // ------------------------------------------------------------------------
+
+    private void startPeriodicSync() {
+        periodicSyncExecutor = Executors.newSingleThreadScheduledExecutor();
+        periodicSyncExecutor.scheduleAtFixedRate(() -> {
+            if (isOnline()) {
+                Log.d(TAG, "Periodic sync triggered");
+                syncExecutor.submit(this::syncQueue);
+            }
+        }, 1, 1, TimeUnit.MINUTES);
+    }
+
+    // ------------------------------------------------------------------------
+    // NOTIFICATIONS
+    // ------------------------------------------------------------------------
+
+    private void updateLocationNotification(JSONObject point) {
         try {
-            synchronized (queueLock) {
-                if (!isOnline()) {
-                    return;
-                }
-                String queueString = prefs.getString(QUEUE_KEY, "[]");
-                queueToUpload = new JSONArray(queueString);
-                if (queueToUpload.length() == 0) {
-                    return; // Nothing to sync
-                }
-            }
+            String text =
+                    "Lat: " + point.getDouble("latitude") +
+                            "\nLng: " + point.getDouble("longitude") +
+                            "\nAt: " + point.getString("recorded_at");
 
-            boolean success = uploadBatch(queueToUpload);
+            Notification notification = new NotificationCompat.Builder(this, "location")
+                    .setContentTitle("Location recorded")
+                    .setContentText("Lat: " + point.getDouble("latitude")
+                            + ", Lng: " + point.getDouble("longitude"))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                    .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                    .setOngoing(true)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .build();
 
-            if (success) {
-                // If upload was successful, remove the sent items from the master queue
-                synchronized (queueLock) {
-                    JSONArray masterQueue = new JSONArray(prefs.getString(QUEUE_KEY, "[]"));
-                    JSONArray newQueue = new JSONArray();
-                    HashSet<Long> sentIds = new HashSet<>();
-                    for (int i = 0; i < queueToUpload.length(); i++) {
-                        sentIds.add(queueToUpload.getJSONObject(i).getLong("id"));
-                    }
-                    for (int i = 0; i < masterQueue.length(); i++) {
-                        if (!sentIds.contains(masterQueue.getJSONObject(i).getLong("id"))) {
-                            newQueue.put(masterQueue.getJSONObject(i));
-                        }
-                    }
-                    prefs.edit().putString(QUEUE_KEY, newQueue.toString()).apply();
-                    Log.d(TAG, "Batch upload successful. New queue size: " + newQueue.length());
-                }
-            } else {
-                Log.w(TAG, "Batch upload failed. Items remain in queue.");
-            }
+            NotificationManager nm =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.notify(LOCATION_NOTIFICATION_ID, notification);
+
         } catch (Exception e) {
-            Log.e(TAG, "Exception during syncQueue", e);
-        } finally {
-            syncRunning.set(false);
+            Log.e(TAG, "updateLocationNotification failed", e);
         }
     }
 
+    private Notification createNotification(String text) {
+        return new NotificationCompat.Builder(this, "location")
+                .setContentTitle("Location tracking active")
+                .setContentText(text)
+                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                .setOngoing(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build();
+    }
+
+    private void createNotificationChannelIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "location",
+                    "Location Tracking",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            getSystemService(NotificationManager.class)
+                    .createNotificationChannel(channel);
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    // NETWORK RECEIVER
+    // ------------------------------------------------------------------------
 
     private void registerNetworkReceiver() {
-        if (networkReceiver != null) return;
         networkReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
+            public void onReceive(Context c, Intent i) {
                 if (isOnline()) {
-                    Log.d(TAG, "Network is back online. Triggering sync.");
                     syncExecutor.submit(BackgroundLocationService.this::syncQueue);
                 }
             }
         };
-        registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        registerReceiver(
+                networkReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        );
     }
+
+    // ------------------------------------------------------------------------
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        Log.w(TAG, "Service destroyed. Cleaning up.");
         if (fusedClient != null && locationPendingIntent != null) {
             fusedClient.removeLocationUpdates(locationPendingIntent);
         }
-        if (networkReceiver != null) {
-            unregisterReceiver(networkReceiver);
-        }
+        if (networkReceiver != null) unregisterReceiver(networkReceiver);
+        if (periodicSyncExecutor != null) periodicSyncExecutor.shutdownNow();
         syncExecutor.shutdownNow();
+        super.onDestroy();
     }
 
     @Nullable

@@ -53,7 +53,6 @@ export class MakeRequestPage implements OnInit {
   ngOnInit() {
     this.absences = this.navParams.get("absences");
     this.absenceToUpdate = this.navParams.get("update");
-    console.log("this.absenceToUpdate ", this.absenceToUpdate);
     if (this.absenceToUpdate) {
       this.selectedEndDate = this.absenceToUpdate.date_end;
       this.selectedStartDate = this.absenceToUpdate.date_start;

@@ -20,26 +20,22 @@ export class ChatRepository implements ChatInterface {
   }
 
   room(sender_id: number, recipient_id: number): Observable<any> {
-    return this.httpClient.get<any>(`${environment.urlAPI}chat/room/${sender_id}/${recipient_id}`);
+    return this.httpClient.get<any>(`${environment.newApiUrl}chat/room/${sender_id}/${recipient_id}`);
   }
 
   getUsers(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${environment.urlAPI}/chat/users`);
+    return this.httpClient.get<any[]>(`${environment.newApiUrl}chat/users`);
   }
 
   loadMoreMessages(room_id: number, last_message_id: any): Observable<any> {
-    return this.httpClient.get<any>(`${environment.urlAPI}chat/load_more_messages/${room_id}/${last_message_id}`);
-  }
-
-  setReadsAt(formData: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.urlAPI}chat/set_reads_at`, formData);
+    return this.httpClient.get<any>(`${environment.newApiUrl}chat/load_more_messages/${room_id}/${last_message_id}`);
   }
 
   checkReadsAt(data: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.urlAPI}chat/check_reads_at`, data);
+    return this.httpClient.post<any>(`${environment.newApiUrl}chat/check_reads_at`, data);
   }
 
   updateReadsAt(data: any): Observable<any> {
-    return this.httpClient.patch<any>(`${environment.urlAPI}chat/update_reads_at`, {ids: data, reads_at: new Date().toISOString()});
+    return this.httpClient.patch<any>(`${environment.newApiUrl}chat/update_reads_at`, {ids: data, reads_at: new Date().toISOString()});
   }
 }
