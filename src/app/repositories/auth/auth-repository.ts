@@ -67,14 +67,14 @@ export class AuthRepository implements AuthInterface {
           value: res.token
         });
       }),
-      switchMap(res => {
-        console.log(res.user);
-        if (res?.user?.role === "supervisor") {
-          return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, acessSupervisor);
-        } else {
-          return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, acessAagent);
-        }
-      })
+      // switchMap(res => {
+      //   console.log(res.user);
+      //   if (res?.user?.role === "supervisor") {
+      //     return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, acessSupervisor);
+      //   } else {
+      //     return this.http.post<AuthResponse>(`${this.apiUrl}auth/login`, acessAagent);
+      //   }
+      // })
     );
   }
 }

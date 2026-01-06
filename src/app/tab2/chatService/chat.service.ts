@@ -86,17 +86,12 @@ export class ChatService implements ChatInterface {
 
     this.loadUsers();
   }
-  voice(data: FormData): Observable<any> {
-    return this.chatRepository.voice(data);
+
+
+  attachments(data: FormData): Observable<any> {
+    return this.chatRepository.attachments(data);
   }
 
-  images(data: FormData): Observable<any> {
-    return this.chatRepository.images(data);
-  }
-
-  file(data: FormData): Observable<any> {
-    return this.chatRepository.file(data);
-  }
 
   room(sender_id: number, recipient_id: number): Observable<any> {
     return this.chatRepository.room(sender_id, recipient_id);
