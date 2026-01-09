@@ -8,6 +8,7 @@ import {Network} from "@capacitor/network";
 import {ChatService} from "./tab2/chatService/chat.service";
 
 import {Platform} from "@ionic/angular";
+import {PushService} from "./widgets/push/push.service";
 
 @Component({
   selector: "app-root",
@@ -25,7 +26,8 @@ export class AppComponent implements OnInit {
     private photoReportService: PhotoReportService,
     private googleMapsLoader: GoogleMapsLoaderService,
     private chatService: ChatService,
-    private platform: Platform
+    private platform: Platform,
+    private pushService: PushService
   ) {
     this.translate.setDefaultLang("fr");
   }
@@ -33,6 +35,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this.loaded = true;
     await this.platform.ready();
+    this.pushService.initPush();
     // await this.sqliteService.initDB();
     // await this.sqliteService.listTables();
     await this.photoReportService.detectNetworksStatusChange();

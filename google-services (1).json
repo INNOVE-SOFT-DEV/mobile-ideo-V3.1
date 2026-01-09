@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "441687306980",
+    "firebase_url": "https://ideogroupe-54496-default-rtdb.firebaseio.com",
+    "project_id": "ideogroupe-54496",
+    "storage_bucket": "ideogroupe-54496.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441687306980:android:c85b51294e7a1a0aa132f1",
+        "android_client_info": {
+          "package_name": "com.ideogroupe.app2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiSw8RfO-OJyBzOvGsuKigpZl5Er5MF8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441687306980:android:9832b8fb908aaf09a132f1",
+        "android_client_info": {
+          "package_name": "com.ideogroupev3.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiSw8RfO-OJyBzOvGsuKigpZl5Er5MF8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
