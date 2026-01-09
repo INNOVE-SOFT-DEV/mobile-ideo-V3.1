@@ -146,9 +146,8 @@ export class MenuMessionPage implements OnInit {
       const formData = new FormData();
       formData.append("extracted_text", this.extractedText);
       formData.append("image", blob, new Date().getTime() + ".jpg");
-      formData.append("planning_id", this.planning.id);
-      formData.append("planning_type", this.planningType);
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      formData.append("schedule_id", this.planning.today_schedule.id);
+      const user = JSON.parse(localStorage.getItem("user-v3") || "{}");
       formData.append("user_id", user.id); // Example user ID
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {

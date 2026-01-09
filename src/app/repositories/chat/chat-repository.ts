@@ -8,12 +8,9 @@ import {environment} from "src/environments/environment";
 export class ChatRepository implements ChatInterface {
   constructor(private httpClient: HttpClient) {}
 
-
   attachments(data: FormData): Observable<any> {
     return this.httpClient.post<any>(`${environment.newApiUrl}chat/attachments`, data);
   }
-
-  
 
   room(sender_id: number, recipient_id: number): Observable<any> {
     return this.httpClient.get<any>(`${environment.newApiUrl}chat/room/${sender_id}/${recipient_id}`);

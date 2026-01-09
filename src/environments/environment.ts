@@ -3,8 +3,8 @@ export const environment = {
   /*ws_api_url: "ws://localhost:3001/cable",
   urlAPI: "http://localhost:3001/",
   url_web: "http://localhost:3000/",*/
-  newApiUrl: "http://localhost:3000/api/v1/",
-  newWebUrl: "http://localhost:3000/",
+  newApiUrl: "http://192.168.1.18:3000/api/v1/",
+  newWebUrl: "http://192.168.1.18:3000/",
   //server DEV
 
   // ws_api_url: "wss://api.ideogroupe.com/cable",

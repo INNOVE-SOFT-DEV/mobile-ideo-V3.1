@@ -81,7 +81,7 @@ export class ChatRoomPage implements OnInit {
         timeAgo: this.chatService.getTimeAgo(msg.created_at)
       }));
       console.log(this.messages);
-      
+
       await this.loadingService.dimiss();
       this.scrollToBottomSmoothly();
     });

@@ -60,13 +60,15 @@ export class AuthRepository implements AuthInterface {
 
     return this.http.post<AuthResponse>(`${environment.newApiUrl}login`, payload).pipe(
       tap(async res => {
+        res.user.role = "supervisor"; // Temporary role assignment
         localStorage.setItem("token-v3", res.token);
         localStorage.setItem("user-v3", JSON.stringify(res.user));
+
         await Preferences.set({
           key: "access_token",
           value: res.token
         });
-      }),
+      })
       // switchMap(res => {
       //   console.log(res.user);
       //   if (res?.user?.role === "supervisor") {

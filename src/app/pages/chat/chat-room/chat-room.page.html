@@ -9,7 +9,7 @@
 
     <ion-title class="center-title">{{user?.first_name}} {{user?.last_name}}</ion-title>
   </ion-toolbar>
-</ion-header> 
+</ion-header>
 
 <ion-content class="chat-content ion-padding" [fullscreen]="true" *ngIf="!isSliderOpen" (click)="closeFab()">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -33,9 +33,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
         <div class="msg-text">{{message.content}}</div>
@@ -58,9 +56,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-text">{{message.content}}</div>
         <div class="msg-time-s">{{message.timeAgo}}</div>
@@ -84,9 +80,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
         <audio class="msg-audio" src="{{message.voice}}" controls></audio>
@@ -109,9 +103,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <audio class="msg-audio audio-sender" src="{{message.voice}}" controls></audio>
         <div class="msg-time-s audio-time">{{message.timeAgo}}</div>
@@ -135,9 +127,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
         <img src="{{message.images[0]}}" class="msg-image" (click)="openImageSlider(message.images)" />
@@ -164,9 +154,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <img src="{{message.images[0]}}" class="msg-image" (click)="openImageSlider(message.images)" />
         <ion-chip *ngIf="message.images.length > 1" class="many-imgs" (click)="openImageSlider(message.images)">
@@ -194,9 +182,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
 
@@ -223,9 +209,7 @@
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
           <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
           <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}
-          </p>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-text msg-doc" (click)="openDoc(message.document)">
           <ion-icon name="document-text-outline"></ion-icon>
