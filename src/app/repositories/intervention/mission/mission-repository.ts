@@ -225,6 +225,8 @@ export class MissionRepository implements MissionInterface {
   }
 
   deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any> {
+    console.log(uuid);
+    
     const params = new HttpParams().set("photo_type", typePhoroto).set("client_uuid", uuid);
     return this.http.delete(`${this.newApiUrl}pointing_internals/delete_photo`, {params});
 

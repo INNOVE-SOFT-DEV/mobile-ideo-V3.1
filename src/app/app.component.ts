@@ -49,10 +49,10 @@ export class AppComponent implements OnInit {
         }
       }
     });
-    this.geolocationService.getApiKey().subscribe((res: any) => {
-      if (res) {
-        this.googleMapsLoader.load(res);
-      }
-    });
+    //  this.googleMapsLoader.load(res);
+    // this.geolocationService.getApiKey().subscribe((res: any) => {
+    //   if (res) {
+    //   }
+    // });
   }
 }

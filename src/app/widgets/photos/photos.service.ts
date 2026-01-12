@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
+import {Camera, CameraDirection, CameraResultType, CameraSource} from "@capacitor/camera";
 
 @Injectable({
   providedIn: "root"
@@ -29,7 +29,8 @@ export class PhotosService {
         presentationStyle: "fullscreen",
         allowEditing: false,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Camera
+        source: CameraSource.Camera,
+        direction: CameraDirection.Rear
       });
     } else {
       this.lastImage = await Camera.getPhoto({

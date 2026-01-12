@@ -89,10 +89,17 @@ export class Tab1Page implements OnInit, OnDestroy {
   }
 
   foramtplannings(data: any) {
+    console.log(data);
+    
     this.noSchedule = 0;
     return data.map((element: any) => {
       element["showDetails"] = false;
       element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null;
+      element["today_schedule"]['agents']?.forEach((agent: any) => {
+        agent.first_name = agent.full_name.split(" ")[0];
+        agent.last_name = agent.full_name.split(" ")[1] || "";
+        agent.role = agent['role_name']
+      });
 
       let subcontractors: any[] = [];
       if (element["today_schedule"] == null) {

@@ -14,6 +14,7 @@ import {Ocr} from "@capacitor-community/image-to-text";
 import {OcrService} from "../../ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
+import { ChatService } from "src/app/tab2/chatService/chat.service";
 
 @Component({
   selector: "app-details",
@@ -47,7 +48,8 @@ export class DetailsPage implements OnInit {
     private location: Location,
     private ocrService: OcrService,
     private toast: ToastControllerService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private chatService: ChatService
   ) {}
 
   async ngOnInit() {
@@ -70,6 +72,7 @@ export class DetailsPage implements OnInit {
   async refreshLocalData() {
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
+    console.log("Planning details loaded:", this.planning?.today_schedule?.id);
     this.planningType = cached.planningType;
     this.setupPhotos();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");

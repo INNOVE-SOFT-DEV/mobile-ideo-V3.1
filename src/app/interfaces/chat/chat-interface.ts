@@ -7,4 +7,5 @@ export interface ChatInterface {
   loadMoreMessages(room_id: any, last_message_id: any): Observable<any>;
   checkReadsAt(data: any): Observable<any>;
   updateReadsAt(data: any): Observable<any>;
+  scheduleRoom(schedule_id: number): Observable<any>;
 }

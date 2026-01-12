@@ -86,6 +86,9 @@ export class ChatService implements ChatInterface {
 
     this.loadUsers();
   }
+  scheduleRoom(schedule_id: number): Observable<any> {
+    return this.chatRepository.scheduleRoom(schedule_id);
+  }
 
   attachments(data: FormData): Observable<any> {
     return this.chatRepository.attachments(data);

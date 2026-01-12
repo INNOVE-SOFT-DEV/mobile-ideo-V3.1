@@ -317,6 +317,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     uuid: string,
     checkGroupedRemoval?: () => boolean
   ): Promise<void> {
+    console.log(uuid , photo , typePhoroto , type , index , checkGroupedRemoval);
+    
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
       message: "Voulez-vous vraiment supprimer cette photo ?",
@@ -338,8 +340,11 @@ export class PhotoReportPage implements OnInit, OnDestroy {
               return;
             }
             const photoId = this.getPhotoIdFromUrl(photo.url);
+            console.log(uuid);
+            
             await this.loadingService.present(this.loadingMessage);
-
+            console.log(photo.client_uuid);
+            
             this.missionsService.deletePhoto(photoId, this.planningType, uuid, typePhoroto).subscribe({
               next: async () => {
                 await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
@@ -488,7 +493,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     });
   }
 
-  async deletePhoto(type: string, i: number, uuid: string) {
+  async deletePhoto(type: string, i: number, uuid: string , photo: any) {
+    console.log(photo);
+    uuid = photo?.client_uuid;  
+    
     let targetPhoto: any;
     let photosArray: any;
     let typePhoroto: string = "";
@@ -520,7 +528,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       console.warn(`Photo object or array not found for type: ${type}, index: ${i}. Cannot proceed with deletion.`);
       return;
     }
-
-    await this.performDeletePhoto(targetPhoto, photosArray, type, i, typePhoroto, uuid, checkGroupedRemoval);
+     console.log(photo);
+    await this.performDeletePhoto(targetPhoto, photosArray, type, i, typePhoroto, photo[0].client_uuid, checkGroupedRemoval);
   }
 }
