@@ -95,7 +95,7 @@ export class PhotoReportService {
             if (!item?.photo) continue;
             const photo = item.photo;
             if (!this.isRemote(photo)) continue;
-            const uuid = photo.client_uuid || this.generateUniqueId();
+            console.log("🔄 Synchronisation de la photo:", item);
             const fileData = await this.fs.readSecretFile(photo.path);
             const type = item.photo_type === "photo_before" ? "before" : "after";
             const imageBase64 = fileData.startsWith("data:image") ? fileData : `data:image/jpeg;base64,${fileData}`;
@@ -103,7 +103,7 @@ export class PhotoReportService {
               photo: [
                 {
                   photo_type: type,
-                  client_uuid: uuid,
+                  client_uuid: item.client_uuid ,
                   image_base64: imageBase64
                 }
               ]
@@ -367,7 +367,8 @@ export class PhotoReportService {
     return updatedClientUuids;
   }
 
-  uploadImagetoApi(base64String: any, type: string, currentDate: any) {
+  uploadImagetoApi(base64String: any, type: string, currentDate: any , clientUuid?: string) {
+    console.log("uploadImagetoApi clientUuid:", clientUuid);
     const uniqueId = this.generateUniqueId();
     type = type === "photo_before" ? "before" : type === "photo_truck" ? "truck" : "after";
 
@@ -377,7 +378,7 @@ export class PhotoReportService {
       photo: [
         {
           photo_type: type,
-          client_uuid: uniqueId,
+          client_uuid: clientUuid ,
           image_base64: imageBase64
         }
       ]

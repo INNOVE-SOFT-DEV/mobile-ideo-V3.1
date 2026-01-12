@@ -174,14 +174,16 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
-    if (this.isConneted) {
+    if (false) {
       let client_uuid = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
       } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
       }
-      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate);
+      console.log(client_uuid);
+      console.log(this.grouped_presentation_photos[this.grouped_presentation_photos.length - 1][0].client_uuid);
+      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate ,this.grouped_presentation_photos[this.grouped_presentation_photos.length - 1][0].client_uuid)
       const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
       let form = data;
       if (hasAfterOrBefore) {
@@ -213,6 +215,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } else {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
       if (url) {
+        console.log(this.grouped_presentation_photos[i][0].client_uuid);
+        
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][0].photo.path = url.path;
