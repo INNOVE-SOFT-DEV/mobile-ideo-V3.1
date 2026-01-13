@@ -76,3 +76,38 @@ ion-datetime {
 .custom-picker-popover ion-picker {
   width: 320px !important;
 }
+
+
+
+
+.custom-toast-success,
+.custom-toast-warning,
+.custom-toast-danger {
+  --background: white;
+  --color: black;
+  --border-radius: 8px;
+  --box-shadow: 0 0 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 16px;
+  font-size: 14px;
+  box-sizing: border-box;
+  top:-10%
+}
+.custom-toast-success {
+  --box-shadow: 0 0 0 2px #2dd36f;
+}
+.custom-toast-danger {
+  --box-shadow: 0 0 0 2px #eb445a;
+}
+.custom-toast-warning{
+  --box-shadow: 0 0 0 2px #ddd;
+}
+.custom-toast-warning::before,
+.custom-toast-success::before,
+.custom-toast-danger::before {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 18px;
+}
