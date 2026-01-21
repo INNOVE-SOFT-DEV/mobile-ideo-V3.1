@@ -14,7 +14,7 @@
     <p><span class="cls-b">{{'My profile' | translate}}</span></p>
     <div class="cls-avatar-wrapper" (click)="uploadProfilePic()">
       <div class="cls-avatar">
-        <ion-img [src]="user?.photo?.url ? user?.photo?.url : 'assets/img/icone-pdf.png'" class="img-avatar"></ion-img>
+        <ion-img [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'" class="img-avatar"></ion-img>
       </div>
       <ion-icon name="create-outline" class="edit-icon"></ion-icon>
     </div>

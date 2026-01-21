@@ -11,6 +11,7 @@ import {Preferences} from "@capacitor/preferences";
 })
 export class AuthRepository implements AuthInterface {
   private apiUrl = `${environment.urlAPI}`;
+  private newApiUrl = `${environment.newApiUrl}`;
 
   constructor(private http: HttpClient) {}
   logOut(): Observable<any> {
@@ -40,7 +41,8 @@ export class AuthRepository implements AuthInterface {
   }
 
   updateProfilePicture(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}user/update_profile_picture`, data);
+    const userId = data.get("userId");
+    return this.http.post<any>(`${this.newApiUrl}users/${userId}/update_photo`, data);
   }
   getVehicleHistiory(date?: string): Observable<any> {
     const month = date ? date : "";
@@ -52,7 +54,7 @@ export class AuthRepository implements AuthInterface {
   }
 
   updateProfile(data: any): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}user/update_user_data`, data);
+    return this.http.put<User>(`${this.newApiUrl}users/update`, data);
   }
   login(payload: any): Observable<AuthResponse> {
     const acessAagent = {email: "c@c.com", password: "123456"};
