@@ -111,7 +111,7 @@ export class UpdateProfilePage implements OnInit {
         password: this.password,
         user_id: this.user.id
       };
-      this.authService.updateProfile(data).subscribe({
+      this.authService.updateProfile(data, this.user.id).subscribe({
         next: (response: any) => {
           this.toastController.presentToast(this.successMessage, "success");
           this.loading = false;
