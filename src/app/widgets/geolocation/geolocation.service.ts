@@ -13,7 +13,7 @@ export class GeolocationService implements OnDestroy {
   private apiUrl = `${environment.urlAPI}`;
 
   constructor(private http: HttpClient) {
-    this.init();  
+    this.init();
   }
 
   async init() {
@@ -60,7 +60,7 @@ export class GeolocationService implements OnDestroy {
         enableHighAccuracy: false,
         timeout: 60000,
         maximumAge: 0
-      });      
+      });
       this.coordinates = coordinates.coords;
     } catch (err) {
       console.trace("Failed to get location:", err);

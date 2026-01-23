@@ -14,7 +14,7 @@ import {Ocr} from "@capacitor-community/image-to-text";
 import {OcrService} from "../../ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
-import { ChatService } from "src/app/tab2/chatService/chat.service";
+import {ChatService} from "src/app/tab2/chatService/chat.service";
 
 @Component({
   selector: "app-details",

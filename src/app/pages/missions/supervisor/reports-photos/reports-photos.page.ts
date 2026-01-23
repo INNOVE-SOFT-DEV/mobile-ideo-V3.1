@@ -113,6 +113,8 @@ export class ReportsPhotosPage implements OnInit {
 
     this.missionService.getPhotoReportsSupervisor(this.planning.type, scheduleId).subscribe(
       async (data: any[]) => {
+        console.log(data);
+
         this.images = [];
         this.imagesCamions = [];
 
@@ -134,6 +136,7 @@ export class ReportsPhotosPage implements OnInit {
           if (Array.isArray(agent.photos_truck)) {
             agent.photos_truck.forEach((photo: any) => {
               this.imagesCamions.push({
+                id: photo.id,
                 url: photo.image_url?.url || null,
                 agent: agent.agent
               });
@@ -180,19 +183,22 @@ export class ReportsPhotosPage implements OnInit {
   }
 
   sendReport() {
+    console.log(this.planning);
+    
     this.router.navigate([
       "/send-report",
       {
         data: JSON.stringify({
           planning_type: this.planning.type,
           planning_id: this.planning.id,
-          intervention_id: this.planning.intervention_id,
+          intervention_id: this.planning.intervention.id,
           date: this.planning.date,
           client_logo_url: this.planning?.logo?.url,
-          intervention_name: this.planning?.intervention_name,
+          intervention_name: this.planning?.intervention.name,
           contacts: this.planning?.contacts,
           prestation: this.planning?.prestation,
           prestation_id: this.planning?.prestation_id,
+          logo: this.planning?.intervention?.logos.thumb,
           intervention_days: this.planning.type == "regular" ? this.planning.intervention_days : ""
         })
       }
@@ -257,12 +263,24 @@ export class ReportsPhotosPage implements OnInit {
   }
 
   async downloadZip() {
+    const imageTozip = this.images.map(item => {
+      item.before.photo = item.before.image_url;
+      item.after.photo = item.after.image_url;
+
+      return [item.before, item.after];
+    });
+
     await this.photoReportService.downloadZip(
-      this.images.filter((group: any) => group[0]?.no_include == false || group[1]?.no_include == false),
-      this.imagesCamions.filter((group: any) => group?.no_include == false),
-      this.planning.intervention_name,
+      this.images.map(item => {
+        item.before.photo = item.before.image_url;
+        item.after.photo = item.after.image_url;
+
+        return [item.before, item.after];
+      }),
+      this.imagesCamions,
+      this.planning.intervention.name,
       this.planning.type,
-      this.planning.date || ""
+      this.planning.today_schedule.date || ""
     );
   }
 }

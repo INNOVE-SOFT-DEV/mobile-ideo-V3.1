@@ -30,61 +30,61 @@ export class ChatService implements ChatInterface {
     private router: Router
   ) {
     this.current_user = this.authService.getCurrentUser();
-    this.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-    this.channel = this.cable.subscriptions.create(
-      {channel: "ChatChannel", userId: this.current_user?.id},
-      {
-        received: (data: any) => {
-          if (data.message) {
-            this.newMessage.emit(data.message);
-            const formData = new FormData();
-            formData.append("message_id", data.message.id.toString());
-            formData.append("room_id", data.message.room_id.toString());
-            formData.append("sender_id", data.message.sender_id.toString());
-            this.checkReadsAt(formData).subscribe();
-            this.loadUsers();
-            const users = [...this.usersSubject.value];
-            const index = users.findIndex(u => u.room_id === data.message.room_id);
-            if (index > -1) {
-              const [user] = users.splice(index, 1);
-              user?.reads_count ? (user.reads_count += 1) : null;
-              user?.reads_ids?.push(data.message.id);
-              users.unshift(user);
-            }
-            this.usersSubject.next(users);
-          }
-          if (data.online_user_ids) {
-            this.lastOnlineIds = data.online_user_ids;
-            this.updateOnlineStatuses();
-            this.updateStatus.emit(data.online_user_ids);
-          }
-          if (data?.type == "ping_user") {
-            const currentUrl = this.router.url;
-            const dataParam = currentUrl.split(";").find(part => part.startsWith("data="));
-            let body: any = {
-              message_id: data.message_id,
-              user_id: data.recipient_id,
-              room_id: data.room_id
-            };
+    // this.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+    // this.channel = this.cable.subscriptions.create(
+    //   {channel: "ChatChannel", userId: this.current_user?.id},
+    //   {
+    //     received: (data: any) => {
+    //       if (data.message) {
+    //         this.newMessage.emit(data.message);
+    //         const formData = new FormData();
+    //         formData.append("message_id", data.message.id.toString());
+    //         formData.append("room_id", data.message.room_id.toString());
+    //         formData.append("sender_id", data.message.sender_id.toString());
+    //         this.checkReadsAt(formData).subscribe();
+    //         this.loadUsers();
+    //         const users = [...this.usersSubject.value];
+    //         const index = users.findIndex(u => u.room_id === data.message.room_id);
+    //         if (index > -1) {
+    //           const [user] = users.splice(index, 1);
+    //           user?.reads_count ? (user.reads_count += 1) : null;
+    //           user?.reads_ids?.push(data.message.id);
+    //           users.unshift(user);
+    //         }
+    //         this.usersSubject.next(users);
+    //       }
+    //       if (data.online_user_ids) {
+    //         this.lastOnlineIds = data.online_user_ids;
+    //         this.updateOnlineStatuses();
+    //         this.updateStatus.emit(data.online_user_ids);
+    //       }
+    //       if (data?.type == "ping_user") {
+    //         const currentUrl = this.router.url;
+    //         const dataParam = currentUrl.split(";").find(part => part.startsWith("data="));
+    //         let body: any = {
+    //           message_id: data.message_id,
+    //           user_id: data.recipient_id,
+    //           room_id: data.room_id
+    //         };
 
-            if (dataParam) {
-              const encoded = dataParam.replace("data=", "");
-              const decoded = decodeURIComponent(encoded);
-              const dataObject = JSON.parse(decoded);
-              if (dataObject.room_id == data.room_id) {
-                body.reads_at = new Date().toISOString();
-              }
-            }
+    //         if (dataParam) {
+    //           const encoded = dataParam.replace("data=", "");
+    //           const decoded = decodeURIComponent(encoded);
+    //           const dataObject = JSON.parse(decoded);
+    //           if (dataObject.room_id == data.room_id) {
+    //             body.reads_at = new Date().toISOString();
+    //           }
+    //         }
 
-            this.channel.perform("ping_response", body);
-          }
-        },
-        connected: () => {},
-        disconnected: () => {}
-      }
-    );
+    //         this.channel.perform("ping_response", body);
+    //       }
+    //     },
+    //     connected: () => {},
+    //     disconnected: () => {}
+    //   }
+    // );
 
-    this.loadUsers();
+    // this.loadUsers();
   }
   scheduleRoom(schedule_id: number): Observable<any> {
     return this.chatRepository.scheduleRoom(schedule_id);
