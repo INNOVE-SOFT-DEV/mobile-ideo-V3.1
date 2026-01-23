@@ -113,7 +113,7 @@
       <div class="recording-card" *ngIf="audioUrl?.url?.includes('http')">
       
         <!-- Play / Pause -->
-        <div class="play-btn" (click)="togglePlay()">
+        <div class="play-btn" (click)="playRecordingAgain()">
           <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
         </div>
       
@@ -123,15 +123,13 @@
         </span>
       
         <!-- Wave -->
-        <div class="waveform">
-          <span *ngFor="let bar of bars"></span>
+        <div id="waveform">
         </div>
       
         <!-- Audio réel -->
-        <audio #audioPlayer [src]="audioUrl.url"></audio>
-      
-      </div>
-
+        
+  
+          </div>
       
     </ion-card>
 
