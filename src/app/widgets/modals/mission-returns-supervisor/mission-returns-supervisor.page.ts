@@ -124,10 +124,14 @@ export class MissionReturnsSupervisorPage implements OnInit {
     this.waveSurfer?.destroy();
     this.waveSurfer = WaveSurfer.create({
       container: "#waveform",
-      waveColor: "violet",
-      progressColor: "purple"
+      waveColor: "white",
+      progressColor: "gray",
+      normalize: true,
+      height: 52,
+      barWidth: 3,
+      barRadius: 3,
+      
     });
-
     this.waveSurfer.on("audioprocess", () => {
       if (this.waveSurfer) {
         const currentTime = this.waveSurfer.getCurrentTime();
@@ -136,12 +140,14 @@ export class MissionReturnsSupervisorPage implements OnInit {
     });
 
     this.waveSurfer.on("finish", () => {
+      this.isPlaying = false;
       this.getAudioDurationWithFetch();
     });
   }
 
   playRecordingAgain() {
     if (this.waveSurfer && this.audioUrl?.url) {
+      this.isPlaying = true;
       this.waveSurfer.playPause();
     }
   }
