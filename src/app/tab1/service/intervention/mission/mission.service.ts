@@ -52,8 +52,8 @@ export class MissionService implements MissionInterface {
   getAgentReport(id: number, type: string): Observable<any> {
     return this.missionRepo.getAgentReport(id, type);
   }
-  syncPhotos(data: any): Observable<any> {
-    return this.missionRepo.syncPhotos(data);
+  syncPhotos(data: any, internal: any): Observable<any> {
+    return this.missionRepo.syncPhotos(data, internal);
   }
 
   getPointAgents(data: any): Observable<any> {

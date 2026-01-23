@@ -44,8 +44,8 @@ export class MissionRepository implements MissionInterface {
   getAgentReport(id: number, type: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
   }
-  syncPhotos(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}photos_report/sync_photos`, data);
+  syncPhotos(data: any, internal: any): Observable<any> {
+    return this.http.post<any>(`${this.newApiUrl}pointing_internals/${internal}/sync_report`, data);
   }
 
   getPointAgents(data: any): Observable<any> {
@@ -225,13 +225,15 @@ export class MissionRepository implements MissionInterface {
   }
 
   deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any> {
+    console.log(uuid);
+
     const params = new HttpParams().set("photo_type", typePhoroto).set("client_uuid", uuid);
-    return this.http.delete(`${this.newApiUrl}pointing_internals/delete_photo`, {params});
+    return this.http.delete(`${this.newApiUrl}pointing_internals/delete_photo/${id}`, );
 
     //return this.http.delete<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
   }
   getPhotoReport(id: number, type: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
+    return this.http.get<any>(`${this.newApiUrl}pointing_internals/${id}/photos`);
   }
   createReportPhoto(data: any, id: any): Observable<any> {
     return this.http.post<any>(`${this.newApiUrl}pointing_internals/${id}/upload_photo`, data);

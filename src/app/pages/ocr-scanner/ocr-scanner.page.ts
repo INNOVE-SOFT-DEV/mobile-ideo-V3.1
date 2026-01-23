@@ -5,6 +5,7 @@ import {LoadingController, ModalController} from "@ionic/angular";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
+import {environment} from "src/environments/environment";
 
 @Component({
   selector: "app-ocr-scanner",
@@ -25,8 +26,10 @@ export class OcrScannerPage implements OnInit {
     private toast: ToastControllerService
   ) {}
   ngOnInit() {
+    console.log(this.result);
+
     const recipe = this.result?.data?.recipe || {};
-    this.imageUrl = this.result?.data?.file_url || "";
+    this.imageUrl = `${environment.newWebUrl}${this.result?.data?.image_url}`;
 
     this.form = this.fb.group({
       price: [recipe.price || ""],
@@ -39,6 +42,7 @@ export class OcrScannerPage implements OnInit {
     if (!this.form.valid) return;
 
     const payload = this.form.value; // edited fields only
+    console.log(payload);
 
     // ✅ Prepare your FormData (if backend expects multipart/form-data)
     const formData = new FormData();
@@ -46,7 +50,7 @@ export class OcrScannerPage implements OnInit {
       formData.append(key, value as string);
     });
 
-    formData.append("recipe_id", this.result?.data?.id || "");
+    formData.append("depense_id", this.result?.data?.id || "");
 
     const loading = await this.loadingCtrl.create({
       message: "Mise à jour du reçu...",

@@ -80,6 +80,8 @@ export class ChatRoomPage implements OnInit {
         ...msg,
         timeAgo: this.chatService.getTimeAgo(msg.created_at)
       }));
+      console.log(this.messages);
+
       await this.loadingService.dimiss();
       this.scrollToBottomSmoothly();
     });
@@ -162,6 +164,7 @@ export class ChatRoomPage implements OnInit {
     formData.append("sender_id", this.current_user.id);
     formData.append("room_id", this.roomId);
     formData.append("voice", this.audioBlob, Date.now() + ".mp3");
+    formData.append("message_type", "voice");
     formData.append("recipient_id", this.user.id);
     let toReplayID: any = null;
     if (this.replyingToMessage) {
@@ -169,7 +172,7 @@ export class ChatRoomPage implements OnInit {
       formData.append("replied_to", toReplayID);
     }
     await this.loadingService.present("Envoi de votre vocal");
-    this.chatService.voice(formData).subscribe(async res => {
+    this.chatService.attachments(formData).subscribe(async res => {
       this.chatService;
       if (this.showReplyInput) {
         this.showReplyInput = false;
@@ -197,9 +200,9 @@ export class ChatRoomPage implements OnInit {
         const formData = new FormData();
         formData.append("sender_id", this.current_user.id);
         formData.append("room_id", this.roomId);
-        formData.append("file", file, file.name.split(".")[0] + `.${file.name.split(".")[1]}`);
-        formData.append("file", file, file.name.split(".")[0] + `.${file.name.split(".")[1]}`);
+        formData.append("document", file, file.name.split(".")[0] + `.${file.name.split(".")[1]}`);
         formData.append("recipient_id", this.user.id);
+        formData.append("message_type", "document");
 
         let toReplayID: any = null;
         if (this.replyingToMessage) {
@@ -207,7 +210,7 @@ export class ChatRoomPage implements OnInit {
           formData.append("replied_to", toReplayID);
         }
         await this.loadingService.present("Envoi de votre document");
-        this.chatService.file(formData).subscribe(async res => {
+        this.chatService.attachments(formData).subscribe(async res => {
           this.showFab = false;
           this.hideReplyInput();
           await this.loadingService.dimiss();
@@ -241,7 +244,7 @@ export class ChatRoomPage implements OnInit {
       formData.append("replied_to", toReplayID);
     }
     await this.loadingService.present("Envoi de vos images");
-    this.chatService.images(formData).subscribe(async res => {
+    this.chatService.attachments(formData).subscribe(async res => {
       this.photoService.multipleImages = [];
       this.showFab = false;
       this.hideReplyInput();
@@ -261,7 +264,7 @@ export class ChatRoomPage implements OnInit {
       formData.append("replied_to", toReplayID);
     }
     await this.loadingService.present("Envoi de votre image");
-    this.chatService.images(formData).subscribe(async res => {
+    this.chatService.attachments(formData).subscribe(async res => {
       this.images = [];
       this.showFab = false;
       this.hideReplyInput();

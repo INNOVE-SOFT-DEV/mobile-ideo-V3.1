@@ -10,7 +10,9 @@ export const environment = {
   urlAPI: "https://apideo.webo.tn/",
   url_web: "https://ideo.webo.tn/",
 
-  newApiUrl: "https://limeless-milagro-unintegrated.ngrok-free.dev/api/v1/",
+  
+   newApiUrl: "https://ideo.webo.tn/api/v1/",
+  newWebUrl: "https://ideo.webo.tn/",
 
   mattermost_ws_url: "wss://chat.ideogroupe.com/api/v4/websocket",
   matter_https_url: "https://chat.ideogroupe.com/api/v4/"

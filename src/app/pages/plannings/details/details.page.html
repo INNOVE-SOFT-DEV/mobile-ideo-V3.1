@@ -149,19 +149,19 @@
           </div>
         </ion-col>
 
-        <ion-col size="4" size-md="4" class="custom-block" *ngIf="agent?.is_teamleader" (click)="missionReturns()">
+        <ion-col size="4" size-md="4" class="custom-block" (click)="missionReturns()">
           <div class="block-content">
             <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="block-image" />
             <div class="block-text">{{'Mission returns' | translate}}</div>
           </div>
         </ion-col>
 
-        <ion-col size="4" size-md="4" class="custom-block" *ngIf="!agent?.is_teamleader">
+        <!-- <ion-col size="4" size-md="4" class="custom-block" *ngIf="!agent?.is_teamleader">
           <div class="block-content no-return">
             <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="block-image" />
             <div class="block-text">{{'Mission returns' | translate}}</div>
           </div>
-        </ion-col>
+        </ion-col> -->
       </ion-row>
     </ion-grid>
 

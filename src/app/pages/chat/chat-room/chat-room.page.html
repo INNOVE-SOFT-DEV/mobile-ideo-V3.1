@@ -31,11 +31,9 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
         <div class="msg-text">{{message.content}}</div>
@@ -56,11 +54,9 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-text">{{message.content}}</div>
         <div class="msg-time-s">{{message.timeAgo}}</div>
@@ -82,14 +78,12 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
-        <audio class="msg-audio" src="{{message.audio_url.url}}" controls></audio>
+        <audio class="msg-audio" src="{{message.voice}}" controls></audio>
         <div class="msg-time-r audio-time">{{message.timeAgo}}</div>
       </div>
 
@@ -107,13 +101,11 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
-        <audio class="msg-audio audio-sender" src="{{message.audio_url.url}}" controls></audio>
+        <audio class="msg-audio audio-sender" src="{{message.voice}}" controls></audio>
         <div class="msg-time-s audio-time">{{message.timeAgo}}</div>
       </div>
     </ng-container>
@@ -133,17 +125,15 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
-        <img src="{{message.image_urls[0].url}}" class="msg-image" (click)="openImageSlider(message.image_urls)" />
-        <ion-chip *ngIf="message.image_urls.length > 1" class="many-imgs-r" (click)="openImageSlider(message.image_urls)">
+        <img src="{{message.images[0]}}" class="msg-image" (click)="openImageSlider(message.images)" />
+        <ion-chip *ngIf="message.images.length > 1" class="many-imgs-r" (click)="openImageSlider(message.images)">
           <ion-icon name="images-outline" class="many-imgs-r"></ion-icon>
-          <ion-label>{{message.image_urls.length}} images</ion-label>
+          <ion-label>{{message.images.length}} images</ion-label>
         </ion-chip>
         <div class="msg-time-r">{{message.timeAgo}}</div>
       </div>
@@ -162,16 +152,14 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
-        <img src="{{message.image_urls[0].url}}" class="msg-image" (click)="openImageSlider(message.image_urls)" />
-        <ion-chip *ngIf="message.image_urls.length > 1" class="many-imgs" (click)="openImageSlider(message.image_urls)">
+        <img src="{{message.images[0]}}" class="msg-image" (click)="openImageSlider(message.images)" />
+        <ion-chip *ngIf="message.images.length > 1" class="many-imgs" (click)="openImageSlider(message.images)">
           <ion-icon name="images-outline" class="many-imgs"></ion-icon>
-          <ion-label>{{message.image_urls.length}} images</ion-label>
+          <ion-label>{{message.images.length}} images</ion-label>
         </ion-chip>
         <div class="msg-time-s">{{message.timeAgo}}</div>
       </div>
@@ -192,17 +180,15 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
         <div class="msg-name">{{user?.first_name}} {{user?.last_name}}</div>
 
-        <div class="msg-text msg-doc" (click)="openDoc(message.document_url.url)">
+        <div class="msg-text msg-doc" (click)="openDoc(message.document)">
           <ion-icon name="document-text-outline"></ion-icon>
-          {{message.document_url.url.split('/')[message.document_url.url.split('/').length - 1]}}
+          {{message.document.split('/')[message.document.split('/').length - 1]}}
         </div>
         <div class="msg-time-r">{{message.timeAgo}}</div>
       </div>
@@ -221,15 +207,13 @@
           <p *ngIf="message.replied_to.sender_id != current_user.id" class="replyer">{{user?.first_name}} {{user?.last_name}}</p>
 
           <p *ngIf="message.replied_to.message_type === 'text'">{{ message.replied_to.content }}</p>
-          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.image_urls?.[0].url" alt="Image" class="message-image" />
-          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.audio_url.url" controls class="msg-audio"></audio>
-          <p *ngIf="message.replied_to.message_type === 'document'">
-            {{message.replied_to.document_url.url.split('/')[message.replied_to.document_url.url.split('/').length - 1] }}
-          </p>
+          <img *ngIf="message.replied_to.message_type === 'image'" [src]="message.replied_to.images?.[0]" alt="Image" class="message-image" />
+          <audio *ngIf="message.replied_to.message_type === 'voice'" [src]="message.replied_to.voice" controls class="msg-audio"></audio>
+          <p *ngIf="message.replied_to.message_type === 'document'">{{message.replied_to.document.split('/')[message.replied_to.document.split('/').length - 1] }}</p>
         </div>
-        <div class="msg-text msg-doc" (click)="openDoc(message.document_url.url)">
+        <div class="msg-text msg-doc" (click)="openDoc(message.document)">
           <ion-icon name="document-text-outline"></ion-icon>
-          {{message.document_url.url.split('/')[message.document_url.url.split('/').length - 1]}}
+          {{message.document.split('/')[message.document.split('/').length - 1]}}
         </div>
         <div class="msg-time-s">{{message.timeAgo}}</div>
       </div>
@@ -251,9 +235,9 @@
 
       <div *ngIf="replyingToMessage" class="reply-preview" [ngStyle]="{ 'bottom': !isIos ? '120px' : '80px' }">
         <p *ngIf="replyingToMessage.message_type === 'text'">{{ replyingToMessage.content }}</p>
-        <img *ngIf="replyingToMessage.message_type === 'image'" [src]="replyingToMessage.image_urls?.[0].url" alt="Image" class="message-image" />
-        <audio *ngIf="replyingToMessage.message_type === 'voice'" [src]="replyingToMessage.audio_url.url" controls class="msg-audio"></audio>
-        <p *ngIf="replyingToMessage.message_type === 'document'">{{ replyingToMessage.document_url.url.split('/')[replyingToMessage.document_url.url.split('/').length - 1] }}</p>
+        <img *ngIf="replyingToMessage.message_type === 'image'" [src]="replyingToMessage.images?.[0]" alt="Image" class="message-image" />
+        <audio *ngIf="replyingToMessage.message_type === 'voice'" [src]="replyingToMessage.voice" controls class="msg-audio"></audio>
+        <p *ngIf="replyingToMessage.message_type === 'document'">{{ replyingToMessage.document.split('/')[replyingToMessage.document.split('/').length - 1] }}</p>
         <ion-icon name="close-outline" class="close-reply" (click)="cancelReply()"></ion-icon>
       </div>
 

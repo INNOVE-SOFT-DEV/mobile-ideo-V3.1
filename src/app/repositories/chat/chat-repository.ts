@@ -7,16 +7,12 @@ import {environment} from "src/environments/environment";
 @Injectable({providedIn: "root"})
 export class ChatRepository implements ChatInterface {
   constructor(private httpClient: HttpClient) {}
-  voice(data: FormData): Observable<any> {
-    return this.httpClient.post<any>(`${environment.urlAPI}chat/voice`, data);
+  scheduleRoom(schedule_id: number): Observable<any> {
+    return this.httpClient.get<any>(`${environment.newApiUrl}chat/schedule_room/${schedule_id}`);
   }
 
-  images(data: FormData): Observable<any> {
-    return this.httpClient.post<any>(`${environment.urlAPI}chat/images`, data);
-  }
-
-  file(data: FormData): Observable<any> {
-    return this.httpClient.post<any>(`${environment.urlAPI}chat/file`, data);
+  attachments(data: FormData): Observable<any> {
+    return this.httpClient.post<any>(`${environment.newApiUrl}chat/attachments`, data);
   }
 
   room(sender_id: number, recipient_id: number): Observable<any> {

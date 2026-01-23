@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {LoadingControllerService} from "../../../widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
 import {Location} from "@angular/common";
@@ -14,6 +14,7 @@ import {Ocr} from "@capacitor-community/image-to-text";
 import {OcrService} from "../../ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
+import {ChatService} from "src/app/tab2/chatService/chat.service";
 
 @Component({
   selector: "app-details",
@@ -47,7 +48,8 @@ export class DetailsPage implements OnInit {
     private location: Location,
     private ocrService: OcrService,
     private toast: ToastControllerService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private chatService: ChatService
   ) {}
 
   async ngOnInit() {
@@ -70,6 +72,7 @@ export class DetailsPage implements OnInit {
   async refreshLocalData() {
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
+    console.log("Planning details loaded:", this.planning?.today_schedule?.id);
     this.planningType = cached.planningType;
     this.setupPhotos();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
@@ -183,13 +186,14 @@ export class DetailsPage implements OnInit {
       const formData = new FormData();
       formData.append("extracted_text", this.extractedText);
       formData.append("image", blob, new Date().getTime() + ".jpg");
-      formData.append("planning_id", this.planning.id);
-      formData.append("planning_type", this.planningType);
+      formData.append("schedule_id", this.planning.today_schedule.id);
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       formData.append("user_id", user.id); // Example user ID
       await this.loadingService.present("analyse de reçu...");
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {
+          console.log(res);
+          await this.loadingService.dimiss();
           this.generatedJson = res.data || {};
 
           await this.toast.presentToast("Reçu scanné avec succès", "success");

@@ -20,6 +20,7 @@ export interface User {
   last_sign_in_at: string;
   current_sign_in_at: string;
   photo: Photo;
+  photo_urls: any;
   password: string;
   rib: any;
   cin: any;

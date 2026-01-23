@@ -34,7 +34,7 @@
             <ion-icon
               style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
               name="trash"
-              (click)="deletePhoto('photo_before',i,group_photos[0]?.photo?.prestation_id)"
+              (click)="deletePhoto('photo_before',i,group_photos[0]?.photo?.prestation_id , group_photos)"
             ></ion-icon>
             <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_before',i)"></ion-icon>
           </div>
@@ -47,7 +47,7 @@
             <ion-icon
               style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
               name="trash"
-              (click)="deletePhoto('photo_after',i,group_photos[1]?.photo?.prestation_id)"
+              (click)="deletePhoto('photo_after',i,group_photos[1]?.photo?.prestation_id , group_photos[1]?.photo?.client_uuid)"
             ></ion-icon>
             <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_after',i)"></ion-icon>
           </div>
@@ -74,7 +74,7 @@
             <ion-icon
               style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
               name="trash"
-              (click)="deletePhoto('photo_truck' ,i,photo?.prestation_id)"
+              (click)="deletePhoto('photo_truck' ,i,photo?.prestation_id , photo?.client_uuid)"
             ></ion-icon>
             <ion-icon style="position: absolute; left: 0; top: 0; color: black; font-size: 25px" name="eye" (click)="openSlides('photo_truck',i)"></ion-icon>
           </div>

@@ -58,10 +58,11 @@ export class PointagePage implements OnInit, OnDestroy {
     this.type = this.route.snapshot.paramMap.get("type");
     this.user = this.authService.getCurrentUser();
     this.updateTime();
+    await this.mapService.loadGoogleMapsApi();
+    await this.initMapAndUserPosition();
     this.intervalTimeId = setInterval(() => this.updateTime(), 1000);
     this.googleMapsLoader.apiLoaded$.subscribe(async loaded => {
       if (loaded) {
-        await this.initMapAndUserPosition();
       }
     });
   }
@@ -76,6 +77,7 @@ export class PointagePage implements OnInit, OnDestroy {
 
     const planningLat = parseFloat(this.planning.intervention.address.latitude);
     const planningLng = parseFloat(this.planning.intervention.address.longitude);
+
     await this.mapService.initMap(this.mapElement, planningLat, planningLng);
     this.mapService.addMarker({lat: planningLat, lng: planningLng}, "Lieu d'intervention", "assets/img/building_marker.png", {width: 30, height: 30});
     this.mapService.addCircle(planningLat, planningLng);
@@ -110,11 +112,12 @@ export class PointagePage implements OnInit, OnDestroy {
   }
   async setPointing() {
     await this.getLocation();
+    console.log(this.geolocationService.coordinates);
 
     let body: any = {
       point: {
-        longitude: this.userCoordinates.longitude,
-        latitude: this.userCoordinates.latitude,
+        longitude: this.geolocationService.coordinates.longitude,
+        latitude: this.geolocationService.coordinates.latitude,
         recorder_at: new Date().toISOString()
       }
     };
@@ -162,12 +165,17 @@ export class PointagePage implements OnInit, OnDestroy {
       const minutes = now.getMinutes();
       body["started_on"] = `${hours}:${minutes}`;
 
-      const distance = this.geolocationService.getDistanceFromCurrentLoaction({
+      const distance = await this.geolocationService.getDistanceFromCurrentLoaction({
         latitude: parseFloat(this.planning.intervention.address.latitude),
         longitude: parseFloat(this.planning.intervention.address.longitude)
       });
+      console.log(this.planning.intervention.address);
+      console.log(distance);
+      
+      
+      console.log(distance <= 0.5);
 
-      if (distance <= 500) {
+      if (distance <= 0.5) {
         // console.log(this.pointing_internal.id, "start", body);
 
         await this.loadingService.present(this.loadingMessage);

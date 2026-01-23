@@ -12,7 +12,9 @@ export class GeolocationService implements OnDestroy {
   private watchId: string | null = null;
   private apiUrl = `${environment.urlAPI}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.init();
+  }
 
   async init() {
     const platform = Capacitor.getPlatform();
@@ -91,8 +93,8 @@ export class GeolocationService implements OnDestroy {
     this.stopWatchingLocation();
   }
 
-  getDistanceFromCurrentLoaction(coords: any) {
-    this.getCurrentLocation();
+  async getDistanceFromCurrentLoaction(coords: any) {
+    await this.getCurrentLocation();
     const R = 6371;
     const dLat = ((coords.latitude - this.coordinates.latitude) * Math.PI) / 180;
     const dLon = ((coords.longitude - this.coordinates.longitude) * Math.PI) / 180;
