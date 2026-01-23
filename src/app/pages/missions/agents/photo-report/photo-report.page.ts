@@ -191,8 +191,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       }
       console.log(client_uuid);
       console.log(this.grouped_presentation_photos[this.grouped_presentation_photos.length - 1][0].client_uuid);
-      console.log(this.photosService.lastImage);
-
       const data = this.service.uploadImagetoApi(
         this.photosService.lastImage.base64String,
         photo_type,
@@ -540,9 +538,7 @@ uint8ArrayToBase64(bytes: Uint8Array): string {
 }
 
   async deletePhoto(type: string, i: number, uuid: string, photo: any) {
-    console.log(photo);
     uuid = photo?.client_uuid;
-    console.log(type, );
     if(type?.includes('before')) {
       photo = this.grouped_presentation_photos[i][0];
     } else if(type?.includes('after')) {
