@@ -270,6 +270,10 @@ const routes: Routes = [
   {
     path: "ocr-scanner",
     loadChildren: () => import("./pages/ocr-scanner/ocr-scanner.module").then(m => m.OcrScannerPageModule)
+  },
+  {
+    path: 'feedback-modal',
+    loadChildren: () => import('./widgets/modals/feedback-modal/feedback-modal.module').then( m => m.FeedbackModalPageModule)
   }
 ];
 @NgModule({

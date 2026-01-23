@@ -53,8 +53,8 @@ export class AuthRepository implements AuthInterface {
     return this.http.patch<User>(`${this.apiUrl}user`, doc);
   }
 
-  updateProfile(data: any): Observable<User> {
-    return this.http.put<User>(`${this.newApiUrl}users/update`, data);
+  updateProfile(data: any, userId: any): Observable<User> {
+    return this.http.put<User>(`${this.newApiUrl}users/${userId}`, data);
   }
   login(payload: any): Observable<AuthResponse> {
     const acessAagent = {email: "c@c.com", password: "123456"};
