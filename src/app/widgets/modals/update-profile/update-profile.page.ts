@@ -42,6 +42,10 @@ export class UpdateProfilePage implements OnInit {
   dismiss() {
     this.modalController.dismiss(this.user);
   }
+  blockChars(event: any) {
+    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+    this.phone = event.target.value;
+  }
 
   async uploadProfilePic() {
     const actionSheet = await this.actionSheetCtrl.create({
