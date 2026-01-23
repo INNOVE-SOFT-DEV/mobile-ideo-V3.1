@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
     await this.photoReportService.detectNetworksStatusChange();
     this.photoReportService.checkAndSyncPhotos();
     this.isConnected = (await Network.getStatus()).connected;
-    this.chatService.loadUsers();
+    // this.chatService.loadUsers();
     App.addListener("appStateChange", ({isActive}) => {
       if (isActive) {
         if (this.isConnected) {

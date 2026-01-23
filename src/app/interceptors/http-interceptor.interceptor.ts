@@ -47,7 +47,7 @@ export class httpInterceptor implements HttpInterceptor {
             body: event.body
           };
 
-          console.table(this.api);
+          // console.table(this.api);
         }
       }),
 

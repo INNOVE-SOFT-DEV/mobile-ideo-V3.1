@@ -11,10 +11,10 @@ import {MissionService} from "src/app/tab1/service/intervention/mission/mission.
 import {environment} from "src/environments/environment";
 import {Subscription} from "rxjs";
 import {EmailComposer} from "capacitor-email-composer";
-import JSZip from "jszip";
 import {AuthService} from "src/app/pages/login/service/auth.service";
 import exifr from "exifr";
 import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
+import { zip } from "fflate";
 @Component({
   selector: "app-photo-report",
   templateUrl: "./photo-report.page.html",
@@ -75,6 +75,9 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.refreshLocalData();
+    console.log(this.data.planning.team.find((u: any) => u.id == this.user.id).pointing_internal[0].id);
+    console.log(this.data.planning.today_schedule);
+
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     Network.addListener("networkStatusChange", async status => {
       this.isConneted = status.connected;
@@ -119,7 +122,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           text: "Camera",
           cssClass: "btn_actionSheet",
           handler: async () => {
-            await this.photosService.takePictureOption("Camera", 40);
+            await this.photosService.takePictureOption("Camera", 10);
             let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
             await this.saveNewPhoto(photo_type, i, currentDate);
           }
@@ -128,7 +131,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           text: "Galerie",
           cssClass: "btn_actionSheet",
           handler: async () => {
-            await this.photosService.takePictureOption("Galerie", 40);
+            await this.photosService.takePictureOption("Galerie", 10);
             let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
             await this.saveNewPhoto(photo_type, i, currentDate);
           }
@@ -144,33 +147,38 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
-    if (this.service.startedOn() == null && !this.isPointed) {
-      await this.geolocationService.getCurrentLocation();
-      let userCoordinates = this.geolocationService.coordinates;
-      let pointageInternalId = this.service.getPointageId();
-      let body: any = {
-        point: {
-          longitude: userCoordinates.longitude,
-          latitude: userCoordinates.latitude,
-          recorder_at: new Date().toISOString()
-        }
-      };
+    // if (this.service.startedOn() == null && !this.isPointed) {
+    //   await this.geolocationService.getCurrentLocation();
+    //   let userCoordinates = this.geolocationService.coordinates;
+    //   let pointageInternalId = this.service.getPointageId();
+    //   let body: any = {
+    //     point: {
+    //       longitude: userCoordinates.longitude,
+    //       latitude: userCoordinates.latitude,
+    //       recorder_at: new Date().toISOString()
+    //     }
+    //   };
 
-      this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
-        next: async () => {
-          this.isPointed = true;
-          // console.log("Pointage début réalisé ");
-        },
-        error: () => {
-          console.error("Erreur lors du pointage ");
-        }
-      });
-    }
+    //   this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
+    //     next: async () => {
+    //       this.isPointed = true;
+    //       // console.log("Pointage début réalisé ");
+    //     },
+    //     error: () => {
+    //       console.error("Erreur lors du pointage ");
+    //     }
+    //   });
+    // }
 
     const base64 = this.photosService.lastImage.base64String;
-    const blob = this.photosService.getInfoBase64ToBlob(base64);
+    console.log(this.photosService.lastImage);
+
+    const blob = this.photosService.getInfoBase64ToBlob(base64, "image/jpeg");
+
     try {
       const exifData = await exifr.parse(blob);
+      console.log(exifData);
+      
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
@@ -200,12 +208,15 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         next: async value => {
           if (value[0].photo_type == "before") {
             this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
+            this.grouped_presentation_photos[i][0].id = value[0].id
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
             this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
+            this.grouped_presentation_photos[i][1].id = value[0].id
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else {
             this.photos_truck[i].url = value[0]?.image_url?.url;
+            this.photos_truck[i].id = value[0].id
 
             this.photos_truck[i].client_uuid = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.photos_truck);
@@ -243,7 +254,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
         }
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
-        const index = reportNeedSync.findIndex((item: any) => item.id === this.data.planning.id && item.type === this.planningType);
+        console.log(reportNeedSync);
+        console.log(this.data);
+
+        const index = reportNeedSync.findIndex((item: any) => item.internal === this.service.getPointageId());
         if (index == -1) {
           reportNeedSync.push({id: this.data.planning.id, type: this.planningType, internal: this.service.getPointageId()});
           localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
@@ -326,7 +340,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     uuid: string,
     checkGroupedRemoval?: () => boolean
   ): Promise<void> {
-    console.log(uuid, photo, typePhoroto, type, index, checkGroupedRemoval);
+    console.log( type);
+    let server_id : any
+    type.includes('before') ?  server_id = this.grouped_presentation_photos[index][0].id : type.includes('after') ? server_id = this.grouped_presentation_photos[index][1].id : server_id = this.photos_truck[index].id
+
 
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
@@ -352,9 +369,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
             console.log(uuid);
 
             await this.loadingService.present(this.loadingMessage);
-            console.log(photo.client_uuid);
+            console.log(server_id);
+            
 
-            this.missionsService.deletePhoto(photoId, this.planningType, uuid, typePhoroto).subscribe({
+            this.missionsService.deletePhoto(server_id, this.planningType, this.data.planning.team.find((u: any) => u.id == this.user.id).pointing_internal[0].id, typePhoroto).subscribe({
               next: async () => {
                 await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
                 await this.loadingService.dimiss();
@@ -391,120 +409,144 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async downloadZip() {
+  console.log(this.data.planning);
+  
     await this.service.downloadZip(
       this.grouped_presentation_photos,
       this.photos_truck,
-      this.data.planning.intervention_name,
+      this.data.planning.intervention.name,
       this.data.planningType,
-      this.data.planning.date || ""
+      this.data.planning.today_schedule.date || ""
     );
   }
 
-  async openEmail() {
-    await this.loadingService.present(this.loadingMessage);
-    const images = [...this.grouped_presentation_photos.flat(), ...this.photos_truck];
-    const zip = new JSZip();
-    for (const [index, img] of images.entries()) {
-      if (img != null) {
-        let url = img?.photo?.url || img?.url;
-        const response = await fetch(url);
-        const blob = await response.blob();
-        zip.file(`image_${img?.photo_type == "photo_truck" || !img?.photo_type ? "camion" : img?.photo_type == "photo_before" ? "before" : "after"}_${index + 1}.jpg`, blob);
-      }
-    }
-    const content = await zip.generateAsync({type: "blob"});
-    const base64 = await this.service.blobToBase64(content);
-    const fileName = `photos_${this.data.planning.intervention_name}_${this.planningType}_${this.data.planning.id}_${this.data.planning.date}.zip`;
+async openEmail() {
+  await this.loadingService.present(this.loadingMessage);
 
-    const logUrl = `${environment.url_web}/assets/img/logo-Ideo2.png`;
-    await this.loadingService.dimiss();
-    EmailComposer.open({
-      to: ["h.hadjrabah@ideogroupe.fr"],
-      subject: `Raport photos ${this.data.planning.intervention_name}`,
-      isHtml: true,
-      body: `<!DOCTYPE html>
-<html lang="en">
+  const images = [
+    ...this.grouped_presentation_photos.flat(),
+    ...this.photos_truck
+  ];
+
+  const files: Record<string, Uint8Array> = {};
+
+  for (const [index, img] of images.entries()) {
+    if (!img) continue;
+
+    const url = img?.photo?.url || img?.url;
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const buffer = await blob.arrayBuffer();
+
+    const typePhoto =
+      img?.photo_type === "photo_truck" || !img?.photo_type
+        ? "camion"
+        : img?.photo_type === "photo_before"
+        ? "before"
+        : "after";
+
+    const filename = `image_${typePhoto}_${index + 1}.jpg`;
+    files[filename] = new Uint8Array(buffer);
+  }
+
+  const zipData: Uint8Array = await new Promise((resolve, reject) => {
+    zip(files, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+
+
+
+  const base64Zip = this.uint8ArrayToBase64(zipData);
+
+  const fileName = `photos_${this.data.planning.intervention.name}_${this.planningType}_${this.data.planning.id}_${this.data.planning.today_schedule.date}.zip`;
+
+  const logoUrl = `${environment.url_web}/assets/img/logo-Ideo2.png`;
+
+  await this.loadingService.dimiss();
+
+  EmailComposer.open({
+    to: ["h.hadjrabah@ideogroupe.fr"],
+    subject: `Rapport photos ${this.data.planning.intervention.name}`,
+    isHtml: true,
+    body: this.buildEmailHtml(logoUrl),
+    attachments: [
+      {
+        type: "base64",
+        path: base64Zip,
+        name: fileName
+      }
+    ]
+  });
+}
+
+buildEmailHtml(logoUrl: string): string {
+  return `<!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mobile Blue Email</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-    img {
-      border: 0;
-      display: block;
-      max-width: 100%;
-      height: auto;
-    }
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 24px !important;
-      }
-      p {
-        font-size: 16px !important;
-      }
-      .button {
-        padding: 14px 24px !important;
-        font-size: 16px !important;
-      }
-    }
+    body { margin:0; padding:0; background:#ddf5ff; font-family:Arial,sans-serif; }
+    table { width:100%; border-collapse:collapse; }
+    img { max-width:100%; height:auto; display:block; }
   </style>
 </head>
-
-<body style="margin: 0; padding: 0; background-color: #ddf5ff;">
-  <center style="width: 100%; background-color: #ddf5ff;">
-    <table align="center" role="presentation" cellspacing="0" cellpadding="0" width="100%" style="max-width: 600px;">
-      <!-- Header -->
+<body>
+  <center>
+    <table style="max-width:600px;background:#ffffff;">
       <tr>
-        <td align="center" bgcolor="#ddf5ff" style="padding: 40px 10px;">
-          <img src="${logUrl}" alt="Logo" width="200" height="200" style="display: block; margin: 0 auto;" />
+        <td align="center" style="padding:30px;">
+          <img src="${'https://ideo.webo.tn/assets/logo-afd07cf48e2d231f6478ebb84df8ff36ea2470c7f5aac563557cd07dbb0e32cf.png'}" width="200" />
         </td>
       </tr>
-
-      <!-- Body -->
       <tr>
-        <td bgcolor="#ffffff" style="padding: 30px 20px 40px 20px; text-align: left;">
-          <p style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.6; color: #333;">
-          Agent : ${this.user.first_name} ${this.user.last_name}
-          <br><br>  
-          Identifiant de l'agent : ${this.user.id}
-          <br><br>
-          Type de mission : ${this.data.planningType == "punctual" ? "Ponctuelle" : this.data.planningType == "regular" ? "Régulière" : "Forfaitaire"}
-          <br><br>
-          Mission : ${this.data.planning.intervention_name}
-          <br><br>
-          Date : ${this.data.planning.date || ""}
-          <br><br>
-          Identifiant de la mission : ${this.data.planning.id}
-          </p>
+        <td style="padding:20px;color:#333;font-size:16px;line-height:1.6;">
+          Agent : ${this.user.first_name} ${this.user.last_name}<br><br>
+          Identifiant agent : ${this.user.id}<br><br>
+          Type de mission : ${
+            this.data.planningType === "punctual"
+              ? "Ponctuelle"
+              : this.data.planningType === "regular"
+              ? "Régulière"
+              : "Forfaitaire"
+          }<br><br>
+          Mission : ${this.data.planning.intervention.name}<br><br>
+          Date : ${this.data.planning.date || ""}<br><br>
+          Identifiant mission : ${this.data.planning.id}<br><br>
+          Identifiant Schedule : ${this.data.planning.today_schedule.id}
+
         </td>
       </tr>
     </table>
   </center>
 </body>
-</html>
-`,
-      attachments: [
-        {
-          type: "base64",
-          path: base64,
-          name: fileName
-        }
-      ]
-    });
+</html>`;
+}
+
+
+uint8ArrayToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
   }
 
+  return btoa(binary);
+}
+
   async deletePhoto(type: string, i: number, uuid: string, photo: any) {
-    console.log(photo);
     uuid = photo?.client_uuid;
+    if(type?.includes('before')) {
+      photo = this.grouped_presentation_photos[i][0];
+    } else if(type?.includes('after')) {
+      photo = this.grouped_presentation_photos[i][1];
+    } else {
+      photo = this.photos_truck[i];
+    }
+    
 
     let targetPhoto: any;
     let photosArray: any;
@@ -532,12 +574,13 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         console.warn(`Unknown photo type: ${type}`);
         return;
     }
-
+       console.log(targetPhoto , photosArray);
+       
     if (!targetPhoto || !photosArray) {
       console.warn(`Photo object or array not found for type: ${type}, index: ${i}. Cannot proceed with deletion.`);
       return;
     }
     console.log(photo);
-    await this.performDeletePhoto(targetPhoto, photosArray, type, i, typePhoroto, photo[0].client_uuid, checkGroupedRemoval);
+    await this.performDeletePhoto(targetPhoto, photosArray, type, i, typePhoroto, photo.client_uuid, checkGroupedRemoval);
   }
 }

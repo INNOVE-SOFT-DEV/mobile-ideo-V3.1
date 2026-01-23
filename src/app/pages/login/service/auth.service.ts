@@ -62,8 +62,8 @@ export class AuthService implements AuthInterface {
     );
   }
 
-  updateProfile(data: any): Observable<User> {
-    return this.authRepo.updateProfile(data).pipe(
+  updateProfile(data: any, userId: any): Observable<User> {
+    return this.authRepo.updateProfile(data, userId).pipe(
       tap((response: any) => {
         if (response.user) {
           localStorage.setItem("user", JSON.stringify(response.user));

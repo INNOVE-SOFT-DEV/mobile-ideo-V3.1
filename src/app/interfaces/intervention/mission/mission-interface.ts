@@ -22,7 +22,7 @@ export interface MissionInterface {
   getPhotoReportsSupervisor(type: string, id: number): Observable<any>;
   generatePhotosReport(data: any): Observable<any>;
   getPointAgents(data: any): Observable<any>;
-  syncPhotos(data: any): Observable<any>;
+  syncPhotos(data: any, internal: any): Observable<any>;
   getAgentReport(id: number, type: string): Observable<any>;
   updateNoIncludePhotos(data: PlanningData): Observable<any>;
   getRegularReturns(planning_id: number, type_planning: string, filter: boolean): Observable<any>;

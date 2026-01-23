@@ -130,7 +130,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
           return_types: this.returnTypes,
           client_uuid: this.uuid,
           important: this.important,
-          recorded_at: Date.now()
+          recorded_at:new Date().toISOString()
         }
       };
       if (this.audioRecording) {

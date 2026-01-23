@@ -77,7 +77,7 @@ export class PointagePage implements OnInit, OnDestroy {
 
     const planningLat = parseFloat(this.planning.intervention.address.latitude);
     const planningLng = parseFloat(this.planning.intervention.address.longitude);
-    
+
     await this.mapService.initMap(this.mapElement, planningLat, planningLng);
     this.mapService.addMarker({lat: planningLat, lng: planningLng}, "Lieu d'intervention", "assets/img/building_marker.png", {width: 30, height: 30});
     this.mapService.addCircle(planningLat, planningLng);
@@ -169,7 +169,11 @@ export class PointagePage implements OnInit, OnDestroy {
         latitude: parseFloat(this.planning.intervention.address.latitude),
         longitude: parseFloat(this.planning.intervention.address.longitude)
       });
-       console.log(distance);
+      console.log(this.planning.intervention.address);
+      console.log(distance);
+      
+      
+      console.log(distance <= 0.5);
 
       if (distance <= 0.5) {
         // console.log(this.pointing_internal.id, "start", body);

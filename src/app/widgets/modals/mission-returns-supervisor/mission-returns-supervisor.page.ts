@@ -4,7 +4,8 @@ import {TranslateService} from "@ngx-translate/core";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {LoadingControllerService} from "../../loading-controller/loading-controller.service";
 import WaveSurfer from "wavesurfer.js";
-
+import {ElementRef, ViewChild} from "@angular/core";
+import {FeedbackModalPage} from "../feedback-modal/feedback-modal.page";
 @Component({
   selector: "app-mission-returns-supervisor",
   templateUrl: "./mission-returns-supervisor.page.html",
@@ -12,6 +13,8 @@ import WaveSurfer from "wavesurfer.js";
   standalone: false
 })
 export class MissionReturnsSupervisorPage implements OnInit {
+  @ViewChild("audioPlayer") audioPlayer!: ElementRef<HTMLAudioElement>;
+
   @Input() planning: any;
   regularAgentFilter = false;
   selectedRegularAgent: any = {id: null};
@@ -22,8 +25,11 @@ export class MissionReturnsSupervisorPage implements OnInit {
   recordedAudios: any[] = [];
   returnTime: any;
   waveSurfer?: WaveSurfer;
-  durationDisplay: any;
+  //durationDisplay: any;
   loadingMessage: string = "";
+  isPlaying = false;
+  durationDisplay = "0:00";
+  bars = new Array(18);
 
   constructor(
     private modalController: ModalController,
@@ -48,6 +54,41 @@ export class MissionReturnsSupervisorPage implements OnInit {
       }
       await this.loadingService.dimiss();
     });
+  }
+
+  togglePlay() {
+    const audio = this.audioPlayer.nativeElement;
+
+    if (!audio) return;
+
+    if (this.isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+
+    this.isPlaying = !this.isPlaying;
+
+    // Quand la durée est chargée
+    audio.onloadedmetadata = () => {
+      this.durationDisplay = this.formatTime(audio.duration);
+    };
+
+    // Mise à jour du timer pendant la lecture
+    audio.ontimeupdate = () => {
+      this.durationDisplay = this.formatTime(audio.currentTime);
+    };
+
+    // Quand l’audio est fini
+    audio.onended = () => {
+      this.isPlaying = false;
+    };
+  }
+
+  formatTime(seconds: number): string {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? "0" + sec : sec}`;
   }
 
   dismiss() {
@@ -103,5 +144,18 @@ export class MissionReturnsSupervisorPage implements OnInit {
     if (this.waveSurfer && this.audioUrl?.url) {
       this.waveSurfer.playPause();
     }
+  }
+
+  async openFeedbackModal() {
+    // 1️⃣ Fermer la modal actuelle
+    await this.modalController.dismiss();
+
+    const modal = await this.modalController.create({
+      component: FeedbackModalPage,
+      cssClass: "feedback-modal",
+      backdropDismiss: false
+    });
+
+    await modal.present();
   }
 }

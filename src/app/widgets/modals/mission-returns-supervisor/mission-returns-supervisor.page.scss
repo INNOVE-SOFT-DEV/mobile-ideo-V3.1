@@ -65,6 +65,7 @@
 .agenda-icon {
   font-size: 20px;
   vertical-align: middle;
+  color: #233341;
 }
 .replanification-text {
   font-family: "Montserrat", sans-serif;
@@ -73,6 +74,7 @@
   line-height: 100%;
   letter-spacing: -0.015em;
   vertical-align: middle;
+  color: #233341;
 }
 .vocal-card {
   width: 100%;
@@ -169,4 +171,298 @@
 #waveform {
   width: 100%;
   height: 128px;
+}
+
+
+.custom-card {
+  //width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 0.4px solid #4a80b233;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  padding: 0;
+}
+
+.card-container {
+  display: flex;
+ gap: 10px;
+  padding: 16px;
+}
+
+/* ===== Colonnes ===== */
+.left-col {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.right-col {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* ===== Lignes ===== */
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row-1 {
+  gap: 8px;
+}
+
+.row-3 {
+  display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ===== Textes ===== */
+.title {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+
+.address {
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+
+.date {
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+
+/* ===== Images ===== */
+.logo {
+  width: 24px;
+  height: 24px;
+}
+
+/* ===== Chip ===== */
+.time-chip {
+  height: 23px;
+  border-radius: 20px;
+  background: #ffceaa;
+  padding: 4px 10px;
+}
+
+.time-text {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+
+
+.profile-card {
+ // width: 100%;
+  height: auto;
+  border-radius: 14px;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+}
+
+/* ===== Conteneur centré ===== */
+.card-inner {
+  width: 80%;
+  margin: 0 auto;
+  /* centre horizontalement */
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+/* ===== Colonnes ===== */
+.avatar-col {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+}
+
+.info-col {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ===== Avatar ===== */
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ===== Texte ===== */
+.name {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+
+/* ===== Chip ===== */
+.role-chip {
+  width: fit-content;
+  height: 20px;
+  border-radius: 20px;
+  padding: 4px 10px;
+  background: #cdf3ff;
+}
+
+.role-text {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: -1.5%;
+  color: #233341;
+}
+
+
+
+
+.recording-card {
+ // width: 100%;
+  height: 56px;
+  background: linear-gradient(90deg, #0aa5e8, #1bb1f5);
+  border-radius: 14px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 5px 4px 10px 0px #dfdfdf;
+  margin-top: 10px;
+}
+
+/* Play button */
+.play-btn {
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-btn ion-icon {
+  font-size: 20px;
+  color: #0aa5e8;
+}
+
+/* Time */
+.record-time {
+  font-family: 'Montserrat';
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  min-width: 40px;
+}
+
+/* Waveform */
+.waveform {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.waveform span {
+  width: 3px;
+  height: 10px;
+  background: #ffffff;
+  border-radius: 3px;
+  animation: wave 1.2s infinite ease-in-out;
+}
+
+.waveform span:nth-child(odd) {
+  animation-delay: 0.2s;
+}
+
+.waveform span:nth-child(even) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0% {
+    height: 6px;
+    opacity: 0.6;
+  }
+
+  50% {
+    height: 18px;
+    opacity: 1;
+  }
+
+  100% {
+    height: 6px;
+    opacity: 0.6;
+  }
+}
+
+
+
+
+
+
+/* Conteneur pour centrer dans la page */
+.feedback-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  /* optionnel */
+}
+
+/* Bouton */
+.feedback-btn {
+  width: 80%;
+  height: 45px;
+  background: #00a2e1;
+  border-radius: 50px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Texte */
+.feedback-text {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 280%;
+  letter-spacing: 0px;
+  color: #ffffff;
+  text-align: center;
 }
