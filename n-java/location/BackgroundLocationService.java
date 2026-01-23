@@ -37,6 +37,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 public class BackgroundLocationService extends Service {
 
     public static final String TAG = "BG_LOC_SERVICE";
@@ -189,6 +192,27 @@ public class BackgroundLocationService extends Service {
             }
         }
     }
+}
+
+
+private void saveQueueToFile(JSONArray queue) {
+    try {
+        String filename = "queue.json";
+        String data = queue.toString();
+        File file = new File(getFilesDir(), filename);
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data.getBytes(StandardCharsets.UTF_8));
+        }
+        Log.i(TAG, "Queue file written to " + file.getAbsolutePath());
+    } catch (Exception e) {
+        Log.e(TAG, "Failed to save queue", e);
+    }
+}
+
+
+
+
+
 
     private void syncQueue() {
         if (!syncRunning.compareAndSet(false, true)) return;
