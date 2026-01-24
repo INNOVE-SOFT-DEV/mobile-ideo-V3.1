@@ -36,6 +36,7 @@ export class DetailsPage implements OnInit {
   detectedTexts: string[] = [];
   generatedJson: any = {};
   agent: any;
+  hasSubcontractor: boolean = false;
 
   constructor(
     private loadingService: LoadingControllerService,
@@ -53,10 +54,12 @@ export class DetailsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.supervisors = [];
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     try {
       await this.refreshLocalData();
+      this.supervisors = this.planning.supervisors || [];
+      this.hasSubcontractor = this.planning.team.some((member: any) => member.manager);
+
       this.setupPhotos();
     } catch (error) {
       console.error("Erreur lors du chargement des détails :", error);
@@ -72,7 +75,6 @@ export class DetailsPage implements OnInit {
   async refreshLocalData() {
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
-    console.log("Planning details loaded:", this.planning?.today_schedule?.id);
     this.planningType = cached.planningType;
     this.setupPhotos();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
@@ -192,7 +194,6 @@ export class DetailsPage implements OnInit {
       await this.loadingService.present("analyse de reçu...");
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {
-          console.log(res);
           await this.loadingService.dimiss();
           this.generatedJson = res.data || {};
 

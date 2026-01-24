@@ -43,6 +43,7 @@ export class PointagesPage implements OnInit {
 
     this.planning = data;
     this.team = this.planning.team.filter((member: any) => !member?.manager);
+    console.log(this.team);
 
     if (this.planning.type != "regular") this.nonRegularDay = new Intl.DateTimeFormat("fr-FR", {weekday: "long"})?.format(new Date(this.planning.today_schedule.date));
     this.setDate();
@@ -50,9 +51,9 @@ export class PointagesPage implements OnInit {
   }
 
   async prepareData() {
-    this.missionService.getPointAgents({id: this.planning.id, type: this.planning.type, date: this.date}).subscribe(async data => {
-      await this.loadingService.dimiss();
-    });
+    // this.missionService.getPointAgents({id: this.planning.id, type: this.planning.type, date: this.date}).subscribe(async data => {
+    //   await this.loadingService.dimiss();
+    // });
   }
 
   setDate() {

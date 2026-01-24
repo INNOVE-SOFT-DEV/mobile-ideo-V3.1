@@ -48,6 +48,7 @@ export class MenuMessionPage implements OnInit {
   ngOnInit() {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
     this.planning = data;
+    this.supervisors = this.planning.supervisors || [];
     // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
     this.planningType = data.type || "";
     this.taskmanagerService.getAllTasksByKanban("superviseur mobile", this.user.email).subscribe((res: any) => {

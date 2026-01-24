@@ -11,14 +11,18 @@ export class GeolocationService implements OnDestroy {
   public coordinates: any;
   private watchId: string | null = null;
   private apiUrl = `${environment.urlAPI}`;
+  private platform = Capacitor.getPlatform();
 
   constructor(private http: HttpClient) {
     this.init();
   }
 
   async init() {
-    const platform = Capacitor.getPlatform();
-    if (platform === "web") {
+    if (this.platform === "android") {
+      await new Promise(r => setTimeout(r, 500));
+    }
+
+    if (this.platform === "web") {
       navigator.geolocation.getCurrentPosition(
         position => {
           this.coordinates = position.coords;
@@ -33,48 +37,40 @@ export class GeolocationService implements OnDestroy {
       );
     } else {
       await this.checkAndRequestLocationPermission();
+      await this.startWatchingLocation();
     }
   }
+
   getApiKey() {
     return this.http.get(this.apiUrl + "googlemaps");
   }
+
   async checkAndRequestLocationPermission() {
     try {
       const permissionStatus = await Geolocation.checkPermissions();
       if (permissionStatus.location !== "granted") {
-        const requestResult = await Geolocation.requestPermissions();
-        if (requestResult.location === "granted") {
-          await this.getCurrentLocation();
-        }
-      } else {
-        await this.getCurrentLocation();
+        await Geolocation.requestPermissions();
       }
     } catch (error) {
       console.error("Error checking location permission:", error);
     }
   }
 
-  async getCurrentLocation() {
-    try {
-      const coordinates = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: false,
-        timeout: 60000,
-        maximumAge: 0
-      });
-      this.coordinates = coordinates.coords;
-    } catch (err) {
-      console.trace("Failed to get location:", err);
-    }
-  }
-
   async startWatchingLocation() {
+    if (this.watchId) return;
+
     this.watchId = await Geolocation.watchPosition(
       {
-        enableHighAccuracy: false
+        enableHighAccuracy: this.platform === "android",
+        maximumAge: 0,
+        timeout: 30000
       },
       (position: Position | null, err: any) => {
         if (position) {
-          this.coordinates = position.coords;
+          // Android: ignore noisy fixes
+          if (this.platform !== "android" || position.coords.accuracy <= 30) {
+            this.coordinates = position.coords;
+          }
         } else if (err) {
           console.error("Watcher error:", err);
         }
@@ -94,7 +90,8 @@ export class GeolocationService implements OnDestroy {
   }
 
   async getDistanceFromCurrentLoaction(coords: any) {
-    await this.getCurrentLocation();
+    if (!this.coordinates) return null;
+
     const R = 6371;
     const dLat = ((coords.latitude - this.coordinates.latitude) * Math.PI) / 180;
     const dLon = ((coords.longitude - this.coordinates.longitude) * Math.PI) / 180;
@@ -102,12 +99,12 @@ export class GeolocationService implements OnDestroy {
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((this.coordinates.latitude * Math.PI) / 180) * Math.cos((coords.latitude * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;
-    return distance;
+    return R * c;
   }
 
   async isAroundIdeo() {
-    await this.getCurrentLocation();
+    if (!this.coordinates) return false;
+
     const TARGET_LAT = 48.9136971;
     const TARGET_LON = 2.3774035;
     const R = 6371;
@@ -117,6 +114,7 @@ export class GeolocationService implements OnDestroy {
       Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(this.toRad(this.coordinates.latitude)) * Math.cos(this.toRad(TARGET_LAT)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
+
     return true;
   }
 

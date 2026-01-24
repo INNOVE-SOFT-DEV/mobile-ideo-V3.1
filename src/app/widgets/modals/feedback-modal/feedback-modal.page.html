@@ -2,109 +2,95 @@
   <ion-toolbar>
     <ion-title></ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">{{ 'Cancel' | translate }}</ion-button>
+      <ion-button (click)="dismiss({})">{{ 'Cancel' | translate }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-
-
-
-
-
 <ion-content class="modal-content">
-
-
-
-
-
-
-
-
   <div class="center-container">
-
-
-
     <ion-card class="custom-card">
       <div class="card-container">
-
         <!-- Colonne gauche 75% -->
         <div class="left-col">
-
           <!-- Ligne 1 -->
           <div class="row row-1">
-            <img src="assets/img/logo_pitch 5.png" class="logo" />
-            <span class="title">Cogedim - Lot A1</span>
+            <img [src]="planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'" class="logo" />
+            <span class="title">{{planning?.intervention?.name?.split('-')[0]}}</span>
           </div>
 
           <!-- Ligne 2 -->
           <div class="row row-2">
-            <span class="address">
-              218 avenu du general leclerc<br />
-              Dammarie les lys
-            </span>
+            <span class="address">{{planning?.intervention?.name?.split('-')[1]}}</span>
           </div>
 
           <!-- Ligne 3 -->
           <div class="row row-3">
-            <span class="date">15/11/2023</span>
+            <span class="date">{{planning?.today_schedule?.date}}</span>
 
             <ion-chip class="time-chip">
-              <span class="time-text">08:00</span>
+              <span class="time-text">{{returnTime}}</span>
             </ion-chip>
           </div>
-
         </div>
 
         <!-- Colonne droite 25% -->
         <div class="right-col">
           <img src="assets/img/img-55.png" class="icon" />
         </div>
-
       </div>
     </ion-card>
 
     <div class="center-text-container">
-      <span class="center-text">
-        Envoyer un retour à l’agent
-      </span>
+      <span class="center-text">Envoyer un retour à l’agent</span>
     </div>
-
 
     <div class="images-container">
-      <img src="assets/img/1.png" />
-      <img src="assets/img/2.png" />
-      <img src="assets/img/3.png" />
-      <img src="assets/img/4.png" />
-      <img src="assets/img/5.png" />
-      <img src="assets/img/6.png" />
-    </div>
+      <img src="assets/img/1.png" (click)="selectOption(0)" [class.selected]="selectedOption === 0 || reply?.reaction_type === 0" />
 
+      <img src="assets/img/2.png" (click)="selectOption(1)" [class.selected]="selectedOption === 1 || reply?.reaction_type === 1" />
+
+      <img src="assets/img/3.png" (click)="selectOption(2)" [class.selected]="selectedOption === 2 || reply?.reaction_type === 2" />
+      <img src="assets/img/4.png" (click)="selectOption(3)" [class.selected]="selectedOption === 3 || reply?.reaction_type === 3" />
+
+      <img src="assets/img/5.png" (click)="selectOption(4)" [class.selected]="selectedOption === 4 || reply?.reaction_type === 4" />
+      <img src="assets/img/6.png" (click)="selectOption(5)" [class.selected]="selectedOption === 5 || reply?.reaction_type === 5" />
+    </div>
 
     <ion-card class="voice-card">
       <div class="voice-card-content">
         <!-- Texte 60% -->
-        <div class="voice-card-text">
-          Enregistrer un message vocal
-        </div>
-    
-        <!-- Image 40% -->
         <div class="voice-card-image">
-          <img src="assets/img/micr.png" alt="microphone">
+          <img *ngIf="!recording " src="assets/img/micr.png" alt="micro" class="micro-image" (click)="startRecording()" />
+          <ion-icon *ngIf="recording" name="stop-circle-outline" class="stop-icon red-icon cls-btn-stop" (click)="stopRecording()"></ion-icon>
         </div>
       </div>
     </ion-card>
 
-
-
-
-    <div class="feedback-container">
-      <div class="feedback-btn" >
-        <span class="feedback-text">
-          Envoyer
-        </span>
+    <div
+      class="recording-card"
+      [ngStyle]="{
+          'display': blobUrl ? 'flex' : 'none'
+        }"
+    >
+      <!-- Play / Pause -->
+      <div class="play-btn" (click)="playRecordingAgain()">
+        <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
       </div>
+
+      <!-- Timer -->
+      <span class="record-time">{{ durationDisplay }}</span>
+
+      <!-- Wave -->
+      <div id="waveform"></div>
+
+      <!-- Audio réel -->
     </div>
 
+    <div class="feedback-container">
+      <div class="feedback-btn" (click)="submitFeedback()">
+        <span class="feedback-text">Envoyer</span>
+      </div>
+    </div>
   </div>
 </ion-content>

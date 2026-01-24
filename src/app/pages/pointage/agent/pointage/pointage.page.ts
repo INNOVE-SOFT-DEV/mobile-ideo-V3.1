@@ -102,18 +102,15 @@ export class PointagePage implements OnInit, OnDestroy {
     this.currentTime = `${hours}:${minutes}`;
   }
   async getLocation() {
-    if (this.pointing_internal?.started_on != null) {
-    } else {
-      await this.loadingService.present(this.loadingMessage);
-      await this.geolocationService.getCurrentLocation();
-      this.userCoordinates = this.geolocationService.coordinates;
-      await this.loadingService.dimiss();
-    }
+    // if (this.pointing_internal?.started_on != null) {
+    // } else {
+    //   await this.loadingService.present(this.loadingMessage);
+    //   await this.geolocationService.getCurrentLocation();
+    //   this.userCoordinates = this.geolocationService.coordinates;
+    //   await this.loadingService.dimiss();
+    // }
   }
   async setPointing() {
-    await this.getLocation();
-    console.log(this.geolocationService.coordinates);
-
     let body: any = {
       point: {
         longitude: this.geolocationService.coordinates.longitude,
@@ -169,13 +166,10 @@ export class PointagePage implements OnInit, OnDestroy {
         latitude: parseFloat(this.planning.intervention.address.latitude),
         longitude: parseFloat(this.planning.intervention.address.longitude)
       });
-      console.log(this.planning.intervention.address);
-      console.log(distance);
-      
-      
-      console.log(distance <= 0.5);
 
-      if (distance <= 0.5) {
+      console.log(distance);
+
+      if (distance && distance <= 0.5) {
         // console.log(this.pointing_internal.id, "start", body);
 
         await this.loadingService.present(this.loadingMessage);

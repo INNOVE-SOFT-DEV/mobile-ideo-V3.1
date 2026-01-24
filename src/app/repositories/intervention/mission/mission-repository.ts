@@ -26,6 +26,9 @@ export class MissionRepository implements MissionInterface {
       this.connected = status.connected;
     });
   }
+  getSupervisorAudioReport(data: any): Observable<any> {
+    return this.http.get<any>(`${this.newApiUrl}schedules/${data}/get_audio_report`);
+  }
   getDispatchAgent(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}missions/get_dispatch_agent`);
   }
@@ -225,10 +228,8 @@ export class MissionRepository implements MissionInterface {
   }
 
   deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any> {
-    console.log(uuid);
-
     const params = new HttpParams().set("photo_type", typePhoroto).set("client_uuid", uuid);
-    return this.http.delete(`${this.newApiUrl}pointing_internals/delete_photo/${id}`, );
+    return this.http.delete(`${this.newApiUrl}pointing_internals/delete_photo/${id}`);
 
     //return this.http.delete<any>(`${this.apiUrl}interventions/photos/${id}/${type}`);
   }

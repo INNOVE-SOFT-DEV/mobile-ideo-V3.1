@@ -26,8 +26,6 @@ export class OcrScannerPage implements OnInit {
     private toast: ToastControllerService
   ) {}
   ngOnInit() {
-    console.log(this.result);
-
     const recipe = this.result?.data?.recipe || {};
     this.imageUrl = `${environment.newWebUrl}${this.result?.data?.image_url}`;
 
@@ -42,7 +40,6 @@ export class OcrScannerPage implements OnInit {
     if (!this.form.valid) return;
 
     const payload = this.form.value; // edited fields only
-    console.log(payload);
 
     // ✅ Prepare your FormData (if backend expects multipart/form-data)
     const formData = new FormData();
