@@ -30,7 +30,7 @@
             <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
           </ion-item>
           <ion-item>
-            <ion-input labelPlacement="floating" [(ngModel)]="phone" name="phone" type="tel" required [pattern]="phonePattern" #phoneCtrl="ngModel">
+            <ion-input labelPlacement="floating" [(ngModel)]="phone" (ionInput)="blockChars($event)" name="phone" type="tel" required [pattern]="phonePattern" #phoneCtrl="ngModel">
               <div slot="label">
                 {{'Phone number' | translate}}
                 <ion-text color="danger" *ngIf="phoneCtrl.invalid && phoneCtrl.touched">{{'Requis' | translate}}</ion-text>
