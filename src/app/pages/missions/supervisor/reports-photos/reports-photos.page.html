@@ -99,7 +99,7 @@
         </div>
 
         <div *ngIf="activeTab === 'Camion'">
-          <ng-container *ngIf="imagesCamions?.length == 0">
+          <ng-container *ngIf="imagesCamions.length == 0">
             <div class="empty-container">
               <img src="assets/img/emty-icon.png" />
               <p class="cls-empty-title">{{'No data found' | translate}}</p>
