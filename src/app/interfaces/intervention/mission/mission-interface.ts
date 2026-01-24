@@ -29,4 +29,5 @@ export interface MissionInterface {
   getVehiculeReturnByPlanning(id: number, type: string): Observable<any>;
   dispatchAgent(data: any): Observable<any>;
   getDispatchAgent(): Observable<any>;
+  getSupervisorAudioReport(data: any): Observable<any>;
 }

@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FeedbackModalPage } from './feedback-modal.page';
+import {ComponentFixture, TestBed} from "@angular/core/testing";
+import {FeedbackModalPage} from "./feedback-modal.page";
 
-describe('FeedbackModalPage', () => {
+describe("FeedbackModalPage", () => {
   let component: FeedbackModalPage;
   let fixture: ComponentFixture<FeedbackModalPage>;
 
@@ -11,7 +11,7 @@ describe('FeedbackModalPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -29,7 +29,9 @@ export class MissionReturnsSupervisorPage implements OnInit {
   loadingMessage: string = "";
   isPlaying = false;
   durationDisplay = "0:00";
-  bars = new Array(18);
+  agent: any;
+  parent_id: any;
+  reply: any;
 
   constructor(
     private modalController: ModalController,
@@ -40,20 +42,30 @@ export class MissionReturnsSupervisorPage implements OnInit {
 
   async ngOnInit() {
     this.loadingMessage = await this.translateService.get("loading").toPromise();
-
     await this.loadingService.present(this.loadingMessage);
     const id = this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
-    this.missionService.getMissionReturnAudio(id).subscribe(async (data: any) => {
-      this.returnType = data.return_types;
-      this.important = data.important;
-      if (data?.audio_url) {
-        this.audioUrl = data.audio_url;
+    this.missionService.getSupervisorAudioReport(this.planning.today_schedule.id).subscribe(async (data: any) => {
+      console.log(data);
+      this.returnTime = data.audio_report?.recorded_at.split("T")[1].split(".")[0].split(":").slice(0, 2).join(":") || "";
+      console.log(this.returnTime);
+
+      this.reply = data?.reply;
+      this.returnType = data.audio_report?.return_types;
+      this.important = data.audio_report?.important;
+      this.parent_id = data.audio_report?.id;
+      if (data.audio_report?.audio_url) {
+        this.audioUrl = data.audio_report.audio_url;
+        this.agent = this.planning.today_schedule.agents.find((a: any) => a.pointing_internal[0].id == data.audio_report.pointing_internal_id);
         await this.loadingService.dimiss();
         this.createWaves();
-        this.waveSurfer?.load(data.audio_url.url);
+        this.waveSurfer?.load(data.audio_report.audio_url.url);
       }
       await this.loadingService.dimiss();
     });
+  }
+
+  async getId() {
+    return this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
   }
 
   togglePlay() {
@@ -129,8 +141,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
       normalize: true,
       height: 52,
       barWidth: 3,
-      barRadius: 3,
-      
+      barRadius: 3
     });
     this.waveSurfer.on("audioprocess", () => {
       if (this.waveSurfer) {
@@ -159,9 +170,19 @@ export class MissionReturnsSupervisorPage implements OnInit {
     const modal = await this.modalController.create({
       component: FeedbackModalPage,
       cssClass: "feedback-modal",
-      backdropDismiss: false
+      backdropDismiss: false,
+      componentProps: {
+        planning: this.planning,
+        agent: this.agent,
+        schedule: this.planning.today_schedule,
+        parent_id: this.parent_id,
+        reply: this.reply
+      }
     });
-
+    modal.onDidDismiss().then(data => {
+      console.log(data);
+      this.reply = data;
+    });
     await modal.present();
   }
 }

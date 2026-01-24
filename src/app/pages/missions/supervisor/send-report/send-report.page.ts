@@ -23,8 +23,6 @@ export class SendReportPage implements OnInit {
     this.route.params.subscribe(params => {
       if (params["data"]) {
         this.data = JSON.parse(params["data"]);
-        console.log(this.data);
-        
       }
     });
   }
