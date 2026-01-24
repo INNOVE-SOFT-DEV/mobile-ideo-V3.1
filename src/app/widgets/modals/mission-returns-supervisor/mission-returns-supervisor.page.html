@@ -7,145 +7,100 @@
   </ion-toolbar>
 </ion-header>
 
-
-
-
-
-
 <ion-content class="modal-content">
-
-
-
- 
-
-
-
-
   <div class="center-container">
-
-
-
     <ion-card class="custom-card">
       <div class="card-container">
-    
         <!-- Colonne gauche 75% -->
         <div class="left-col">
-    
           <!-- Ligne 1 -->
           <div class="row row-1">
-            <img src="assets/img/logo_pitch 5.png" class="logo" />
-            <span class="title">Cogedim - Lot A1</span>
+            <img [src]="planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'" class="logo" />
+            <span class="title">{{planning?.intervention?.name?.split('-')[0]}}</span>
           </div>
-    
+
           <!-- Ligne 2 -->
           <div class="row row-2">
-            <span class="address">
-              218 avenu du general leclerc<br />
-              Dammarie les lys
-            </span>
+            <span class="address">{{ planning?.intervention?.name?.split('-')[1] }}</span>
           </div>
-    
+
           <!-- Ligne 3 -->
           <div class="row row-3">
-            <span class="date">15/11/2023</span>
-    
+            <span class="date">{{planning?.today_schedule?.date}}</span>
+
             <ion-chip class="time-chip">
-              <span class="time-text">08:00</span>
+              <span class="time-text">{{returnTime}}</span>
             </ion-chip>
           </div>
-    
         </div>
-    
+
         <!-- Colonne droite 25% -->
         <div class="right-col">
           <img src="assets/img/img-55.png" class="icon" />
         </div>
-    
       </div>
     </ion-card>
 
-
-    <ion-card class="profile-card">
+    <ion-card class="profile-card" *ngIf="audioUrl">
       <div class="card-inner">
-    
         <!-- Colonne image 30% -->
         <div class="avatar-col">
-          <img src="assets/img/avatar.png" class="avatar" />
+          <img [src]="agent?.photo_urls?.thumb || 'assets/img/default-avatar.png'" class="avatar" />
         </div>
-    
+
         <!-- Colonne texte -->
         <div class="info-col">
-          <span class="name">DIARRA Sadio</span>
-    
+          <span class="name">{{agent?.first_name}} {{agent?.last_name}}</span>
+
           <ion-chip class="role-chip">
-            <span class="role-text">Agent</span>
+            <span class="role-text">{{agent?.role_name}}</span>
           </ion-chip>
         </div>
-
-       
-    
       </div>
 
-
-      <div class="replanification-block m-50"
-        [ngClass]="returnType.indexOf('rescheduling') != -1  ? 'bg-FEFD99' : 'bg-FFFFFF'">
+      <div *ngIf="returnType?.indexOf('rescheduling') !== -1" class="replanification-block m-50 bg-FEFD99">
         <ion-icon name="calendar-clear-outline" class="agenda-icon"></ion-icon>
         <span class="replanification-text">{{ 'Replanification' | translate }}</span>
       </div>
 
-      <div class="replanification-block m-10" [ngClass]="returnType.indexOf('empty_truck') != -1 ? 'bg-CDF3FF' : 'bg-FFFFFF'">
+      <div *ngIf="returnType?.indexOf('empty_truck') !== -1" class="replanification-block m-10 bg-CDF3FF">
         <ion-icon name="car-outline" class="agenda-icon"></ion-icon>
         <span class="replanification-text">{{ 'Truck to empty' | translate }}</span>
       </div>
-      
-      <div class="replanification-block m-10"
-        [ngClass]="returnType.indexOf('agent_absence') != -1 ? 'bg-D6BDFF' : 'bg-FFFFFF'">
+
+      <div *ngIf="returnType?.indexOf('agent_absence') !== -1" class="replanification-block m-10 bg-D6BDFF">
         <ion-icon name="person-remove-outline" class="agenda-icon"></ion-icon>
         <span class="replanification-text">{{ 'Agent absence' | translate }}</span>
       </div>
-      
-      <div class="replanification-block m-10" [ngClass]="returnType.indexOf('accident') != -1 ? 'bg-F4C5BA' : 'bg-FFFFFF'">
+
+      <div *ngIf="returnType?.indexOf('accident') !== -1" class="replanification-block m-10 bg-F4C5BA">
         <ion-icon name="medkit-outline" class="agenda-icon"></ion-icon>
         <span class="replanification-text">{{ 'Accident' | translate }}</span>
       </div>
 
-
       <div class="recording-card" *ngIf="audioUrl?.url?.includes('http')">
-      
         <!-- Play / Pause -->
         <div class="play-btn" (click)="playRecordingAgain()">
           <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
         </div>
-      
-        <!-- Timer -->
-        <span class="record-time">
-          {{ durationDisplay }}
-        </span>
-      
-        <!-- Wave -->
-        <div id="waveform">
-        </div>
-      
-        <!-- Audio réel -->
-        
-  
-          </div>
-      
-    </ion-card>
 
+        <!-- Timer -->
+        <span class="record-time">{{ durationDisplay }}</span>
+
+        <!-- Wave -->
+        <div id="waveform"></div>
+
+        <!-- Audio réel -->
+      </div>
+    </ion-card>
 
     <div class="feedback-container">
       <div class="feedback-btn" (click)="openFeedbackModal()">
-        <span class="feedback-text">
-          Faire un retour à l’agent
-        </span>
+        <span class="feedback-text">Faire un retour à l’agent</span>
       </div>
     </div>
 
-
-
-
-<!--
+    <!--
     <div class="center-title">
       <p class="cls-title">{{ 'Return mission' | translate }} 11</p> 
     </div>

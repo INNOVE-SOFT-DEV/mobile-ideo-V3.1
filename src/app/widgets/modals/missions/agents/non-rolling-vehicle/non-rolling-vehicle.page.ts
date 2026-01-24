@@ -68,7 +68,7 @@ export class NonRollingVehiclePage implements OnInit {
 
   async ngOnInit() {
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
-    await this.geolocation.getCurrentLocation();
+    // await this.geolocation.getCurrentLocation();
     this.planningType = this.data.teamMember.planning_punctual_agent_id != null ? "punctual" : "forfaitaire";
     this.currentLocation = this.geolocation.coordinates;
   }

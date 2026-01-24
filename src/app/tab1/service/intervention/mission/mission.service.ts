@@ -34,6 +34,9 @@ export class MissionService implements MissionInterface {
       }
     });
   }
+  getSupervisorAudioReport(data: any): Observable<any> {
+    return this.missionRepo.getSupervisorAudioReport(data);
+  }
   getDispatchAgent(): Observable<any> {
     return this.missionRepo.getDispatchAgent();
   }

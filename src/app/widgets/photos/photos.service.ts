@@ -42,11 +42,9 @@ export class PhotosService {
         source: CameraSource.Photos
       });
     }
-    console.log(this.lastImage);
-    
   }
 
-  getInfoBase64ToBlob(base64: string, contentType :string) {
+  getInfoBase64ToBlob(base64: string, contentType: string) {
     const byteChars = atob(base64);
     const byteNumbers = new Array(byteChars.length);
 

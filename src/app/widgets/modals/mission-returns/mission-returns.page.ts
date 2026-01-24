@@ -22,6 +22,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
   isRecording: boolean = false;
   durationDisplay: string = "";
   waveSurfer?: WaveSurfer;
+  waveSurfer_reply?: WaveSurfer;
   audioRecording?: Blob;
   blobUrl?: string;
   replanification: boolean = false;
@@ -36,9 +37,12 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
   uuid: string = "";
   user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
   internal: any;
+  reply: any;
+  isPlaying = false;
 
   private durationSub?: Subscription;
   loadingMessage: string = "";
+  durationDisplay_reply: string = "";
 
   constructor(
     private modalController: ModalController,
@@ -130,7 +134,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
           return_types: this.returnTypes,
           client_uuid: this.uuid,
           important: this.important,
-          recorded_at:new Date().toISOString()
+          recorded_at: new Date().toISOString()
         }
       };
       if (this.audioRecording) {
@@ -181,19 +185,76 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
       object.return_types.includes("agent_absence") ? (this.agentAbsence = true) : null;
     }
   }
+  createWaves_reply() {
+    this.waveSurfer_reply?.destroy();
+    this.waveSurfer_reply = WaveSurfer.create({
+      container: "#waveform-reply",
+      waveColor: "white",
+      progressColor: "gray",
+      normalize: true,
+      height: 52,
+      barWidth: 3,
+      barRadius: 3
+    });
+    this.waveSurfer_reply.on("audioprocess", () => {
+      if (this.waveSurfer_reply) {
+        const currentTime = this.waveSurfer_reply.getCurrentTime();
+        this.durationDisplay_reply = this.formatDuration(currentTime);
+      }
+    });
+
+    this.waveSurfer_reply.on("finish", () => {
+      this.isPlaying = false;
+      this.getAudioDurationWithFetch();
+    });
+  }
+  formatDuration(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" + secs : secs}`;
+  }
+
+  getAudioDurationWithFetch() {
+    if (!this.reply?.audio_url) return;
+
+    fetch(this.reply.audio_url.url)
+      .then(response => response.arrayBuffer())
+      .then(arrayBuffer => {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        return audioContext.decodeAudioData(arrayBuffer);
+      })
+      .then(decodedData => {
+        const duration = decodedData.duration;
+        this.durationDisplay_reply = this.formatDuration(duration);
+      })
+      .catch(err => {
+        console.error("Error decoding audio:", err);
+        this.durationDisplay_reply = "Unknown";
+      });
+  }
+
+  playRecordingAgain_reply() {
+    if (this.waveSurfer_reply && this.reply?.audio_url.url) {
+      this.isPlaying = true;
+      this.waveSurfer_reply.playPause();
+    }
+  }
 
   async getReturns() {
     await this.loadingService.present(this.loadingMessage);
     this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
-        this.setReturnTypes(value);
-        this.important = value.important;
-        if (value.audio_url) {
-          this.blobUrl = value.audio_url;
+        this.reply = value?.reply;
+        this.setReturnTypes(value?.audio_report || {});
+        this.important = value.audio_report?.important;
+        if (value.audio_report?.audio_url) {
+          this.blobUrl = value.audio_report?.audio_url;
           this.isRecording = true;
           await this.loadingService.dimiss();
+          this.createWaves_reply();
           this.createWaves();
-          this.waveSurfer?.load(value.audio_url.url);
+          this.waveSurfer_reply?.load(value.reply?.audio_url.url);
+          this.waveSurfer?.load(value.audio_report?.audio_url.url);
         }
         await this.loadingService.dimiss();
       },

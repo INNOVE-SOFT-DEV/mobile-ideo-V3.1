@@ -72,11 +72,11 @@ export class Tab1Page implements OnInit, OnDestroy {
         this.punctuals = this.foramtplannings(value.punctuals);
         this.regulars = this.foramtplannings(value.regulars);
         this.forfaitaires = this.foramtplannings(value.flat_rates);
-        this.counts= {
+        this.counts = {
           punctuals_count: this.punctuals.length,
           regulars_count: this.regulars.length,
           forfaitaires_count: this.forfaitaires.length
-        }
+        };
         // this.counts = value.counts;
         this.superVisors = value.supervisors_contact;
         // await this.loadingService.dimiss();
@@ -89,8 +89,6 @@ export class Tab1Page implements OnInit, OnDestroy {
   }
 
   foramtplannings(data: any) {
-    console.log(data);
-
     this.noSchedule = 0;
     return data.map((element: any) => {
       element["showDetails"] = false;

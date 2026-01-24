@@ -12,10 +12,7 @@ import {LoadingControllerService} from "src/app/widgets/loading-controller/loadi
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {v4 as uuidv4} from "uuid";
 import {lastValueFrom} from "rxjs";
-import { zip , zipSync,} from 'fflate';
-
-
-
+import {zip, zipSync} from "fflate";
 
 @Injectable({
   providedIn: "root"
@@ -83,102 +80,90 @@ export class PhotoReportService {
     }
   }
 
-
-
-
-async checkAndSyncPhotos() {
-  if (this.isSyncingLock) {
-    return;
-  }
-  this.isSyncingLock = true;
-  this.isSyncingSubject.next(true);
-  try {
-    const reportsToSync = JSON.parse(localStorage.getItem("report_need_sync")!) || [];
-    for (const report of reportsToSync) {
-      console.log(report);
-      const obj: Record<string, Uint8Array> = {};
-
-      const groupedPresentationPhotos = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`)!) || [];
-      const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
-
-      for (const group of groupedPresentationPhotos) {
-        if (group[0]?.photo?.path && group[0].photo.path.includes("v3")) {
-          const fileDataBefore = await this.fs.readSecretFile(group[0].photo.path);
-          const filename = `before_${group[0]?.client_uuid}.jpeg`;
-          const binary = Uint8Array.from(atob(fileDataBefore), c => c.charCodeAt(0));
-          obj[filename] = binary;
-          console.log(group[0]?.photo);
-        }
-        if (group[1]?.photo?.path && group[1].photo.path.includes("v3")) {
-          const fileDataAfter = await this.fs.readSecretFile(group[1].photo.path);
-          const filename = `after_${group[1]?.client_uuid}.jpeg`;
-          const binary = Uint8Array.from(atob(fileDataAfter), c => c.charCodeAt(0));
-          obj[filename] = binary;
-          console.log(group[1]?.photo);
-        }
-      }
-
-      for (const photo of photosTruck) {
-        if (!photo.path || !photo.date) continue;
-        const fileData = await this.fs.readSecretFile(photo.path);
-        const filename = `truck_${photo?.client_uuid}.jpeg`;
-        const binary = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
-        obj[filename] = binary;
-      }
-
-      // --- CHANGE HERE: async zip instead of zipSync ---
-      const zipBlob: Blob = await new Promise((resolve, reject) => {
-        zip(obj, (err, data:any) => {
-          if (err) return reject(err);
-          resolve(new Blob([data], { type: 'application/zip' }));
-        });
-      });
-
-      const formData = new FormData();
-      formData.append('zip', zipBlob, `photos_internal_${report.internal}.zip`);
-      formData.append('internal', report.internal.toString());
-
-    const res = await lastValueFrom(
-  this.missionsService.syncPhotos(formData, report.internal)
-);
-
-reportsToSync.splice(
-  reportsToSync.findIndex((r: any) => r.internal === report.internal),
-  1
-);
-localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
-
-const data = await lastValueFrom(
-  this.missionsService.getPhotoReport(report.internal, report.type)
-);
-
-const gourped = data.pairs.map((p: any) => [
-  { id: p.before.id, client_uuid: p.before.client_uuid, photo_type: "photo_before", photo: { url: p.before.image_url?.url } },
-  { id: p.after.id, client_uuid: p.after.client_uuid, photo_type: "photo_after", photo: { url: p.after.image_url?.url } }
-]);
-
-const truckPhotos = data.truck.map((t: any) => ({
-  id: t.id,
-  client_uuid: t.client_uuid,
-  photo_type: "photo_truck",
-  url: t.image_url?.url
-}));
-
-localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(gourped));
-localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(truckPhotos));
-
-this.doneEvent.emit(true);
-
+  async checkAndSyncPhotos() {
+    if (this.isSyncingLock) {
+      return;
     }
-  } catch (err) {
-    console.error("Error syncing photos:", err);
-  } finally {
-    await this.loadingService.dimiss();
-    this.isSyncingLock = false;
-    this.isSyncingSubject.next(false);
-  }
-}
+    this.isSyncingLock = true;
+    this.isSyncingSubject.next(true);
+    try {
+      const reportsToSync = JSON.parse(localStorage.getItem("report_need_sync")!) || [];
+      for (const report of reportsToSync) {
+        const obj: Record<string, Uint8Array> = {};
 
+        const groupedPresentationPhotos = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`)!) || [];
+        const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
+
+        for (const group of groupedPresentationPhotos) {
+          if (group[0]?.photo?.path && group[0].photo.path.includes("v3")) {
+            const fileDataBefore = await this.fs.readSecretFile(group[0].photo.path);
+            const filename = `before_${group[0]?.client_uuid}.jpeg`;
+            const binary = Uint8Array.from(atob(fileDataBefore), c => c.charCodeAt(0));
+            obj[filename] = binary;
+          }
+          if (group[1]?.photo?.path && group[1].photo.path.includes("v3")) {
+            const fileDataAfter = await this.fs.readSecretFile(group[1].photo.path);
+            const filename = `after_${group[1]?.client_uuid}.jpeg`;
+            const binary = Uint8Array.from(atob(fileDataAfter), c => c.charCodeAt(0));
+            obj[filename] = binary;
+          }
+        }
+
+        for (const photo of photosTruck) {
+          if (!photo.path || !photo.date) continue;
+          const fileData = await this.fs.readSecretFile(photo.path);
+          const filename = `truck_${photo?.client_uuid}.jpeg`;
+          const binary = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+          obj[filename] = binary;
+        }
+
+        // --- CHANGE HERE: async zip instead of zipSync ---
+        const zipBlob: Blob = await new Promise((resolve, reject) => {
+          zip(obj, (err, data: any) => {
+            if (err) return reject(err);
+            resolve(new Blob([data], {type: "application/zip"}));
+          });
+        });
+
+        const formData = new FormData();
+        formData.append("zip", zipBlob, `photos_internal_${report.internal}.zip`);
+        formData.append("internal", report.internal.toString());
+
+        const res = await lastValueFrom(this.missionsService.syncPhotos(formData, report.internal));
+
+        reportsToSync.splice(
+          reportsToSync.findIndex((r: any) => r.internal === report.internal),
+          1
+        );
+        localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
+
+        const data = await lastValueFrom(this.missionsService.getPhotoReport(report.internal, report.type));
+
+        const gourped = data.pairs.map((p: any) => [
+          {id: p.before.id, client_uuid: p.before.client_uuid, photo_type: "photo_before", photo: {url: p.before.image_url?.url}},
+          {id: p.after.id, client_uuid: p.after.client_uuid, photo_type: "photo_after", photo: {url: p.after.image_url?.url}}
+        ]);
+
+        const truckPhotos = data.truck.map((t: any) => ({
+          id: t.id,
+          client_uuid: t.client_uuid,
+          photo_type: "photo_truck",
+          url: t.image_url?.url
+        }));
+
+        localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(gourped));
+        localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(truckPhotos));
+
+        this.doneEvent.emit(true);
+      }
+    } catch (err) {
+      console.error("Error syncing photos:", err);
+    } finally {
+      await this.loadingService.dimiss();
+      this.isSyncingLock = false;
+      this.isSyncingSubject.next(false);
+    }
+  }
 
   async base64ToArrayBuffer(base64: string): Promise<ArrayBuffer> {
     const binaryString = atob(base64);
@@ -233,96 +218,85 @@ this.doneEvent.emit(true);
     }
   }
 
-async downloadZip(
-  grouped_presentation_photos: any,
-  photos_truck: any,
-  intervention_name: string,
-  type: string,
-  date: string
-) {
-  if (!this.isConneted) {
-    this.toastController.presentToast("Action requise une connexion internet", "danger");
-    return;
-  }
+  async downloadZip(grouped_presentation_photos: any, photos_truck: any, intervention_name: string, type: string, date: string) {
+    if (!this.isConneted) {
+      this.toastController.presentToast("Action requise une connexion internet", "danger");
+      return;
+    }
 
-  const loadingMessage = await this.translateService.get("Loading").toPromise();
-  await this.loadingService.present(loadingMessage);
+    const loadingMessage = await this.translateService.get("Loading").toPromise();
+    await this.loadingService.present(loadingMessage);
 
-  const images = [...grouped_presentation_photos.flat(), ...photos_truck];
+    const images = [...grouped_presentation_photos.flat(), ...photos_truck];
 
-  if (images.length === 0) {
-    await this.toastController.presentToast("Aucune photo à télécharger", "warning");
-    await this.loadingService.dimiss();
-    return;
-  }
+    if (images.length === 0) {
+      await this.toastController.presentToast("Aucune photo à télécharger", "warning");
+      await this.loadingService.dimiss();
+      return;
+    }
 
-  const files: Record<string, Uint8Array> = {};
+    const files: Record<string, Uint8Array> = {};
 
-  for (const [index, img] of images.entries()) {
-    if (!img) continue;
+    for (const [index, img] of images.entries()) {
+      if (!img) continue;
 
-    const url = img?.photo?.url || img?.url;
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const buffer = await blob.arrayBuffer();
+      const url = img?.photo?.url || img?.url;
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const buffer = await blob.arrayBuffer();
 
-    const typePhoto =
-      img?.photo_type === "photo_truck" || !img?.photo_type
-        ? "camion"
-        : img?.photo_type.includes("before")
-        ? "before"
-        : "after";
+      const typePhoto = img?.photo_type === "photo_truck" || !img?.photo_type ? "camion" : img?.photo_type.includes("before") ? "before" : "after";
 
-    const filename = `image_${typePhoto}_${index + 1}_${intervention_name}_${type}_${date}.jpg`;
-    files[filename] = new Uint8Array(buffer);
-  }
+      const filename = `image_${typePhoto}_${index + 1}_${intervention_name}_${type}_${date}.jpg`;
+      files[filename] = new Uint8Array(buffer);
+    }
 
-  // Create ZIP (Uint8Array)
-  const zipData: Uint8Array = await new Promise((resolve, reject) => {
-    zip(files, (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
+    // Create ZIP (Uint8Array)
+    const zipData: Uint8Array = await new Promise((resolve, reject) => {
+      zip(files, (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
     });
-  });
 
-  // Convert Uint8Array → Base64 (REQUIRED for mobile)
-  const base64Zip = this.uint8ArrayToBase64(zipData);
+    // Convert Uint8Array → Base64 (REQUIRED for mobile)
+    const base64Zip = this.uint8ArrayToBase64(zipData);
 
-  const fileName = `photos_${intervention_name}_${type}_${date}.zip`;
+    const fileName = `photos_${intervention_name}_${type}_${date}.zip`;
 
-  await Filesystem.writeFile({
-    path: fileName,
-    data: base64Zip,
-    directory: Directory.Documents,
-  });
-
-  await this.loadingService.dimiss();
-
-  if (this.platform.is("hybrid")) {
-    const fileUri = await Filesystem.getUri({
-      directory: Directory.Documents,
+    await Filesystem.writeFile({
       path: fileName,
+      data: base64Zip,
+      directory: Directory.Documents
     });
 
-    await Share.share({
-      title: "Partager le fichier",
-      text: "Voici votre fichier compressé",
-      url: fileUri.uri,
-      dialogTitle: "Partager le fichier",
-    });
+    await this.loadingService.dimiss();
+
+    if (this.platform.is("hybrid")) {
+      const fileUri = await Filesystem.getUri({
+        directory: Directory.Documents,
+        path: fileName
+      });
+
+      await Share.share({
+        title: "Partager le fichier",
+        text: "Voici votre fichier compressé",
+        url: fileUri.uri,
+        dialogTitle: "Partager le fichier"
+      });
+    }
   }
-}
 
-uint8ArrayToBase64(bytes: Uint8Array): string {
-  let binary = "";
-  const chunkSize = 0x8000;
+  uint8ArrayToBase64(bytes: Uint8Array): string {
+    let binary = "";
+    const chunkSize = 0x8000;
 
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+
+    return btoa(binary);
   }
-
-  return btoa(binary);
-}
 
   async blobToBase64(blob: Blob): Promise<string> {
     return new Promise<string>((resolve, reject) => {
@@ -413,12 +387,9 @@ uint8ArrayToBase64(bytes: Uint8Array): string {
     return updatedClientUuids;
   }
 
-  uploadImagetoApi(base64String: any, type: string, currentDate: any , clientUuid?: string) {
-    console.log("uploadImagetoApi clientUuid:", clientUuid);
+  uploadImagetoApi(base64String: any, type: string, currentDate: any, clientUuid?: string) {
     const uniqueId = this.generateUniqueId();
     type = type === "photo_before" ? "before" : type === "photo_truck" ? "truck" : "after";
-    console.log(base64String);
-    
 
     const imageBase64 = base64String.startsWith("data:image") ? base64String : `data:image/jpeg;base64,${base64String}`;
 
@@ -426,38 +397,13 @@ uint8ArrayToBase64(bytes: Uint8Array): string {
       photo: [
         {
           photo_type: type,
-          client_uuid: clientUuid ,
+          client_uuid: clientUuid,
           image_base64: imageBase64
         }
       ]
     };
     return payload;
 
-    /*
-    const fileName = new Date().getTime() + ".jpeg";
-    const base64Data = base64String + "";
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], {type: "image/jpeg"});
-    const uploadData = new FormData();
-    uploadData.append("photo", blob, fileName);
-    uploadData.append("planning_type", this.planningType);
-    uploadData.append("planning_id", this.data.planning.id);
-    uploadData.append("uuid", this.generateUniqueId());
-     if (this.planningType == "punctual") {
-      uploadData.append("planning_punctual_id", this.data.planning.id);
-    } else if (this.planningType == "regular") {
-      uploadData.append("planning_regular_id", this.data.planning.id);
-    } else {
-      uploadData.append("forfaitaire_item_id", this.data.planning.id);
-    }
-    uploadData.append("photo_type", type);
-    //uploadData.append("date", currentDate + "");
 
-    return uploadData;*/
   }
 }

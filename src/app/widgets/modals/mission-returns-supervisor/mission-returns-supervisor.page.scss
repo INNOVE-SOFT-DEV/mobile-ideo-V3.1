@@ -173,7 +173,6 @@
   height: 52px;
 }
 
-
 .custom-card {
   //width: 100%;
   height: auto;
@@ -186,7 +185,7 @@
 
 .card-container {
   display: flex;
- gap: 10px;
+  gap: 10px;
   padding: 16px;
 }
 
@@ -222,13 +221,13 @@
 
 .row-3 {
   display: flex;
-    align-items: center;
-    gap: 5px;
+  align-items: center;
+  gap: 5px;
 }
 
 /* ===== Textes ===== */
 .title {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   font-size: 18px;
   line-height: 100%;
@@ -237,7 +236,7 @@
 }
 
 .address {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   font-size: 14px;
   line-height: 100%;
@@ -246,7 +245,7 @@
 }
 
 .date {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
@@ -269,7 +268,7 @@
 }
 
 .time-text {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   font-size: 12px;
   line-height: 100%;
@@ -277,9 +276,8 @@
   color: #233341;
 }
 
-
 .profile-card {
- // width: 100%;
+  // width: 100%;
   height: auto;
   border-radius: 14px;
   padding: 20px;
@@ -321,7 +319,7 @@
 
 /* ===== Texte ===== */
 .name {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   font-size: 16px;
   line-height: 100%;
@@ -339,7 +337,7 @@
 }
 
 .role-text {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   font-size: 14px;
   line-height: 100%;
@@ -347,11 +345,8 @@
   color: #233341;
 }
 
-
-
-
 .recording-card {
- // width: 100%;
+  // width: 100%;
   height: 56px;
   background: linear-gradient(90deg, #0aa5e8, #1bb1f5);
   border-radius: 14px;
@@ -381,7 +376,7 @@
 
 /* Time */
 .record-time {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-size: 14px;
   font-weight: 500;
   color: #ffffff;
@@ -429,11 +424,6 @@
   }
 }
 
-
-
-
-
-
 /* Conteneur pour centrer dans la page */
 .feedback-container {
   width: 100%;
@@ -458,7 +448,7 @@
 
 /* Texte */
 .feedback-text {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   font-size: 16px;
   line-height: 280%;

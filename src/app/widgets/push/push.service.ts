@@ -13,19 +13,15 @@ export class PushService {
     //     PushNotifications.register();
     //   }
     // });
-
     // PushNotifications.addListener("registration", (token: Token) => {
     //   console.log("🔥 FCM Token:", token.value);
     // });
-
     // PushNotifications.addListener("registrationError", err => {
     //   console.error("Erreur FCM:", err);
     // });
-
     // PushNotifications.addListener("pushNotificationReceived", (notification: PushNotificationSchema) => {
     //   console.log("📩 Notification reçue", notification);
     // });
-
     // PushNotifications.addListener("pushNotificationActionPerformed", (notification: ActionPerformed) => {
     //   console.log("👉 Notification cliquée", notification);
     // });

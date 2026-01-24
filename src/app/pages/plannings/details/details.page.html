@@ -240,7 +240,7 @@
 
     <ng-container *ngIf="planning?.team.length >0">
       <div class="cls-list-c-b">
-        <ion-list class="cls-ion-list-c">
+        <ion-list class="cls-ion-list-c" *ngIf="hasSubcontractor">
           <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? '' : 'none' }">
             <ion-grid *ngIf="agent?.manager && !agent.platform">
               <ion-row class="align-center">

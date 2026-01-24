@@ -80,7 +80,7 @@ export class ChatRoomPage implements OnInit {
         ...msg,
         timeAgo: this.chatService.getTimeAgo(msg.created_at)
       }));
-      console.log(this.messages);
+      // console.log(this.messages);
 
       await this.loadingService.dimiss();
       this.scrollToBottomSmoothly();
@@ -233,7 +233,7 @@ export class ChatRoomPage implements OnInit {
     for (let i = 0; i < this.photoService.multipleImages.length; i++) {
       const photo = this.photoService.multipleImages[i];
       const response = await fetch(photo.webPath);
-      console.log(response);
+      // console.log(response);
 
       const blob = await response.blob();
       formData.append("images[]", blob, `image_${Date.now()}_${i}.${photo.format}`);

@@ -75,8 +75,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.refreshLocalData();
-    console.log(this.data.planning.team.find((u: any) => u.id == this.user.id).pointing_internal[0].id);
-    console.log(this.data.planning.today_schedule);
 
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     Network.addListener("networkStatusChange", async status => {
@@ -148,7 +146,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
     if (this.service.startedOn() == null && !this.isPointed) {
-      await this.geolocationService.getCurrentLocation();
+      //await this.geolocationService.getCurrentLocation();
       let userCoordinates = this.geolocationService.coordinates;
       let pointageInternalId = this.service.getPointageId();
       let body: any = {
@@ -179,19 +177,14 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
-    if (false) {
+    if (this.isConneted) {
       let client_uuid = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
       } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
       }
-      const data = this.service.uploadImagetoApi(
-        this.photosService.lastImage.base64String,
-        photo_type,
-        currentDate,
-        this.grouped_presentation_photos[this.grouped_presentation_photos.length - 1][0].client_uuid
-      );
+      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, this.grouped_presentation_photos[i][0].client_uuid);
       const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
       let form = data;
       if (hasAfterOrBefore) {
@@ -226,7 +219,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } else {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
       if (url) {
-
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][0].photo.path = url.path;
@@ -248,7 +240,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
         }
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
- 
+
         const index = reportNeedSync.findIndex((item: any) => item.internal === this.service.getPointageId());
         if (index == -1) {
           reportNeedSync.push({id: this.data.planning.id, type: this.planningType, internal: this.service.getPointageId()});
@@ -290,8 +282,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       this.isSliderOpen = true;
     }
   }
-
-
 
   private async handleLocalPhotoStateUpdate(photo: any, photosArray: any, type: string, index: number, checkGroupedRemoval?: () => boolean): Promise<void> {
     photo.url = "";
@@ -352,7 +342,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
               return;
             }*/
 
-
             const isLocalPhoto = photo.url.includes("ideo_v3");
 
             if (isLocalPhoto) {
@@ -366,7 +355,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
                 await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
               }
             } else {
-              if(!this.isConneted){
+              if (!this.isConneted) {
                 this.setOpen(true);
                 return;
               }
@@ -542,7 +531,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       console.warn(`Photo object or array not found for type: ${type}, index: ${i}. Cannot proceed with deletion.`);
       return;
     }
-    console.log(photo);
     await this.performDeletePhoto(targetPhoto, photosArray, type, i, typePhoroto, photo.client_uuid, checkGroupedRemoval);
   }
 }

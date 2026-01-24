@@ -113,8 +113,6 @@ export class ReportsPhotosPage implements OnInit {
 
     this.missionService.getPhotoReportsSupervisor(this.planning.type, scheduleId).subscribe(
       async (data: any[]) => {
-        console.log(data);
-
         this.images = [];
         this.imagesCamions = [];
 
@@ -183,8 +181,6 @@ export class ReportsPhotosPage implements OnInit {
   }
 
   sendReport() {
-    console.log(this.planning);
-    
     this.router.navigate([
       "/send-report",
       {
