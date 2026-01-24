@@ -171,25 +171,21 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     }
 
     const base64 = this.photosService.lastImage.base64String;
-    console.log(this.photosService.lastImage);
 
     const blob = this.photosService.getInfoBase64ToBlob(base64, "image/jpeg");
 
     try {
       const exifData = await exifr.parse(blob);
-      console.log(exifData);
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
-    if (this.isConneted) {
+    if (false) {
       let client_uuid = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
       } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
       }
-      console.log(client_uuid);
-      console.log(this.grouped_presentation_photos[this.grouped_presentation_photos.length - 1][0].client_uuid);
       const data = this.service.uploadImagetoApi(
         this.photosService.lastImage.base64String,
         photo_type,
@@ -230,7 +226,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } else {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
       if (url) {
-        console.log(this.grouped_presentation_photos[i][0].client_uuid);
 
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
@@ -253,9 +248,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
         }
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
-        console.log(reportNeedSync);
-        console.log(this.data);
-
+ 
         const index = reportNeedSync.findIndex((item: any) => item.internal === this.service.getPointageId());
         if (index == -1) {
           reportNeedSync.push({id: this.data.planning.id, type: this.planningType, internal: this.service.getPointageId()});
@@ -336,14 +329,12 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     uuid: string,
     checkGroupedRemoval?: () => boolean
   ): Promise<void> {
-    console.log(type);
     let server_id: any;
     type.includes("before")
       ? (server_id = this.grouped_presentation_photos[index][0].id)
       : type.includes("after")
         ? (server_id = this.grouped_presentation_photos[index][1].id)
         : (server_id = this.photos_truck[index].id);
-    console.log(photo);
 
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
@@ -361,10 +352,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
               return;
             }*/
 
-            console.log(this.isConneted);
 
             const isLocalPhoto = photo.url.includes("ideo_v3");
-            console.log(isLocalPhoto);
 
             if (isLocalPhoto) {
               try {
@@ -548,7 +537,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         console.warn(`Unknown photo type: ${type}`);
         return;
     }
-    console.log(targetPhoto, photosArray);
 
     if (!targetPhoto || !photosArray) {
       console.warn(`Photo object or array not found for type: ${type}, index: ${i}. Cannot proceed with deletion.`);
