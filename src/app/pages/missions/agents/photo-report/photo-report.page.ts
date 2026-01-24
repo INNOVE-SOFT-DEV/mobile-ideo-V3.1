@@ -14,7 +14,7 @@ import {EmailComposer} from "capacitor-email-composer";
 import {AuthService} from "src/app/pages/login/service/auth.service";
 import exifr from "exifr";
 import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
-import { zip } from "fflate";
+import {zip} from "fflate";
 @Component({
   selector: "app-photo-report",
   templateUrl: "./photo-report.page.html",
@@ -147,28 +147,28 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
-    // if (this.service.startedOn() == null && !this.isPointed) {
-    //   await this.geolocationService.getCurrentLocation();
-    //   let userCoordinates = this.geolocationService.coordinates;
-    //   let pointageInternalId = this.service.getPointageId();
-    //   let body: any = {
-    //     point: {
-    //       longitude: userCoordinates.longitude,
-    //       latitude: userCoordinates.latitude,
-    //       recorder_at: new Date().toISOString()
-    //     }
-    //   };
+    if (this.service.startedOn() == null && !this.isPointed) {
+      await this.geolocationService.getCurrentLocation();
+      let userCoordinates = this.geolocationService.coordinates;
+      let pointageInternalId = this.service.getPointageId();
+      let body: any = {
+        point: {
+          longitude: userCoordinates.longitude,
+          latitude: userCoordinates.latitude,
+          recorder_at: new Date().toISOString()
+        }
+      };
 
-    //   this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
-    //     next: async () => {
-    //       this.isPointed = true;
-    //       // console.log("Pointage début réalisé ");
-    //     },
-    //     error: () => {
-    //       console.error("Erreur lors du pointage ");
-    //     }
-    //   });
-    // }
+      this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
+        next: async () => {
+          this.isPointed = true;
+          // console.log("Pointage début réalisé ");
+        },
+        error: () => {
+          console.error("Erreur lors du pointage ");
+        }
+      });
+    }
 
     const base64 = this.photosService.lastImage.base64String;
     console.log(this.photosService.lastImage);
@@ -178,7 +178,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     try {
       const exifData = await exifr.parse(blob);
       console.log(exifData);
-      
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
@@ -208,15 +207,15 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         next: async value => {
           if (value[0].photo_type == "before") {
             this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
-            this.grouped_presentation_photos[i][0].id = value[0].id
+            this.grouped_presentation_photos[i][0].id = value[0].id;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
             this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
-            this.grouped_presentation_photos[i][1].id = value[0].id
+            this.grouped_presentation_photos[i][1].id = value[0].id;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else {
             this.photos_truck[i].url = value[0]?.image_url?.url;
-            this.photos_truck[i].id = value[0].id
+            this.photos_truck[i].id = value[0].id;
 
             this.photos_truck[i].client_uuid = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.photos_truck);
@@ -299,10 +298,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     }
   }
 
-  private getPhotoIdFromUrl(url: string): string {
-    const parts = url.split("/");
-    return parts[parts.length - 2];
-  }
+
 
   private async handleLocalPhotoStateUpdate(photo: any, photosArray: any, type: string, index: number, checkGroupedRemoval?: () => boolean): Promise<void> {
     photo.url = "";
@@ -340,10 +336,14 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     uuid: string,
     checkGroupedRemoval?: () => boolean
   ): Promise<void> {
-    console.log( type);
-    let server_id : any
-    type.includes('before') ?  server_id = this.grouped_presentation_photos[index][0].id : type.includes('after') ? server_id = this.grouped_presentation_photos[index][1].id : server_id = this.photos_truck[index].id
-
+    console.log(type);
+    let server_id: any;
+    type.includes("before")
+      ? (server_id = this.grouped_presentation_photos[index][0].id)
+      : type.includes("after")
+        ? (server_id = this.grouped_presentation_photos[index][1].id)
+        : (server_id = this.photos_truck[index].id);
+    console.log(photo);
 
     const alert = await this.alertController.create({
       header: "Supprimer la photo ?",
@@ -361,45 +361,39 @@ export class PhotoReportPage implements OnInit, OnDestroy {
               return;
             }*/
 
-            if (!this.isConneted) {
-              this.setOpen(true);
-              return;
-            }
-            const photoId = this.getPhotoIdFromUrl(photo.url);
-            console.log(uuid);
+            console.log(this.isConneted);
 
-            await this.loadingService.present(this.loadingMessage);
-            console.log(server_id);
-            
+            const isLocalPhoto = photo.url.includes("ideo_v3");
+            console.log(isLocalPhoto);
 
-            this.missionsService.deletePhoto(server_id, this.planningType, this.data.planning.team.find((u: any) => u.id == this.user.id).pointing_internal[0].id, typePhoroto).subscribe({
-              next: async () => {
+            if (isLocalPhoto) {
+              try {
+                await this.fs.deleteSecretFile(photo.path);
                 await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
                 await this.loadingService.dimiss();
-              },
-              error: async (err: any) => {
+              } catch (localFileErr) {
                 await this.loadingService.dimiss();
-                console.error(`Error deleting photo from API (${type}, ID: ${photoId}):`, err);
+                console.error(`Error deleting local file (${type}, Path: ${photo.path}):`, localFileErr);
+                await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
               }
-            });
-
-            /*const isServerPhoto = photo.url && photo.url.includes(environment.urlAPI);
-            if (isServerPhoto) {
-              
             } else {
-              if (photo.path) {
-                try {
-                  await this.fs.deleteSecretFile(photo.path);
-                  await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
-                } catch (localFileErr) {
-                  console.error(`Error deleting local file (${type}, Path: ${photo.path}):`, localFileErr);
-                  await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
-                }
-              } else {
-                console.warn(`Local photo at index ${index} of type ${type} has no path to delete. Updating local state.`);
-                await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
+              if(!this.isConneted){
+                this.setOpen(true);
+                return;
               }
-            }*/
+              this.missionsService
+                .deletePhoto(server_id, this.planningType, this.data.planning.team.find((u: any) => u.id == this.user.id).pointing_internal[0].id, typePhoroto)
+                .subscribe({
+                  next: async () => {
+                    await this.handleLocalPhotoStateUpdate(photo, photosArray, type, index, checkGroupedRemoval);
+                    await this.loadingService.dimiss();
+                  },
+                  error: async (err: any) => {
+                    await this.loadingService.dimiss();
+                    console.error(`Error deleting photo from API (${type}, ID: ${server_id}):`, err);
+                  }
+                });
+            }
           }
         }
       ]
@@ -409,8 +403,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async downloadZip() {
-  console.log(this.data.planning);
-  
     await this.service.downloadZip(
       this.grouped_presentation_photos,
       this.photos_truck,
@@ -420,69 +412,59 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     );
   }
 
-async openEmail() {
-  await this.loadingService.present(this.loadingMessage);
+  async openEmail() {
+    await this.loadingService.present(this.loadingMessage);
 
-  const images = [
-    ...this.grouped_presentation_photos.flat(),
-    ...this.photos_truck
-  ];
+    const images = [...this.grouped_presentation_photos.flat(), ...this.photos_truck];
 
-  const files: Record<string, Uint8Array> = {};
+    const files: Record<string, Uint8Array> = {};
 
-  for (const [index, img] of images.entries()) {
-    if (!img) continue;
+    for (const [index, img] of images.entries()) {
+      if (!img) continue;
 
-    const url = img?.photo?.url || img?.url;
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const buffer = await blob.arrayBuffer();
+      const url = img?.photo?.url || img?.url;
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const buffer = await blob.arrayBuffer();
 
-    const typePhoto =
-      img?.photo_type === "photo_truck" || !img?.photo_type
-        ? "camion"
-        : img?.photo_type === "photo_before"
-        ? "before"
-        : "after";
+      const typePhoto = img?.photo_type === "photo_truck" || !img?.photo_type ? "camion" : img?.photo_type === "photo_before" ? "before" : "after";
 
-    const filename = `image_${typePhoto}_${index + 1}.jpg`;
-    files[filename] = new Uint8Array(buffer);
+      const filename = `image_${typePhoto}_${index + 1}.jpg`;
+      files[filename] = new Uint8Array(buffer);
+    }
+
+    const zipData: Uint8Array = await new Promise((resolve, reject) => {
+      zip(files, (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
+    });
+
+    const base64Zip = this.uint8ArrayToBase64(zipData);
+
+    const fileName = `photos_${this.data.planning.intervention.name}_${this.planningType}_${this.data.planning.id}_${this.data.planning.today_schedule.date}.zip`;
+
+    const logoUrl = `${environment.url_web}/assets/img/logo-Ideo2.png`;
+
+    await this.loadingService.dimiss();
+
+    EmailComposer.open({
+      to: ["h.hadjrabah@ideogroupe.fr"],
+      subject: `Rapport photos ${this.data.planning.intervention.name}`,
+      isHtml: true,
+      body: this.buildEmailHtml(logoUrl),
+      attachments: [
+        {
+          type: "base64",
+          path: base64Zip,
+          name: fileName
+        }
+      ]
+    });
   }
 
-  const zipData: Uint8Array = await new Promise((resolve, reject) => {
-    zip(files, (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
-    });
-  });
-
-
-
-  const base64Zip = this.uint8ArrayToBase64(zipData);
-
-  const fileName = `photos_${this.data.planning.intervention.name}_${this.planningType}_${this.data.planning.id}_${this.data.planning.today_schedule.date}.zip`;
-
-  const logoUrl = `${environment.url_web}/assets/img/logo-Ideo2.png`;
-
-  await this.loadingService.dimiss();
-
-  EmailComposer.open({
-    to: ["h.hadjrabah@ideogroupe.fr"],
-    subject: `Rapport photos ${this.data.planning.intervention.name}`,
-    isHtml: true,
-    body: this.buildEmailHtml(logoUrl),
-    attachments: [
-      {
-        type: "base64",
-        path: base64Zip,
-        name: fileName
-      }
-    ]
-  });
-}
-
-buildEmailHtml(logoUrl: string): string {
-  return `<!DOCTYPE html>
+  buildEmailHtml(logoUrl: string): string {
+    return `<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -498,20 +480,14 @@ buildEmailHtml(logoUrl: string): string {
     <table style="max-width:600px;background:#ffffff;">
       <tr>
         <td align="center" style="padding:30px;">
-          <img src="${'https://ideo.webo.tn/assets/logo-afd07cf48e2d231f6478ebb84df8ff36ea2470c7f5aac563557cd07dbb0e32cf.png'}" width="200" />
+          <img src="${"https://ideo.webo.tn/assets/logo-afd07cf48e2d231f6478ebb84df8ff36ea2470c7f5aac563557cd07dbb0e32cf.png"}" width="200" />
         </td>
       </tr>
       <tr>
         <td style="padding:20px;color:#333;font-size:16px;line-height:1.6;">
           Agent : ${this.user.first_name} ${this.user.last_name}<br><br>
           Identifiant agent : ${this.user.id}<br><br>
-          Type de mission : ${
-            this.data.planningType === "punctual"
-              ? "Ponctuelle"
-              : this.data.planningType === "regular"
-              ? "Régulière"
-              : "Forfaitaire"
-          }<br><br>
+          Type de mission : ${this.data.planningType === "punctual" ? "Ponctuelle" : this.data.planningType === "regular" ? "Régulière" : "Forfaitaire"}<br><br>
           Mission : ${this.data.planning.intervention.name}<br><br>
           Date : ${this.data.planning.date || ""}<br><br>
           Identifiant mission : ${this.data.planning.id}<br><br>
@@ -523,30 +499,28 @@ buildEmailHtml(logoUrl: string): string {
   </center>
 </body>
 </html>`;
-}
-
-
-uint8ArrayToBase64(bytes: Uint8Array): string {
-  let binary = "";
-  const chunkSize = 0x8000;
-
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
   }
 
-  return btoa(binary);
-}
+  uint8ArrayToBase64(bytes: Uint8Array): string {
+    let binary = "";
+    const chunkSize = 0x8000;
+
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+
+    return btoa(binary);
+  }
 
   async deletePhoto(type: string, i: number, uuid: string, photo: any) {
     uuid = photo?.client_uuid;
-    if(type?.includes('before')) {
+    if (type?.includes("before")) {
       photo = this.grouped_presentation_photos[i][0];
-    } else if(type?.includes('after')) {
+    } else if (type?.includes("after")) {
       photo = this.grouped_presentation_photos[i][1];
     } else {
       photo = this.photos_truck[i];
     }
-    
 
     let targetPhoto: any;
     let photosArray: any;
@@ -574,8 +548,8 @@ uint8ArrayToBase64(bytes: Uint8Array): string {
         console.warn(`Unknown photo type: ${type}`);
         return;
     }
-       console.log(targetPhoto , photosArray);
-       
+    console.log(targetPhoto, photosArray);
+
     if (!targetPhoto || !photosArray) {
       console.warn(`Photo object or array not found for type: ${type}, index: ${i}. Cannot proceed with deletion.`);
       return;
