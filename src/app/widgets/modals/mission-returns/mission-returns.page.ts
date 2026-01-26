@@ -186,6 +186,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
     }
   }
   createWaves_reply() {
+    if(!this.reply) return;
     this.waveSurfer_reply?.destroy();
     this.waveSurfer_reply = WaveSurfer.create({
       container: "#waveform-reply",
@@ -246,9 +247,9 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
       next: async value => {
         this.reply = value?.reply;
         this.setReturnTypes(value?.audio_report || {});
-        this.important = value.audio_report?.important;
-        if (value.audio_report?.audio_url) {
-          this.blobUrl = value.audio_report?.audio_url;
+        this.important = value?.audio_report?.important;
+        if (value?.audio_report?.audio_url) {
+          this.blobUrl = value?.audio_report?.audio_url;
           this.isRecording = true;
           await this.loadingService.dimiss();
           this.createWaves_reply();

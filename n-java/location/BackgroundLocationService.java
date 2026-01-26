@@ -254,7 +254,7 @@ private void saveQueueToFile(JSONArray queue) {
             Log.d(TAG, "Uploading payload: " + body.toString());
 
             java.net.URL url = new java.net.URL(
-                    "https://demo.ssp-protection.fr/api/v1/pointing_internals/auto_point"
+                    "https://ideo.webo.tn/api/v1/pointing_internals/auto_point"
             );
             java.net.HttpURLConnection conn =
                     (java.net.HttpURLConnection) url.openConnection();

@@ -41,14 +41,15 @@ export class AppComponent implements OnInit {
     await this.photoReportService.detectNetworksStatusChange();
     this.photoReportService.checkAndSyncPhotos();
     this.isConnected = (await Network.getStatus()).connected;
+    this.isConnected ? this.photoReportService.checkAndSyncPhotos() : null;
     // this.chatService.loadUsers();
-    App.addListener("appStateChange", ({isActive}) => {
-      if (isActive) {
-        if (this.isConnected) {
-          this.photoReportService.checkAndSyncPhotos();
-        }
-      }
-    });
+    // App.addListener("appStateChange", ({isActive}) => {
+    //   if (isActive) {
+    //     if (this.isConnected) {
+    //       this.photoReportService.checkAndSyncPhotos();
+    //     }
+    //   }
+    // });
     //  this.googleMapsLoader.load(res);
     // this.geolocationService.getApiKey().subscribe((res: any) => {
     //   if (res) {

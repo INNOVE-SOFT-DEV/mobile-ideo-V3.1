@@ -359,6 +359,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
                 this.setOpen(true);
                 return;
               }
+              await this.loadingService.present(this.loadingMessage);
               this.missionsService
                 .deletePhoto(server_id, this.planningType, this.data.planning.team.find((u: any) => u.id == this.user.id).pointing_internal[0].id, typePhoroto)
                 .subscribe({
