@@ -80,90 +80,186 @@ export class PhotoReportService {
     }
   }
 
-  async checkAndSyncPhotos() {
-    if (this.isSyncingLock) {
-      return;
-    }
-    this.isSyncingLock = true;
-    this.isSyncingSubject.next(true);
-    try {
-      const reportsToSync = JSON.parse(localStorage.getItem("report_need_sync")!) || [];
-      for (const report of reportsToSync) {
-        const obj: Record<string, Uint8Array> = {};
-
-        const groupedPresentationPhotos = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`)!) || [];
-        const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`)!) || [];
-
-        for (const group of groupedPresentationPhotos) {
-          if (group[0]?.photo?.path && group[0].photo.path.includes("v3")) {
-            const fileDataBefore = await this.fs.readSecretFile(group[0].photo.path);
-            const filename = `before_${group[0]?.client_uuid}.jpeg`;
-            const binary = Uint8Array.from(atob(fileDataBefore), c => c.charCodeAt(0));
-            obj[filename] = binary;
-          }
-          if (group[1]?.photo?.path && group[1].photo.path.includes("v3")) {
-            const fileDataAfter = await this.fs.readSecretFile(group[1].photo.path);
-            const filename = `after_${group[1]?.client_uuid}.jpeg`;
-            const binary = Uint8Array.from(atob(fileDataAfter), c => c.charCodeAt(0));
-            obj[filename] = binary;
-          }
-        }
-
-        for (const photo of photosTruck) {
-          if (!photo.path || !photo.date) continue;
-          const fileData = await this.fs.readSecretFile(photo.path);
-          const filename = `truck_${photo?.client_uuid}.jpeg`;
-          const binary = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
-          obj[filename] = binary;
-        }
-
-        // --- CHANGE HERE: async zip instead of zipSync ---
-        const zipBlob: Blob = await new Promise((resolve, reject) => {
-          zip(obj, (err, data: any) => {
-            if (err) return reject(err);
-            resolve(new Blob([data], {type: "application/zip"}));
-          });
-        });
-
-        const formData = new FormData();
-        formData.append("zip", zipBlob, `photos_internal_${report.internal}.zip`);
-        formData.append("internal", report.internal.toString());
-
-        const res = await lastValueFrom(this.missionsService.syncPhotos(formData, report.internal));
-
-        reportsToSync.splice(
-          reportsToSync.findIndex((r: any) => r.internal === report.internal),
-          1
-        );
-        localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
-
-        const data = await lastValueFrom(this.missionsService.getPhotoReport(report.internal, report.type));
-
-        const gourped = data.pairs.map((p: any) => [
-          {id: p.before.id, client_uuid: p.before.client_uuid, photo_type: "photo_before", photo: {url: p.before.image_url?.url}},
-          {id: p.after.id, client_uuid: p.after.client_uuid, photo_type: "photo_after", photo: {url: p.after.image_url?.url}}
-        ]);
-
-        const truckPhotos = data.truck.map((t: any) => ({
-          id: t.id,
-          client_uuid: t.client_uuid,
-          photo_type: "photo_truck",
-          url: t.image_url?.url
-        }));
-
-        localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(gourped));
-        localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(truckPhotos));
-
-        this.doneEvent.emit(true);
-      }
-    } catch (err) {
-      console.error("Error syncing photos:", err);
-    } finally {
-      await this.loadingService.dimiss();
-      this.isSyncingLock = false;
-      this.isSyncingSubject.next(false);
-    }
+ async checkAndSyncPhotos() {
+  if (this.isSyncingLock) {
+    console.warn("🔒 Sync already running, skipping");
+    return;
   }
+
+  this.isSyncingLock = true;
+  this.isSyncingSubject.next(true);
+
+  console.group("🟡 OFFLINE PHOTO SYNC START");
+
+  try {
+    const reportsToSync: any[] = JSON.parse(localStorage.getItem("report_need_sync") || "[]");
+
+    console.log("Reports queued for sync:", reportsToSync);
+    await this.loadingService.present('Synchronisation des photos en cours...');
+
+    // IMPORTANT: clone array to avoid mutation bugs
+    for (const report of [...reportsToSync]) {
+      console.group(`📦 Syncing report internal=${report.internal}`);
+
+      const obj: Record<string, Uint8Array> = {};
+      const expectedFiles: string[] = [];
+
+      const groupedPresentationPhotos =
+        JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`) || "[]");
+
+      const photosTruck =
+        JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`) || "[]");
+
+      console.log("Presentation groups:", groupedPresentationPhotos.length);
+      console.log("Truck photos:", photosTruck.length);
+
+      /* ------------------ PRESENTATION PHOTOS ------------------ */
+      for (const group of groupedPresentationPhotos) {
+        // BEFORE
+        if (group?.[0]?.photo?.path && group[0].photo.path.includes("v3")) {
+          const filename = `before_${group[0].client_uuid}_${Date.now()}.jpeg`;
+          expectedFiles.push(filename);
+
+          try {
+            const fileData = await this.fs.readSecretFile(group[0].photo.path);
+            obj[filename] = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+          } catch (e) {
+            console.error("❌ Failed reading BEFORE photo:", group[0].photo.path, e);
+          }
+        }
+
+        // AFTER
+        if (group?.[1]?.photo?.path && group[1].photo.path.includes("v3")) {
+          const filename = `after_${group[1].client_uuid}_${Date.now()}.jpeg`;
+          expectedFiles.push(filename);
+
+          try {
+            const fileData = await this.fs.readSecretFile(group[1].photo.path);
+            obj[filename] = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+          } catch (e) {
+            console.error("❌ Failed reading AFTER photo:", group[1].photo.path, e);
+          }
+        }
+      }
+
+      /* ------------------ TRUCK PHOTOS ------------------ */
+      for (const photo of photosTruck) {
+        if (!photo?.path || !photo?.client_uuid) continue;
+
+        const filename = `truck_${photo.client_uuid}_${Date.now()}.jpeg`;
+        expectedFiles.push(filename);
+
+        try {
+          const fileData = await this.fs.readSecretFile(photo.path);
+          obj[filename] = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+        } catch (e) {
+          console.error("❌ Failed reading TRUCK photo:", photo.path, e);
+        }
+      }
+
+      console.log("Expected files:", expectedFiles.length);
+      console.log("Files added to ZIP:", Object.keys(obj).length);
+      console.log("ZIP filenames:", Object.keys(obj));
+
+      if (Object.keys(obj).length === 0) {
+        console.warn("⚠️ No files to sync for this report, skipping");
+        console.groupEnd();
+        continue;
+      }
+
+      /* ------------------ ZIP CREATION ------------------ */
+      const zipBlob: Blob = await new Promise((resolve, reject) => {
+        zip(obj, (err, data :any) => {
+          if (err) return reject(err);
+          resolve(new Blob([data], { type: "application/zip" }));
+        });
+      });
+
+      console.log("ZIP size (bytes):", zipBlob.size);
+
+      /* ------------------ API SYNC ------------------ */
+      const formData = new FormData();
+      formData.append("zip", zipBlob, `photos_internal_${report.internal}.zip`);
+      formData.append("internal", report.internal.toString());
+
+      const syncRes = await lastValueFrom(
+        this.missionsService.syncPhotos(formData, report.internal)
+      );
+
+      console.log("✅ Sync API response:", syncRes);
+
+      /* ------------------ SERVER VERIFICATION ------------------ */
+      const serverData = await lastValueFrom(
+        this.missionsService.getPhotoReport(report.internal, report.type)
+      );
+
+      console.log("Server pairs:", serverData.pairs?.length);
+      console.log("Server truck photos:", serverData.truck?.length);
+
+      if (
+        serverData.pairs.length < groupedPresentationPhotos.length ||
+        serverData.truck.length < photosTruck.length
+      ) {
+        console.warn("⚠️ Server mismatch detected, keeping report in sync queue");
+        console.groupEnd();
+        continue;
+      }
+
+      /* ------------------ LOCAL STORAGE UPDATE ------------------ */
+      const grouped = serverData.pairs.map((p: any) => [
+        {
+          id: p.before.id,
+          client_uuid: p.before.client_uuid,
+          photo_type: "photo_before",
+          photo: { url: p.before.image_url?.url, thumb: p.before.image_url?.thumb }
+        },
+        {
+          id: p.after.id,
+          client_uuid: p.after.client_uuid,
+          photo_type: "photo_after",
+          photo: { url: p.after.image_url?.url, thumb: p.after.image_url?.thumb }
+        }
+      ]);
+
+      const truckPhotos = serverData.truck.map((t: any) => ({
+        id: t.id,
+        client_uuid: t.client_uuid,
+        photo_type: "photo_truck",
+        url: t.image_url?.url,
+        thumb: t.image_url?.thumb
+      }));
+
+      localStorage.setItem(
+        `photo_report_${report.type}_${report.id}_presentation`,
+        JSON.stringify(grouped)
+      );
+      localStorage.setItem(
+        `photo_report_${report.type}_${report.id}_truck`,
+        JSON.stringify(truckPhotos)
+      );
+
+      /* ------------------ REMOVE FROM SYNC QUEUE ------------------ */
+      const index = reportsToSync.findIndex((r: any) => r.internal === report.internal);
+      if (index !== -1) {
+        reportsToSync.splice(index, 1);
+        localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
+      }
+
+      console.log("🟢 Report fully synced and removed from queue");
+      this.doneEvent.emit(true);
+
+      console.groupEnd();
+    }
+  } catch (err) {
+    console.error("🔥 Global sync error:", err);
+  } finally {
+    console.groupEnd();
+    await this.loadingService.dimiss();
+    this.isSyncingLock = false;
+    this.isSyncingSubject.next(false);
+  }
+}
+
 
   async base64ToArrayBuffer(base64: string): Promise<ArrayBuffer> {
     const binaryString = atob(base64);

@@ -30,7 +30,7 @@
       <ion-card-content>
         <p class="photo-title">{{'Presentation photos' | translate}}</p>
         <div *ngFor="let group_photos of grouped_presentation_photos; let i = index" class="photo-container">
-          <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != '' " [ngStyle]="{ 'background-image': 'url(\'' + group_photos[0]?.photo?.url + '\')' }">
+          <div class="photo-block" *ngIf="group_photos[0]?.photo?.url != '' " [ngStyle]="{ 'background-image': 'url(\'' + group_photos[0]?.photo?.thumb + '\')' }">
             <ion-icon
               style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
               name="trash"
@@ -43,7 +43,7 @@
             <ion-icon name="add-outline" class="plus"></ion-icon>
             <span class="photo-number">{{'Before' | translate}}</span>
           </div>
-          <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''" [ngStyle]="{ 'background-image': 'url(\'' + group_photos[1]?.photo?.url + '\')' }">
+          <div class="photo-block" *ngIf="group_photos[1]?.photo?.url != ''" [ngStyle]="{ 'background-image': 'url(\'' + group_photos[1]?.photo?.thumb + '\')' }">
             <ion-icon
               style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
               name="trash"
@@ -70,7 +70,7 @@
       <ion-card-content>
         <p class="photo-title">{{'Truck photos' | translate}}</p>
         <div *ngFor="let photo of photos_truck; let i = index" class="photo-container">
-          <div class="photo-block" *ngIf="photo?.url != ''  && photo?.url != null && photo?.url != undefined " [ngStyle]="{ 'background-image': 'url(\'' + photo?.url + '\')' }">
+          <div class="photo-block" *ngIf="photo?.url != ''  && photo?.url != null && photo?.url != undefined " [ngStyle]="{ 'background-image': 'url(\'' + photo?.thumb + '\')' }">
             <ion-icon
               style="position: absolute; right: 0; top: 0; color: rgb(235, 92, 111); font-size: 25px"
               name="trash"

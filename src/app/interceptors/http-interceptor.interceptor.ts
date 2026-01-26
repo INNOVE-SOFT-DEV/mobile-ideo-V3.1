@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpErrorResponse, HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, finalize, Observable, tap, throwError} from "rxjs";
+import {catchError, EMPTY, finalize, Observable, tap, throwError} from "rxjs";
 @Injectable()
 export class httpInterceptor implements HttpInterceptor {
   api: any = {};
@@ -29,6 +29,11 @@ export class httpInterceptor implements HttpInterceptor {
       }
     }
 
+    if (request.url.includes("chat")) {
+      console.warn("HTTP request blocked by interceptor:", request.url);
+      return EMPTY; // stops execution, no request sent
+    }
+
     if (request.url.includes("/api/v1/")) {
       this.api.url = request.url;
       this.api.method = request.method;
@@ -52,7 +57,7 @@ export class httpInterceptor implements HttpInterceptor {
       }),
 
       catchError((error: HttpErrorResponse) => {
-        console.error("HTTP Error:", error);
+        console.error("HTTP Error:", JSON.stringify(error, null, 2), error);
         return throwError(() => error);
       }),
       finalize(async () => {

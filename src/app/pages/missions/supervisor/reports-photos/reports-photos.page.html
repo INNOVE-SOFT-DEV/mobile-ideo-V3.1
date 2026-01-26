@@ -56,12 +56,12 @@
             <div class="grid-item" *ngFor="let pair of images; let i = index ">
               <div class="image-pair">
                 <div class="image-column" *ngIf="pair?.before?.image_url?.url">
-                  <img [src]="pair.before.image_url.url" alt="Before" (click)="openSlides('photo_before', i)" />
+                  <img [src]="pair.before.image_url.thumb" alt="Before" (click)="openSlides('photo_before', i)" />
                   <div class="label">Before</div>
                 </div>
 
                 <div class="image-column" *ngIf="pair?.after?.image_url?.url">
-                  <img [src]="pair.after.image_url.url" alt="After" (click)="openSlides('photo_after', i)" />
+                  <img [src]="pair.after.image_url.thumb" alt="After" (click)="openSlides('photo_after', i)" />
                   <div class="label">After</div>
                 </div>
               </div>

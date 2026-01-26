@@ -10,10 +10,10 @@ import {environment} from "src/environments/environment";
 export class OcrRepository implements OcrInterface {
   constructor(private http: HttpClient) {}
   updateRecipe(recipeData: any): Observable<any> {
-    return this.http.put<any>(`${environment.newApiUrl}depenses/confirm_depense`, recipeData);
+    return this.http.put<any>(`${environment.newApiUrl}expenses/confirm_expense`, recipeData);
   }
 
   extractText(formData: any) {
-    return this.http.post<any>(`${environment.newApiUrl}depenses/extract`, formData);
+    return this.http.post<any>(`${environment.newApiUrl}expenses/extract`, formData);
   }
 }

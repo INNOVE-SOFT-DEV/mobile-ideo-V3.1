@@ -17,7 +17,7 @@ final class BackgroundLocationService: NSObject, CLLocationManagerDelegate {
 
     private var isSyncRunning = false
     private let QUEUE_KEY = "unsent_locations"
-    private let serverURL = URL(string: "https://demo.ssp-protection.fr/api/v1/pointing_internals/auto_point")!
+    private let serverURL = URL(string: "https://ideo.webo.tn/api/v1/pointing_internals/auto_point")!
     private let alwaysRequestedKey = "bg_loc.always_requested"
 
     // Failsafe region

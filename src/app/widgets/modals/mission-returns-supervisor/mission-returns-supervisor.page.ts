@@ -180,7 +180,6 @@ export class MissionReturnsSupervisorPage implements OnInit {
       }
     });
     modal.onDidDismiss().then(data => {
-      console.log(data);
       this.reply = data;
     });
     await modal.present();
