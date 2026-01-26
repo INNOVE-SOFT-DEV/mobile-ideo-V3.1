@@ -197,10 +197,15 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           if (value[0].photo_type == "before") {
             this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
             this.grouped_presentation_photos[i][0].id = value[0].id;
+            this.grouped_presentation_photos[i][0].photo.client_uuid = value[0].client_uuid;
+            this.grouped_presentation_photos[i][0].photo.thumb = value[0].image_url.thumb;
+
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
             this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
             this.grouped_presentation_photos[i][1].id = value[0].id;
+            this.grouped_presentation_photos[i][1].photo.client_uuid = value[0].client_uuid;
+            this.grouped_presentation_photos[i][1].thumb = value[0].image_url.thumb;
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else {
             this.photos_truck[i].url = value[0]?.image_url?.url;
@@ -221,18 +226,24 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       if (url) {
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
+                    this.grouped_presentation_photos[i][0].photo.thumb = url.displayUri;
+
+
           this.grouped_presentation_photos[i][0].photo.path = url.path;
           this.grouped_presentation_photos[i][0].photo.remote = true;
           this.grouped_presentation_photos[i][0].photo.date = currentDate;
+
           this.service.updateLocalPhotos("photo_before", this.grouped_presentation_photos);
         } else if (photo_type == "photo_after") {
           this.grouped_presentation_photos[i][1].photo.url = url.displayUri;
+          this.grouped_presentation_photos[i][1].photo.thumb = url.displayUri;
           this.grouped_presentation_photos[i][1].photo.path = url.path;
           this.grouped_presentation_photos[i][1].photo.remote = true;
           this.grouped_presentation_photos[i][1].photo.date = currentDate;
           this.service.updateLocalPhotos("photo_after", this.grouped_presentation_photos);
         } else {
           this.photos_truck[i].url = url.displayUri;
+          this.photos_truck[i].thumb = url.displayUri;
           this.photos_truck[i].path = url.path;
           this.photos_truck[i].remote = true;
           this.photos_truck[i].date = currentDate;

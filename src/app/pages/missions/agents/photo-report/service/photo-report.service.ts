@@ -211,13 +211,13 @@ export class PhotoReportService {
           id: p.before.id,
           client_uuid: p.before.client_uuid,
           photo_type: "photo_before",
-          photo: { url: p.before.image_url?.url }
+          photo: { url: p.before.image_url?.url, thumb: p.before.image_url?.thumb }
         },
         {
           id: p.after.id,
           client_uuid: p.after.client_uuid,
           photo_type: "photo_after",
-          photo: { url: p.after.image_url?.url }
+          photo: { url: p.after.image_url?.url, thumb: p.after.image_url?.thumb }
         }
       ]);
 
@@ -225,7 +225,8 @@ export class PhotoReportService {
         id: t.id,
         client_uuid: t.client_uuid,
         photo_type: "photo_truck",
-        url: t.image_url?.url
+        url: t.image_url?.url,
+        thumb: t.image_url?.thumb
       }));
 
       localStorage.setItem(

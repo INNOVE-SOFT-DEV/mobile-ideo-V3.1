@@ -47,7 +47,7 @@ export class OcrScannerPage implements OnInit {
       formData.append(key, value as string);
     });
 
-    formData.append("depense_id", this.result?.data?.id || "");
+    formData.append("expense_id", this.result?.data?.id || "");
 
     const loading = await this.loadingCtrl.create({
       message: "Mise à jour du reçu...",
