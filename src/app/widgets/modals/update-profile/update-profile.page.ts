@@ -84,6 +84,7 @@ export class UpdateProfilePage implements OnInit {
   user: User | null = this.authService.getCurrentUser();
   phone: string = this.user?.phone || "";
   password: string = "";
+  currentPassword: string = "";
   phonePattern = "^(\\+?[0-9]{1,3})?[-.\\s]?([0-9]{2,4})?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
   loading: boolean = false;
   successMessage: string = "";
@@ -183,7 +184,8 @@ export class UpdateProfilePage implements OnInit {
       this.loading = true;
       const data = {
         phone: this.phone,
-        password: this.password,
+        new_password: this.password,
+        current_password: this.currentPassword,
         user_id: this.user.id
       };
       this.authService.updateProfile(data, this.user.id).subscribe({
