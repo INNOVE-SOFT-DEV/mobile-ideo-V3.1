@@ -122,7 +122,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           text: "Camera",
           cssClass: "btn_actionSheet",
           handler: async () => {
-            await this.photosService.takePictureOption("Camera", 10);
+            await this.photosService.takePictureOption("Camera", 30);
             let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
             await this.saveNewPhoto(photo_type, i, currentDate);
           }
@@ -131,7 +131,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           text: "Galerie",
           cssClass: "btn_actionSheet",
           handler: async () => {
-            await this.photosService.takePictureOption("Galerie", 10);
+            await this.photosService.takePictureOption("Galerie", 30);
             let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
             await this.saveNewPhoto(photo_type, i, currentDate);
           }

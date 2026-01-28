@@ -1,80 +1,96 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title></ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">{{'Cancel' | translate}}</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="modal-content">
-  <div class="cls-supervisor">
-    <p><span class="cls-b-a">{{'Update my profile' | translate}}</span></p>
-    <div class="cls-booth"></div>
-    <p><span class="cls-b">{{'My profile' | translate}}</span></p>
-    <div class="cls-avatar-wrapper" (click)="uploadProfilePic()">
-      <div class="cls-avatar">
-        <ion-img [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'" class="img-avatar"></ion-img>
-      </div>
-      <ion-icon name="create-outline" class="edit-icon"></ion-icon>
-    </div>
-    <ion-card>
-      <ion-card-content>
-        <ion-list>
-          <ion-item>
-            <ion-input labelPlacement="floating" [value]="user?.first_name" disabled class="disabled-input"></ion-input>
-            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
-          </ion-item>
-          <ion-item>
-            <ion-input labelPlacement="floating" [value]="user?.last_name" disabled class="disabled-input"></ion-input>
-            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
-          </ion-item>
-          <ion-item>
-            <ion-input labelPlacement="floating" [(ngModel)]="phone" (ionInput)="blockChars($event)" name="phone" type="tel" required [pattern]="phonePattern" #phoneCtrl="ngModel">
-              <div slot="label">
-                {{'Phone number' | translate}}
-                <ion-text color="danger" *ngIf="phoneCtrl.invalid && phoneCtrl.touched">{{'Requis' | translate}}</ion-text>
-                <ion-text color="danger" *ngIf="phoneCtrl.hasError('pattern') && phoneCtrl.touched">{{'Phone number error' | translate}}</ion-text>
-              </div>
-            </ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input labelPlacement="floating" [value]="user?.address" disabled class="disabled-input"></ion-input>
-            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-    <div class="cls-booth"></div>
-    <p><span class="cls-b">{{'Registration' | translate}}</span></p>
-    <ion-card>
-      <ion-card-content>
-        <ion-list>
-          <ion-item>
-            <ion-input labelPlacement="floating" [value]="user?.email" disabled class="disabled-input"></ion-input>
-            <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
-          </ion-item>
-          <ion-item>
-            <ion-input labelPlacement="floating" [(ngModel)]="password" name="password" type="password" minlength="6" #passwordCtrl="ngModel">
-              <div slot="label">
-                {{'password' | translate}}
-                <ion-text color="danger" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">{{'Min 6 characters' | translate}}</ion-text>
-              </div>
-            </ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-    <div class="btn-container">
-      <ion-button class="custom-button-update-cancel" (click)="dismiss()">
+<div class="modal-wrapper" [@backdropAnim]>
+  <div class="modal-backdrop" (click)="dismiss()"></div>
+  
+  <div class="modal-content" [@modalAnim] (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Mettre à jour mon profil</h2>
+      <button class="close-button" (click)="dismiss()">
         <ion-icon name="close-outline"></ion-icon>
-        {{'Cancel' | translate}}
-      </ion-button>
-      <ion-button class="custom-button-update" [disabled]="(phoneCtrl.invalid && phoneCtrl.touched) || (passwordCtrl.invalid && passwordCtrl.touched)" (click)="saveProfile()">
-        <ion-icon *ngIf="!loading" name="checkmark-outline"></ion-icon>
-        <ion-spinner color="black" *ngIf="loading" name="crescent"></ion-spinner>
-        {{'Confirm' | translate}}
-      </ion-button>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Avatar Upload Section -->
+      <div class="avatar-upload-section" [@avatarSectionAnim]>
+        <div class="avatar-container-modal" (click)="uploadProfilePic()">
+          <div class="avatar-image-wrapper">
+            <ion-img
+              [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'"
+              class="avatar-image-modal"
+            ></ion-img>
+          </div>
+          <div class="camera-overlay">
+            <ion-icon name="camera-outline"></ion-icon>
+          </div>
+        </div>
+        <p class="avatar-hint">Clicker sur l'avatar pour le modifier</p>
+      </div>
+
+      <form [@formFieldsAnim] (ngSubmit)="saveProfile()">
+        <!-- Phone -->
+        <div class="form-field">
+          <label class="form-label">Téléphone</label>
+          <div class="input-wrapper">
+            <ion-icon name="call-outline" class="input-icon"></ion-icon>
+            <input
+              type="tel"
+              class="form-input"
+              [(ngModel)]="phone"
+              name="phone"
+              [pattern]="phonePattern"
+              (input)="blockChars($event)"
+              placeholder="{{'Enter phone number' | translate}}"
+              required
+            />
+          </div>
+        </div>
+
+         <div class="form-field">
+          <label class="form-label">Mot de passe actuel</label>
+          <div class="input-wrapper">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <input
+              type="password"
+              class="form-input"
+              [(ngModel)]="currentPassword"
+              name="currentPassword"
+              placeholder="entrer votre mot de passe actuel"
+                autocomplete ="off"
+
+            />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-field">
+          <label class="form-label">Mot de passe</label>
+          <div class="input-wrapper">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <input
+              type="password"
+              class="form-input"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="entrer un nouveau mot de passe"
+            />
+          </div>
+        </div>
+        
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+          <button type="button" class="cancel-button" (click)="dismiss()" [disabled]="loading">
+            {{'Cancel' | translate}}
+          </button>
+          <button type="submit" class="save-button" [disabled]="loading">
+            <ion-spinner name="crescent" *ngIf="loading" class="button-spinner"></ion-spinner>
+            <ion-icon name="checkmark-outline" *ngIf="!loading"></ion-icon>
+            <span>{{loading ? ('Saving' | translate) : ('save' | translate)}}</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-</ion-content>
+</div>
