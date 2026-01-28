@@ -7,22 +7,43 @@
 }
 .cls-card {
   min-height: 150px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hover-card:hover {
+  transform: scale(1.02) rotateY(2deg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 .cls-avatar {
   width: 72px;
   height: 72px;
   margin: 0 auto;
-  border-radius: 50px;
+  border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #f0f0f0;
+  position: relative;
 }
 .img-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background-color: #00ff6a;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 .btn-container {
   display: flex;
@@ -31,8 +52,6 @@
 .custom-button {
   --border-radius: 50px;
   --background: #ff6666;
-  --background-hover: #ff4d4d;
-  --background-activated: #ff3333;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -41,17 +60,24 @@
   --padding-bottom: 15px;
   --padding-start: 24px;
   --padding-end: 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.custom-button:hover {
+  transform: scale(1.05);
 }
 .custom-button-update {
   --border-radius: 50px;
-  --background: #00a2e1;
-  --background-hover: #00a2e1;
-  --background-activated: #00a2e1;
+  --background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 700;
   padding: 10px 20px;
   text-transform: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.custom-button-update:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 162, 225, 0.4);
 }
 .disabled-input {
   opacity: 0.7;
@@ -76,58 +102,6 @@ p {
 .cls-b {
   font-weight: 700;
   text-align: center;
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  display: inline;
-}
-.cls-mession {
-  padding: 20px;
-  border-radius: 50px;
-  text-align: center;
-}
-.cls-card-title {
-  font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: #233341;
-}
-.cls-card-title-link {
-  font-family: Montserrat, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: #233341;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.cls-booth {
-  height: 2px;
-  background-color: #d9d9d9;
-  width: 100%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.cls-calendar {
-  width: 25px;
-  height: 25px;
-  color: #ffffff;
-}
-.cls-flex {
-  flex: 0.7 !important;
-  max-width: 30px !important;
-}
-.cls-chip-notif {
-  background-color: #ff2323;
-  color: #ffffff;
-  font-family: Montserrat, sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
 }
 .cls-m {
   font-family: Montserrat, sans-serif;
@@ -149,4 +123,474 @@ p {
   border-top-left-radius: 8px;
   padding-left: 10px;
   border-top-right-radius: 8px;
+}
+.cls-booth {
+  height: 2px;
+  background-color: #d9d9d9;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+// ==============================================
+// GRADIENT BACKGROUND
+// ==============================================
+.gradient-background {
+  // --background: linear-gradient(
+  //   135deg,
+  //   #f8fafc 0%,
+  //   #dbeafe 50%,
+  //   #cffafe 100%
+  // );
+}
+
+// ==============================================
+// HEADER STYLES
+// ==============================================
+ion-header {
+  &.ion-no-border::after {
+    display: none;
+  }
+}
+
+.custom-toolbar {
+  --background: rgba(255, 255, 255, 0.8);
+  --backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.center-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  color: #1f2937;
+}
+
+.header-button {
+  background:transparent;
+  --background-hover: #f3f4f6;
+  --border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  ion-icon {
+    font-size: 20px;
+    color: #374151;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.notification-button {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+}
+
+// ==============================================
+// CONTENT WRAPPER
+// ==============================================
+.content-wrapper {
+  padding: 20px;
+  padding-bottom: 32px;
+}
+
+// ==============================================
+// AVATAR SECTION
+// ==============================================
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.avatar-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 4px solid #ffffff;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05) rotate(5deg);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+// ==============================================
+// GREETING SECTION
+// ==============================================
+.greeting-section {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.greeting-text {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.greeting-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.greeting-name {
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+  display: block;
+}
+
+// ==============================================
+// BUTTONS
+// ==============================================
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.logout-button {
+  --background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  --background-hover: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  --border-radius: 50px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 32px;
+  --padding-end: 32px;
+  --box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+  transition: all 0.3s ease;
+
+  ion-icon {
+    font-size: 16px;
+    margin-right: 4px;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    --box-shadow: 0 12px 32px rgba(239, 68, 68, 0.5);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.update-button {
+  --background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
+  --background-hover: linear-gradient(135deg, #212327 0%, #595e6a 100%);
+  --border-radius: 50px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 32px;
+  --padding-end: 32px;
+  --box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+  transition: all 0.3s ease;
+
+  ion-icon {
+    font-size: 16px;
+    margin-right: 4px;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    --box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ==============================================
+// DIVIDER
+// ==============================================
+.divider {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #e5e7eb 50%,
+    transparent 100%
+  );
+  margin: 24px 0;
+}
+
+// ==============================================
+// ACTION CARDS
+// ==============================================
+.cards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.action-card {
+  margin: 0;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+
+  &:hover {
+    transform: scale(1.02) rotateY(2deg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.card-header {
+  background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-container {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.6s ease;
+
+  ion-icon {
+    font-size: 24px;
+    color: #ffffff;
+  }
+
+  .action-card:hover & {
+    transform: rotate(360deg);
+  }
+}
+
+.card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  flex: 1;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-description {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 0;
+  text-align: left;
+}
+
+// ==============================================
+// PROFILE SECTION
+// ==============================================
+.profile-title-section {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.profile-title {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+}
+
+.profile-title-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+// ==============================================
+// PROFILE CARD
+// ==============================================
+.profile-card {
+  margin: 0;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.profile-card-content {
+  padding: 24px;
+}
+
+.profile-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f0f1f4 0%, #c5c9d1 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateX(5px);
+  }
+}
+
+.profile-item-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 20px;
+    color: #ffffff;
+  }
+}
+
+.profile-item-content {
+  flex: 1;
+}
+
+.profile-item-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-item-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  text-align: justify;
+}
+
+// ==============================================
+// RESPONSIVE DESIGN
+// ==============================================
+@media (min-width: 768px) {
+  .content-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .avatar-ring {
+    width: 96px;
+    height: 96px;
+  }
+
+  .avatar-wrapper {
+    width: 96px;
+    height: 96px;
+  }
 }
