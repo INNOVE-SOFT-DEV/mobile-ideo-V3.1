@@ -9,6 +9,7 @@ import {environment} from "src/environments/environment";
 })
 export class MaterialsRepository implements MaterialsInterface {
   private apiUrl = `${environment.urlAPI}`;
+  private newApiUrl = `${environment.newApiUrl}`;
   constructor(private http: HttpClient) {}
   getUserVehiculeReturns(id: any, date: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}interventions/get_user_vehicule_returns/${id}/${date}`);
@@ -46,7 +47,7 @@ export class MaterialsRepository implements MaterialsInterface {
     return this.http.post<any>(`${this.apiUrl}user/materials/require/v2`, ids);
   }
   getMaterials(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}materials/v2`);
+    return this.http.get<any>(`${this.newApiUrl}equipments/active`);
   }
   getMyMaterials() {
     return this.http.get<any>(`${this.apiUrl}user/materials/v2`);

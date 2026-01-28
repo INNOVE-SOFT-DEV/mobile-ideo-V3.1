@@ -33,7 +33,7 @@ export class MaterialRequestPage implements OnInit {
     this.loadingService.present(this.loadingMessage);
     this.materialsRepo.getMaterials().subscribe({
       next: async value => {
-        this.materials = value.materials;
+        this.materials = value;
         this.list_filtered_materials = this.materials;
         await this.loadingService.dimiss();
       },
@@ -45,7 +45,7 @@ export class MaterialRequestPage implements OnInit {
 
     this.searchControl.valueChanges.pipe(debounceTime(1000)).subscribe(value => {
       if (value.length > 0) {
-        this.list_filtered_materials = this.materials.filter((material: any) => material.name.toLowerCase().includes(value));
+        this.list_filtered_materials = this.materials.filter((material: any) => material.designation.toLowerCase().includes(value));
       } else {
         this.list_filtered_materials = this.materials;
       }
