@@ -54,6 +54,19 @@
             <ion-input labelPlacement="floating" [value]="user?.email" disabled class="disabled-input"></ion-input>
             <img src="assets/img/ban-sharp.png" slot="end" class="input-icon" />
           </ion-item>
+
+
+          <ion-item>
+            <ion-input labelPlacement="floating" [(ngModel)]="currentPassword" name="currentPassword" type="password"
+              minlength="6" #passwordCtrl="ngModel">
+              <div slot="label">
+                Mot de passe actuel
+                <ion-text color="danger" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">{{'Min 6 characters' |
+                  translate}}</ion-text>
+              </div>
+            </ion-input>
+          </ion-item>
+
           <ion-item>
             <ion-input labelPlacement="floating" [(ngModel)]="password" name="password" type="password" minlength="6" #passwordCtrl="ngModel">
               <div slot="label">
@@ -62,6 +75,9 @@
               </div>
             </ion-input>
           </ion-item>
+
+         
+
         </ion-list>
       </ion-card-content>
     </ion-card>
