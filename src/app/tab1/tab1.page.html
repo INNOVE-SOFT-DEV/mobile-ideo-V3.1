@@ -1,7 +1,7 @@
-<ion-header   [@headerAnim] class="ion-no-border">
+<ion-header [@headerAnim] class="ion-no-border">
   <ion-toolbar class="custom-toolbar-3d">
     <ion-buttons slot="start">
-      <ion-button (click)="goToProfile()" class="header-button-3d" >
+      <ion-button (click)="goToProfile()" class="header-button-3d">
         <ion-icon name="person-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -14,7 +14,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="!isSuperVisor" >
+  <ng-container *ngIf="!isSuperVisor">
     <div class="header-container-agent" *ngIf="!isSuperVisor" [@cardsAnim]>
       <div class="month-block" (click)="openPopover($event)" *ngIf="!isSuperVisor" [@cardsAnim]>
         <span class="month-text">{{ currentDate | capitalizeFirstLetter }}</span>

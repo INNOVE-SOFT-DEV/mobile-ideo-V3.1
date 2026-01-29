@@ -61,17 +61,14 @@ ion-spinner {
   --padding-start: 32px;
   --padding-end: 32px;
   --background-activated: linear-gradient(135deg, #999696 0%, #959698 100%);
- padding: 0;
-   --box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1), 
-    0 8px 20px rgba(0, 0, 0, 0.15),
-    0 16px 40px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;  font-family: 'Montserrat', sans-serif;
+  padding: 0;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 20px rgba(0, 0, 0, 0.15), 0 16px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 700;
   text-transform: none;
   transition: all 0.3s ease;
-
 
   ion-icon {
     font-size: 16px;
@@ -100,7 +97,6 @@ ion-spinner {
   width: 60px;
   height: 60px;
 }
-
 
 // ==============================================
 // GRADIENT BACKGROUND
@@ -136,7 +132,7 @@ ion-header {
 }
 
 .center-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 18px;
   text-align: center;
@@ -144,7 +140,7 @@ ion-header {
 }
 
 .header-button {
-  background:transparent;
+  background: transparent;
   --background-hover: #f3f4f6;
   --border-radius: 50%;
   width: 40px;
@@ -208,12 +204,16 @@ ion-header {
   height: 40px;
   margin: 0;
   transform-style: preserve-3d;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   ion-icon {
     font-size: 20px;
     color: #374151;
-    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      text-shadow 0.3s ease;
   }
 
   &:hover {
@@ -256,13 +256,15 @@ ion-header {
 
 // Center title with subtle 3D
 .center-title-3d {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 18px;
   text-align: center;
   color: #1f2937;
   transform-style: preserve-3d;
-  transition: transform 0.3s ease, text-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    text-shadow 0.3s ease;
 
   &:hover {
     transform: translateZ(5px) rotateX(-2deg) rotateY(2deg);
@@ -274,10 +276,14 @@ ion-header {
 // FLOATING KEYFRAME
 // ==============================================
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
-
 
 // ==============================================
 // HEADER 3D STYLING
@@ -304,12 +310,16 @@ ion-header {
   height: 40px;
   margin: 0;
   transform-style: preserve-3d;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   ion-icon {
     font-size: 20px;
     color: #374151;
-    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      text-shadow 0.3s ease;
   }
 
   &:hover {
@@ -352,13 +362,15 @@ ion-header {
 
 // Center title with subtle 3D
 .center-title-3d {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 18px;
   text-align: center;
   color: #1f2937;
   transform-style: preserve-3d;
-  transition: transform 0.3s ease, text-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    text-shadow 0.3s ease;
 
   &:hover {
     transform: translateZ(5px) rotateX(-2deg) rotateY(2deg);
@@ -370,7 +382,11 @@ ion-header {
 // FLOATING KEYFRAME
 // ==============================================
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
-

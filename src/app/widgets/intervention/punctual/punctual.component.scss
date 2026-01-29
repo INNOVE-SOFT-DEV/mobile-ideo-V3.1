@@ -8,35 +8,34 @@
   margin-right: 15px;
 
   padding: 0;
-    box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1), 
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
     0 8px 20px rgba(0, 0, 0, 0.15),
     0 16px 40px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+  border-radius: 12px;
 }
-
 
 .center-container {
   display: flex;
   justify-content: center;
   margin-bottom: 12px;
-  
+
   .time-badge {
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &:hover {
-    //   transform: scale(1.05);
+      //   transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   }
 }
 
 .card {
- margin-bottom: 16px;
+  margin-bottom: 16px;
   margin-left: -5px;
   margin-right: -5px;
   border-radius: 12px;
@@ -46,37 +45,37 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   will-change: transform, box-shadow;
-  
+
   // Subtle shadow by default
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  
+
   // Prevent janky animations
   backface-visibility: hidden;
   transform: translateZ(0);
-  
+
   .card-header {
     padding: 16px;
     background: linear-gradient(135deg, #ffffff 0%, #c9c8c8 100%);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     transition: background 0.3s ease;
-    
+
     .logo {
       border-radius: 8px;
       overflow: hidden;
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      
+
       img {
         width: 100%;
         height: auto;
         object-fit: cover;
         transition: transform 0.3s ease;
       }
-      
+
       &:hover img {
         transform: scale(1.1);
       }
     }
-    
+
     .name-campany {
       font-weight: 600;
       font-size: 16px;
@@ -84,46 +83,46 @@
       color: #233341;
       transition: color 0.2s ease;
     }
-    
+
     .custom-chip {
       margin-top: 8px;
       transition: all 0.2s ease;
-      
+
       &:hover {
         transform: translateX(4px);
       }
-      
+
       ion-icon {
         margin-right: 4px;
         transition: transform 0.3s ease;
       }
-      
+
       &:hover ion-icon {
         transform: rotate(15deg) scale(1.1);
       }
     }
   }
-  
+
   .card-content {
     padding: 0;
-    
+
     .list {
       background: transparent;
-      
+
       ion-item {
         --background: transparent;
         --padding-start: 16px;
         --padding-end: 16px;
         transition: all 0.2s ease;
-        
+
         &:hover {
           --background: rgba(0, 0, 0, 0.02);
           transform: translateX(4px);
         }
-        
+
         ion-thumbnail {
           margin-inline-end: 16px;
-          
+
           .avatar-container {
             width: 28px;
             height: 28px;
@@ -135,22 +134,22 @@
             justify-content: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            
+
             svg {
               transition: transform 0.3s ease;
             }
           }
         }
-        
+
         &:hover .avatar-container {
           transform: scale(1.1) rotate(5deg);
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-          
+
           svg {
             transform: scale(1.1);
           }
         }
-        
+
         .custom-grid {
           .name-agent {
             font-weight: 600;
@@ -159,14 +158,14 @@
             line-height: 1.4;
             transition: color 0.2s ease;
           }
-          
+
           .job-agent {
             font-weight: 400;
             font-size: 13px;
             color: #666;
             transition: color 0.2s ease;
           }
-          
+
           .wrap-text {
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -182,16 +181,16 @@
   overflow: hidden;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(0, 0, 0, 0.01);
-  
+
   &.expanded {
     background: transparent;
   }
-  
+
   .expandable-item {
     opacity: 0;
     transform: translateX(-20px);
     animation: slideInFromLeft 0.3s ease forwards;
-    
+
     @for $i from 1 through 20 {
       &:nth-child(#{$i}) {
         animation-delay: #{$i * 0.05}s;
@@ -217,33 +216,33 @@
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.02) 100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  
+
   &:hover {
     background: rgba(0, 0, 0, 0.04);
-    
+
     .show-more-text {
       color: var(--ion-color-primary);
       transform: translateX(4px);
     }
-    
+
     .icon-show-more {
       color: var(--ion-color-primary);
       transform: scale(1.2);
     }
   }
-  
+
   &:active {
     background: rgba(0, 0, 0, 0.06);
     transform: scale(0.98);
   }
-  
+
   .show-more-text {
     font-weight: 600;
     color: #666;
     margin: 0 8px 0 0;
     transition: all 0.3s ease;
   }
-  
+
   .icon-show-more {
     font-size: 24px;
     color: #666;
@@ -258,7 +257,7 @@
       transform: scale(0.98);
     }
   }
-  
+
   ion-item {
     &:active {
       --background: rgba(0, 0, 0, 0.04) !important;
@@ -275,13 +274,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .card {
     &:hover {
       transform: none;
     }
   }
-  
+
   .expandable-item {
     animation: none !important;
     opacity: 1 !important;
@@ -329,13 +328,7 @@ ion-item {
   contain: layout style paint;
 }
 
---tem-native::after {
-    background-color: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0) 100%) !important;
-}
-
-
-.team-item {
-  animation-duration: 480ms;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform, opacity;
-}
+--tem-native:
+  : after {background-color: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0) 100%) !important;} .team-item {animation-duration: 480ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ; will-change: transform,
+  opacity;};

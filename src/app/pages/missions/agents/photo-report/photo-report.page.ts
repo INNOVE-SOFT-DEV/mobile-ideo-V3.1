@@ -76,7 +76,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.refreshLocalData();
     console.log(this.grouped_presentation_photos);
-    
 
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     Network.addListener("networkStatusChange", async status => {
@@ -205,7 +204,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
             console.log(value);
-            
+
             this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
             this.grouped_presentation_photos[i][1].id = value[0].id;
             this.grouped_presentation_photos[i][1].photo.client_uuid = value[0].client_uuid;
@@ -230,8 +229,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       if (url) {
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
-                    this.grouped_presentation_photos[i][0].photo.thumb = url.displayUri;
-
+          this.grouped_presentation_photos[i][0].photo.thumb = url.displayUri;
 
           this.grouped_presentation_photos[i][0].photo.path = url.path;
           this.grouped_presentation_photos[i][0].photo.remote = true;

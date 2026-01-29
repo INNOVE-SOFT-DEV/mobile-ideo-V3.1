@@ -7,7 +7,9 @@
 }
 .cls-card {
   min-height: 150px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 .hover-card:hover {
   transform: scale(1.02) rotateY(2deg);
@@ -42,8 +44,13 @@
   animation: pulse 2s infinite;
 }
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 .btn-container {
   display: flex;
@@ -60,7 +67,9 @@
   --padding-bottom: 15px;
   --padding-start: 24px;
   --padding-end: 24px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 .custom-button:hover {
   transform: scale(1.05);
@@ -73,7 +82,9 @@
   font-weight: 700;
   padding: 10px 20px;
   text-transform: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 .custom-button-update:hover {
   transform: scale(1.05);
@@ -132,11 +143,9 @@ p {
   margin-bottom: 20px;
 }
 
-
 // ==============================================
 // GRADIENT BACKGROUND
 // ==============================================
-
 
 // ==============================================
 // HEADER STYLES
@@ -160,7 +169,7 @@ ion-header {
 }
 
 .center-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 18px;
   text-align: center;
@@ -168,7 +177,7 @@ ion-header {
 }
 
 .header-button {
-  background:transparent;
+  background: transparent;
   --background-hover: #f3f4f6;
   --border-radius: 50%;
   width: 40px;
@@ -288,7 +297,7 @@ ion-header {
 }
 
 .greeting-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
   line-height: 1.5;
 }
@@ -326,7 +335,7 @@ ion-header {
   --padding-start: 32px;
   --padding-end: 32px;
   --box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 700;
   text-transform: none;
@@ -356,7 +365,7 @@ ion-header {
   --padding-start: 32px;
   --padding-end: 32px;
   --box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 700;
   text-transform: none;
@@ -382,12 +391,7 @@ ion-header {
 // ==============================================
 .divider {
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    #e5e7eb 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg, transparent 0%, #e5e7eb 50%, transparent 100%);
   margin: 24px 0;
 }
 
@@ -453,7 +457,7 @@ ion-header {
 }
 
 .card-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
@@ -465,7 +469,7 @@ ion-header {
 }
 
 .card-description {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #4b5563;
@@ -482,7 +486,7 @@ ion-header {
 }
 
 .profile-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
 }
 
@@ -549,7 +553,7 @@ ion-header {
 }
 
 .profile-item-label {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #6b7280;
@@ -560,7 +564,7 @@ ion-header {
 }
 
 .profile-item-value {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #1f2937;

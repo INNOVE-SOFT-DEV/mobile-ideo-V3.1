@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { MissionService } from "./service/intervention/mission/mission.service";
-import { Intervention } from "../models/intervention/mission/mission";
-import { AuthService } from "../pages/login/service/auth.service";
-import { User } from "../models/auth/user";
-import { TranslateService } from "@ngx-translate/core";
-import { LoadingControllerService } from "../widgets/loading-controller/loading-controller.service";
-import { Router } from "@angular/router";
-import { Subscription } from "rxjs";
-import { IonDatetime, PopoverController } from "@ionic/angular";
-import { trigger, transition, style, animate, query, stagger } from "@angular/animations";
+import {Component, OnDestroy, OnInit} from "@angular/core";
+import {MissionService} from "./service/intervention/mission/mission.service";
+import {Intervention} from "../models/intervention/mission/mission";
+import {AuthService} from "../pages/login/service/auth.service";
+import {User} from "../models/auth/user";
+import {TranslateService} from "@ngx-translate/core";
+import {LoadingControllerService} from "../widgets/loading-controller/loading-controller.service";
+import {Router} from "@angular/router";
+import {Subscription} from "rxjs";
+import {IonDatetime, PopoverController} from "@ionic/angular";
+import {trigger, transition, style, animate, query, stagger} from "@angular/animations";
 
 @Component({
   selector: "app-tab1",
@@ -17,37 +17,17 @@ import { trigger, transition, style, animate, query, stagger } from "@angular/an
   standalone: false,
   animations: [
     // Header slide in
-     // Header slide in from top with fade
+    // Header slide in from top with fade
     trigger("headerAnim", [
-      transition(":enter", [
-        style({ transform: "translateY(-100px)", opacity: 0 }),
-        animate(
-          "500ms ease-out",
-          style({ transform: "translateY(0)", opacity: 1 })
-        )
-      ])
+      transition(":enter", [style({transform: "translateY(-100px)", opacity: 0}), animate("500ms ease-out", style({transform: "translateY(0)", opacity: 1}))])
     ]),
-    
+
     // Cards entrance with stagger + 3D
     trigger("cardsAnim", [
-        transition(":enter", [
-        style({ opacity: 0, transform: "translateY(75px)" }),
-        animate(
-          "500ms 700ms ease-out",
-          style({ opacity: 1, transform: "translateY(0)" })
-        )
-      ])
+      transition(":enter", [style({opacity: 0, transform: "translateY(75px)"}), animate("500ms 700ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])
     ]),
     // Button fade + scale
-    trigger("buttonAnim", [
-     transition(":enter", [
-        style({ opacity: 0, transform: "scale(0.8)" }),
-        animate(
-          "400ms 800ms ease-out",
-          style({ opacity: 1, transform: "scale(1)" })
-        )
-      ])
-    ])
+    trigger("buttonAnim", [transition(":enter", [style({opacity: 0, transform: "scale(0.8)"}), animate("400ms 800ms ease-out", style({opacity: 1, transform: "scale(1)"}))])])
   ]
 })
 export class Tab1Page implements OnInit, OnDestroy {
@@ -84,14 +64,12 @@ export class Tab1Page implements OnInit, OnDestroy {
     if (this.refreshEvent) this.refreshEvent.unsubscribe();
   }
 
-  async ngOnInit() {
+  async ngOnInit() {}
 
-  }
-
- async ngAfterViewInit() {
+  async ngAfterViewInit() {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-        this.setCurrentDay();
+    this.setCurrentDay();
     this.isSuperVisor = this.authService.isSuperVisor();
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     await this.getAllMissions();
@@ -99,7 +77,6 @@ export class Tab1Page implements OnInit, OnDestroy {
       this.setCurrentDay();
       await this.getAllMissions();
     });
-    
   }
 
   async getAllMissions() {
@@ -117,7 +94,7 @@ export class Tab1Page implements OnInit, OnDestroy {
         };
         this.superVisors = value.supervisors_contact;
       },
-      error: async (err) => {
+      error: async err => {
         console.error("Error:", err);
         await this.loadingService.dimiss();
       }
@@ -142,7 +119,7 @@ export class Tab1Page implements OnInit, OnDestroy {
       }
 
       el.today_schedule.subcontractors.forEach((sub: any) => {
-        sub.agents.forEach((agent: any) => subcontractors.push({ ...sub, ...agent }));
+        sub.agents.forEach((agent: any) => subcontractors.push({...sub, ...agent}));
       });
 
       el.team = [...el.today_schedule.agents, ...subcontractors];
@@ -167,7 +144,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   async openPopover($event: MouseEvent) {
     const popover = await this.popoverController.create({
       component: IonDatetime,
-      componentProps: { presentation: "day", value: this.date, locale: "fr-FR" },
+      componentProps: {presentation: "day", value: this.date, locale: "fr-FR"},
       event: $event
     });
     await popover.present();
@@ -186,20 +163,20 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   setCurrentDay() {
     const now = new Date();
-    const parisNow = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+    const parisNow = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Paris"}));
     let shifted = false;
     if (parisNow.getHours() >= 21) {
       parisNow.setDate(parisNow.getDate() + 1);
       shifted = true;
     }
-    this.currentDate = parisNow.toLocaleDateString("fr-FR", { month: "long", year: "numeric", day: "numeric" });
+    this.currentDate = parisNow.toLocaleDateString("fr-FR", {month: "long", year: "numeric", day: "numeric"});
     this.date = parisNow.toISOString().split("T")[0];
     this.isToDayPlannings = !shifted;
   }
 
   updateDay(event: any) {
     const selectedDate = new Date(event.detail.value);
-    this.currentDate = selectedDate.toLocaleDateString("fr-FR", { month: "long", year: "numeric", day: "numeric" });
+    this.currentDate = selectedDate.toLocaleDateString("fr-FR", {month: "long", year: "numeric", day: "numeric"});
     this.date = selectedDate.toISOString().split("T")[0];
     this.isToDayPlannings = this.date === new Date().toISOString().split("T")[0];
   }

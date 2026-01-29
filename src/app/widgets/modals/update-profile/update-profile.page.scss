@@ -63,7 +63,7 @@
 }
 
 .modal-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: #ffffff;
@@ -199,7 +199,7 @@
 }
 
 .avatar-hint {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: #6b7280;
@@ -223,7 +223,7 @@ form {
 }
 
 .form-label {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #374151;
@@ -249,7 +249,7 @@ form {
   background: linear-gradient(135deg, #f0f1f4 0%, #c5c9d1 100%);
   border: 1px solid #e5e7eb;
   border-radius: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #1f2937;
@@ -263,7 +263,6 @@ form {
   &:focus {
     border-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-    
   }
 
   &:disabled {
@@ -287,13 +286,13 @@ form {
   padding: 12px 24px;
   border: none;
   border-radius: 50px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
-  
+
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -419,14 +418,13 @@ form {
 // ACTION SHEET CUSTOMIZATION (OPTIONAL)
 // ==============================================
 .header_actionSheet {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .btn_actionSheet {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
 }
-
 
 .input:-internal-autofill-selected {
   background-color: transparent !important;
@@ -437,7 +435,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px rgb(236, 236, 236) inset !important; /* background color */
-    -webkit-text-fill-color: #000 !important; /* text color */
-    transition: background-color linear-gradient(135deg, #f0f1f4 0%, #c5c9d1 100%);
+  -webkit-box-shadow: 0 0 0px 1000px rgb(236, 236, 236) inset !important; /* background color */
+  -webkit-text-fill-color: #000 !important; /* text color */
+  transition: background-color linear-gradient(135deg, #f0f1f4 0%, #c5c9d1 100%);
 }
