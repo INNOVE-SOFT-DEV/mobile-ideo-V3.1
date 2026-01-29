@@ -9,7 +9,7 @@
     <ion-buttons slot="end">
       <ion-button class="header-button notification-button">
         <ion-icon name="notifications-outline"></ion-icon>
-        <span class="notification-badge">{{notificationCount}}</span>
+        <!-- <span class="notification-badge">{{notificationCount}}</span> -->
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -21,10 +21,7 @@
     <div class="avatar-container" [@avatarAnim]>
       <div class="avatar-wrapper">
         <div class="avatar-ring">
-          <ion-img
-            [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'"
-            class="avatar-image"
-          ></ion-img>
+          <ion-img [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'" class="avatar-image"></ion-img>
         </div>
         <div class="status-dot"></div>
       </div>
@@ -65,11 +62,7 @@
       </ion-card>
 
       <!-- Vehicle Card -->
-      <ion-card
-        *ngIf="user?.role != 'supervisor'"
-        class="action-card"
-        (click)="goVehicles()"
-      >
+      <ion-card *ngIf="user?.role != 'supervisor'" class="action-card" (click)="goVehicles()">
         <div class="card-header">
           <div class="icon-container">
             <ion-icon name="car-outline"></ion-icon>

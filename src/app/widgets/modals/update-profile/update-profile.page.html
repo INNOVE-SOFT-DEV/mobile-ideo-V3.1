@@ -1,6 +1,6 @@
 <div class="modal-wrapper" [@backdropAnim]>
   <div class="modal-backdrop" (click)="dismiss()"></div>
-  
+
   <div class="modal-content" [@modalAnim] (click)="$event.stopPropagation()">
     <!-- Modal Header -->
     <div class="modal-header">
@@ -16,10 +16,7 @@
       <div class="avatar-upload-section" [@avatarSectionAnim]>
         <div class="avatar-container-modal" (click)="uploadProfilePic()">
           <div class="avatar-image-wrapper">
-            <ion-img
-              [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'"
-              class="avatar-image-modal"
-            ></ion-img>
+            <ion-img [src]="user?.photo_urls?.url ? user?.photo_urls?.url : 'assets/img/icone-pdf.png'" class="avatar-image-modal"></ion-img>
           </div>
           <div class="camera-overlay">
             <ion-icon name="camera-outline"></ion-icon>
@@ -47,19 +44,11 @@
           </div>
         </div>
 
-         <div class="form-field">
+        <div class="form-field">
           <label class="form-label">Mot de passe actuel</label>
           <div class="input-wrapper">
             <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
-            <input
-              type="password"
-              class="form-input"
-              [(ngModel)]="currentPassword"
-              name="currentPassword"
-              placeholder="entrer votre mot de passe actuel"
-                autocomplete ="off"
-
-            />
+            <input type="password" class="form-input" [(ngModel)]="currentPassword" name="currentPassword" placeholder="entrer votre mot de passe actuel" autocomplete="off" />
           </div>
         </div>
 
@@ -68,22 +57,13 @@
           <label class="form-label">Mot de passe</label>
           <div class="input-wrapper">
             <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
-            <input
-              type="password"
-              class="form-input"
-              [(ngModel)]="password"
-              name="password"
-              placeholder="entrer un nouveau mot de passe"
-            />
+            <input type="password" class="form-input" [(ngModel)]="password" name="password" placeholder="entrer un nouveau mot de passe" />
           </div>
         </div>
-        
 
         <!-- Action Buttons -->
         <div class="button-group">
-          <button type="button" class="cancel-button" (click)="dismiss()" [disabled]="loading">
-            {{'Cancel' | translate}}
-          </button>
+          <button type="button" class="cancel-button" (click)="dismiss()" [disabled]="loading">{{'Cancel' | translate}}</button>
           <button type="submit" class="save-button" [disabled]="loading">
             <ion-spinner name="crescent" *ngIf="loading" class="button-spinner"></ion-spinner>
             <ion-icon name="checkmark-outline" *ngIf="!loading"></ion-icon>

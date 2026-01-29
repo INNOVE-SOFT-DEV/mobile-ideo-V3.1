@@ -186,7 +186,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
     }
   }
   createWaves_reply() {
-    if(!this.reply) return;
+    if (!this.reply) return;
     this.waveSurfer_reply?.destroy();
     this.waveSurfer_reply = WaveSurfer.create({
       container: "#waveform-reply",
