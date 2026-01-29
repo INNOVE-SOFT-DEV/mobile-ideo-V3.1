@@ -178,11 +178,11 @@ export class UpdatePage implements OnInit {
   }
 
   goDocuments() {
-    this.router.navigate(["documents"]);
+    // this.router.navigate(["documents"]);
   }
 
   goVehicles() {
-    this.router.navigate(["vehicles"]);
+    // this.router.navigate(["vehicles"]);
   }
 
   logout() {
