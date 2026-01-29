@@ -1,19 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { ActionSheetController, ModalController } from "@ionic/angular";
-import { User } from "src/app/models/auth/user";
-import { AuthService } from "src/app/pages/login/service/auth.service";
-import { ToastControllerService } from "../../toast-controller/toast-controller.service";
-import { TranslateService } from "@ngx-translate/core";
-import { PhotosService } from "../../photos/photos.service";
-import { LoadingControllerService } from "../../loading-controller/loading-controller.service";
-import {
-  trigger,
-  transition,
-  style,
-  animate,
-  query,
-  stagger
-} from "@angular/animations";
+import {Component, OnInit} from "@angular/core";
+import {ActionSheetController, ModalController} from "@ionic/angular";
+import {User} from "src/app/models/auth/user";
+import {AuthService} from "src/app/pages/login/service/auth.service";
+import {ToastControllerService} from "../../toast-controller/toast-controller.service";
+import {TranslateService} from "@ngx-translate/core";
+import {PhotosService} from "../../photos/photos.service";
+import {LoadingControllerService} from "../../loading-controller/loading-controller.service";
+import {trigger, transition, style, animate, query, stagger} from "@angular/animations";
 
 @Component({
   selector: "app-update-profile",
@@ -23,60 +16,31 @@ import {
   animations: [
     // Modal backdrop fade in
     trigger("backdropAnim", [
-      transition(":enter", [
-        style({ opacity: 0 }),
-        animate("300ms ease-out", style({ opacity: 1 }))
-      ]),
-      transition(":leave", [
-        animate("200ms ease-in", style({ opacity: 0 }))
-      ])
+      transition(":enter", [style({opacity: 0}), animate("300ms ease-out", style({opacity: 1}))]),
+      transition(":leave", [animate("200ms ease-in", style({opacity: 0}))])
     ]),
 
     // Modal slide up with spring
     trigger("modalAnim", [
       transition(":enter", [
-        style({ transform: "translateY(100%)", opacity: 0, scale: 0.9 }),
-        animate(
-          "400ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-          style({ transform: "translateY(0)", opacity: 1, scale: 1 })
-        )
+        style({transform: "translateY(100%)", opacity: 0, scale: 0.9}),
+        animate("400ms cubic-bezier(0.34, 1.56, 0.64, 1)", style({transform: "translateY(0)", opacity: 1, scale: 1}))
       ]),
-      transition(":leave", [
-        animate(
-          "300ms ease-in",
-          style({ transform: "translateY(100%)", opacity: 0, scale: 0.9 })
-        )
-      ])
+      transition(":leave", [animate("300ms ease-in", style({transform: "translateY(100%)", opacity: 0, scale: 0.9}))])
     ]),
 
     // Form fields stagger animation
     trigger("formFieldsAnim", [
       transition(":enter", [
-        query(
-          ".form-field",
-          [
-            style({ opacity: 0, transform: "translateX(-20px)" }),
-            stagger(100, [
-              animate(
-                "400ms ease-out",
-                style({ opacity: 1, transform: "translateX(0)" })
-              )
-            ])
-          ],
-          { optional: true }
-        )
+        query(".form-field", [style({opacity: 0, transform: "translateX(-20px)"}), stagger(100, [animate("400ms ease-out", style({opacity: 1, transform: "translateX(0)"}))])], {
+          optional: true
+        })
       ])
     ]),
 
     // Avatar section animation
     trigger("avatarSectionAnim", [
-      transition(":enter", [
-        style({ opacity: 0, transform: "scale(0.8)" }),
-        animate(
-          "400ms 100ms ease-out",
-          style({ opacity: 1, transform: "scale(1)" })
-        )
-      ])
+      transition(":enter", [style({opacity: 0, transform: "scale(0.8)"}), animate("400ms 100ms ease-out", style({opacity: 1, transform: "scale(1)"}))])
     ])
   ]
 })
@@ -99,11 +63,9 @@ export class UpdateProfilePage implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     private loadingService: LoadingControllerService
   ) {
-    this.translateService
-      .get("Success message update profile")
-      .subscribe((translatedText: string) => {
-        this.successMessage = translatedText;
-      });
+    this.translateService.get("Success message update profile").subscribe((translatedText: string) => {
+      this.successMessage = translatedText;
+    });
   }
 
   async ngOnInit() {
@@ -159,20 +121,20 @@ export class UpdateProfilePage implements OnInit {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: "image/jpeg" });
+    const blob = new Blob([byteArray], {type: "image/jpeg"});
     const uploadData = new FormData();
     const userId = this.user?.id.toString() || "";
     uploadData.append("userId", userId);
     uploadData.append("photo", blob, fileName);
     await this.loadingService.present(this.loadingMessage);
     this.authService.updateProfilePicture(uploadData).subscribe({
-      next: async (value) => {
+      next: async value => {
         localStorage.removeItem("user");
         localStorage.setItem("user", JSON.stringify(value.user));
         this.user = value.user;
         await this.loadingService.dimiss();
       },
-      error: async (err) => {
+      error: async err => {
         console.error(err);
         await this.loadingService.dimiss();
       }
@@ -195,7 +157,7 @@ export class UpdateProfilePage implements OnInit {
           this.user = response.user;
           this.dismiss();
         },
-        error: (error) => {
+        error: error => {
           this.toastController.presentToast(error.error.error, "danger");
           this.loading = false;
         }

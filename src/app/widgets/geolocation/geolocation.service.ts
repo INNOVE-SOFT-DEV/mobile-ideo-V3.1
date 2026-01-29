@@ -62,7 +62,7 @@ export class GeolocationService implements OnDestroy {
     this.watchId = await Geolocation.watchPosition(
       {
         enableHighAccuracy: this.platform === "android",
-        maximumAge: 0,
+        maximumAge: 30000,
         timeout: 30000
       },
       (position: Position | null, err: any) => {

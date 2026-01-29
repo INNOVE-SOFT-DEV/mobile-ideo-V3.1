@@ -8,12 +8,27 @@ import {LoadingControllerService} from "../widgets/loading-controller/loading-co
 import {Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {IonDatetime, PopoverController} from "@ionic/angular";
+import {trigger, transition, style, animate, query, stagger} from "@angular/animations";
 
 @Component({
   selector: "app-tab1",
   templateUrl: "tab1.page.html",
   styleUrls: ["tab1.page.scss"],
-  standalone: false
+  standalone: false,
+  animations: [
+    // Header slide in
+    // Header slide in from top with fade
+    trigger("headerAnim", [
+      transition(":enter", [style({transform: "translateY(-100px)", opacity: 0}), animate("500ms ease-out", style({transform: "translateY(0)", opacity: 1}))])
+    ]),
+
+    // Cards entrance with stagger + 3D
+    trigger("cardsAnim", [
+      transition(":enter", [style({opacity: 0, transform: "translateY(75px)"}), animate("500ms 700ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])
+    ]),
+    // Button fade + scale
+    trigger("buttonAnim", [transition(":enter", [style({opacity: 0, transform: "scale(0.8)"}), animate("400ms 800ms ease-out", style({opacity: 1, transform: "scale(1)"}))])])
+  ]
 })
 export class Tab1Page implements OnInit, OnDestroy {
   user: User | null = this.authService.getCurrentUser();
@@ -31,9 +46,10 @@ export class Tab1Page implements OnInit, OnDestroy {
   isLoaded: boolean = false;
   currentDate: any;
   date: string = new Date().toISOString().split("T")[0];
-  isPopoverOpen: boolean = false;
   isToDayPlannings: boolean = false;
   noSchedule: number = 0;
+  clickedButton: string = "";
+  isPopoverOpen: boolean = false;
 
   constructor(
     private missionService: MissionService,
@@ -43,43 +59,40 @@ export class Tab1Page implements OnInit, OnDestroy {
     private loadingService: LoadingControllerService,
     private popoverController: PopoverController
   ) {}
+
   ngOnDestroy(): void {
-    if (this.refreshEvent) {
-      this.refreshEvent.unsubscribe();
-    }
+    if (this.refreshEvent) this.refreshEvent.unsubscribe();
   }
 
-  async ngOnInit() {
+  async ngOnInit() {}
+
+  async ngAfterViewInit() {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
     this.setCurrentDay();
     this.isSuperVisor = this.authService.isSuperVisor();
-    const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
-    this.setCurrentDay();
     await this.getAllMissions();
-    this.refreshEvent = this.missionService.refreshEvent.subscribe(async (data: any) => {
+    this.refreshEvent = this.missionService.refreshEvent.subscribe(async () => {
       this.setCurrentDay();
       await this.getAllMissions();
     });
   }
 
   async getAllMissions() {
-    this.executed = true;
-    // await this.loadingService.present("loading");
     this.isLoaded = false;
     this.missionService.getPlannings(true, this.date, "all").subscribe({
-      next: async value => {
+      next: (value: any) => {
         this.isLoaded = true;
-        this.punctuals = this.foramtplannings(value.punctuals);
-        this.regulars = this.foramtplannings(value.regulars);
-        this.forfaitaires = this.foramtplannings(value.flat_rates);
+        this.punctuals = this.formatPlannings(value.punctuals);
+        this.regulars = this.formatPlannings(value.regulars);
+        this.forfaitaires = this.formatPlannings(value.flat_rates);
         this.counts = {
           punctuals_count: this.punctuals.length,
           regulars_count: this.regulars.length,
           forfaitaires_count: this.forfaitaires.length
         };
-        // this.counts = value.counts;
         this.superVisors = value.supervisors_contact;
-        // await this.loadingService.dimiss();
       },
       error: async err => {
         console.error("Error:", err);
@@ -88,32 +101,29 @@ export class Tab1Page implements OnInit, OnDestroy {
     });
   }
 
-  foramtplannings(data: any) {
+  formatPlannings(data: any) {
     this.noSchedule = 0;
-    return data.map((element: any) => {
-      element["showDetails"] = false;
-      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null;
-      element["today_schedule"]["agents"]?.forEach((agent: any) => {
+    return data.map((el: any) => {
+      el.showDetails = false;
+      el.today_schedule = el?.schedules?.find((s: any) => s.date === this.date) || el?.schedule?.find((s: any) => s.date === this.date) || null;
+      el.today_schedule?.agents?.forEach((agent: any) => {
         agent.first_name = agent.full_name.split(" ")[0];
         agent.last_name = agent.full_name.split(" ")[1] || "";
-        agent.role = agent["role_name"];
+        agent.role = agent.role_name;
       });
 
       let subcontractors: any[] = [];
-      if (element["today_schedule"] == null) {
+      if (!el.today_schedule) {
         this.noSchedule++;
-        return element;
+        return el;
       }
-      element["today_schedule"]["subcontractors"].forEach((subcontractor: any, index: number) => {
-        subcontractor.agents.forEach((agent: any) => {
-          subcontractors.push({
-            ...subcontractor,
-            ...agent
-          });
-        });
+
+      el.today_schedule.subcontractors.forEach((sub: any) => {
+        sub.agents.forEach((agent: any) => subcontractors.push({...sub, ...agent}));
       });
-      element["team"] = [...element["today_schedule"]["agents"], ...subcontractors];
-      return element;
+
+      el.team = [...el.today_schedule.agents, ...subcontractors];
+      return el;
     });
   }
 
@@ -124,33 +134,28 @@ export class Tab1Page implements OnInit, OnDestroy {
   getByDate() {
     this.isLoaded = false;
     this.missionService.getPlannings(true, this.date, "all").subscribe((value: any) => {
-      this.punctuals = this.foramtplannings(value.punctuals);
-      this.regulars = this.foramtplannings(value.regulars);
-      this.forfaitaires = this.foramtplannings(value.flat_rates);
+      this.punctuals = this.formatPlannings(value.punctuals);
+      this.regulars = this.formatPlannings(value.regulars);
+      this.forfaitaires = this.formatPlannings(value.flat_rates);
       this.isLoaded = true;
     });
   }
+
   async openPopover($event: MouseEvent) {
     const popover = await this.popoverController.create({
       component: IonDatetime,
-      componentProps: {
-        presentation: "day",
-        value: this.date,
-        locale: "fr-FR"
-      },
-      event
+      componentProps: {presentation: "day", value: this.date, locale: "fr-FR"},
+      event: $event
     });
-
     await popover.present();
     const datetimeElement = popover.querySelector("ion-datetime");
-    if (datetimeElement) {
-      datetimeElement.addEventListener("ionChange", (event: any) => {
-        this.currentDate = event.detail.value;
-        this.updateDay(event);
-        this.closePopover();
-      });
-    }
+    datetimeElement?.addEventListener("ionChange", (event: any) => {
+      this.currentDate = event.detail.value;
+      this.updateDay(event);
+      this.closePopover();
+    });
   }
+
   closePopover() {
     this.isPopoverOpen = false;
     this.popoverController.dismiss();
@@ -164,23 +169,15 @@ export class Tab1Page implements OnInit, OnDestroy {
       parisNow.setDate(parisNow.getDate() + 1);
       shifted = true;
     }
-    this.currentDate = parisNow.toLocaleDateString("fr-FR", {
-      month: "long",
-      year: "numeric",
-      day: "numeric"
-    });
+    this.currentDate = parisNow.toLocaleDateString("fr-FR", {month: "long", year: "numeric", day: "numeric"});
     this.date = parisNow.toISOString().split("T")[0];
     this.isToDayPlannings = !shifted;
   }
 
-  async updateDay(event: any) {
+  updateDay(event: any) {
     const selectedDate = new Date(event.detail.value);
-    this.currentDate = selectedDate.toLocaleDateString("fr-FR", {
-      month: "long",
-      year: "numeric",
-      day: "numeric"
-    });
+    this.currentDate = selectedDate.toLocaleDateString("fr-FR", {month: "long", year: "numeric", day: "numeric"});
     this.date = selectedDate.toISOString().split("T")[0];
-    this.date == new Date().toISOString().split("T")[0] ? (this.isToDayPlannings = true) : (this.isToDayPlannings = false);
+    this.isToDayPlannings = this.date === new Date().toISOString().split("T")[0];
   }
 }

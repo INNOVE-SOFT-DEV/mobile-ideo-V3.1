@@ -12,7 +12,7 @@ import {httpInterceptor} from "./interceptors/http-interceptor.interceptor";
 import {FormsModule} from "@angular/forms";
 import {DatePipe} from "@angular/common";
 import {IonicStorageModule} from "@ionic/storage-angular";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");

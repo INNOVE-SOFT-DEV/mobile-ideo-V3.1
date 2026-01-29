@@ -55,6 +55,7 @@
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
     "actioncable": "^5.2.8-1",
+    "animate.css": "^4.1.1",
     "buffer": "^6.0.3",
     "capacitor-email-composer": "^7.0.0",
     "capacitor-voice-recorder": "^7.0.5",
