@@ -1,0 +1,327 @@
+@use "./mission-style.scss" as *;
+
+// Enhanced styles with animation support
+.item-missions {
+  // Smooth scroll behavior
+  scroll-behavior: smooth;
+  margin-left: 15px;
+  margin-right: 15px;
+
+  padding: 0;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 8px 20px rgba(0, 0, 0, 0.15),
+    0 16px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+
+  .time-badge {
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      //   transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.card {
+  margin-bottom: 16px;
+  margin-left: -5px;
+  margin-right: -5px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  will-change: transform, box-shadow;
+
+  // Subtle shadow by default
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  // Prevent janky animations
+  backface-visibility: hidden;
+  transform: translateZ(0);
+
+  .card-header {
+    padding: 16px;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background 0.3s ease;
+    background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
+
+    .logo {
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-height: 85px;
+      min-height: 85px;
+
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover img {
+        transform: scale(1.1);
+      }
+    }
+
+    .name-campany {
+      font-weight: 600;
+      font-size: 16px;
+      margin: 0;
+      color: #233341;
+      transition: color 0.2s ease;
+    }
+
+    .custom-chip {
+      margin-top: 8px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateX(4px);
+      }
+
+      ion-icon {
+        margin-right: 4px;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover ion-icon {
+        transform: rotate(15deg) scale(1.1);
+      }
+    }
+  }
+
+  .card-content {
+    padding: 0;
+
+    .list {
+      background: transparent;
+
+      ion-item {
+        --background: linear-gradient(to bottom, #f0f4ff 0%, #f4f9fd 100%);
+        --padding-start: 16px;
+        --padding-end: 16px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          --background: rgba(0, 0, 0, 0.02);
+          transform: translateX(4px);
+        }
+
+        ion-thumbnail {
+          margin-inline-end: 16px;
+
+          .avatar-container {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            margin-top: 2px;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #c6dbf8;
+
+            svg {
+              transition: transform 0.3s ease;
+            }
+          }
+        }
+
+        &:hover .avatar-container {
+          transform: scale(1.1) rotate(5deg);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+          svg {
+            transform: scale(1.1);
+          }
+        }
+
+        .custom-grid {
+          .name-agent {
+            font-weight: 600;
+            color: #233341;
+            margin: 0;
+            line-height: 1.4;
+            transition: color 0.2s ease;
+          }
+
+          .job-agent {
+            font-weight: 400;
+            font-size: 13px;
+            color: #666;
+            transition: color 0.2s ease;
+          }
+
+          .wrap-text {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Expandable content styling
+.expandable-content {
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(0, 0, 0, 0.01);
+
+  &.expanded {
+    background: transparent;
+  }
+
+  .expandable-item {
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slideInFromLeft 0.3s ease forwards;
+
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.05}s;
+      }
+    }
+  }
+}
+
+@keyframes slideInFromLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Show more container
+.show-more-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: linear-gradient(to bottom, #dee8fc 0%, #f1f9ff 100%);
+
+  &:hover {
+    .show-more-text {
+      transform: translateX(4px);
+    }
+
+    .icon-show-more {
+      transform: scale(1.2);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .show-more-text {
+    font-weight: 600;
+    color: #666;
+    margin: 0 8px 0 0;
+    transition: all 0.3s ease;
+  }
+
+  .icon-show-more {
+    font-size: 24px;
+    color: #666;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// Ripple effect for touch devices
+@media (hover: none) and (pointer: coarse) {
+  .card {
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  ion-item {
+    &:active {
+      --background: rgba(0, 0, 0, 0.04) !important;
+    }
+  }
+}
+
+// Reduced motion for accessibility
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .card {
+    &:hover {
+      transform: none;
+    }
+  }
+
+  .expandable-item {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+// Loading skeleton animation (optional)
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Smooth entrance for empty state
+.empty-state {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Performance optimization
+.card,
+.expandable-content,
+ion-item {
+  contain: layout style paint;
+}

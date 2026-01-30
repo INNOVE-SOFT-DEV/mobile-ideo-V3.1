@@ -54,6 +54,8 @@ export class TabsPage {
   }
 
   animateTab(tab: string) {
+    console.log(tab);
+    
     this.clickedTab = tab;
     setTimeout(() => (this.clickedTab = ""), 200);
   }
