@@ -46,7 +46,7 @@
   width: 100%;
   border-radius: 14px;
   padding: 20px 10px;
-  background: #ffffff;
+  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
   box-shadow: 5px 4px 10px 0px #dfdfdf;
   border: 0.4px solid transparent;
   box-sizing: border-box;
@@ -110,11 +110,13 @@
 }
 .bg-update {
   --border-radius: 50px;
-  --background: #00a2e1;
   --background-hover: #00a2e1;
   --background-activated: #00a2e1;
   color: white;
   gap: 8px;
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background-hover: #ffceaa;
+  --background-activated: #ffceaa;
 }
 .btn-container {
   width: 100%;
@@ -122,4 +124,19 @@
 }
 .icon-space {
   font-size: 20px;
+}
+
+ion-toolbar {
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+}
+
+.header-button {
+  --color: whitesmoke;
+  --background: transparent;
+}
+textarea {
+  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
+}
+ion-title {
+  color: whitesmoke;
 }

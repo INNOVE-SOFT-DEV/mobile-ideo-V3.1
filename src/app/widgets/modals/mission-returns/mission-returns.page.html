@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title></ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">{{ 'Cancel' | translate }}</ion-button>
+      <ion-button class="header-button" (click)="dismiss()">{{ 'Cancel' | translate }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -18,15 +18,15 @@
     <div class="reply-card" *ngIf="reply">
       <h5 class="reply-title">Feedback superviseur</h5>
       <div class="images-container">
-        <img src="assets/img/1.png" [class.selected]="reply?.reaction_type === 0" />
+        <img *ngIf="reply?.reaction_type== 0" src="assets/img/1.png" [class.selected]="reply?.reaction_type === 0" />
 
-        <img src="assets/img/2.png" [class.selected]="reply?.reaction_type === 1" />
+        <img *ngIf="reply?.reaction_type==1" src="assets/img/2.png" [class.selected]="reply?.reaction_type === 1" />
 
-        <img src="assets/img/3.png" [class.selected]="reply?.reaction_type === 2" />
-        <img src="assets/img/4.png" [class.selected]="reply?.reaction_type === 3" />
+        <img *ngIf="reply?.reaction_type==2" src="assets/img/3.png" [class.selected]="reply?.reaction_type === 2" />
+        <img *ngIf="reply?.reaction_type==3" src="assets/img/4.png" [class.selected]="reply?.reaction_type === 3" />
 
-        <img src="assets/img/5.png" [class.selected]="reply?.reaction_type === 4" />
-        <img src="assets/img/6.png" [class.selected]="reply?.reaction_type === 5" />
+        <img *ngIf="reply?.reaction_type==4" src="assets/img/5.png" [class.selected]="reply?.reaction_type === 4" />
+        <img *ngIf="reply?.reaction_type==5" src="assets/img/6.png" [class.selected]="reply?.reaction_type === 5" />
       </div>
 
       <div class="recording-card" *ngIf="reply?.audio_url?.url">

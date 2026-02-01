@@ -50,9 +50,6 @@
   justify-content: center;
 }
 .custom-button-send {
-  --background: #00a2e1;
-  --background-hover: #00a2e1;
-  --background-activated: #00a2e1;
   --border-radius: 50px;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
@@ -69,6 +66,9 @@
   justify-content: center;
   width: fit-content !important;
   min-width: 120px;
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #5d7ea9 50%, #2b405f 72%, #141c28 100%);
+  --background-hover: linear-gradient(160deg, #141c28 0%, #22344d 28%, #5d7ea9 50%, #2b405f 72%, #141c28 100%);
+  --background-activated: gray;
 }
 .button-container {
   display: flex;
@@ -140,4 +140,134 @@
 .icon {
   font-size: 18px;
   color: #233341;
+}
+
+.custom-toolbar-3d {
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #5d7ea9 50%, #2b405f 72%, #141c28 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+  perspective: 1200px; // enable 3D transforms for children
+  color: white;
+  backdrop-filter: blur(6px);
+  ion-icon {
+    color: #ffffff;
+    font-size: 28px;
+  }
+}
+
+// Header buttons (profile / notifications)
+.header-button-3d {
+  background: transparent;
+  --border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  ion-icon {
+    font-size: 20px;
+    transition:
+      transform 0.3s ease,
+      text-shadow 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px) rotateX(5deg) rotateY(-5deg) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0) rotateX(0deg) rotateY(0deg) scale(0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  // Optional: subtle floating animation
+  ion-icon {
+    animation: float 4s ease-in-out infinite;
+  }
+}
+
+// Notification button additional styling
+.notification-button-3d {
+  position: relative;
+
+  .notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+  }
+}
+
+// Center title with subtle 3D
+.center-title-3d {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  color: white;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.3s ease,
+    text-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateZ(5px) rotateX(-2deg) rotateY(2deg);
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// ==============================================
+// FLOATING KEYFRAME
+// ==============================================
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.delay-1 {
+  animation-delay: 0s;
+}
+
+.delay-2 {
+  animation-delay: 0.1s;
+}
+
+.delay-3 {
+  animation-delay: 0.15s;
+}
+
+ion-avatar {
+  width: 28px;
+  height: 28px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: solid 2px #f3f4f6;
+}
+
+ion-card {
+  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
 }

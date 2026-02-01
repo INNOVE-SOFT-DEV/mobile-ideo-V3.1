@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {HttpErrorResponse, HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {catchError, EMPTY, finalize, Observable, tap, throwError} from "rxjs";
+import {LoadingControllerService} from "../widgets/loading-controller/loading-controller.service";
 @Injectable()
 export class httpInterceptor implements HttpInterceptor {
   api: any = {};
-  constructor() {}
+  constructor(private loadingService: LoadingControllerService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem("token");
     const tokenV3 = localStorage.getItem("token-v3");
@@ -29,8 +30,9 @@ export class httpInterceptor implements HttpInterceptor {
       }
     }
 
-    if (request.url.includes("chat")) {
+    if (request.url.includes("chat") || request.url.includes("apideo")) {
       console.warn("HTTP request blocked by interceptor:", request.url);
+      this.loadingService.dimiss();
       return EMPTY; // stops execution, no request sent
     }
 

@@ -58,7 +58,7 @@ ion-card {
   height: 40px;
   border-radius: 25px;
   border: 0px;
-  background-color: #cdf3ff;
+  background-color: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
   color: #fff;
   font-family: Montserrat, sans-serif;
   font-size: 12px;
@@ -68,4 +68,17 @@ ion-card {
   letter-spacing: -0.3px;
   padding-top: 5px;
   color: black;
+}
+
+ion-toolbar {
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+}
+
+.header-button {
+  --color: whitesmoke;
+  --background: transparent;
+}
+
+ion-title {
+  color: whitesmoke;
 }
