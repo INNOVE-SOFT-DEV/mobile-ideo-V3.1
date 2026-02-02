@@ -64,7 +64,9 @@ export class Tab1Page implements OnInit, OnDestroy {
     if (this.refreshEvent) this.refreshEvent.unsubscribe();
   }
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    console.log(this.user);
+  }
 
   async ngAfterViewInit() {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.

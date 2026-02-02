@@ -95,7 +95,7 @@ export class PhotoReportService {
       const reportsToSync: any[] = JSON.parse(localStorage.getItem("report_need_sync") || "[]");
 
       console.log("Reports queued for sync:", reportsToSync);
-      await this.loadingService.present("Synchronisation des photos en cours...");
+      // await this.loadingService.present("Synchronisation des photos en cours...");
 
       // IMPORTANT: clone array to avoid mutation bugs
       for (const report of [...reportsToSync]) {

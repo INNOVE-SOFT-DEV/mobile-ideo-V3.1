@@ -38,7 +38,7 @@ final class BackgroundLocationService: NSObject, CLLocationManagerDelegate {
     private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        locationManager.distanceFilter = 1
+        locationManager.distanceFilter = 30
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.pausesLocationUpdatesAutomatically = false
        // locationManager.showsBackgroundLocationIndicator = true
@@ -267,7 +267,7 @@ final class BackgroundLocationService: NSObject, CLLocationManagerDelegate {
     // MARK: - Timer
     private func startSyncTimer() {
         DispatchQueue.main.async {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
+            self.timer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
                 self.syncQueue.async { self.syncQueueNow() }
             }
             self.debugPrint("[BG_LOC] 1-minute sync timer started")

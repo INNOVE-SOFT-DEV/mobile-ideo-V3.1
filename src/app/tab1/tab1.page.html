@@ -1,19 +1,17 @@
-<ion-header [@headerAnim] class="ion-no-border">
+<ion-header [@headerAnim] class="ion-no-border" *ngIf="!isSuperVisor">
   <ion-toolbar class="custom-toolbar-3d">
     <ion-buttons slot="start">
-      <ion-button (click)="goToProfile()" class="header-button-3d">
-        <ion-icon name="person-outline"></ion-icon>
-      </ion-button>
+      <ion-avatar (click)="goToProfile()" class="header-button-3d">
+        <img alt="Silhouette of a person's head" [src]="user?.photo_urls?.thumb" />
+      </ion-avatar>
     </ion-buttons>
     <ion-title class="center-title-3d">{{'My missions' | translate}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-button>
+      <ion-icon name="notifications-outline" color="white" class="notif"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="!isSuperVisor">
   <ng-container *ngIf="!isSuperVisor">
     <div class="header-container-agent" *ngIf="!isSuperVisor" [@cardsAnim]>
       <div class="month-block" (click)="openPopover($event)" *ngIf="!isSuperVisor" [@cardsAnim]>
@@ -33,9 +31,17 @@
       </div>
     </ng-container>
     <ng-container *ngIf="isLoaded==true">
-      <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [date]="date" [supervisors]="superVisors"></app-forfaitaire>
-      <app-punctual [data]="punctuals" [date]="date" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-punctual>
-      <app-regular [data]="regulars" [date]="date" [supervisors]="superVisors"></app-regular>
+      <div class="animate__animated animate__slideInRight delay-1">
+        <app-forfaitaire [data]="forfaitaires" [isTodayPlannings]="isToDayPlannings" [date]="date" [supervisors]="superVisors"></app-forfaitaire>
+      </div>
+
+      <div class="animate__animated animate__slideInRight delay-2">
+        <app-punctual [data]="punctuals" [date]="date" [isTodayPlannings]="isToDayPlannings" [supervisors]="superVisors"></app-punctual>
+      </div>
+
+      <div class="animate__animated animate__slideInRight delay-3">
+        <app-regular [data]="regulars" [date]="date" [supervisors]="superVisors"></app-regular>
+      </div>
     </ng-container>
   </ng-container>
 </ion-content>

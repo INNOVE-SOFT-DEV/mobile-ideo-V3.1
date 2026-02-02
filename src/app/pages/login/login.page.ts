@@ -28,6 +28,9 @@ export class LoginPage implements OnInit {
     try {
       const info = await Device.getInfo();
       const id = await Device.getId();
+      console.log(id);
+      console.log(info);
+
       this.deviceInfo = {
         device_id: id.identifier,
         platform: info.platform,

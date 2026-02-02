@@ -31,6 +31,7 @@ export class MenuMessionPage implements OnInit {
   generatedJson: any = {};
   user: any = JSON.parse(localStorage.getItem("user") || "{}");
 
+  address: string = "";
   constructor(
     private location: Location,
     private router: Router,
@@ -49,11 +50,20 @@ export class MenuMessionPage implements OnInit {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
     this.planning = data;
     this.supervisors = this.planning.supervisors || [];
+    `${this.planning?.intervention?.address.postal_code},  ${this.planning?.intervention?.address.street},  ${this.planning?.intervention?.address.city} , ${this.planning?.intervention?.address.country}`;
     // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
     this.planningType = data.type || "";
-    this.taskmanagerService.getAllTasksByKanban("superviseur mobile", this.user.email).subscribe((res: any) => {
-      this.kanban = res.kanban;
-    });
+    // this.taskmanagerService.getAllTasksByKanban("superviseur mobile", this.user.email).subscribe((res: any) => {
+    //   this.kanban = res.kanban;
+
+    // });
+
+    const address: any = this.planning.intervention.address;
+    this.address = this.planning.intervention.address;
+
+    this.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+      .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
+      .join(", ");
   }
 
   createTicket() {
@@ -101,9 +111,13 @@ export class MenuMessionPage implements OnInit {
   }
 
   direction() {
-    this.mapService.address = this.planning.address;
-    this.mapService.longitude = this.planning.long;
-    this.mapService.latitude = this.planning.lat;
+    const address: any = this.planning.intervention.address;
+
+    this.mapService.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+      .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
+      .join(", ");
+    this.mapService.longitude = this.planning?.intervention?.address.longitude;
+    this.mapService.latitude = this.planning?.intervention?.address.latitude;
     this.mapService.direction();
   }
 

@@ -106,8 +106,7 @@ ion-row.image-row {
   width: 100%;
   border-radius: 14px;
   padding: 16px;
-  background: #ffffff;
-  box-shadow: 0px 4px 4px 0px #00000040;
+  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
   display: flex;
   margin: auto 0;
 }
@@ -209,9 +208,10 @@ ion-card-content {
   width: 100%;
 }
 .custom-button {
-  --background: #00a2e1;
-  --background-hover: #00a2e1;
-  --background-activated: #00a2e1;
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background-hover: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background-activated: gray;
+
   --border-radius: 50px;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
@@ -229,4 +229,17 @@ ion-card-content {
 .cls-b {
   text-align: center;
   width: 100%;
+}
+
+ion-toolbar {
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+}
+
+.header-button {
+  --color: whitesmoke;
+  --background: transparent;
+}
+
+ion-title {
+  color: whitesmoke;
 }

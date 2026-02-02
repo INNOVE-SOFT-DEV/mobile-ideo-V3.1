@@ -13,11 +13,11 @@
 
 body {
   font-family: Montserrat, sans-serif;
-  background-color: #f4f9ff;
+  // background-color: #f4f9ff;
 }
 ion-content {
   font-family: Montserrat, sans-serif;
-  background-color: #f4f9ff;
+  --background: linear-gradient(90deg, rgb(225, 234, 252) 0%, rgba(215, 222, 250, 1) 50%, rgb(216, 219, 245) 100%);
 }
 ion-button {
   min-height: 50px;

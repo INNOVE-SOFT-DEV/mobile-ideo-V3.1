@@ -206,7 +206,7 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
 
     this.waveSurfer_reply.on("finish", () => {
       this.isPlaying = false;
-      this.getAudioDurationWithFetch();
+      this.getAudioDurationWithAudioTag();
     });
   }
   formatDuration(seconds: number): string {
@@ -215,23 +215,20 @@ export class MissionReturnsPage implements OnInit, OnDestroy {
     return `${mins}:${secs < 10 ? "0" + secs : secs}`;
   }
 
-  getAudioDurationWithFetch() {
+  getAudioDurationWithAudioTag() {
     if (!this.reply?.audio_url) return;
 
-    fetch(this.reply.audio_url.url)
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => {
-        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        return audioContext.decodeAudioData(arrayBuffer);
-      })
-      .then(decodedData => {
-        const duration = decodedData.duration;
-        this.durationDisplay_reply = this.formatDuration(duration);
-      })
-      .catch(err => {
-        console.error("Error decoding audio:", err);
-        this.durationDisplay_reply = "Unknown";
-      });
+    const audio = new Audio();
+    audio.src = this.reply.audio_url.url;
+    audio.preload = "metadata";
+
+    audio.onloadedmetadata = () => {
+      this.durationDisplay_reply = this.formatDuration(audio.duration);
+    };
+
+    audio.onerror = () => {
+      this.durationDisplay_reply = "Unknown";
+    };
   }
 
   playRecordingAgain_reply() {
