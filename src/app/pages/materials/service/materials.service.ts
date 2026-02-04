@@ -16,8 +16,11 @@ export class MaterialsService implements MaterialsInterface {
   getAllVehicules(): Observable<any> {
     return this.materialsRepo.getAllVehicules();
   }
-  takeMaterialRequest(note: string, id: number, state: string, materialId: number): Observable<any> {
-    return this.materialsRepo.takeMaterialRequest(note, id, state, materialId);
+  takeMaterialRequest(data: any, id: any): Observable<any> {
+    return this.materialsRepo.takeMaterialRequest(data, id);
+  }
+  takeMaterialRequestReturn(data: any, id: any): Observable<any> {
+    return this.materialsRepo.takeMaterialRequestReturn(data, id);
   }
   changeUserMaterialState(state: string, id: number): Observable<any> {
     return this.materialsRepo.changeUserMaterialState(state, id);

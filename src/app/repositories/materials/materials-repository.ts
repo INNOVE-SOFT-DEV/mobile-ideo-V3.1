@@ -18,8 +18,12 @@ export class MaterialsRepository implements MaterialsInterface {
   getAllVehicules(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}user/get_all_vehicules`);
   }
-  takeMaterialRequest(note: string, id: number, state: string, materialId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}user/user_take_material`, {note, state, id, materialId});
+  takeMaterialRequest(data: any, id: any): Observable<any> {
+    return this.http.post<any>(`${this.newApiUrl}equipments/retrieved_equipment`, data);
+  }
+
+  takeMaterialRequestReturn(data: any, id: any): Observable<any> {
+    return this.http.post<any>(`${this.newApiUrl}equipments/returned_equipment`, data);
   }
 
   changeUserMaterialState(state: string, id: Number): Observable<any> {
@@ -43,13 +47,14 @@ export class MaterialsRepository implements MaterialsInterface {
   addPhoto(formData: FormData, type: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}user/materials/${type}/v2`, formData);
   }
+
   requireMaterials(ids: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}user/materials/require/v2`, ids);
+    return this.http.post<any>(`${this.newApiUrl}equipments/create_equipment_request`, ids);
   }
   getMaterials(): Observable<any> {
     return this.http.get<any>(`${this.newApiUrl}equipments/active`);
   }
   getMyMaterials() {
-    return this.http.get<any>(`${this.apiUrl}user/materials/v2`);
+    return this.http.get<any>(`${this.newApiUrl}equipments/equipment_requests`);
   }
 }

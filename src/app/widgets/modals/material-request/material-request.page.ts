@@ -33,7 +33,7 @@ export class MaterialRequestPage implements OnInit {
     this.loadingService.present(this.loadingMessage);
     this.materialsRepo.getMaterials().subscribe({
       next: async value => {
-        this.materials = value;
+        this.materials = value.equipments;
         this.list_filtered_materials = this.materials;
         await this.loadingService.dimiss();
       },
@@ -66,7 +66,7 @@ export class MaterialRequestPage implements OnInit {
 
   requireMaterial() {
     this.loadingService.present(this.loadingMessage);
-    this.materialsRepo.requireMaterials({material_ids: this.pickedMaterial}).subscribe({
+    this.materialsRepo.requireMaterials({equipment_ids: this.pickedMaterial}).subscribe({
       next: async value => {
         await this.loadingService.dimiss();
         await this.modalController.dismiss("refresh");
