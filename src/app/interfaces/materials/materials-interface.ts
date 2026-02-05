@@ -12,5 +12,6 @@ export interface MaterialsInterface {
   getMaterialById(id: number): Observable<any>;
   destroyPhoto(type: string, id: number): Observable<any>;
   allUserMaterialsCount(state: string): Observable<any>;
-  takeMaterialRequest(note: string, id: number, state: string, materialId: number): Observable<any>;
+  takeMaterialRequest(data: any, id: any): Observable<any>;
+  takeMaterialRequestReturn(data: any, id: any): Observable<any>;
 }
