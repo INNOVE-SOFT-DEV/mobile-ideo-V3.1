@@ -97,9 +97,11 @@ export class Tab1Page implements OnInit, OnDestroy {
           forfaitaires_count: this.forfaitaires.length
         };
         this.superVisors = value.supervisors_contact;
+
       },
       error: async err => {
         console.error("Error:", err);
+        this.isLoaded = true;
         await this.loadingService.dimiss();
       }
     });

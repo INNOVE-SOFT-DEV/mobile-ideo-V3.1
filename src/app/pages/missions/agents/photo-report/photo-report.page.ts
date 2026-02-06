@@ -146,6 +146,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
+    console.log(this.user , this.data);
+    
     if (this.service.startedOn() == null && !this.isPointed) {
       //await this.geolocationService.getCurrentLocation();
       let userCoordinates = this.geolocationService.coordinates;
@@ -184,8 +186,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
         client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
       } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
+      }else {
+        client_uuid = this.service.generateUniqueId();
       }
-      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, this.grouped_presentation_photos[i][0].client_uuid);
+      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, client_uuid);
       const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
       let form = data;
       if (hasAfterOrBefore) {
@@ -213,7 +217,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           } else {
             this.photos_truck[i].url = value[0]?.image_url?.url;
             this.photos_truck[i].id = value[0].id;
-
+            this.photos_truck[i].thumb = value[0].image_url.thumb;
             this.photos_truck[i].client_uuid = value[0].client_uuid;
             this.service.updateLocalPhotos(photo_type, this.photos_truck);
           }
