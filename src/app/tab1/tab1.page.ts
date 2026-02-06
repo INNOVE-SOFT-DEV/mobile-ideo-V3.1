@@ -89,6 +89,8 @@ export class Tab1Page implements OnInit, OnDestroy {
         this.punctuals = this.formatPlannings(value.punctuals);
         this.regulars = this.formatPlannings(value.regulars);
         this.forfaitaires = this.formatPlannings(value.flat_rates);
+        console.log(this.user);
+
         this.counts = {
           punctuals_count: this.punctuals.length,
           regulars_count: this.regulars.length,
@@ -181,5 +183,6 @@ export class Tab1Page implements OnInit, OnDestroy {
     this.currentDate = selectedDate.toLocaleDateString("fr-FR", {month: "long", year: "numeric", day: "numeric"});
     this.date = selectedDate.toISOString().split("T")[0];
     this.isToDayPlannings = this.date === new Date().toISOString().split("T")[0];
+    this.getByDate()
   }
 }

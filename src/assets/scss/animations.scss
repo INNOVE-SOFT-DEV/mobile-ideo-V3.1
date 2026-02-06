@@ -58,7 +58,7 @@
 
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     transition: background 0.3s ease;
-    background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
+    // background: #fafafa;
 
     .logo {
       border-radius: 8px;
@@ -110,10 +110,9 @@
     padding: 0;
 
     .list {
-      background: transparent;
 
       ion-item {
-        --background: linear-gradient(to bottom, #f0f4ff 0%, #f4f9fd 100%);
+        --background: #fafafa
         --padding-start: 16px;
         --padding-end: 16px;
         transition: all 0.2s ease;
@@ -136,7 +135,7 @@
             justify-content: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: #c6dbf8;
+            background-color: #CDF3FF;
 
             svg {
               transition: transform 0.3s ease;
@@ -218,7 +217,7 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  background: linear-gradient(to bottom, #dee8fc 0%, #f1f9ff 100%);
+  background:#CDF3FF;
 
   &:hover {
     .show-more-text {

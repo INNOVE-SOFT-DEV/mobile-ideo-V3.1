@@ -18,7 +18,7 @@
         <span class="month-text">{{ currentDate | capitalizeFirstLetter }}</span>
         <ion-icon name="calendar-outline" class="icon-calendar" color="black"></ion-icon>
       </div>
-      <ion-button [@buttonAnim] expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button>
+      <!-- <ion-button [@buttonAnim] expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button> -->
     </div>
     <div class="spinner-container" *ngIf="isLoaded == false">
       <ion-spinner name="crescent"></ion-spinner>

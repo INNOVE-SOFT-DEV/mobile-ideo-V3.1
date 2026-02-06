@@ -30,9 +30,9 @@
   padding: 10px 20px;
   box-shadow: 0px 4px 4px 0px #00000040;
 }
-.bg-FFFFFF {
-  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
-}
+// .bg-FFFFFF {
+//   background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
+// }
 .bg-FEFD99 {
   background: #fefd99;
 }
@@ -78,7 +78,6 @@
   width: 100%;
   padding: 20px;
   border-radius: 14px;
-  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
   box-shadow: 5px 4px 10px 0px #dfdfdf;
   display: flex;
   flex-direction: column;
@@ -110,7 +109,6 @@
   border-radius: 100px;
   padding: 10px;
   box-shadow: 0px 4px 4px 0px #00000040;
-  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
 }
 .important {
   background: #f4c5ba;
@@ -164,7 +162,7 @@
   --color: white;
 }
 .bg-save {
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background: #00a2e1;
 
   --background-hover: #cdffed;
   --background-activated: #cdffed;
@@ -338,15 +336,13 @@
   letter-spacing: -0.015em;
   color: #233341;
 }
-ion-toolbar {
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
-}
+
 
 .header-button {
-  --color: whitesmoke;
+  --color: black
   --background: transparent;
 }
 
 ion-title {
-  color: whitesmoke;
+  color: black
 }

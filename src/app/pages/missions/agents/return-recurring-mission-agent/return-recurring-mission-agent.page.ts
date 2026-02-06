@@ -56,9 +56,9 @@ export class ReturnRecurringMissionAgentPage implements OnInit {
     await this.loadingService.present(this.loadingMessage);
     this.missionService.getMissionReturnAudio(this.internal.id).subscribe({
       next: async value => {
-        this.note = value?.audio_report.note || "";
+        this.note = value?.audio_report?.note || "";
         this.noteCache = this.note;
-        if (value?.audio_report.audio_url) {
+        if (value?.audio_report?.audio_url) {
           this.blobUrl = value?.audio_report.audio_url;
           this.isRecording = true;
           this.createWaves();
