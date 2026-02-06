@@ -2,6 +2,8 @@ import {Component} from "@angular/core";
 import {ChatService} from "../tab2/chatService/chat.service";
 import {Subscription} from "rxjs";
 import {trigger, transition, style, animate, state, keyframes} from "@angular/animations";
+import {IonRouterOutlet} from "@ionic/angular";
+import {Router} from "@angular/router";
 
 @Component({
   selector: "app-tabs",
@@ -39,7 +41,11 @@ export class TabsPage {
   updateReads!: Subscription;
   clickedTab: string = "";
 
-  constructor(private chatService: ChatService) {
+  constructor(
+    private chatService: ChatService,
+    private outlet: IonRouterOutlet,
+    private router: Router
+  ) {
     this.chatService.getUsers().subscribe(res => {
       this.chatService.users$.subscribe(users => {
         this.reads = 0;
@@ -55,8 +61,17 @@ export class TabsPage {
 
   animateTab(tab: string) {
     console.log(tab);
-
+    //  this.resetStack()
     this.clickedTab = tab;
+    this.router.navigate(
+      ["/tabs", tab],
+      {replaceUrl: true} // clears navigation history
+    );
+
     setTimeout(() => (this.clickedTab = ""), 200);
+  }
+
+  resetStack() {
+    this.outlet.pop();
   }
 }

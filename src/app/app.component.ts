@@ -10,6 +10,7 @@ import {ChatService} from "./tab2/chatService/chat.service";
 import {Platform} from "@ionic/angular";
 import {PushService} from "./widgets/push/push.service";
 
+
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
@@ -19,6 +20,8 @@ import {PushService} from "./widgets/push/push.service";
 export class AppComponent implements OnInit {
   loaded = false;
   isConnected = false;
+    isDark = false;
+
 
   constructor(
     private geolocationService: GeolocationService,
@@ -30,6 +33,19 @@ export class AppComponent implements OnInit {
     private pushService: PushService
   ) {
     this.translate.setDefaultLang("fr");
+        this.platform.ready().then(() => {
+      // default = light mode
+      this.setTheme(false);
+    });
+  }
+
+    setTheme(dark: boolean) {
+    this.isDark = dark;
+    document.body.classList.toggle('dark', dark);
+  }
+
+  toggleTheme() {
+    this.setTheme(!this.isDark);
   }
 
   async ngOnInit() {

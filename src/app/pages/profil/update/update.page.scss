@@ -76,7 +76,7 @@
 }
 .custom-button-update {
   --border-radius: 50px;
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #5d7ea9 50%, #2b405f 72%, #141c28 100%);
+  --background: #00a2e1;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -153,7 +153,6 @@ ion-header {
 }
 
 .custom-toolbar {
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
   --backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
@@ -169,7 +168,7 @@ ion-header {
   font-weight: 700;
   font-size: 18px;
   text-align: center;
-  color: rgb(235, 233, 233);
+  color:black;
 }
 
 .header-button {
@@ -184,8 +183,7 @@ ion-header {
 
   ion-icon {
     font-size: 20px;
-    color: rgb(235, 233, 233);
-    --background:     
+    color:black;
   ;
   }
 
@@ -358,7 +356,7 @@ ion-header {
 }
 
 .update-button {
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background: #00a2e1;
 
   --background-hover: linear-gradient(135deg, #212327 0%, #595e6a 100%);
   --border-radius: 50px;
@@ -429,7 +427,7 @@ ion-header {
 }
 
 .card-header {
-  background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+background: #00a2e1; 
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -451,7 +449,7 @@ ion-header {
 
   ion-icon {
     font-size: 24px;
-    color: #ffffff;
+    color: white;
   }
 
   .action-card:hover & {
@@ -463,13 +461,12 @@ ion-header {
   font-family: "Montserrat", sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
+  color: white;
   flex: 1;
 }
 
 .card-content {
   padding: 20px;
-  background: linear-gradient(90deg, rgb(237, 241, 251) 0%, rgb(226, 231, 252) 50%, rgb(226, 228, 242) 100%);
 }
 
 .card-description {
@@ -512,7 +509,6 @@ ion-header {
 
 .profile-card-content {
   padding: 24px;
-  background: linear-gradient(90deg, rgb(237, 241, 251) 0%, rgb(226, 231, 252) 50%, rgb(226, 228, 242) 100%);
 }
 
 .profile-items {
@@ -526,7 +522,7 @@ ion-header {
   align-items: center;
   gap: 16px;
   padding: 16px;
-  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
+  // background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   transition: all 0.3s ease;
@@ -542,7 +538,7 @@ ion-header {
 .profile-item-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  background: #00a2e1 ;
   border-radius: 50%;
   display: flex;
   align-items: center;

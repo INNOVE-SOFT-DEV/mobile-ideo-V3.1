@@ -1,20 +1,71 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="tab1" href="/tabs/tab1" [@tabLoadAnimation] [@tabClickAnimation]="clickedTab === 'tab1' ? 'clicked' : 'normal'" (click)="animateTab('tab1')">
-      <ion-img src="../../assets/img/missions-menu.png"></ion-img>
+      <div class="tab-icon-wrapper">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M18.6667 20.0001C18.6667 20.7365 19.2637 21.3334 20.0001 21.3334C20.7365 21.3334 21.3334 20.7365 21.3334 20.0001C21.3334 19.2637 20.7365 18.6667 20.0001 18.6667C19.2637 18.6667 18.6667 19.2637 18.6667 20.0001Z"
+            stroke="currentColor"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M10.6667 20.0001C10.6667 20.7365 11.2637 21.3334 12.0001 21.3334C12.7365 21.3334 13.3334 20.7365 13.3334 20.0001C13.3334 19.2637 12.7365 18.6667 12.0001 18.6667C11.2637 18.6667 10.6667 19.2637 10.6667 20.0001Z"
+            stroke="currentColor"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M18.6667 12.0001C18.6667 12.7365 19.2637 13.3334 20.0001 13.3334C20.7365 13.3334 21.3334 12.7365 21.3334 12.0001C21.3334 11.2637 20.7365 10.6667 20.0001 10.6667C19.2637 10.6667 18.6667 11.2637 18.6667 12.0001Z"
+            stroke="currentColor"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M10.6667 12.0001C10.6667 12.7365 11.2637 13.3334 12.0001 13.3334C12.7365 13.3334 13.3334 12.7365 13.3334 12.0001C13.3334 11.2637 12.7365 10.6667 12.0001 10.6667C11.2637 10.6667 10.6667 11.2637 10.6667 12.0001Z"
+            stroke="currentColor"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
       <ion-label>{{ 'assignment' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="tab2" href="/tabs/tab2" [@tabLoadAnimation] [@tabClickAnimation]="clickedTab === 'tab2' ? 'clicked' : 'normal'" (click)="animateTab('tab2')">
       <div class="tab-icon-badge">
-        <ion-img src="../../assets/img/message-menu.png"></ion-img>
+        <div class="tab-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path
+              d="M28 19.7332V9.59985V9.59545C28 8.10491 28 7.35918 27.7096 6.78931C27.454 6.28754 27.0455 5.87956 26.5437 5.6239C25.9733 5.33325 25.2271 5.33325 23.7336 5.33325H8.26693C6.77345 5.33325 6.02616 5.33325 5.45573 5.6239C4.95396 5.87956 4.54631 6.28754 4.29065 6.78931C4 7.35974 4 8.10638 4 9.59985V24.8945C4 26.3155 4 27.026 4.29128 27.3909C4.54459 27.7083 4.92858 27.8929 5.33464 27.8924C5.80153 27.8919 6.35658 27.448 7.46615 26.5604L9.4981 24.9348C9.93125 24.5883 10.1478 24.4151 10.389 24.2919C10.6029 24.1826 10.8304 24.1027 11.0658 24.0544C11.331 23.9999 11.6087 23.9999 12.1634 23.9999H23.7334C25.2269 23.9999 25.9733 23.9999 26.5437 23.7092C27.0455 23.4536 27.454 23.0457 27.7096 22.544C28 21.9741 28 21.2281 28 19.7376V19.7332Z"
+              stroke="currentColor"
+              stroke-width="2.66667"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
         <ion-badge *ngIf="reads > 0" color="danger" class="badge-message">{{ reads }}</ion-badge>
       </div>
       <ion-label>{{ 'messaging' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="tab3" href="/tabs/tab3" [@tabLoadAnimation] [@tabClickAnimation]="clickedTab === 'tab3' ? 'clicked' : 'normal'" (click)="animateTab('tab3')">
-      <ion-img src="../../assets/img/absence-menu.png"></ion-img>
+      <div class="tab-icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path
+            d="M20 25.3333C20 22.3877 16.4183 19.9999 12 19.9999C7.58172 19.9999 4 22.3877 4 25.3333M22.6667 18.6665L28 13.3333M22.6667 13.3333L28 18.6665M12 15.9999C9.05448 15.9999 6.66667 13.6121 6.66667 10.6666C6.66667 7.72107 9.05448 5.33325 12 5.33325C14.9455 5.33325 17.3333 7.72107 17.3333 10.6666C17.3333 13.6121 14.9455 15.9999 12 15.9999Z"
+            stroke="currentColor"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
       <ion-label>{{ 'absences' | translate }}</ion-label>
     </ion-tab-button>
 
@@ -25,7 +76,18 @@
       [@tabClickAnimation]="clickedTab === 'materials' ? 'clicked' : 'normal'"
       (click)="animateTab('materials')"
     >
-      <ion-img src="../../assets/img/material-menu.png"></ion-img>
+      <div class="tab-icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path
+            d="M13.3525 21.0668H18.6859M25.3525 16.5334V23.4668C25.3525 24.9603 25.3528 25.707 25.0622 26.2774C24.8065 26.7792 24.398 27.1871 23.8963 27.4428C23.3258 27.7334 22.5796 27.7335 21.0861 27.7335H10.9528C9.45933 27.7335 8.71204 27.7334 8.14161 27.4428C7.63984 27.1871 7.23219 26.7792 6.97653 26.2774C6.68588 25.707 6.68588 24.9603 6.68588 23.4668V16.5334C6.68588 15.7867 6.68588 15.4134 6.8312 15.1282C6.95903 14.8773 7.16286 14.6733 7.41374 14.5455C7.69896 14.4001 8.07195 14.4001 8.81869 14.4001H23.2187C23.9654 14.4001 24.3398 14.4001 24.6251 14.5455C24.8759 14.6733 25.0789 14.8773 25.2067 15.1282C25.352 15.4134 25.3525 15.7867 25.3525 16.5334ZM25.3818 14.4001H6.65593C5.52182 14.4001 4.95538 14.4002 4.63379 14.2021C4.20501 13.9379 3.9619 13.4548 4.00489 12.953C4.03713 12.5767 4.3741 12.121 5.04916 11.2097C5.24442 10.9461 5.34205 10.8143 5.46156 10.7136C5.62092 10.5794 5.81001 10.4844 6.0127 10.4363C6.16472 10.4001 6.32788 10.4001 6.65593 10.4001H25.3818C25.7098 10.4001 25.8746 10.4001 26.0266 10.4363C26.2293 10.4844 26.4172 10.5794 26.5765 10.7136C26.696 10.8143 26.794 10.9461 26.9893 11.2097C27.6643 12.121 28.0018 12.5767 28.0341 12.953C28.0771 13.4548 27.834 13.9379 27.4053 14.2021C27.0837 14.4002 26.5159 14.4001 25.3818 14.4001Z"
+            stroke="currentColor"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path d="M18.1526 4.80005H23.4859M18.1527 14L20.8193 4.80005" stroke="currentColor" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
       <ion-label>{{ 'materials' | translate }}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>

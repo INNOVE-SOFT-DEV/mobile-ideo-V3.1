@@ -120,6 +120,9 @@ export class RegularComponent implements OnInit {
       element["today_schedule"] = element.schedules.find((s: any) => s.date == this.date);
       element["team"] = [...element["today_schedule"]["agents"], ...element["today_schedule"]["subcontractors"]];
     });
+
+    console.log(this.data);
+    
   }
 
   toggleDetails(planning: Intervention) {

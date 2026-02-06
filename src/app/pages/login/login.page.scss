@@ -30,7 +30,6 @@
 }
 
 ion-list {
-  --background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
   border-radius: 25px;
   padding: 0;
 }
@@ -40,7 +39,6 @@ ion-input {
   padding: 0;
 }
 ion-item {
-  --background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
   border-radius: 25px;
   //strong shadow
   box-shadow:
@@ -63,7 +61,7 @@ ion-item {
   width: 80%;
   border-radius: 25px;
   --border-radius: 25px;
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background: #00a2e1;
 }
 
 /* Global animation tuning */

@@ -97,6 +97,8 @@ export class DetailsPage implements OnInit {
         .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
         .join(", ");
     }
+
+    
   }
 
   setupPhotos() {

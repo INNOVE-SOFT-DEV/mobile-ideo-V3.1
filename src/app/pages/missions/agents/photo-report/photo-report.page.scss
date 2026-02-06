@@ -4,6 +4,7 @@
   flex-grow: 1;
   display: flex;
   justify-content: center;
+  color : black;
 }
 .card-footer {
   width: 100%;
@@ -14,7 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -23,7 +23,6 @@
   ion-icon {
     font-size: 16px;
     margin-right: 5px;
-    color: #ffffff;
   }
 }
 .photo-card {
@@ -95,7 +94,7 @@
   color: #233341;
 }
 .custom-button-send {
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background:  #00a2e1;
 
   --background-hover: #556f91;
   --background-activated: #556f91;
@@ -174,10 +173,10 @@
 .custom-button {
   margin-top: 10px;
   --border-radius: 50px;
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+  --background:  #00a2e1;
 
-  --background-hover: #556f91;
-  --background-activated: #556f91;
+  --background-hover: #9a9a9a;
+  --background-activated: #929292;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -187,16 +186,13 @@
 .btn-icon {
   margin-right: 5px;
 }
-ion-card-content {
-  background: linear-gradient(to bottom, #e7edfb 0%, #f4f9fd 100%);
-}
+
 
 .center-title {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 18px;
   text-align: center;
-  color: rgb(235, 233, 233);
 }
 
 .header-button {
@@ -211,8 +207,8 @@ ion-card-content {
 
   ion-icon {
     font-size: 20px;
-    color: rgb(235, 233, 233);
-    --background:     
+    color:black;
+    --background:      
   ;
   }
 
@@ -225,9 +221,7 @@ ion-card-content {
   position: relative;
 }
 
-.tool-bar {
-  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
-}
+
 ion-button {
   --background: transparent;
 }
