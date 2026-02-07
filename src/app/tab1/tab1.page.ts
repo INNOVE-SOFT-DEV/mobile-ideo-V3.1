@@ -89,8 +89,6 @@ export class Tab1Page implements OnInit, OnDestroy {
         this.punctuals = this.formatPlannings(value.punctuals);
         this.regulars = this.formatPlannings(value.regulars);
         this.forfaitaires = this.formatPlannings(value.flat_rates);
-        console.log(this.user);
-
         this.counts = {
           punctuals_count: this.punctuals.length,
           regulars_count: this.regulars.length,
@@ -102,9 +100,10 @@ export class Tab1Page implements OnInit, OnDestroy {
       error: async err => {
         console.error("Error:", err);
         this.isLoaded = true;
-        await this.loadingService.dimiss();
+        // await this.loadingService.dimiss();
       }
     });
+    this.loaded = true;
   }
 
   formatPlannings(data: any) {

@@ -30,7 +30,7 @@ export class MissionService implements MissionInterface {
     });
     App.addListener("appStateChange", ({isActive}) => {
       if (isActive) {
-        this.refreshEvent.emit();
+        // this.refreshEvent.emit();
       }
     });
   }

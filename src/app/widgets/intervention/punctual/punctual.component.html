@@ -1,20 +1,10 @@
 <div class="item-missions">
   @for (item of data; track $index) {
     @if (item["team"]?.length > 0) {
-      <!-- <div 
-        class="center-container" 
-        [@cardAnimation]="{ value: '', params: { delay: getAnimationDelay($index) } }">
-        <ion-badge 
-          color="warning" 
-          class="time-badge"
-          [@badgePulse]>
-          {{ "default hour" | translate }}
-        </ion-badge>
-      </div> -->
+  
 
       <ion-card
         class="card"
-        [@cardAnimation]="{value: '', params: {delay: getAnimationDelay($index)}}"
         [@cardHover]="cardHoverStates[$index]"
         [@clickEffect]="clickStates[$index]"
         (mouseenter)="onCardHover($index, true)"
@@ -38,11 +28,22 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
+                <div 
+        class="center-container" 
+       >
+        <ion-badge 
+          color="warning" 
+          class="time-badge"
+          [@badgePulse]>
+          {{ "default hour" | translate }}
+        </ion-badge>
+      </div>
             <ion-chip color="tertiary" class="custom-chip animate__animated animate__slideInRight">
               <ion-icon name="people-outline"></ion-icon>
               {{ "team" | translate }}
             </ion-chip>
           </ion-card-title>
+          
         </ion-card-header>
 
         <ion-card-content class="card-content" (click)="goToDetails(item); onCardClick($index)">
@@ -202,4 +203,6 @@
       </ion-card>
     }
   }
-</div>
+  
+
+

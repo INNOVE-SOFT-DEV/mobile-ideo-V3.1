@@ -1,97 +1,75 @@
 @use "./mission-style.scss" as *;
 
-// Enhanced styles with animation support
+// Parent container - should NOT have card-specific styles
 .item-missions {
   scroll-behavior: smooth;
-  margin: 0 15px;
-  padding: 0;
+  margin: 0;
+  padding: 15px; // Add padding inside container for spacing
+  
+  // Remove card-specific styles from here
+  background: transparent; // Change from var(--ion-background-color)
+  
+}
 
+
+// Individual card styles - this is where the shadow and spacing should be
+.card {
+  margin-bottom: 16px; // Add spacing between cards
+  margin-left: 0;
+  margin-right: 0;
   border-radius: 14px;
   background: var(--ion-background-color);
-
-  box-shadow:
-    0 2px 4px rgba(208, 8, 8, 0.06),
-    0 8px 16px rgba(167, 24, 24, 0.12),
-    0 24px 48px rgba(159, 8, 66, 0.18);
-
+  border: #cae2f8 solid 1px;
+  
+  // Move box-shadow and transform here (from .item-missions)
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.1), 
+    0 8px 32px rgba(0, 0, 0, 0.1);
+  
   transform: translateZ(0);
   transition:
     box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.item-missions:hover {
-  transform: translateY(-4px);
-
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.08),
-    0 16px 32px rgba(0, 0, 0, 0.16),
-    0 40px 80px rgba(0, 0, 0, 0.22);
-}
-.item-missions::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.08),
-    transparent 40%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.item-missions:hover::after {
-  opacity: 1;
-}
-
-
-.center-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 12px;
-
-  .time-badge {
-    font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:hover {
-      //   transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-  }
-}
-
-.card {
-  margin-bottom: 16px;
-  margin-left: -5px;
-  margin-right: -5px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
+  
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   will-change: transform, box-shadow;
-
-  // Subtle shadow by default
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-
-  // Prevent janky animations
   backface-visibility: hidden;
-  transform: translateZ(0);
+
+  // Hover effect for individual cards
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.08),
+      0 16px 32px rgba(0, 0, 0, 0.16),
+      0 40px 80px rgba(0, 0, 0, 0.22);
+  }
+
+  // Shine effect
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08),
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
 
   .card-header {
     padding: 16px;
-
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     transition: background 0.3s ease;
-    // background: #fafafa;
+    background: #fafafa;
 
     .logo {
       border-radius: 8px;
@@ -143,9 +121,8 @@
     padding: 0;
 
     .list {
-
       ion-item {
-        --background: #fafafa
+        --background: #fafafa;
         --padding-start: 16px;
         --padding-end: 16px;
         transition: all 0.2s ease;
@@ -211,6 +188,24 @@
   }
 }
 
+.center-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+
+  .time-badge {
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
 // Expandable content styling
 .expandable-content {
   overflow: hidden;
@@ -250,7 +245,7 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  background:#CDF3FF;
+  background: #CDF3FF;
 
   &:hover {
     .show-more-text {

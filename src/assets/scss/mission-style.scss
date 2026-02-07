@@ -67,11 +67,7 @@
   border-radius: 6px;
   background-color: #ffceaa;
 }
-ion-card {
-  border-radius: 8px;
-  margin: 8px;
-  box-shadow: 5px 4px 10px 0px #dfdfdf;
-}
+
 .name-campany {
   font-size: 14px;
   line-height: 1.3;
@@ -283,9 +279,7 @@ ion-item {
   display: flex;
   justify-content: center;
 }
-.item-missions {
-  margin-bottom: 12px;
-}
+
 .no-data-container {
   display: flex;
   flex-direction: column;
@@ -325,10 +319,7 @@ ion-item {
   font-weight: 900;
   font-size: 14px;
 }
-.card {
-  // margin-left: 35px;
-  // margin-right: 35px;
-}
+
 .name-campany {
   font-weight: 900;
   font-style: Montserrat, sans-serif;
