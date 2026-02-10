@@ -14,18 +14,18 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <div class="header-container-agent">
-    <div class="month-block" (click)="openPopover($event)">
-      <span class="month-text">{{ currentDate | capitalizeFirstLetter }}</span>
-      <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+  <div class="anumation-block header-container-agent">
+    <div class="anumation-block month-block" (click)="openPopover($event)">
+      <span class="anumation-block month-text">{{ currentDate | capitalizeFirstLetter }}</span>
+      <ion-icon name="calendar-outline" class="anumation-block icon-calendar"></ion-icon>
     </div>
-    <ion-button expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button>
+    <ion-button expand="block" (click)="getByDate()" class="anumation-block custom-button">{{ "Filter" | translate }}</ion-button>
   </div>
   <ng-container *ngIf="punctuals?.length == 0">
-    <div class="empty-container">
+    <div class="anumation-block empty-container">
       <img src="assets/img/emty-icon.png" />
-      <p class="cls-empty-title">{{'No data found' | translate}}</p>
-      <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+      <p class="anumation-block cls-empty-title">{{'No data found' | translate}}</p>
+      <p class="anumation-block cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
     </div>
   </ng-container>
 

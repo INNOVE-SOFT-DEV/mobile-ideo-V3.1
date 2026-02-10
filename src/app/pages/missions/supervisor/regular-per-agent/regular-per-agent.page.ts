@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {Router} from "@angular/router";
 @Component({
@@ -14,7 +14,8 @@ export class RegularPerAgentPage implements OnInit {
 
   constructor(
     private location: Location,
-    private router: Router
+    private router: Router,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {
@@ -24,6 +25,20 @@ export class RegularPerAgentPage implements OnInit {
     this.superVisors = navigation.supervisors;
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   goBack() {
     this.location.back();
   }

@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {IonDatetime, PopoverController} from "@ionic/angular";
 import {trigger, transition, style, animate, query, stagger} from "@angular/animations";
+import {AfterViewInit, ElementRef} from "@angular/core";
 
 @Component({
   selector: "app-tab1",
@@ -57,7 +58,8 @@ export class Tab1Page implements OnInit, OnDestroy {
     private authService: AuthService,
     private translateService: TranslateService,
     private loadingService: LoadingControllerService,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private el: ElementRef
   ) {}
 
   ngOnDestroy(): void {
@@ -71,6 +73,19 @@ export class Tab1Page implements OnInit, OnDestroy {
   async ngAfterViewInit() {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
+
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.animationDuration = "600ms";
+        }, index * 150);
+      });
+    }, 300);
+
     this.setCurrentDay();
     this.isSuperVisor = this.authService.isSuperVisor();
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
@@ -97,7 +112,6 @@ export class Tab1Page implements OnInit, OnDestroy {
           forfaitaires_count: this.forfaitaires.length
         };
         this.superVisors = value.supervisors_contact;
-
       },
       error: async err => {
         console.error("Error:", err);
@@ -185,6 +199,6 @@ export class Tab1Page implements OnInit, OnDestroy {
     this.currentDate = selectedDate.toLocaleDateString("fr-FR", {month: "long", year: "numeric", day: "numeric"});
     this.date = selectedDate.toISOString().split("T")[0];
     this.isToDayPlannings = this.date === new Date().toISOString().split("T")[0];
-    this.getByDate()
+    this.getByDate();
   }
 }

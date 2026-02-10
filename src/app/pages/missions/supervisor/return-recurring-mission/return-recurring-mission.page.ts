@@ -37,7 +37,8 @@ export class ReturnRecurringMissionPage implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -163,7 +164,20 @@ export class ReturnRecurringMissionPage implements OnInit, AfterViewChecked {
       ws.playPause();
     }
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   formatDuration(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);

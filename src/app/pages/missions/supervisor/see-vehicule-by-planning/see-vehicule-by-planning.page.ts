@@ -82,7 +82,8 @@ export class SeeVehiculeByPlanningPage implements OnInit {
     private missionService: MissionService,
     private translateService: TranslateService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -90,6 +91,21 @@ export class SeeVehiculeByPlanningPage implements OnInit {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
     this.planning = data;
     await this.getReturns();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   async getReturns() {

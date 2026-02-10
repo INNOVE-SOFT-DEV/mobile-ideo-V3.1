@@ -8,6 +8,7 @@ import {OcrScannerPage} from "src/app/pages/ocr-scanner/ocr-scanner.page";
 import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
 import {LoadingControllerService} from "../../loading-controller/loading-controller.service";
 import {ToastControllerService} from "../../toast-controller/toast-controller.service";
+import {AfterViewInit, ElementRef} from "@angular/core";
 
 @Component({
   selector: "app-main",
@@ -30,10 +31,24 @@ export class MainComponent implements OnInit {
     private loadingCtrl: LoadingControllerService,
     private ocrService: OcrService,
     private toast: ToastControllerService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {}
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.animationDuration = "700ms";
+        }, index * 120);
+      });
+    }, 200);
+  }
 
   goSuperVisorAbsences() {
     this.router.navigate(["absence-supervisor"]);

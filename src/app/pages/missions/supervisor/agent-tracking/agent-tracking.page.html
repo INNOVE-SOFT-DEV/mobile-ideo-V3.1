@@ -14,28 +14,28 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <div class="cls-supervisor">
-    <div class="custom-search">
-      <input type="text" placeholder="Rechercher..." class="search-input" [(ngModel)]="searchTerm" (input)="onSearchChange()" />
+  <div class="cls-supervisor custom-block" >
+    <div class="custom-search custom-block">
+      <input type="text" placeholder="Rechercher..." class="search-input custom-block" [(ngModel)]="searchTerm" (input)="onSearchChange()" />
 
-      <ion-icon name="search-outline" class="input-icon"></ion-icon>
+      <ion-icon name="search-outline" class="input-icon custom-block"></ion-icon>
     </div>
-    <ion-grid class="toggle-grid">
-      <ion-row class="ion-justify-content-center toggle-row">
-        <ion-col size="auto" class="toggle-item">
-          <div class="toggle-wrapper">
-            <span class="toggle-label">Agent</span>
-            <ion-toggle [(ngModel)]="isAgent" class="green-toggle" (ionChange)="onAgentToggleChange($event)"></ion-toggle>
+    <ion-grid class="toggle-grid custom-block">
+      <ion-row class="ion-justify-content-center toggle-row custom-block">
+        <ion-col size="auto" class="toggle-item custom-block">
+          <div class="toggle-wrapper custom-block">
+            <span class="toggle-label custom-block">Agent</span>
+            <ion-toggle [(ngModel)]="isAgent" class="green-toggle custom-block" (ionChange)="onAgentToggleChange($event)"></ion-toggle>
           </div>
         </ion-col>
-        <ion-col size="auto" class="toggle-item">
-          <div class="toggle-wrapper">
-            <span class="toggle-label">Camion</span>
-            <ion-toggle [(ngModel)]="isCamion" class="green-toggle" (ionChange)="onCamionToggleChange($event)"></ion-toggle>
+        <ion-col size="auto" class="toggle-item custom-block">
+          <div class="toggle-wrapper custom-block">
+            <span class="toggle-label custom-block">Camion</span>
+            <ion-toggle [(ngModel)]="isCamion" class="green-toggle custom-block" (ionChange)="onCamionToggleChange($event)"></ion-toggle>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <div class="custom-block" #map id="map"></div>
+    <div class="custom-block " #map id="map"></div>
   </div>
 </ion-content>

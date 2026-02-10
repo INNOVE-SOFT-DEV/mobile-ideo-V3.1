@@ -37,7 +37,8 @@ export class MissionReturnsSupervisorPage implements OnInit {
     private modalController: ModalController,
     private missionService: MissionService,
     private translateService: TranslateService,
-    private loadingService: LoadingControllerService
+    private loadingService: LoadingControllerService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -63,7 +64,20 @@ export class MissionReturnsSupervisorPage implements OnInit {
       await this.loadingService.dimiss();
     });
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   async getId() {
     return this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
   }

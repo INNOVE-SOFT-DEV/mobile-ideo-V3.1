@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
@@ -34,7 +34,8 @@ export class PointagesPage implements OnInit {
     private translateService: TranslateService,
     private loadingService: LoadingControllerService,
     private missionService: MissionService,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -56,6 +57,20 @@ export class PointagesPage implements OnInit {
     // });
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   setDate() {
     const dateStart = new Date(this.planning.date_start);
     const dateEnd = new Date(this.planning.date_end);

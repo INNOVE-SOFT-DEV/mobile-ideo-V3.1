@@ -17,34 +17,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="cls-supervisor">
-    <div class="date-display">{{tommorrow}}</div>
+  <div class="anumation-block cls-supervisor">
+    <div class="anumation-block date-display">{{tommorrow}}</div>
 
-    <div class="custom-search">
-      <input type="text" placeholder="Rechercher..." class="search-input" name="search" />
-      <ion-icon name="search-outline" class="input-icon"></ion-icon>
+    <div class="anumation-block custom-search">
+      <input type="text" placeholder="Rechercher..." class="anumation-block search-input" name="search" />
+      <ion-icon name="search-outline" class="anumation-block input-icon"></ion-icon>
     </div>
 
-    <div class="toggle-center">
+    <div class="anumation-block toggle-center">
       <ion-toggle [checked]="false">Placé</ion-toggle>
     </div>
 
-    <div class="cards-list">
-      <ion-card class="custom-card" *ngFor="let item of agents" (click)="placementOfAgentsDetails(item)">
+    <div class="anumation-block cards-list">
+      <ion-card class="anumation-block custom-card" *ngFor="let item of agents" (click)="placementOfAgentsDetails(item)">
         <ion-grid>
-          <ion-row class="ion-align-items-center ion-justify-content-between">
-            <ion-col size="2" class="avatar-col">
+          <ion-row class="anumation-block ion-align-items-center ion-justify-content-between">
+            <ion-col size="2" class="anumation-block avatar-col">
               <img
                 [src]="!item.user.photo.url.includes('default-user') ? item.user.photo.url.replace(env.urlAPI , env.url_web) : 'https://backend.ideogroupe.com/assets/img/default-user.png'"
                 alt="Avatar"
-                class="avatar-img"
+                class="anumation-block avatar-img"
               />
             </ion-col>
-            <ion-col size="8" class="info-col">
-              <ion-row class="name-row">{{item.user.first_name + ' ' + item.user.last_name}}</ion-row>
-              <ion-row class="missions-row">{{item.planning_punctuals}} missions</ion-row>
+            <ion-col size="8" class="anumation-block info-col">
+              <ion-row class="anumation-block name-row">{{item.user.first_name + ' ' + item.user.last_name}}</ion-row>
+              <ion-row class="anumation-block missions-row">{{item.planning_punctuals}} missions</ion-row>
             </ion-col>
-            <ion-col size="2" class="icon-col">
+            <ion-col size="2" class="anumation-block icon-col">
               <ion-icon name="chevron-forward-outline"></ion-icon>
             </ion-col>
           </ion-row>

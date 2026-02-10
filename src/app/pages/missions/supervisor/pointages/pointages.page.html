@@ -15,55 +15,55 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="cls-details">
+  <div class="anumation-block cls-details">
     <ion-card>
       <ion-card-content>
         <ion-grid>
           <ion-row>
             <ion-col><img [src]="planning?.intervention.logos.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'" /></ion-col>
             <ion-col size="8">
-              <div class="cls-title">
-                <p class="cls-p-title">{{planning?.intervention.name.split('-')[0]}}</p>
+              <div class="anumation-block cls-title">
+                <p class="anumation-block cls-p-title">{{planning?.intervention.name.split('-')[0]}}</p>
               </div>
-              <div class="cls-address">
-                <p class="cls-p-address">{{planning?.intervention.name.split('-')[1]}}</p>
+              <div class="anumation-block cls-address">
+                <p class="anumation-block cls-p-address">{{planning?.intervention.name.split('-')[1]}}</p>
               </div>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
-    <div class="not-regular-date col-left user-info" *ngIf="planning?.type != 'regular'">
-      <div class="chip-wrapper">
-        <div class="user-chip-date">
-          <span class="chip-text-date">{{`${nonRegularDay} le ${planning?.today_schedule.date}`}}</span>
+    <div class="anumation-block not-regular-date col-left user-info" *ngIf="planning?.type != 'regular'">
+      <div class="anumation-block chip-wrapper">
+        <div class="anumation-block user-chip-date">
+          <span class="anumation-block chip-text-date">{{`${nonRegularDay} le ${planning?.today_schedule.date}`}}</span>
         </div>
       </div>
     </div>
 
     <ng-container>
-      <div class="custom-user-card" *ngFor="let agent of team">
-        <div class="card-grid">
-          <div class="col-left">
-            <div class="user-info">
-              <img class="avatar" [src]="agent?.photo_urls?.thumb" alt="avatar" />
-              <div class="user-name">{{agent?.first_name}} {{agent?.last_name}}</div>
+      <div class="anumation-block custom-user-card" *ngFor="let agent of team">
+        <div class="anumation-block card-grid">
+          <div class="anumation-block col-left">
+            <div class="anumation-block user-info">
+              <img class="anumation-block avatar" [src]="agent?.photo_urls?.thumb" alt="avatar" />
+              <div class="anumation-block user-name">{{agent?.first_name}} {{agent?.last_name}}</div>
             </div>
-            <div class="chip-wrapper">
-              <div class="user-chip">
-                <span class="chip-text">{{agent?.role}}</span>
+            <div class="anumation-block chip-wrapper">
+              <div class="anumation-block user-chip">
+                <span class="anumation-block chip-text">{{agent?.role}}</span>
               </div>
             </div>
           </div>
 
-          <div class="col-right">
+          <div class="anumation-block col-right">
             <app-pointing-status-indicators [agent]="agent"></app-pointing-status-indicators>
-            <div class="time-info">
-              <div class="time-text">
+            <div class="anumation-block time-info">
+              <div class="anumation-block time-text">
                 Arrivé : {{ !agent?.pointing_internal[0].started_on ? '--:--' :
                 agent?.pointing_internal[0].started_on.split('T')[1].split(':')[0]+':'+agent?.pointing_internal[0].started_on.split('T')[1].split(':')[1] }}
               </div>
-              <div class="time-text">
+              <div class="anumation-block time-text">
                 Départ : {{ !agent?.pointing_internal[0].finished_on ? '--:--' :
                 agent?.pointing_internal[0].finished_on.split('T')[1].split(':')[0]+':'+agent?.pointing_internal[0].finished_on.split('T')[1].split(':')[1]}}
               </div>
@@ -76,55 +76,55 @@
       <ion-card-content>
         <ion-grid>
           <ion-row>
-            <div class="custom-select-container">
-              <div class="left">
-                <span class="selected-text">{{ selectedOption }}</span>
+            <div class="anumation-block custom-select-container">
+              <div class="anumation-block left">
+                <span class="anumation-block selected-text">{{ selectedOption }}</span>
               </div>
-              <div class="right">
-                <span class="select-label">Choisir</span>
-                <ion-icon name="chevron-down-outline" class="select-icon"></ion-icon>
+              <div class="anumation-block right">
+                <span class="anumation-block select-label">Choisir</span>
+                <ion-icon name="chevron-down-outline" class="anumation-block select-icon"></ion-icon>
               </div>
-              <select [(ngModel)]="selectedOption" (change)="onChange($event)" class="select-native">
+              <select [(ngModel)]="selectedOption" (change)="onChange($event)" class="anumation-block select-native">
                 <option *ngFor="let agent of planning?.team" value="{{`${agent?.first_name} ${agent?.last_name}`}}">{{`${agent?.first_name} ${agent?.last_name}`}}</option>
               </select>
             </div>
-            <div class="month-block" (click)="openPopover($event)">
-              <span class="month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
-              <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+            <div class="anumation-block month-block" (click)="openPopover($event)">
+              <span class="anumation-block month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
+              <ion-icon name="calendar-outline" class="anumation-block icon-calendar"></ion-icon>
             </div>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
-    <!-- <div class="not-regular-date col-left user-info" *ngIf="planning?.type == 'regular' && selectedUserRole != ''">
-      <div class="chip-wrapper">
-        <div class="user-chip-date">
-          <span class="chip-text-date">{{selectedUserRole}}</span>
+    <!-- <div class="anumation-block not-regular-date col-left user-info" *ngIf="planning?.type == 'regular' && selectedUserRole != ''">
+      <div class="anumation-block chip-wrapper">
+        <div class="anumation-block user-chip-date">
+          <span class="anumation-block chip-text-date">{{selectedUserRole}}</span>
         </div>
       </div>
     </div> -->
 
     <!-- <ng-container *ngIf="planning?.type == 'regular'">
       <ng-container *ngFor="let agent of team">
-        <div class="custom-user-card" [ngStyle]="{'display': agent?.first_name +' '+agent?.last_name == selectedOption ? '' : 'none'}">
-          <div class="card-grid">
-            <div class="col-left">
-              <div class="user-info">
-                <img class="avatar" [src]="agent?.photo" alt="avatar" />
-                <div class="user-name">{{agent?.first_name}} {{agent?.last_name}}</div>
+        <div class="anumation-block custom-user-card" [ngStyle]="{'display': agent?.first_name +' '+agent?.last_name == selectedOption ? '' : 'none'}">
+          <div class="anumation-block card-grid">
+            <div class="anumation-block col-left">
+              <div class="anumation-block user-info">
+                <img class="anumation-block avatar" [src]="agent?.photo" alt="avatar" />
+                <div class="anumation-block user-name">{{agent?.first_name}} {{agent?.last_name}}</div>
               </div>
-              <div class="chip-wrapper">
-                <div class="user-chip">
-                  <span class="chip-text">{{`${agent.day} le ${agent?.date}`}}</span>
+              <div class="anumation-block chip-wrapper">
+                <div class="anumation-block user-chip">
+                  <span class="anumation-block chip-text">{{`${agent.day} le ${agent?.date}`}}</span>
                 </div>
               </div>
             </div>
 
-            <div class="col-right">
+            <div class="anumation-block col-right">
               <app-pointing-status-indicators [agent]="agent"></app-pointing-status-indicators>
-              <div class="time-info">
-                <div class="time-text">Arrivé : {{ agent?.first_pointing_internal?.length == 1 ? '--:--' : agent?.hour_start}}</div>
-                <div class="time-text">Départ : {{ agent?.second_pointing_internal?.length == 1 ? '--:--' : agent?.hour_end}}</div>
+              <div class="anumation-block time-info">
+                <div class="anumation-block time-text">Arrivé : {{ agent?.first_pointing_internal?.length == 1 ? '--:--' : agent?.hour_start}}</div>
+                <div class="anumation-block time-text">Départ : {{ agent?.second_pointing_internal?.length == 1 ? '--:--' : agent?.hour_end}}</div>
               </div>
             </div>
           </div>

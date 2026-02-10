@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ModalController} from "@ionic/angular";
 import {PlacementOfAgentsConfirmModalPage} from "src/app/widgets/modals/missions/supervisor/placement-of-agents-confirm-modal/placement-of-agents-confirm-modal.page";
@@ -33,7 +33,8 @@ export class PlacementOfAgentsAffectPage implements OnInit {
     private route: ActivatedRoute,
     private translationService: TranslateService,
     private missionService: MissionService,
-    private toastController: ToastControllerService
+    private toastController: ToastControllerService,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {
@@ -70,6 +71,21 @@ export class PlacementOfAgentsAffectPage implements OnInit {
       });
       return await modal.present();
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
   goBack() {
     this.location.back();
