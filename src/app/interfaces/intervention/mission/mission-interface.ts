@@ -17,7 +17,7 @@ export interface MissionInterface {
   getPhotoReport(id: number, type: string): Observable<any>;
   pointing(id: any, type: string, body: any): Observable<any>;
   deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any>;
-  getPlannings(isAgent: boolean, date?: string, type?: string): Observable<any>;
+  getPlannings(isAgent: boolean, date?: string, type?: string, our_missions?: boolean): Observable<any>;
   getSuperVisorPlanningCounts(date?: string): Observable<any>;
   getPhotoReportsSupervisor(type: string, id: number): Observable<any>;
   generatePhotosReport(data: any): Observable<any>;

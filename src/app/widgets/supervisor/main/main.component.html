@@ -5,7 +5,7 @@
   </p>
   <ion-grid>
     <ion-row>
-      <ion-col size="6" *ngIf="counts?.supervisor_punctuals_count > 0" (click)="goSuperVisorAgentMissions()" class="custom-block">
+      <ion-col size="6" *ngIf="counts && counts?.supervisor_punctuals_count > 0" (click)="goSuperVisorAgentMissions()"         class="custom-block animate__animated animate__fadeInUp">
         <div class="block">
           <div class="badge">{{ counts?.supervisor_punctuals_count }}</div>
           <img src="assets/img/Calendarx.png" class="block-image" />
@@ -13,7 +13,7 @@
         </div>
       </ion-col>
 
-      <ion-col [size]="counts?.supervisor_punctuals_count > 0 ? 6 : 12" (click)="goTickets()" class="custom-block">
+      <ion-col [size]="counts?.supervisor_punctuals_count > 0 ? 6 : 12" (click)="goTickets()" class="custom-block animate__animated animate__fadeInUp">
         <div class="block">
           <img src="assets/img/tickets.png" class="block-image" />
           <div class="block-text">{{ "Tickets" | translate }}</div>
@@ -22,7 +22,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size="6" (click)="goSuperVisorMissions()" class="custom-block">
+      <ion-col size="6" (click)="goSuperVisorMissions()" class="custom-block animate__animated animate__fadeInUp">
         <div class="block">
           <div class="badge" *ngIf="counts?.punctuals_count + counts?.regulars_count + counts?.forfaitaires_count > 0">
             {{ counts?.punctuals_count + counts?.regulars_count + counts?.forfaitaires_count }}
@@ -31,7 +31,7 @@
           <div class="block-text">{{ "Missions" | translate }}</div>
         </div>
       </ion-col>
-      <ion-col size="6" (click)="documents()" class="custom-block">
+      <ion-col size="6" (click)="documents()" class="custom-block   animate__animated animate__fadeInUp">
         <div class="block">
           <div class="badge">3</div>
           <img src="assets/img/doc fill.png" class="block-image" />
@@ -41,14 +41,14 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size="6" (click)="vehicules()" class="custom-block">
+      <ion-col size="6" (click)="vehicules()" class="custom-block animate__animated animate__fadeInUp">
         <div class="block">
           <div class="badge">1</div>
           <img src="assets/img/Carx.png" class="block-image" />
           <div class="block-text">{{ "Vehicle" | translate }}</div>
         </div>
       </ion-col>
-      <ion-col size="6" (click)="placementOfAgents()" class="custom-block">
+      <ion-col size="6" (click)="placementOfAgents()" class="custom-block animate__animated animate__fadeInUp">
         <div class="block">
           <div class="badge">0</div>
           <img src="assets/img/Locationx.png" class="block-image" />
@@ -58,7 +58,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size="12" (click)="chooseSource()" class="custom-block">
+      <ion-col size="12" (click)="chooseSource()" class="custom-block ">
         <div class="block">
           <!-- <div class="badge"></div> -->
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
