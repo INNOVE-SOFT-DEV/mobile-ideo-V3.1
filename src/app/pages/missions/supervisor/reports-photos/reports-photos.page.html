@@ -20,23 +20,23 @@
   <div class="anumation-block cls-details" *ngIf="!isSliderOpen">
 
     <!-- Select -->
-    <div class="anumation-block custom-select-container">
-      <div class="anumation-block left">
-        <span class="anumation-block selected-text">{{ selectedOption }}</span>
+    <div class=" custom-select-container">
+      <div class=" left">
+        <span class=" selected-text">{{ selectedOption }}</span>
       </div>
 
-      <div class="anumation-block right">
-        <span class="anumation-block select-label">Select</span>
+      <div class=" anumation-blockright">
+        <span class=" select-label">Select</span>
         <ion-icon
           name="chevron-down-outline"
-          class="anumation-block select-icon">
+          class=" select-icon">
         </ion-icon>
       </div>
 
       <select
         [(ngModel)]="selectedOption"
         (change)="onChange($event)"
-        class="anumation-block select-native"
+        class=" select-native"
         name="select">
         <option value="Tous les agents">Tous les agents</option>
         <option
@@ -49,9 +49,9 @@
 
     <!-- Tabs -->
     <div class="anumation-block custom-tab-container">
-      <div class="anumation-block tabs">
+      <div class="tabs">
         <div
-          class="anumation-block tab"
+          class=" tab"
           [class.active]="activeTab === 'prestation'"
           (click)="setActiveTab('prestation')">
           <ion-icon name="image-outline"></ion-icon>
@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="anumation-block tab-content">
+      <div class=" tab-content">
 
         <!-- PRESTATION -->
         <div *ngIf="activeTab === 'prestation'">
@@ -75,10 +75,10 @@
           <ng-container *ngIf="images.length === 0">
             <div class="anumation-block empty-container">
               <img src="assets/img/emty-icon.png" />
-              <p class="anumation-block cls-empty-title">
+              <p class=" cls-empty-title">
                 {{ 'No data found' | translate }}
               </p>
-              <p class="anumation-block cls-empty-d">
+              <p class="cls-empty-d">
                 {{ 'It appears that this list is currently empty' | translate }}
               </p>
             </div>
@@ -95,10 +95,10 @@
                 {{ pair?.agent }}
               </div>
 
-              <div class="anumation-block image-pair">
+              <div class="image-pair">
 
                 <div
-                  class="anumation-block image-column"
+                  class="image-column"
                   *ngIf="pair?.before?.image_url?.url">
                   <img
                     [src]="pair.before.image_url.thumb"
@@ -107,13 +107,13 @@
                 </div>
 
                 <div
-                  class="anumation-block image-column"
+                  class=" image-column"
                   *ngIf="pair?.after?.image_url?.url">
                   <img
                     [src]="pair.after.image_url.thumb"
                     alt="After"
                     (click)="openSlides('photo_after', i)" />
-                  <div class="anumation-block label">After</div>
+                  <div class=" label">After</div>
                 </div>
 
               </div>
@@ -127,10 +127,10 @@
           <ng-container *ngIf="imagesCamions.length === 0">
             <div class="anumation-block empty-container">
               <img src="assets/img/emty-icon.png" />
-              <p class="anumation-block cls-empty-title">
+              <p class="cls-empty-title">
                 {{ 'No data found' | translate }}
               </p>
-              <p class="anumation-block cls-empty-d">
+              <p class="cls-empty-d">
                 {{ 'It appears that this list is currently empty' | translate }}
               </p>
             </div>
@@ -139,7 +139,7 @@
           <div class="anumation-block truck-grid">
             <div class="anumation-block camions-grid">
               <div
-                class="anumation-block camion-item"
+                class=" camion-item"
                 *ngFor="let obj of imagesCamions; let i = index">
                 <img
                   [src]="obj?.url"
@@ -156,12 +156,12 @@
     <!-- Buttons -->
     <div class="anumation-block btn-container">
       <ion-button
-        class="anumation-block custom-button"
+        class="custom-button"
         expand="block"
         (click)="downloadZip()">
         <ion-img
           slot="start"
-          class="anumation-block btn-icon"
+          class="btn-icon"
           src="assets/img/Download.png">
         </ion-img>
         Télécharger les photos
@@ -173,7 +173,7 @@
         (click)="sendReport()">
         <ion-img
           slot="start"
-          class="anumation-block btn-icon"
+          class=" btn-icon"
           src="assets/img/Navigation.png">
         </ion-img>
         Envoyez vers le client

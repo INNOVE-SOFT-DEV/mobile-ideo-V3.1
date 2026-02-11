@@ -5,8 +5,13 @@ import {MissionService} from "src/app/tab1/service/intervention/mission/mission.
 import WaveSurfer from "wavesurfer.js";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
+
   selector: "app-return-recurring-mission",
   templateUrl: "./return-recurring-mission.page.html",
   styleUrls: ["./return-recurring-mission.page.scss"],
@@ -164,20 +169,7 @@ export class ReturnRecurringMissionPage implements OnInit, AfterViewChecked {
       ws.playPause();
     }
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   formatDuration(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);

@@ -26,7 +26,6 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   date: string = new Date().toISOString().split("T")[0];
   noSchedule: number = 0;
 
-
   constructor(
     private location: Location,
     private missionService: MissionService,
@@ -53,7 +52,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   }
   ngAfterViewInit() {
     setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
       blocks.forEach((block, index) => {
         setTimeout(() => {
@@ -65,7 +64,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
       });
     }, 200);
   }
-    formatPlannings(data: any) {
+  formatPlannings(data: any) {
     this.noSchedule = 0;
     return data?.map((el: any) => {
       el.showDetails = false;
@@ -75,8 +74,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
         agent.last_name = agent.full_name.split(" ")[1] || "";
         agent.role = agent.role_name;
       });
-      console.log(el.today_schedule)
-      
+      console.log(el.today_schedule);
 
       let subcontractors: any[] = [];
       if (!el.today_schedule) {
@@ -97,8 +95,8 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
     this.executed = true;
     await this.loadingService.present(this.laodingMessage);
     this.missionService.getPlannings(true, this.punctualDate, "punctual").subscribe(async (data: any) => {
-      this.superVisors = data.punctuals?.supervisors
-      this.punctuals = this.formatPlannings (data.punctuals);
+      this.superVisors = data.punctuals?.supervisors;
+      this.punctuals = this.formatPlannings(data.punctuals);
       await this.loadingService.dimiss();
       this.executed = false;
     });
