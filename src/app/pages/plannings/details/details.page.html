@@ -231,14 +231,14 @@
                 <p class="mission-text">{{'Assignment' | translate}}</p>
               </ion-col>
               <ion-col size="8">
-                <!-- <ion-chip class="cls-in-progress">{{'In progress' | translate}}</ion-chip> -->
+                <ion-chip class="cls-in-progress">{{'In progress' | translate}}</ion-chip>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-card-title>
         <ion-card-subtitle><ion-chip class="cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content class="cls-desc" [innerHTML]="planning?.note"></ion-card-content>
+      <ion-card-content class="cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
     </ion-card>
     <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
       <ion-card-header>

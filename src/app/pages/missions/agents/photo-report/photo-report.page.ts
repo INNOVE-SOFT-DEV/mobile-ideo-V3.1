@@ -152,6 +152,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       //await this.geolocationService.getCurrentLocation();
       let userCoordinates = this.geolocationService.coordinates;
       let pointageInternalId = this.service.getPointageId();
+      console.log(pointageInternalId);
+      
       let body: any = {
         point: {
           longitude: userCoordinates.longitude,
@@ -195,9 +197,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       if (hasAfterOrBefore) {
         form = this.service.updateClientUuidFromGroupedPhotos(data, this.grouped_presentation_photos, i);
       }
-      const pointageId = this.service.getPointageId();
+      
+      
       await this.loadingService.present(this.loadingMessage);
-      this.missionsService.createReportPhoto(form, pointageId).subscribe({
+      this.missionsService.createReportPhoto(form, this.service.getPointageId()).subscribe({
         next: async value => {
           if (value[0].photo_type == "before") {
             this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;

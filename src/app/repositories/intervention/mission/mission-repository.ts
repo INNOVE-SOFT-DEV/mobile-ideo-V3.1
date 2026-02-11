@@ -117,7 +117,9 @@ export class MissionRepository implements MissionInterface {
 
   getSuperVisorPlanningCounts(date?: string): Observable<any> {
     const cacheKey = `supervisor_planning_counts_${date}`;
-    return this.http.get<any>(`${this.apiUrl}missions/supervisor_plannings_counts/${date}`).pipe(
+    console.log(date);
+    
+    return this.http.get<any>(`${this.newApiUrl}plannings/count?=${date}`).pipe(
       switchMap(async data => {
         await Preferences.set({
           key: cacheKey,

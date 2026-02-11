@@ -47,7 +47,9 @@ export class ReportsPhotosPage implements OnInit {
     this.selectedOption = event.target.value;
 
     // Trouver l'agent sélectionné
-    this.pickedAgent = this.team.find(u => `${u.first_name} ${u.last_name}` === this.selectedOption);
+    this.pickedAgent = this.team.find(u => u.full_name === this.selectedOption)
+    console.log(this.pickedAgent);
+    
 
     if (this.selectedOption === "Tous les agents") {
       // Récupérer toutes les images
@@ -55,10 +57,10 @@ export class ReportsPhotosPage implements OnInit {
       this.imagesCamions = this.imagesCamionsCache;
     } else if (this.pickedAgent) {
       // Filtrer images before/after par agent
-      this.images = this.imagesCache.filter((pair: any) => pair.agent === this.pickedAgent.first_name + " " + this.pickedAgent.last_name);
+      this.images = this.imagesCache.filter((pair: any) => pair.agent === this.pickedAgent ?.full_name);
 
       // Filtrer images camion par agent
-      this.imagesCamions = this.imagesCamionsCache.filter((camion: any) => camion.agent === this.pickedAgent.first_name + " " + this.pickedAgent.last_name);
+      this.imagesCamions = this.imagesCamionsCache.filter((camion: any) => camion.agent === this.pickedAgent?.full_name);
     } else {
       // Si agent non trouvé, vider les images
       this.images = [];
@@ -86,7 +88,9 @@ export class ReportsPhotosPage implements OnInit {
     const data = (await JSON.parse(this.route.snapshot.paramMap.get("data")!)) || {};
     this.planning = data;
     const scheduleId = this.planning.today_schedule.id;
-    this.team = this.planning.team.filter((member: any) => member.first_name || member.last_name);
+    this.team = this.planning.team.filter((member: any) =>( member.first_name || member.last_name) && !member?.manager);
+    console.log(this.team);
+    
     await this.loadingService.present(this.laodingMessage);
     Network.getStatus().then(status => {
       this.isConnected = status.connected;
@@ -95,6 +99,7 @@ export class ReportsPhotosPage implements OnInit {
     Network.addListener("networkStatusChange", status => {
       this.isConnected = status.connected;
     });
+    
 
     //this.missionService.getPhotoReportsSupervisor(this.planning.type, this.planning.id).subscribe(
     /*this.missionService.getPhotoReportsSupervisor(this.planning.type, scheduleId).subscribe(

@@ -274,6 +274,10 @@ const routes: Routes = [
   {
     path: "feedback-modal",
     loadChildren: () => import("./widgets/modals/feedback-modal/feedback-modal.module").then(m => m.FeedbackModalPageModule)
+  },
+  {
+    path: 'confirm-absent',
+    loadChildren: () => import('./widgets/modals/confirm-absent/confirm-absent.module').then( m => m.ConfirmAbsentPageModule)
   }
 ];
 @NgModule({

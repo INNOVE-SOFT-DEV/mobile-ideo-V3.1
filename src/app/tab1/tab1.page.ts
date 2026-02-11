@@ -6,7 +6,7 @@ import {User} from "../models/auth/user";
 import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "../widgets/loading-controller/loading-controller.service";
 import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {elementAt, Subscription} from "rxjs";
 import {IonDatetime, PopoverController} from "@ionic/angular";
 import {trigger, transition, style, animate, query, stagger} from "@angular/animations";
 import {AfterViewInit, ElementRef} from "@angular/core";
@@ -33,7 +33,8 @@ import {AfterViewInit, ElementRef} from "@angular/core";
 })
 export class Tab1Page implements OnInit, OnDestroy {
   user: User | null = this.authService.getCurrentUser();
-  isSuperVisor: boolean = false;
+  isSuperVisor: boolean =    this.authService.isSuperVisor();
+
   punctuals: Intervention[] = [];
   regulars: Intervention[] = [];
   forfaitaires: Intervention[] = [];
@@ -67,7 +68,14 @@ export class Tab1Page implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    console.log(this.user);
+    
+        this.setCurrentDay();
+        this.loadingMessage = await this.translateService.get("Loading").toPromise();
+        await this.getAllMissions();
+        this.refreshEvent = this.missionService.refreshEvent.subscribe(async () => {
+          this.setCurrentDay();
+          await this.getAllMissions();
+        });
   }
 
   async ngAfterViewInit() {
@@ -119,11 +127,71 @@ export class Tab1Page implements OnInit, OnDestroy {
         await this.loadingService.dimiss();
       }
     });
+
+  async getAllMissions() {
+    this.isLoaded = false;
+    console.log(this.isSuperVisor);
+    if(this.isSuperVisor){
+      this.missionService.getSuperVisorPlanningCounts(this.date).subscribe({
+        next: (value: any) => {
+          this.isLoaded = true;
+          // this.punctuals = this.formatPlannings(value.punctuals) || [];
+          // this.regulars = this.formatPlannings(value.regulars|| []);
+          // this.forfaitaires = this.formatPlannings(value.flat_rates || []);
+          this.counts = {
+            punctuals_count: value.punctuals,
+            regulars_count: value.regulars,
+            forfaitaires_count: value.flat_rates, 
+            // supervisor_punctuals_count :this.punctuals.filter((punctual: any) => punctual.today_schedule?.agents?.some((agent: any) => agent.id === this.user?.id))?.length
+  
+          };
+          // this.superVisors = value.supervisors_contact;
+          
+  
+        },
+        error: async err => {
+          console.error("Error:", err);
+          this.isLoaded = true;
+          // await this.loadingService.dimiss();
+        }
+      })
+
+    }else {
+
+      this.missionService.getPlannings(true, this.date, "all").subscribe({
+        next: (value: any) => {
+          this.isLoaded = true;
+          this.punctuals = this.formatPlannings(value.punctuals) || [];
+          this.regulars = this.formatPlannings(value.regulars|| []);
+          this.forfaitaires = this.formatPlannings(value.flat_rates || []);
+          
+          
+          
+          this.counts = {
+            punctuals_count: this.punctuals.length,
+            regulars_count: this.regulars?.length || 0,
+            forfaitaires_count: this.forfaitaires?.length || 0,
+            supervisor_punctuals_count :this.punctuals.filter((punctual: any) => punctual.today_schedule?.agents?.some((agent: any) => agent.id === this.user?.id))?.length
+  
+          };
+          this.superVisors = value.supervisors_contact;
+          
+  
+        },
+        error: async err => {
+          console.error("Error:", err);
+          this.isLoaded = true;
+          // await this.loadingService.dimiss();
+        }
+      });
+    }
+    
+    this.loaded = true;
   }
 
   formatPlannings(data: any) {
     this.noSchedule = 0;
-    return data.map((el: any) => {
+    return data?.map((el: any) => {
       el.showDetails = false;
       el.today_schedule = el?.schedules?.find((s: any) => s.date === this.date) || el?.schedule?.find((s: any) => s.date === this.date) || null;
       el.today_schedule?.agents?.forEach((agent: any) => {
@@ -131,6 +199,8 @@ export class Tab1Page implements OnInit, OnDestroy {
         agent.last_name = agent.full_name.split(" ")[1] || "";
         agent.role = agent.role_name;
       });
+      console.log(el.today_schedule)
+      
 
       let subcontractors: any[] = [];
       if (!el.today_schedule) {

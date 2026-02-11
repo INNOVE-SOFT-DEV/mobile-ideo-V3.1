@@ -401,11 +401,16 @@ export class PhotoReportService {
   getPointageId() {
     const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
     const currentId = user_v3?.id;
-    if (!this.data || !this.data.planning || !Array.isArray(this.data.planning.schedule)) {
-      console.warn("Schedule non défini ou données non chargées");
-      return null;
-    }
-    const agent = this.data.planning.schedule.flatMap((s: any) => s.agents || []).find((a: any) => a.id === currentId);
+    console.log(this.data.planning);
+    
+    // if (!this.data || !this.data.planning || !Array.isArray(this.data.planning.schedule)) {
+    //   console.warn("Schedule non défini ou données non chargées");
+    //   return null;
+    // }
+
+
+
+    const agent = this.data.planning.today_schedule.agents.find((a: any) => a.id === currentId);
     return agent.pointing_internal[0].id || null;
   }
 
