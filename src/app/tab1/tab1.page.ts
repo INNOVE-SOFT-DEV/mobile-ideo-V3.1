@@ -69,22 +69,9 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   async ngOnInit() {
     
-        this.setCurrentDay();
-        this.loadingMessage = await this.translateService.get("Loading").toPromise();
-        await this.getAllMissions();
-        this.refreshEvent = this.missionService.refreshEvent.subscribe(async () => {
-          this.setCurrentDay();
-          await this.getAllMissions();
-        });
-  }
-
-  async ngAfterViewInit() {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-
     setTimeout(() => {
       const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
-
+  
       blocks.forEach((block, index) => {
         setTimeout(() => {
           block.classList.add("animate__animated", "animate__fadeInUp");
@@ -93,7 +80,7 @@ export class Tab1Page implements OnInit, OnDestroy {
         }, index * 150);
       });
     }, 300);
-
+  
     this.setCurrentDay();
     this.isSuperVisor = this.authService.isSuperVisor();
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
@@ -102,31 +89,11 @@ export class Tab1Page implements OnInit, OnDestroy {
       this.setCurrentDay();
       await this.getAllMissions();
     });
+
   }
 
-  async getAllMissions() {
-    this.isLoaded = false;
-    this.missionService.getPlannings(true, this.date, "all").subscribe({
-      next: (value: any) => {
-        this.isLoaded = true;
-        this.punctuals = this.formatPlannings(value.punctuals);
-        this.regulars = this.formatPlannings(value.regulars);
-        this.forfaitaires = this.formatPlannings(value.flat_rates);
-        console.log(this.user);
+  
 
-        this.counts = {
-          punctuals_count: this.punctuals.length,
-          regulars_count: this.regulars.length,
-          forfaitaires_count: this.forfaitaires.length
-        };
-        this.superVisors = value.supervisors_contact;
-      },
-      error: async err => {
-        console.error("Error:", err);
-        this.isLoaded = true;
-        await this.loadingService.dimiss();
-      }
-    });
 
   async getAllMissions() {
     this.isLoaded = false;

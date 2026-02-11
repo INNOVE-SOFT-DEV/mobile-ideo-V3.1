@@ -46,7 +46,7 @@ export class MenuMessionPage implements OnInit {
     private ocrService: OcrService,
     private toast: ToastControllerService,
     private modalCtrl: ModalController,
-    private el: ElementRef
+    private el: ElementRef,
         private popoverController: PopoverController,
 
   ) {}
