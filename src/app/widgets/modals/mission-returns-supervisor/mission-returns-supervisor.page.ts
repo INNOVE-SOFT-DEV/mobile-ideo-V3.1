@@ -66,7 +66,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
   }
   ngAfterViewInit() {
     setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
       blocks.forEach((block, index) => {
         setTimeout(() => {
