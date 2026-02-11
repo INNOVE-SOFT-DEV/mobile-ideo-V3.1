@@ -28,7 +28,8 @@ export class VehicleDrivingDetailsPage implements OnInit, AfterViewChecked {
   constructor(
     private location: Location,
     private route: ActivatedRoute,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {
@@ -37,7 +38,20 @@ export class VehicleDrivingDetailsPage implements OnInit, AfterViewChecked {
     this.image = decodeURIComponent(this.route.snapshot.paramMap.get("image") || "");
     this.name = this.route.snapshot.paramMap.get("name") || "";
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   openSliderModal(item: any, title: any) {
     this.notes = [];
     let photos = item.photo.filter((photo: any) => photo.type == title);

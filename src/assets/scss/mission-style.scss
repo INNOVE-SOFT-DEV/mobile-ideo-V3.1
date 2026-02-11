@@ -26,8 +26,9 @@
 .month-block {
   height: 50px;
   width: 80%;
-  border-radius: 14px;
-  background: white;
+  border-radius: 18px;
+  // background-color: #f4f9ff;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,7 +47,6 @@
 }
 .icon-calendar {
   font-size: 20px;
-  color: #4a80b2;
 }
 .center-container {
   display: flex;
@@ -67,11 +67,7 @@
   border-radius: 6px;
   background-color: #ffceaa;
 }
-ion-card {
-  border-radius: 8px;
-  margin: 8px;
-  box-shadow: 5px 4px 10px 0px #dfdfdf;
-}
+
 .name-campany {
   font-size: 14px;
   line-height: 1.3;
@@ -102,13 +98,12 @@ ion-card {
   align-items: center;
   gap: 6px;
   height: 36px;
-  color: #ffffff;
+  color: #110202;
   font-size: 14px;
   line-height: 1.3;
   font-weight: 900;
-  background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
-  --background-hover: linear-gradient(135deg, #212327 0%, #595e6a 100%);
 
+  background:#CDF3FF;
   --background-activated: linear-gradient(135deg, #999696 0%, #959698 100%);
   margin: 8px 0;
 }
@@ -116,7 +111,6 @@ ion-card {
   font-size: 16px;
 }
 .show-more-container {
-  background-color: #cdf3ff;
   padding: 6px 0;
   width: 100%;
   display: flex;
@@ -127,10 +121,11 @@ ion-card {
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 0;
+  padding-bottom: -3px;
+  background:#CDF3FF;
+  
 }
-.show-more-container:hover {
-  background-color: #b8ecff;
-}
+
 .show-more-text {
   color: #233341;
   font-size: 12px;
@@ -218,10 +213,8 @@ ion-item {
   --min-height: 48px;
 }
 .wrap-text {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
 }
 @media (max-width: 576px) {
   .center-container {
@@ -250,9 +243,7 @@ ion-item {
     font-size: 15px;
     gap: 4px;
   }
-  .wrap-text {
-    max-width: 120px;
-  }
+
   ion-thumbnail {
     --size: 32px;
   }
@@ -263,9 +254,7 @@ ion-item {
   }
 }
 @media (max-width: 360px) {
-  .wrap-text {
-    max-width: 100px;
-  }
+
   .name-campany {
     font-size: 14px;
   }
@@ -284,9 +273,7 @@ ion-item {
   display: flex;
   justify-content: center;
 }
-.item-missions {
-  margin-bottom: 12px;
-}
+
 .no-data-container {
   display: flex;
   flex-direction: column;
@@ -326,10 +313,7 @@ ion-item {
   font-weight: 900;
   font-size: 14px;
 }
-.card {
-  // margin-left: 35px;
-  // margin-right: 35px;
-}
+
 .name-campany {
   font-weight: 900;
   font-style: Montserrat, sans-serif;
@@ -342,6 +326,7 @@ ion-item {
   width: 28px;
   height: 28px;
   padding: 0 2px;
+  background :#CDF3FF
 }
 ion-thumbnail {
   margin-left: 15px;
@@ -361,39 +346,4 @@ ion-thumbnail {
   font-weight: 500;
   font-size: 14px;
   color: #233341;
-}
-
-.item-missions {
-  position: relative;
-  perspective: 1400px;
-  transform-style: preserve-3d;
-  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
-  }
-
-  &:hover::before {
-    opacity: 1;
-  }
-
-  canvas.three-shadow {
-    position: absolute;
-    inset: -40px;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-    transform: translateZ(40px);
-  }
 }

@@ -15,67 +15,67 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="!isSliderOpen">
-  <div class="cls-details">
-    <div class="date-select-container">
-      <ion-item lines="none" class="custom-date-item" (click)="showPicker = !showPicker">
-        <ion-input [value]="formattedDate" readonly class="custom-date-input"></ion-input>
-        <ion-icon name="calendar-outline" slot="end" class="calendar-icon"></ion-icon>
+  <div class=" animate__animated animate__fadeInUp  cls-details">
+    <div class=" animate__animated animate__fadeInUp  date-select-container">
+      <ion-item lines="none" class=" custom-date-item" (click)="showPicker = !showPicker">
+        <ion-input [value]="formattedDate" readonly class=" custom-date-input"></ion-input>
+        <ion-icon name="calendar-outline" slot="end" class=" calendar-icon"></ion-icon>
       </ion-item>
 
-      <ion-datetime *ngIf="showPicker" presentation="date" [(ngModel)]="selectedDate" (ionChange)="onDateChange($event)" class="date-picker"></ion-datetime>
+      <ion-datetime *ngIf="showPicker" presentation="date" [(ngModel)]="selectedDate" (ionChange)="onDateChange($event)" class="  date-picker"></ion-datetime>
     </div>
 
-    <div class="center-toggle" *ngIf="!isNotice">
-      <div class="toggle-option left-option" (click)="noticesOrPhotos(false)">
-        <span class="text-site">{{'Photos' | translate}}</span>
+    <div class=" animate__animated animate__fadeInUp center-toggle" *ngIf="!isNotice">
+      <div class="  toggle-option left-option" (click)="noticesOrPhotos(false)">
+        <span class="  text-site">{{'Photos' | translate}}</span>
       </div>
-      <div class="toggle-option right-option" (click)="noticesOrPhotos(true)">
-        <span class="text-agent">{{'Notices' | translate}}</span>
+      <div class="  toggle-option right-option" (click)="noticesOrPhotos(true)">
+        <span class="  text-agent">{{'Notices' | translate}}</span>
       </div>
     </div>
 
-    <div class="center-toggle" *ngIf="isNotice">
-      <div class="toggle-option right-option" (click)="noticesOrPhotos(false)">
-        <span class="text-agent">{{'Photos' | translate}}</span>
+    <div class=" animate__animated animate__fadeInUp  center-toggle" *ngIf="isNotice">
+      <div class="  toggle-option right-option" (click)="noticesOrPhotos(false)">
+        <span class="  text-agent">{{'Photos' | translate}}</span>
       </div>
-      <div class="toggle-option left-option" (click)="noticesOrPhotos(true)">
-        <span class="text-site">{{'Notices' | translate}}</span>
+      <div class="  toggle-option left-option" (click)="noticesOrPhotos(true)">
+        <span class="  text-site">{{'Notices' | translate}}</span>
       </div>
     </div>
 
     <ng-container *ngIf="!isNotice">
-      <div class="custom-select-wrapper" (click)="toggleDropdown()">
-        <div class="select-left">{{ selectedOption }}</div>
-        <div class="select-right">
-          <span class="select-text">Select</span>
-          <ion-icon name="caret-down-outline" class="select-icon"></ion-icon>
+      <div class=" animate__animated animate__fadeInUp  custom-select-wrapper" (click)="toggleDropdown()">
+        <div class="  select-left">{{ selectedOption }}</div>
+        <div class="  select-right">
+          <span class="  select-text">Select</span>
+          <ion-icon name="caret-down-outline" class="  select-icon"></ion-icon>
         </div>
       </div>
 
-      <ion-list *ngIf="showDropdown" class="select-options">
+      <ion-list *ngIf="showDropdown" class="  select-options">
         <ion-item button detail="false" *ngFor="let option of options" (click)="selectOption(option)">{{ option }}</ion-item>
       </ion-list>
 
-      <ion-grid class="custom-image-grid">
+      <ion-grid class="acustom-image-grid">
         <ion-row>
           <ion-col size="6" *ngFor="let img of display; let i = index" (click)="openSlides(i)">
-            <div class="image-wrapper">
-              <img [src]="img?.photo?.url" class="styled-image" />
+            <div class="  image-wrapper">
+              <img [src]="img?.photo?.url" class="  styled-image" />
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
 
-      <div class="empty-container" *ngIf="!display || display.length === 0">
+      <div class=" animate__animated animate__fadeInUp  empty-container" *ngIf="!display || display.length === 0">
         <img src="assets/img/emty-icon.png" />
-        <p class="cls-empty-title">{{'No data found' | translate}}</p>
-        <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+        <p class="  cls-empty-title">{{'No data found' | translate}}</p>
+        <p class="  cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
       </div>
     </ng-container>
 
     <ng-container *ngIf="isNotice">
       <ion-card class="custom-card" *ngIf="notes && notes.length ">
-        <div *ngIf="notes.length > 0" class="card-title">Notes</div>
+        <div *ngIf="notes.length > 0" class="  card-title">Notes</div>
         <ng-container *ngIf="notes.length > 0">
           <ion-item *ngFor="let item of notes">
             <p>{{`${item.created_at.split("T")[0]} : ${item.note}`}}</p>
@@ -83,20 +83,20 @@
         </ng-container>
       </ion-card>
 
-      <ion-card class="custom-card voice" *ngIf="voices && voices?.length">
-        <div *ngFor="let item of voices ; let i = index" class="card-title voice-item">
-          <ion-button class="play" (click)="playRecordingAgain(i)">
-            <ion-icon class="play-icon" name="play-circle-outline" slot="start"></ion-icon>
+      <ion-card class=" custom-card voice" *ngIf="voices && voices?.length">
+        <div *ngFor="let item of voices ; let i = index" class="  card-title voice-item">
+          <ion-button class="  play" (click)="playRecordingAgain(i)">
+            <ion-icon class="  play-icon" name="play-circle-outline" slot="start"></ion-icon>
           </ion-button>
-          <div #waveformContainer [id]="'waveform-' + i" class="waveform"></div>
+          <div #waveformContainer [id]="'waveform-' + i" class="  waveform"></div>
         </div>
       </ion-card>
 
       <ng-container *ngIf="voices?.length == 0 && notes?.length == 0">
-        <div class="empty-container">
+        <div class=" animate__animated animate__fadeInUp  empty-container">
           <img src="assets/img/emty-icon.png" />
-          <p class="cls-empty-title">{{'No data found' | translate}}</p>
-          <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+          <p class="  cls-empty-title">{{'No data found' | translate}}</p>
+          <p class="  cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
         </div>
       </ng-container>
     </ng-container>

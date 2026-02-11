@@ -1,3 +1,5 @@
+import {state} from "@angular/animations";
+import {stagger} from "@angular/animations";
 import {Component, OnInit} from "@angular/core";
 import {ActionSheetController, ModalController, NavParams} from "@ionic/angular";
 import {environment} from "src/environments/environment";
@@ -10,6 +12,10 @@ import {ToastControllerService} from "../../toast-controller/toast-controller.se
 import {MapService} from "../../map/map.service";
 import {GeolocationService} from "../../geolocation/geolocation.service";
 
+type PictureItem = {
+  base64String: string;
+  format: string;
+};
 @Component({
   selector: "app-materials-agent",
   templateUrl: "./materials-agent.page.html",
@@ -20,6 +26,8 @@ export class MaterialsAgentPage implements OnInit {
   material: any;
   api = environment.urlAPI;
   web = environment.url_web;
+  webUrl = environment.newWebUrl;
+
   photos_materials: any[] = [];
   restitution_photos: any[] = [];
   grouped_photos_materials: any = [[{photo: {url: ""}}, {photo: {url: ""}}, {photo: {url: ""}}]];
@@ -34,6 +42,10 @@ export class MaterialsAgentPage implements OnInit {
   note: string = "";
   isPhotoMaterialsEmpty: boolean = true;
   isReturnPhotosEmpty: boolean = true;
+  pictures: PictureItem[] = [];
+
+  pictures_materials: PictureItem[] = [];
+  pictures_restitution: PictureItem[] = [];
 
   constructor(
     private modalController: ModalController,
@@ -50,34 +62,55 @@ export class MaterialsAgentPage implements OnInit {
 
   async ngOnInit() {
     this.material = this.navParams.data;
-    this.loadingMessage = await this.translateService.get("Loading").toPromise();
-    await this.loadingService.present(this.loadingMessage);
-    this.materialService.getMaterialById(this.material.id).subscribe({
-      next: async value => {
-        this.material = value.material;
-        if (value.photos_materials.length > 0) {
-          this.isPhotoMaterialsEmpty = false;
+
+    if (this.material?.equipment_histories?.length) {
+      const lastHistory = this.material.equipment_histories[this.material.equipment_histories.length - 1];
+
+      const firstHistory = this.material.equipment_histories[this.material.equipment_histories.length];
+
+      this.buildGroupedPhotos([lastHistory]);
+      if (this.material.state != "accepted") this.buildGroupedReturnPhotos([firstHistory]);
+      this.note = lastHistory.note;
+    }
+  }
+
+  buildGroupedReturnPhotos(histories: any[]) {
+    const photos: {photo: {url: string}}[] = [];
+
+    histories.forEach(history => {
+      history?.pictures_urls?.forEach((pic: any) => {
+        if (pic?.url) {
+          photos.push({
+            photo: {
+              url: this.webUrl + pic.url
+            }
+          });
         }
-        if (value.return_materials.length > 0) {
-          this.isReturnPhotosEmpty = false;
-        }
-        this.photos_materials = value.photos_materials;
-        this.restitution_photos = value.return_materials;
-        if (this.photos_materials?.length == 0) {
-          this.photos_materials.push({photo: {url: ""}});
-        }
-        if (this.restitution_photos?.length == 0) {
-          this.restitution_photos.push({photo: {url: ""}});
-        }
-        this.grouped_photos_materials = this.chunkArray(this.photos_materials, 3);
-        this.grouped_restitution_photos = this.chunkArray(this.restitution_photos, 3);
-        await this.loadingService.dimiss();
-      },
-      error: async err => {
-        console.error(err);
-        await this.loadingService.dimiss();
-      }
+      });
     });
+    this.grouped_restitution_photos = [];
+    for (let i = 0; i < photos.length; i += 3) {
+      this.grouped_restitution_photos.push([photos[i] ?? {photo: {url: ""}}, photos[i + 1] ?? {photo: {url: ""}}, photos[i + 2] ?? {photo: {url: ""}}]);
+    }
+  }
+  buildGroupedPhotos(histories: any[]) {
+    const photos: {photo: {url: string}}[] = [];
+    histories.forEach(history => {
+      history?.pictures_urls?.forEach((pic: any) => {
+        if (pic?.url) {
+          photos.push({
+            photo: {
+              url: this.webUrl + pic.url
+            }
+          });
+        }
+      });
+    });
+
+    this.grouped_photos_materials = [];
+    for (let i = 0; i < photos.length; i += 3) {
+      this.grouped_photos_materials.push([photos[i] ?? {photo: {url: ""}}, photos[i + 1] ?? {photo: {url: ""}}, photos[i + 2] ?? {photo: {url: ""}}]);
+    }
   }
 
   dismiss() {
@@ -124,7 +157,7 @@ export class MaterialsAgentPage implements OnInit {
           cssClass: "btn_actionSheet",
           handler: async () => {
             await this.photosService.takePictureOption("Camera", 40);
-            await this.uploadPhoto(this.photosService.lastImage, type, l, i);
+            this.setPhotoInBlock(this.photosService.lastImage, type, l, i);
           }
         },
         {
@@ -132,7 +165,7 @@ export class MaterialsAgentPage implements OnInit {
           cssClass: "btn_actionSheet",
           handler: async () => {
             await this.photosService.takePictureOption("Galerie", 40);
-            await this.uploadPhoto(this.photosService.lastImage, type, l, i);
+            this.setPhotoInBlock(this.photosService.lastImage, type, l, i);
           }
         },
         {
@@ -145,15 +178,72 @@ export class MaterialsAgentPage implements OnInit {
     await actionSheet.present();
   }
 
+  setPhotoInBlock(image: any, type: any, l: number, i: number) {
+    if (!image) return;
+
+    let url = "";
+
+    if (image.base64String) {
+      url = `data:image/${image.format || "jpeg"};base64,${image.base64String}`;
+    } else if (image.webPath) {
+      url = image.webPath;
+    } else if (image instanceof File) {
+      url = URL.createObjectURL(image);
+    } else {
+      console.warn("Format image non supporté", image);
+      return;
+    }
+
+    const pictureItem: PictureItem = {
+      base64String: image.base64String,
+      format: image.format || "jpeg"
+    };
+
+    let pictureIndex: number;
+
+    if (type === "photo") {
+      pictureIndex = this.pictures_materials.push(pictureItem) - 1;
+      this.grouped_photos_materials[l][i].photo = {url, pictureIndex};
+    } else {
+      pictureIndex = this.pictures_restitution.push(pictureItem) - 1;
+      this.grouped_restitution_photos[l][i].photo = {url, pictureIndex};
+    }
+  }
+
+  removePhoto(event: Event, type: "photo" | "return", l: number, i: number) {
+    event.stopPropagation();
+
+    const group = type === "photo" ? this.grouped_photos_materials : this.grouped_restitution_photos;
+
+    const pictures = type === "photo" ? this.pictures_materials : this.pictures_restitution;
+
+    const block = group[l][i];
+    if (!block?.photo || block.photo.pictureIndex == null) return;
+
+    const indexToRemove = block.photo.pictureIndex;
+
+    pictures.splice(indexToRemove, 1);
+
+    group.forEach((g: any) => {
+      g.forEach((b: any) => {
+        if (b.photo?.pictureIndex > indexToRemove) {
+          b.photo.pictureIndex--;
+        }
+      });
+    });
+
+    group[l][i].photo = {url: "", pictureIndex: null};
+  }
+
   addPhotoMaterial() {
     this.grouped_photos_materials.push([{photo: {url: ""}}, {photo: {url: ""}}, {photo: {url: ""}}]);
   }
 
   addPhotoRestitutionMaterial() {
     if (
-      this.grouped_restitution_photos[this.grouped_restitution_photos.length - 1][0]?.photo?.url.includes("http") &&
-      this.grouped_restitution_photos[this.grouped_restitution_photos.length - 1][1]?.photo?.url.includes("http") &&
-      this.grouped_restitution_photos[this.grouped_restitution_photos.length - 1][2]?.photo?.url.includes("http")
+      this.grouped_restitution_photos[this.grouped_restitution_photos.length - 1][0]?.photo?.url.includes("data:image") &&
+      this.grouped_restitution_photos[this.grouped_restitution_photos.length - 1][1]?.photo?.url.includes("data:image") &&
+      this.grouped_restitution_photos[this.grouped_restitution_photos.length - 1][2]?.photo?.url.includes("data:image")
     ) {
       this.grouped_restitution_photos.push([{photo: {url: ""}}, {photo: {url: ""}}, {photo: {url: ""}}]);
     }
@@ -251,14 +341,52 @@ export class MaterialsAgentPage implements OnInit {
         return;
       }
     }
-    state == "to_collect" ? (state = "in_progress") : (state = "returned");
-    this.materialService.takeMaterialRequest(this.note, this.material.material.id, state, this.material.id).subscribe({
-      next: async value => {
-        await this.loadingService.dimiss();
-        this.modalController.dismiss("refresh");
-      },
-      error: async err => {}
+    state == "accepted" ? (state = "in_progress") : (state = "returned");
+    this.submitRetrieved(this.material);
+  }
+
+  base64ToFile(base64: string, format: string): File {
+    const byteString = atob(base64);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ab], {type: `image/${format}`});
+    return new File([blob], `photo_${Date.now()}_${Math.random().toString(36).slice(2)}.${format}`, {type: `image/${format}`});
+  }
+
+  buildFormData(note?: string, type: "photo" | "return" = "photo"): FormData {
+    const formData = new FormData();
+    formData.append("equipment_request_id", this.material.id);
+    if (note) formData.append("note", note);
+    const pictures = type === "photo" ? this.pictures_materials : this.pictures_restitution;
+    pictures.forEach(img => {
+      const file = this.base64ToFile(img.base64String, img.format);
+      formData.append("pictures[]", file);
     });
+
+    return formData;
+  }
+
+  submitRetrieved(material: any) {
+    const type = material.state === "accepted" && material?.equipment_histories?.length == 0 ? "photo" : "return";
+    const formData = this.buildFormData(this.note, type);
+    if (type == "return") {
+      this.materialService.takeMaterialRequestReturn(formData, material.id).subscribe({
+        next: async () => {
+          await this.loadingService.dimiss();
+          this.modalController.dismiss("refresh");
+        }
+      });
+    } else {
+      this.materialService.takeMaterialRequest(formData, material.id).subscribe({
+        next: async () => {
+          await this.loadingService.dimiss();
+          this.modalController.dismiss("refresh");
+        }
+      });
+    }
   }
 
   direction() {

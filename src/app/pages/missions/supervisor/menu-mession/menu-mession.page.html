@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="cls-details">
+  <div class="anumation-block cls-details">
     <ion-card>
       <ion-card-content>
         <ion-grid>
@@ -27,19 +27,19 @@
                 src="{{
              planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'
             }}"
-                class="logo"
+                class="anumation-block logo"
               />
             </ion-col>
             <ion-col size="8">
-              <div class="cls-title">
-                <p class="cls-p-title">{{planning?.intervention.name?.split('-')[0]}}</p>
+              <div class="anumation-block cls-title">
+                <p class="anumation-block cls-p-title">{{planning?.intervention.name?.split('-')[0]}}</p>
               </div>
-              <div class="cls-address">
-                <p class="cls-p-address">{{planning?.intervention.name?.split('-')[1]}}</p>
+              <div class="anumation-block cls-address">
+                <p class="anumation-block cls-p-address">{{planning?.intervention.name?.split('-')[1]}}</p>
               </div>
             </ion-col>
             <ion-col>
-              <img *ngIf="planningType =='punctual' && planning?.punctual_info_photos?.length > 0" src="../../../../assets/img/icon-img.png" class="cls-img" />
+              <img *ngIf="planningType =='punctual' && planning?.punctual_info_photos?.length > 0" src="../../../../assets/img/icon-img.png" class="anumation-block cls-img" />
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -47,9 +47,9 @@
     </ion-card>
 
     <ion-grid>
-      <ion-row class="custom-row" responsive>
-        <ion-col size="6" size-md="6" class="custom-block" (click)="createTicket()">
-          <div class="block-content">
+      <ion-row class="anumation-block custom-row" responsive>
+        <ion-col size="6" size-md="6" class="anumation-block custom-block" (click)="createTicket()">
+          <div class="anumation-block block-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
               <path
                 d="M25.2998 5L40.5 20.2002V40.4668C40.4999 41.8658 39.3658 42.9999 37.9668 43H9.0332C7.63418 42.9999 6.50007 41.8658 6.5 40.4668V7.53321C6.50007 6.13419 7.63418 5.00007 9.0332 5H25.2998Z"
@@ -69,11 +69,11 @@
                 fill="#00A2E1"
               />
             </svg>
-            <div class="block-text">Tâches</div>
+            <div class="anumation-block block-text">Tâches</div>
           </div>
         </ion-col>
-        <ion-col size="6" size-md="6" class="custom-block" (click)="chooseSource()">
-          <div class="block-content">
+        <ion-col size="6" size-md="6" class="anumation-block custom-block" (click)="chooseSource()">
+          <div class="anumation-block block-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
               <mask id="path-1-inside-1_2009_598" fill="white">
                 <path
@@ -102,80 +102,80 @@
                 fill="#00A2E1"
               />
             </svg>
-            <div class="block-text">Dépenses</div>
+            <div class="anumation-block block-text">Dépenses</div>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
 
     <ion-grid>
-      <ion-row class="custom-row" responsive>
-        <ion-col size="4" size-md="4" class="custom-block" (click)="direction()">
-          <div class="block-content">
-            <img src="../../../../assets/img/Location.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">{{'Direction' | translate}}</div>
+      <ion-row class="anumation-block custom-row" responsive>
+        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="direction()">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/Location.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">{{'Direction' | translate}}</div>
           </div>
         </ion-col>
-        <ion-col size="4" size-md="4" class="custom-block" (click)="pointages()">
-          <div class="block-content">
-            <img src="../../../../assets/img/pointage.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">{{'Scores' | translate}}</div>
+        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="pointages()">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/pointage.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">{{'Scores' | translate}}</div>
           </div>
         </ion-col>
-        <ion-col size="4" size-md="4" class="custom-block" (click)="reportsPhotos()">
-          <div class="block-content">
-            <img src="../../../../assets/img/camera change.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">{{'Reports' | translate}}</div>
-          </div>
-        </ion-col>
-
-        <ion-col size="4" size-md="4" class="custom-block">
-          <div class="block-content">
-            <img src="../../../../assets/img/Chat.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">{{'Chat' | translate}}</div>
+        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="reportsPhotos()">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/camera change.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">{{'Reports' | translate}}</div>
           </div>
         </ion-col>
 
-        <ion-col size="4" size-md="4" *ngIf="planningType != 'regular'" class="custom-block" (click)="openVehiculeReturn()">
-          <div class="block-content">
-            <img src="../../../../assets/img/Car.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">{{'Change vehicle' | translate}}</div>
-          </div>
-        </ion-col>
-        <ion-col *ngIf="planningType == 'regular'" size="4" size-md="4" class="custom-block" (click)="gdc()">
-          <div class="block-content">
-            <img src="../../../../assets/img/gdc.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">Consignes GDC</div>
+        <ion-col size="4" size-md="4" class="anumation-block custom-block">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/Chat.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">{{'Chat' | translate}}</div>
           </div>
         </ion-col>
 
-        <ion-col size="4" size-md="4" class="custom-block" (click)="missionReturns()">
-          <div class="block-content">
-            <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="block-image" />
-            <div class="block-text">{{'Mission returns' | translate}}</div>
+        <ion-col size="4" size-md="4" *ngIf="planningType != 'regular'" class="anumation-block custom-block" (click)="openVehiculeReturn()">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/Car.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">{{'Change vehicle' | translate}}</div>
+          </div>
+        </ion-col>
+        <ion-col *ngIf="planningType == 'regular'" size="4" size-md="4" class="anumation-block custom-block" (click)="gdc()">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/gdc.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">Consignes GDC</div>
+          </div>
+        </ion-col>
+
+        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="missionReturns()">
+          <div class="anumation-block block-content">
+            <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="anumation-block block-image" />
+            <div class="anumation-block block-text">{{'Mission returns' | translate}}</div>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
 
-  <div class="cls-title-contact">
-    <p class="cls-p-contact">{{'Contacts' | translate}}</p>
+  <div class="anumation-block cls-title-contact">
+    <p class="anumation-block cls-p-contact">{{'Contacts' | translate}}</p>
   </div>
-  <ion-card *ngFor="let contact of planning?.contacts" color="light" class="cls-card-light">
+  <ion-card *ngFor="let contact of planning?.contacts" color="light" class="anumation-block cls-card-light">
     <ion-card-content>
       <ion-grid>
-        <ion-row class="align-center">
+        <ion-row class="anumation-block align-center">
           <ion-col size="9">
-            <div class="title-c-txt">
-              <p class="cls-card-title wrap-text">{{ `${contact.first_name} ${contact.last_name}` }}</p>
+            <div class="anumation-block title-c-txt">
+              <p class="anumation-block cls-card-title wrap-text">{{ `${contact.first_name} ${contact.last_name}` }}</p>
             </div>
-            <div class="title-c-txt">
-              <ion-chip class="chip-job"><span class="cls-title-job">{{contact.job}}</span></ion-chip>
+            <div class="anumation-block title-c-txt">
+              <ion-chip class="anumation-block chip-job"><span class="anumation-block cls-title-job">{{contact.job}}</span></ion-chip>
             </div>
           </ion-col>
           <ion-col size="3">
-            <a class="call-link" href="tel://{{contact?.phone?.split(' ')?.join()}}">
+            <a class="anumation-block call-link" href="tel://{{contact?.phone?.split(' ')?.join()}}">
               <img src="../../../../assets/img/icon-call.png" />
             </a>
           </ion-col>
@@ -183,47 +183,47 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <ion-card class="cls-ionc-card-mission">
+  <ion-card class="anumation-block cls-ionc-card-mission">
     <ion-card-header>
       <ion-card-title>
         <ion-grid>
-          <ion-row class="align-center">
+          <ion-row class="anumation-block align-center">
             <ion-col size="4">
-              <p class="mission-text">{{'Assignment' | translate}}</p>
+              <p class="anumation-block mission-text">{{'Assignment' | translate}}</p>
             </ion-col>
             <ion-col size="8">
-              <ion-chip class="cls-in-progress">{{'In progress' | translate}}</ion-chip>
+              <ion-chip class="anumation-block cls-in-progress">{{'In progress' | translate}}</ion-chip>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-title>
-      <ion-card-subtitle><ion-chip class="cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
+      <ion-card-subtitle><ion-chip class="anumation-block cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="cls-desc" [innerHTML]="planning?.note"></ion-card-content>
+    <ion-card-content class="anumation-block cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
   </ion-card>
-  <ion-card class="cls-ion-card-notice">
+   <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
     <ion-card-header>
-      <ion-card-title class="mission-text">{{'Noticed' | translate}}</ion-card-title>
+      <ion-card-title class="anumation-block mission-text">{{'Noticed' | translate}}</ion-card-title>
     </ion-card-header>
-    <ion-card-content class="cls-desc" [innerHTML]="planning?.remark"></ion-card-content>
+    <ion-card-content class="anumation-block cls-desc" [innerHTML]="planning?.remark"></ion-card-content>
   </ion-card>
-  <div class="cls-title-contact">
-    <p class="cls-p-contact">{{'Team' | translate}}</p>
+  <div class="anumation-block cls-title-contact">
+    <p class="anumation-block cls-p-contact">{{'Team' | translate}}</p>
   </div>
-  <ion-card class="cls-ion-crad-c">
+  <ion-card class="cls-ion-crad-c" *ngIf="supervisors.length > 0">
     <ion-card-content>
       <ion-grid>
-        <ion-row class="align-center" *ngFor="let item of supervisors">
+        <ion-row class="anumation-block align-center" *ngFor="let item of supervisors">
           <ion-col size="9">
-            <div class="title-c-txt">
-              <p class="c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
+            <div class="anumation-block title-c-txt">
+              <p class="anumation-block c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
             </div>
-            <div class="title-c-txt">
-              <ion-chip class="cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
+            <div class="anumation-block title-c-txt">
+              <ion-chip class="anumation-block cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
             </div>
           </ion-col>
           <ion-col size="3">
-            <a class="call-link" href="tel://{{item?.phone?.split(' ')?.join()}}">
+            <a class="anumation-block call-link" href="tel://{{item?.phone?.split(' ')?.join()}}">
               <img src="../../../../assets/img/icon-call.png" />
             </a>
           </ion-col>
@@ -233,27 +233,27 @@
   </ion-card>
 
   <ng-container *ngIf="planning?.team.length >0">
-    <div class="cls-list-c-b">
-      <ion-list class="cls-ion-list-c">
+    <div class="anumation-block cls-list-c-b">
+      <ion-list class="anumation-block cls-ion-list-c">
         <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? '' : 'none' }">
           <ion-grid *ngIf="agent?.manager && !agent.platform">
-            <ion-row class="align-center">
+            <ion-row class="anumation-block align-center">
               <ion-col size="6">
-                <div class="title-c-txt">
-                  <p class="c-text wrap-text">{{ agent?.first_name}} {{ agent?.last_name}}</p>
+                <div class="anumation-block title-c-txt">
+                  <p class="anumation-block c-text wrap-text">{{ agent?.first_name}} {{ agent?.last_name}}</p>
                 </div>
-                <div class="title-c-txt">
-                  <ion-chip class="cls-chip-f-name">{{agent?.company_name}}</ion-chip>
+                <div class="anumation-block title-c-txt">
+                  <ion-chip class="anumation-block cls-chip-f-name">{{agent?.company_name}}</ion-chip>
                 </div>
               </ion-col>
               <ion-col size="6">
                 <ion-grid>
                   <ion-row>
-                    <ion-col size="6">
+                    <ion-col size="6" (click)="notice(agent)">
                       <img src="../../../../assets/img/btn-notice.png" />
                     </ion-col>
                     <ion-col size="6">
-                      <a class="call-link" href="tel://{{agent?.phone?.split(' ')?.join()}}">
+                      <a class="anumation-block call-link" href="tel://{{agent?.phone?.split(' ')?.join()}}">
                         <img src="../../../../assets/img/icon-call.png" />
                       </a>
                     </ion-col>
@@ -267,21 +267,21 @@
     </div>
   </ng-container>
   <ng-container *ngIf="planning?.team.length >0">
-    <div class="cls-list-c-b">
-      <ion-list class="cls-ion-list-c">
+    <div class="anumation-block cls-list-c-b">
+      <ion-list class="anumation-block cls-ion-list-c">
         <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? 'none' : '' }">
           <ion-grid *ngIf="!agent.manager">
-            <ion-row class="align-center">
+            <ion-row class="anumation-block align-center">
               <ion-col size="9">
-                <div class="title-c-txt">
-                  <p class="c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
+                <div class="anumation-block title-c-txt">
+                  <p class="anumation-block c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
                 </div>
-                <div class="title-c-txt">
-                  <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
+                <div class="anumation-block title-c-txt">
+                  <ion-chip class="anumation-block cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
                 </div>
               </ion-col>
               <ion-col size="3">
-                <a class="call-link" href="tel://{{agent?.phone.split(' ').join()}}">
+                <a class="anumation-block call-link" href="tel://{{agent?.phone.split(' ').join()}}">
                   <img src="../../../../assets/img/icon-call.png" />
                 </a>
               </ion-col>
@@ -291,4 +291,5 @@
       </ion-list>
     </div>
   </ng-container>
+
 </ion-content>

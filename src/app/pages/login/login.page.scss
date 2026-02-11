@@ -10,12 +10,15 @@
 .welcome-text {
   font-size: 2rem;
   font-weight: bold;
+  color: #2b405f;
 }
 
 .login-text {
   font-size: 1.2rem;
   margin-top: 10px;
   margin-bottom: 20px;
+  padding: 6px;
+  color: #2b405f;
 }
 
 .form-container {
@@ -23,14 +26,28 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: linear-gradient();
 }
 
+ion-list {
+  border-radius: 25px;
+  padding: 0;
+}
 ion-input {
   margin-bottom: 20px;
+  border-radius: 25px;
+  padding: 0;
+}
+ion-item {
+  border-radius: 25px;
+  //strong shadow
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo-center {
-  width: 120px;
+  width: 220px;
   margin-bottom: 20px;
 }
 
@@ -44,5 +61,63 @@ ion-input {
   width: 80%;
   border-radius: 25px;
   --border-radius: 25px;
-  --background: var(--ion-color-blue-ideo);
+  --background: #00a2e1;
+}
+
+/* Global animation tuning */
+.animate__animated {
+  --animate-duration: 0.6s;
+  --animate-easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Logo */
+.logo-center {
+  width: 220px;
+  margin-bottom: 24px;
+  animation-delay: 0.1s;
+  --animate-duration: 0.8s;
+}
+
+/* Text */
+.welcome-text {
+  animation-delay: 0.25s;
+}
+
+.login-text {
+  animation-delay: 0.35s;
+}
+
+/* Inputs sequence */
+.input-1 {
+  animation-delay: 0.55s;
+}
+
+.input-2 {
+  animation-delay: 0.7s;
+}
+
+/* Button */
+.button-container {
+  margin-top: 28px;
+  animation-delay: 0.9s;
+}
+
+/* Button micro-interaction */
+.submit-button {
+  --border-radius: 28px;
+  height: 48px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+.submit-button:active {
+  transform: scale(0.97);
 }

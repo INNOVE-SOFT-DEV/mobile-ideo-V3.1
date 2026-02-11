@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {Router} from "@angular/router";
 import {ActivatedRoute} from "@angular/router";
@@ -16,7 +16,8 @@ export class SendReportPage implements OnInit {
   constructor(
     private router: Router,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {
@@ -26,7 +27,20 @@ export class SendReportPage implements OnInit {
       }
     });
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   shareReport() {
     if (this.selectedContactId === null) {
       console.warn("No contact selected");

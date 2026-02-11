@@ -5,8 +5,13 @@ import {MissionService} from "src/app/tab1/service/intervention/mission/mission.
 import WaveSurfer from "wavesurfer.js";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
+
   selector: "app-return-recurring-mission",
   templateUrl: "./return-recurring-mission.page.html",
   styleUrls: ["./return-recurring-mission.page.scss"],
@@ -37,7 +42,8 @@ export class ReturnRecurringMissionPage implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {

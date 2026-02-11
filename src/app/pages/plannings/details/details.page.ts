@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {LoadingControllerService} from "../../../widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
@@ -15,12 +15,32 @@ import {OcrService} from "../../ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
 import {ChatService} from "src/app/tab2/chatService/chat.service";
+import {trigger, state, style, transition, animate} from "@angular/animations";
 
 @Component({
   selector: "app-details",
   templateUrl: "./details.page.html",
   styleUrls: ["./details.page.scss"],
-  standalone: false
+  standalone: false,
+
+  animations: [
+    trigger("rotateSvg", [
+      state(
+        "default",
+        style({
+          transform: "rotate(0deg)"
+        })
+      ),
+      state(
+        "rotated",
+        style({
+          transform: "rotate(360deg)"
+        })
+      ),
+      transition("default => rotated", animate("400ms ease-out")),
+      transition("rotated => default", animate("0ms"))
+    ])
+  ]
 })
 export class DetailsPage implements OnInit {
   planning: any;
@@ -37,6 +57,8 @@ export class DetailsPage implements OnInit {
   generatedJson: any = {};
   agent: any;
   hasSubcontractor: boolean = false;
+  svgRotationState: Record<string, "default" | "rotated"> = {};
+  address: string = "";
 
   constructor(
     private loadingService: LoadingControllerService,
@@ -50,7 +72,8 @@ export class DetailsPage implements OnInit {
     private ocrService: OcrService,
     private toast: ToastControllerService,
     private modalCtrl: ModalController,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -65,7 +88,17 @@ export class DetailsPage implements OnInit {
       console.error("Erreur lors du chargement des détails :", error);
     } finally {
       await this.refreshLocalData();
+      console.log(this.planningType);
+
+      const address: any = this.planning.intervention.address;
+      this.address = this.planning.intervention.address;
+
+      this.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+        .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
+        .join(", ");
     }
+
+    
   }
 
   setupPhotos() {
@@ -76,6 +109,7 @@ export class DetailsPage implements OnInit {
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
     this.planningType = cached.planningType;
+    this.supervisors = this.planning.supervisors || [];
     this.setupPhotos();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.agent = this.planning.team.find((user: any) => user.id == user_v3.id);
@@ -112,7 +146,7 @@ export class DetailsPage implements OnInit {
     return await modal.present();
   }
   changeVehicle() {
-    this.router.navigate(["change-vehicle", {data: JSON.stringify(this.planning), type: this.planningType}]);
+    // this.router.navigate(["change-vehicle", {data: JSON.stringify(this.planning), type: this.planningType}]);
   }
 
   pointage() {
@@ -129,14 +163,19 @@ export class DetailsPage implements OnInit {
   }
 
   direction() {
-    this.mapService.address = this.planning.address;
-    this.mapService.longitude = this.planning.long;
-    this.mapService.latitude = this.planning.lat;
+    console.log(this.planning);
+    const address: any = this.planning.intervention.address;
+
+    this.mapService.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+      .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
+      .join(", ");
+    this.mapService.longitude = this.planning?.intervention?.address.longitude;
+    this.mapService.latitude = this.planning?.intervention?.address.latitude;
     this.mapService.direction();
   }
 
   createTicket() {
-    this.router.navigate(["/add-ticket", {data: JSON.stringify(this.planning), type: this.planningType}]);
+    // this.router.navigate(["/add-ticket", {data: JSON.stringify(this.planning), type: this.planningType}]);
   }
 
   async gdc() {
@@ -220,5 +259,19 @@ export class DetailsPage implements OnInit {
     } catch (error) {
       console.error("OCR Error:", error);
     }
+  }
+  ngAfterViewInit() {
+    const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+    // Randomize order
+    const shuffled = blocks.sort(() => Math.random() - 0.5);
+
+    shuffled.forEach((block, index) => {
+      setTimeout(() => {
+        block.classList.add("animate__animated", "animate__bubbleIn");
+        block.style.opacity = "1";
+        block.style.animationDuration = "700ms";
+      }, index * 120); // stagger delay
+    });
   }
 }

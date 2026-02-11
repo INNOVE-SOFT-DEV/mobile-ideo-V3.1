@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
@@ -39,14 +39,16 @@ export class ReportsPhotosPage implements OnInit {
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
     private translateService: TranslateService,
-    private photoReportService: PhotoReportService
+    private photoReportService: PhotoReportService,
+    private el: ElementRef
   ) {}
 
   onChange(event: any) {
     this.selectedOption = event.target.value;
 
     // Trouver l'agent sélectionné
-    this.pickedAgent = this.team.find(u => `${u.first_name} ${u.last_name}` === this.selectedOption);
+    this.pickedAgent = this.team.find(u => u.full_name === this.selectedOption);
+    console.log(this.pickedAgent);
 
     if (this.selectedOption === "Tous les agents") {
       // Récupérer toutes les images
@@ -54,10 +56,10 @@ export class ReportsPhotosPage implements OnInit {
       this.imagesCamions = this.imagesCamionsCache;
     } else if (this.pickedAgent) {
       // Filtrer images before/after par agent
-      this.images = this.imagesCache.filter((pair: any) => pair.agent === this.pickedAgent.first_name + " " + this.pickedAgent.last_name);
+      this.images = this.imagesCache.filter((pair: any) => pair.agent === this.pickedAgent?.full_name);
 
       // Filtrer images camion par agent
-      this.imagesCamions = this.imagesCamionsCache.filter((camion: any) => camion.agent === this.pickedAgent.first_name + " " + this.pickedAgent.last_name);
+      this.imagesCamions = this.imagesCamionsCache.filter((camion: any) => camion.agent === this.pickedAgent?.full_name);
     } else {
       // Si agent non trouvé, vider les images
       this.images = [];
@@ -65,12 +67,29 @@ export class ReportsPhotosPage implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
+
   async ngOnInit() {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
     const data = (await JSON.parse(this.route.snapshot.paramMap.get("data")!)) || {};
     this.planning = data;
     const scheduleId = this.planning.today_schedule.id;
-    this.team = this.planning.team.filter((member: any) => member.first_name || member.last_name);
+    this.team = this.planning.team.filter((member: any) => (member.first_name || member.last_name) && !member?.manager);
+    console.log(this.team);
+
     await this.loadingService.present(this.laodingMessage);
     Network.getStatus().then(status => {
       this.isConnected = status.connected;

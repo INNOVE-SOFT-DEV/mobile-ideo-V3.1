@@ -21,27 +21,45 @@
   </ion-toolbar>
 </ion-header>
 <div class="center-container">
-  <ion-card *ngFor="let material of materials?.materials" class="custom-card-agent" (click)="openModaMaterialAgentl(material)">
+  <ion-card *ngFor="let material of materials" class="custom-card-agent" (click)="openModaMaterialAgentl(material)">
     <ion-card-content>
-      <div *ngIf="material.state == 'pending'" class="cls-pending chip-status">{{ "pending" | translate }}</div>
-
-      <div *ngIf="material.state == 'to_collect'" class="cls-to-recover chip-status">
-        {{ "to collect" | translate }}
+  
+      <!-- STATUS -->
+      <div *ngIf="material.state === 'pending'" class="cls-pending chip-status">
+        {{ 'pending' | translate }}
       </div>
-
-      <div *ngIf="material.state == 'in_progress'" class="cls-in-progress chip-status">
-        {{ "in progress" | translate }}
+  
+      <div  *ngIf="material.state == 'accepted' && material?.equipment_histories?.length == 0 " class="cls-to-recover chip-status">
+        {{ 'to collect' | translate }}
       </div>
+  
+      <div *ngIf="material.state == 'accepted' && material?.equipment_histories?.length > 0 && material?.equipment_histories[0]?.state == 'retrieved'"class="cls-in-progress chip-status">
+        {{ 'in progress' | translate }}
+      </div>
+  
+      <!-- IMAGE -->
       <div class="image-container">
-        <img [src]="material.material.photo.url" alt="Matériel" />
+        <img [src]="material?.equipment?.picture_urls?.url
+              ? webUrl + material.equipment.picture_urls.url
+              : 'assets/img/default-material.png'" alt="Déshumidificateur" class="card-image" />
       </div>
+  
+      <!-- TEXT -->
       <div class="text-container">
-        <h3 class="material-title">{{ material.material.name }}</h3>
-        <p class="material-description" *ngFor="let note of material.notes">{{ note.date + ":" + note.text }}</p>
+        <h3 class="material-title">
+          {{ material.equipment.designation }}
+        </h3>
+  
+        <!-- Historiques (si existants) -->
+        <p class="material-description" *ngFor="let history of material.equipment_histories">
+          {{ history.created_at | date:'short' }} : {{ history.state }}
+        </p>
       </div>
+  
     </ion-card-content>
   </ion-card>
-  <ng-container *ngIf="materials?.materials == 0">
+
+  <ng-container *ngIf="materials == 0">
     <div class="empty-container">
       <img src="assets/img/emty-icon.png" />
       <p class="cls-empty-title">{{ "No data found" | translate }}</p>

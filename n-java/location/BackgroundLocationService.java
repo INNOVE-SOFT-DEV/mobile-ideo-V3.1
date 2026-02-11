@@ -1,5 +1,6 @@
 package com.ideogroupev3.app.location;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -19,7 +22,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.*;
 
@@ -37,9 +42,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
 public class BackgroundLocationService extends Service {
 
     public static final String TAG = "BG_LOC_SERVICE";
@@ -64,23 +66,45 @@ public class BackgroundLocationService extends Service {
 
     private SharedPreferences prefs;
 
-    // ------------------------------------------------------------------------
-
     @Override
     public void onCreate() {
         super.onCreate();
 
+        // 1️⃣ Immediately call startForeground with a minimal notification
+        createNotificationChannelIfNeeded();
+        Notification notification = new NotificationCompat.Builder(this, "location")
+                .setContentTitle("Location Tracking")
+                .setContentText("Initializing location service...")
+                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setOngoing(true)
+                .build();
+
+        // Use the correct foreground service type for Android 14+ (API 34+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(LOCATION_NOTIFICATION_ID, notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(LOCATION_NOTIFICATION_ID, notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else {
+            startForeground(LOCATION_NOTIFICATION_ID, notification);
+        }
+
+        // 2️⃣ Now initialize everything else
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         fusedClient = LocationServices.getFusedLocationProviderClient(this);
 
-        createNotificationChannelIfNeeded();
-        startForeground(LOCATION_NOTIFICATION_ID, createNotification("Waiting for location..."));
-
-        requestLocationUpdates();
-        registerNetworkReceiver();
-        startPeriodicSync();
-
-        Log.d(TAG, "BackgroundLocationService started");
+        // 3️⃣ Check permissions and start location updates
+        if (hasLocationPermission()) {
+            requestLocationUpdates();
+            registerNetworkReceiver();
+            startPeriodicSync();
+            Log.d(TAG, "BackgroundLocationService started successfully with location permissions");
+        } else {
+            Log.w(TAG, "Service started but location permissions not granted - waiting for permissions");
+            updateLocationNotificationNoPerm();
+        }
     }
 
     @Override
@@ -96,26 +120,56 @@ public class BackgroundLocationService extends Service {
         return START_STICKY;
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
     // LOCATION
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
 
     private void requestLocationUpdates() {
+        if (!hasLocationPermission()) {
+            Log.w(TAG, "Location permission missing, cannot start location updates");
+            promptEnableLocationPermission();
+            return; // Don't stop service, just don't track location
+        }
+
         try {
             LocationRequest request = new LocationRequest.Builder(
                     Priority.PRIORITY_HIGH_ACCURACY,
-                    60000 // 1 minute
+                    300_000 // 5 minutes
             )
-                    .setMinUpdateIntervalMillis(60000)
-                    .setMaxUpdateDelayMillis(60000)
+                    .setMinUpdateIntervalMillis(300_000)
+                    .setMaxUpdateDelayMillis(300_000)
                     .setWaitForAccurateLocation(false)
+                    .setMinUpdateDistanceMeters(30)
                     .build();
 
             fusedClient.requestLocationUpdates(request, getLocationPendingIntent());
+            Log.d(TAG, "Location updates requested successfully");
         } catch (SecurityException e) {
-            Log.e(TAG, "Missing location permission", e);
-            stopSelf();
+            Log.e(TAG, "SecurityException while requesting location", e);
         }
+    }
+
+    private boolean hasLocationPermission() {
+        boolean hasFineLocation = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        // Just check basic location permissions (fine OR coarse)
+        // Background location is optional - service will work in foreground mode without it
+        return hasFineLocation || hasCoarseLocation;
+    }
+
+    private void promptEnableLocationPermission() {
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(this, "location")
+                .setContentTitle("Permission Required")
+                .setContentText("Please enable location permission to continue tracking.")
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setOngoing(false)
+                .build();
+        if (nm != null) nm.notify(LOCATION_NOTIFICATION_ID + 2, notification);
     }
 
     private PendingIntent getLocationPendingIntent() {
@@ -149,17 +203,6 @@ public class BackgroundLocationService extends Service {
             Log.e(TAG, "onNewLocation error", e);
         }
     }
-    private void broadcastLocation(JSONObject point) {
-        try {
-            Intent intent = new Intent(ACTION_LOCATION);
-            intent.putExtra("data", point.toString());
-            sendBroadcast(intent);
-
-            Log.d(TAG, "Location broadcasted");
-        } catch (Exception e) {
-            Log.e(TAG, "broadcastLocation failed", e);
-        }
-    }
 
     private JSONObject buildLocationObject(Location loc) {
         JSONObject item = new JSONObject();
@@ -171,15 +214,24 @@ public class BackgroundLocationService extends Service {
                     "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US
             );
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
             item.put("recorded_at", sdf.format(new Date(loc.getTime())));
         } catch (Exception ignored) {}
         return item;
     }
 
-    // ------------------------------------------------------------------------
+    private void broadcastLocation(JSONObject point) {
+        try {
+            Intent intent = new Intent(ACTION_LOCATION);
+            intent.putExtra("data", point.toString());
+            sendBroadcast(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "broadcastLocation failed", e);
+        }
+    }
+
+    // ---------------------------------------------
     // OFFLINE QUEUE
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
 
     private void queueLocation(JSONObject item) {
         synchronized (queueLock) {
@@ -192,27 +244,6 @@ public class BackgroundLocationService extends Service {
             }
         }
     }
-}
-
-
-private void saveQueueToFile(JSONArray queue) {
-    try {
-        String filename = "queue.json";
-        String data = queue.toString();
-        File file = new File(getFilesDir(), filename);
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(data.getBytes(StandardCharsets.UTF_8));
-        }
-        Log.i(TAG, "Queue file written to " + file.getAbsolutePath());
-    } catch (Exception e) {
-        Log.e(TAG, "Failed to save queue", e);
-    }
-}
-
-
-
-
-
 
     private void syncQueue() {
         if (!syncRunning.compareAndSet(false, true)) return;
@@ -228,8 +259,8 @@ private void saveQueueToFile(JSONArray queue) {
             if (uploadBatch(queue)) {
                 synchronized (queueLock) {
                     prefs.edit().putString(QUEUE_KEY, "[]").apply();
-                    Log.d(TAG, "Queue synced and cleared");
                 }
+                Log.d(TAG, "Queue synced successfully, " + queue.length() + " locations uploaded");
             }
 
         } catch (Exception e) {
@@ -239,9 +270,9 @@ private void saveQueueToFile(JSONArray queue) {
         }
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
     // NETWORK
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
 
     private boolean uploadBatch(JSONArray batch) {
         String token = getAccessToken();
@@ -250,8 +281,6 @@ private void saveQueueToFile(JSONArray queue) {
         try {
             JSONObject body = new JSONObject();
             body.put("points", batch);
-
-            Log.d(TAG, "Uploading payload: " + body.toString());
 
             java.net.URL url = new java.net.URL(
                     "https://ideo.webo.tn/api/v1/pointing_internals/auto_point"
@@ -271,8 +300,6 @@ private void saveQueueToFile(JSONArray queue) {
             }
 
             int code = conn.getResponseCode();
-            Log.d(TAG, "Upload response code: " + code);
-
             return code >= 200 && code < 300;
 
         } catch (Exception e) {
@@ -301,23 +328,22 @@ private void saveQueueToFile(JSONArray queue) {
         return cap.getString("access_token", null);
     }
 
-    // ------------------------------------------------------------------------
-    // PERIODIC SYNC (EVERY MINUTE)
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
+    // PERIODIC SYNC
+    // ---------------------------------------------
 
     private void startPeriodicSync() {
         periodicSyncExecutor = Executors.newSingleThreadScheduledExecutor();
         periodicSyncExecutor.scheduleAtFixedRate(() -> {
             if (isOnline()) {
-                Log.d(TAG, "Periodic sync triggered");
                 syncExecutor.submit(this::syncQueue);
             }
         }, 1, 1, TimeUnit.MINUTES);
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
     // NOTIFICATIONS
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
 
     private void updateLocationNotification(JSONObject point) {
         try {
@@ -338,21 +364,13 @@ private void saveQueueToFile(JSONArray queue) {
 
             NotificationManager nm =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(LOCATION_NOTIFICATION_ID, notification);
+            if (nm != null) {
+                nm.notify(LOCATION_NOTIFICATION_ID, notification);
+            }
 
         } catch (Exception e) {
             Log.e(TAG, "updateLocationNotification failed", e);
         }
-    }
-
-    private Notification createNotification(String text) {
-        return new NotificationCompat.Builder(this, "location")
-                .setContentTitle("Location tracking active")
-                .setContentText(text)
-                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                .setOngoing(true)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .build();
     }
 
     private void createNotificationChannelIfNeeded() {
@@ -362,14 +380,37 @@ private void saveQueueToFile(JSONArray queue) {
                     "Location Tracking",
                     NotificationManager.IMPORTANCE_LOW
             );
-            getSystemService(NotificationManager.class)
-                    .createNotificationChannel(channel);
+            channel.setDescription("Tracks your location in the background");
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            if (nm != null) {
+                nm.createNotificationChannel(channel);
+            }
         }
     }
 
-    // ------------------------------------------------------------------------
+    private void updateLocationNotificationNoPerm() {
+        try {
+            Notification notification = new NotificationCompat.Builder(this, "location")
+                    .setContentTitle("Location Service")
+                    .setContentText("Waiting for location permissions")
+                    .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                    .setOngoing(true)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .build();
+
+            NotificationManager nm =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (nm != null) {
+                nm.notify(LOCATION_NOTIFICATION_ID, notification);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "updateLocationNotificationNoPerm failed", e);
+        }
+    }
+
+    // ---------------------------------------------
     // NETWORK RECEIVER
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------
 
     private void registerNetworkReceiver() {
         networkReceiver = new BroadcastReceiver() {
@@ -386,16 +427,22 @@ private void saveQueueToFile(JSONArray queue) {
         );
     }
 
-    // ------------------------------------------------------------------------
-
     @Override
     public void onDestroy() {
         if (fusedClient != null && locationPendingIntent != null) {
             fusedClient.removeLocationUpdates(locationPendingIntent);
         }
-        if (networkReceiver != null) unregisterReceiver(networkReceiver);
+        if (networkReceiver != null) {
+            try {
+                unregisterReceiver(networkReceiver);
+            } catch (Exception e) {
+                Log.e(TAG, "Error unregistering network receiver", e);
+            }
+        }
         if (periodicSyncExecutor != null) periodicSyncExecutor.shutdownNow();
         syncExecutor.shutdownNow();
+
+        Log.d(TAG, "BackgroundLocationService destroyed");
         super.onDestroy();
     }
 

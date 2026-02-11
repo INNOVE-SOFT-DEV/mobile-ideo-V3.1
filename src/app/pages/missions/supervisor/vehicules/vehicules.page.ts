@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {MaterialsService} from "src/app/pages/materials/service/materials.service";
 import {Router} from "@angular/router";
@@ -21,7 +21,8 @@ export class VehiculesPage implements OnInit {
     private materialsService: MaterialsService,
     private router: Router,
     private loadingService: LoadingControllerService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -34,7 +35,20 @@ export class VehiculesPage implements OnInit {
       await this.loadingService.dimiss();
     });
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   applyFilter() {
     const key = this.filterKey.toLowerCase();
     this.search_result = this.vehicules.filter(vehicle => vehicle.name?.toLowerCase().includes(key));

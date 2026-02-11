@@ -80,3 +80,29 @@
   font-weight: 700;
   margin: 0;
 }
+
+ion-toolbar {
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+}
+
+.header-button {
+  --color: whitesmoke;
+  --background: transparent;
+}
+
+ion-title {
+  color: whitesmoke;
+}
+
+ion-toolbar {
+  --background: linear-gradient(160deg, #141c28 0%, #22344d 28%, #556f91 50%, #2b405f 72%, #141c28 100%);
+}
+
+.header-button {
+  --color: whitesmoke;
+  --background: transparent;
+}
+
+ion-title {
+  color: whitesmoke;
+}

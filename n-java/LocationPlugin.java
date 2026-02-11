@@ -20,24 +20,43 @@ public class LocationPlugin extends Plugin {
     private static final String TAG = "LocationPlugin";
     private BroadcastReceiver locationReceiver;
 
-    @PluginMethod
-    public void start(PluginCall call) {
-        try {
-            Context ctx = getContext();
-            Intent intent = new Intent(ctx, com.ideogroupev3.app.location.BackgroundLocationService.class);
-            // start foreground service
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ctx.startForegroundService(intent);
-            } else {
-                ctx.startService(intent);
-            }
-            Log.d(TAG, "start service requested");
-            call.resolve();
-        } catch (Exception ex) {
-            Log.e(TAG, "start error: " + ex.getMessage(), ex);
-            call.reject("start_failed");
+@PluginMethod
+public void start(PluginCall call) {
+    try {
+        Context ctx = getContext();
+
+        // Check location permissions first
+        boolean hasFine = ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        boolean hasCoarse = ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_COARSE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        boolean hasForeground = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                ? ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.FOREGROUND_SERVICE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                : true;
+
+        if (!hasFine && !hasCoarse) {
+            call.reject("Location permission not granted");
+            return;
         }
+        if (!hasForeground) {
+            call.reject("Foreground service location permission not granted");
+            return;
+        }
+
+        // Permissions OK, start service
+        Intent intent = new Intent(ctx, com.ideogroupev3.app.location.BackgroundLocationService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ctx.startForegroundService(intent);
+        } else {
+            ctx.startService(intent);
+        }
+
+        Log.d(TAG, "start service requested");
+        call.resolve();
+    } catch (Exception ex) {
+        Log.e(TAG, "start error: " + ex.getMessage(), ex);
+        call.reject("start_failed");
     }
+}
+
 
     @PluginMethod
     public void stop(PluginCall call) {

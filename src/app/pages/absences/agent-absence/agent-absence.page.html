@@ -1,24 +1,19 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar-3d">
     <ion-buttons slot="start">
-      <ion-button (click)="goToProfile()" *ngIf="!isSuperVisor">
-        <ion-icon name="person-outline"></ion-icon>
-      </ion-button>
-      <ion-button (click)="goBack()" *ngIf="isSuperVisor">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-button>
+      <ion-avatar (click)="goToProfile()" class="header-button-3d">
+        <img alt="Silhouette of a person's head" [src]="user?.photo_urls?.thumb" />
+      </ion-avatar>
     </ion-buttons>
-    <ion-title class="center-title">{{'Absence request' | translate}}</ion-title>
+    <ion-title class="center-title-3d">{{'My absence requests' | translate}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-button>
+      <ion-icon name="notifications-outline" color="white" class="notif"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
   <div class="center-container">
-    <p class="cls-title">{{'My absence requests' | translate}}</p>
+    <!-- <p class="cls-title">{{'My absence requests' | translate}}</p> -->
     <ng-container *ngIf="absences?.pending?.length == 0  && absences?.refused?.length == 0  && absences?.allowed?.length == 0  ">
       <div class="empty-container">
         <img src="assets/img/emty-icon.png" />

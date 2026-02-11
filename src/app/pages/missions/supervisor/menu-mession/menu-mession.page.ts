@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ActionSheetController, LoadingController, ModalController} from "@ionic/angular";
+import {ActionSheetController, LoadingController, ModalController, PopoverController} from "@ionic/angular";
 import {MissionReturnsSupervisorPage} from "src/app/widgets/modals/mission-returns-supervisor/mission-returns-supervisor.page";
 import {GdcPage} from "src/app/widgets/modals/gdc/gdc.page";
 import {MapService} from "src/app/widgets/map/map.service";
@@ -12,6 +12,8 @@ import {OcrScannerPage} from "src/app/pages/ocr-scanner/ocr-scanner.page";
 import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
+import {AfterViewInit, ElementRef} from "@angular/core";
+import { ConfirmAbsentPage } from "src/app/widgets/modals/confirm-absent/confirm-absent.page";
 
 @Component({
   selector: "app-menu-mession",
@@ -31,6 +33,7 @@ export class MenuMessionPage implements OnInit {
   generatedJson: any = {};
   user: any = JSON.parse(localStorage.getItem("user") || "{}");
 
+  address: string = "";
   constructor(
     private location: Location,
     private router: Router,
@@ -42,18 +45,45 @@ export class MenuMessionPage implements OnInit {
     private loadingCtrl: LoadingControllerService,
     private ocrService: OcrService,
     private toast: ToastControllerService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private el: ElementRef,
+        private popoverController: PopoverController,
+
   ) {}
 
   ngOnInit() {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
     this.planning = data;
-    this.supervisors = this.planning.supervisors || [];
+    this.supervisors = this.planning?.supervisors || [];
+    `${this.planning?.intervention?.address.postal_code},  ${this.planning?.intervention?.address.street},  ${this.planning?.intervention?.address.city} , ${this.planning?.intervention?.address.country}`;
     // this.supervisors = JSON.parse(this.route.snapshot.paramMap.get("supervisors")!) || [];
     this.planningType = data.type || "";
-    this.taskmanagerService.getAllTasksByKanban("superviseur mobile", this.user.email).subscribe((res: any) => {
-      this.kanban = res.kanban;
-    });
+    // this.taskmanagerService.getAllTasksByKanban("superviseur mobile", this.user.email).subscribe((res: any) => {
+    //   this.kanban = res.kanban;
+
+    // });
+
+    const address: any = this.planning.intervention.address;
+    this.address = this.planning.intervention.address;
+
+    this.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+      .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
+      .join(", ");
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 20);
+      });
+    }, 200);
   }
 
   createTicket() {
@@ -101,9 +131,13 @@ export class MenuMessionPage implements OnInit {
   }
 
   direction() {
-    this.mapService.address = this.planning.address;
-    this.mapService.longitude = this.planning.long;
-    this.mapService.latitude = this.planning.lat;
+    const address: any = this.planning.intervention.address;
+
+    this.mapService.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+      .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
+      .join(", ");
+    this.mapService.longitude = this.planning?.intervention?.address.longitude;
+    this.mapService.latitude = this.planning?.intervention?.address.latitude;
     this.mapService.direction();
   }
 
@@ -124,6 +158,32 @@ export class MenuMessionPage implements OnInit {
     });
 
     await sheet.present();
+  }
+  async notice(agent:any){
+    console.log(agent);
+     const popover = await this.popoverController.create({
+      component: ConfirmAbsentPage,
+      componentProps: {
+        // Pass data to the component here
+        agent: agent
+      },
+      translucent: true,
+      cssClass: 'popover',
+    });
+
+    popover.onDidDismiss().then((data) => {
+      console.log(data);
+      if(data?.data?.confirmed){
+          console.log('====> call api and toast success or error');
+          
+      }else {
+          console.log('====> user cancled');
+      }
+    });
+
+        return await popover.present();
+
+
   }
 
   async takePhoto(source: CameraSource) {

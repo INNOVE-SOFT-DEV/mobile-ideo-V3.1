@@ -38,13 +38,13 @@
 // ==============================================
 .modal-content {
   position: relative;
-  background: #ffffff;
   width: 100%;
   max-width: 512px;
   border-radius: 24px 24px 0 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   z-index: 10000;
+  background: #ffffff;
 
   @media (min-width: 640px) {
     border-radius: 24px;
@@ -55,7 +55,7 @@
 // MODAL HEADER
 // ==============================================
 .modal-header {
-  background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
+  background:#00a2e1;
   padding: 20px 24px;
   display: flex;
   align-items: center;
@@ -161,7 +161,6 @@
   overflow: hidden;
   border: 4px solid #ffffff;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
   position: relative;
   z-index: 1;
 }
@@ -246,7 +245,6 @@ form {
 .form-input {
   width: 100%;
   padding: 12px 16px 12px 48px;
-  background: linear-gradient(135deg, #f0f1f4 0%, #c5c9d1 100%);
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   font-family: "Montserrat", sans-serif;
@@ -304,7 +302,6 @@ form {
 }
 
 .cancel-button {
-  background: #f3f4f6;
   color: #374151;
 
   &:hover:not(:disabled) {
@@ -318,7 +315,7 @@ form {
 }
 
 .save-button {
-  background: linear-gradient(135deg, #595e6a 0%, #212327 100%);
+  background:#00a2e1;
   color: #ffffff;
   box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
   position: relative;
@@ -437,5 +434,4 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px rgb(236, 236, 236) inset !important; /* background color */
   -webkit-text-fill-color: #000 !important; /* text color */
-  transition: background-color linear-gradient(135deg, #f0f1f4 0%, #c5c9d1 100%);
 }

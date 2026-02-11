@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "src/app/pages/login/service/auth.service";
@@ -28,7 +28,8 @@ export class VisitUserDocumentsPage implements OnInit {
     private authServie: AuthService,
     private modalController: ModalController,
     private loadingCtrl: LoadingControllerService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -45,6 +46,21 @@ export class VisitUserDocumentsPage implements OnInit {
         }
       });
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   async displayDocument(url: string, type: string) {

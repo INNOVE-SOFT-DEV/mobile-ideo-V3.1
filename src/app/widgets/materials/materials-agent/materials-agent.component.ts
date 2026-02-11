@@ -8,6 +8,7 @@ import {LoadingControllerService} from "../../loading-controller/loading-control
 import {Router} from "@angular/router";
 import {AuthService} from "src/app/pages/login/service/auth.service";
 import {Location} from "@angular/common";
+import {environment} from "src/environments/environment";
 
 @Component({
   selector: "app-materials-agent",
@@ -19,6 +20,7 @@ export class MaterialsAgentComponent implements OnInit {
   loadingMessage: string = "";
   materials: any;
   isSuperVisor: boolean = false;
+  webUrl = environment.newWebUrl;
 
   constructor(
     private modalController: ModalController,
@@ -36,7 +38,7 @@ export class MaterialsAgentComponent implements OnInit {
     await this.loadingService.present(this.loadingMessage);
     this.materialsService.getMyMaterials().subscribe({
       next: async data => {
-        this.materials = data;
+        this.materials = data.equipment_requests;
         this.materials.materials.forEach((el: any) => {
           el.notes = this.materialsService.getMaterialNote(el.material.notes, el.id);
         });
@@ -53,7 +55,7 @@ export class MaterialsAgentComponent implements OnInit {
     await this.loadingService.present(this.loadingMessage);
     this.materialsService.getMyMaterials().subscribe({
       next: async data => {
-        this.materials = data;
+        this.materials = data.equipment_requests;
         await this.loadingService.dimiss();
       },
       error: async err => {

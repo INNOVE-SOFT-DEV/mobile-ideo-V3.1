@@ -34,6 +34,7 @@ export class PointagePage implements OnInit, OnDestroy {
   type: any;
   pointingType: string = "";
   loadingMessage: string = "";
+  address: string = "";
   constructor(
     private location: Location,
     private authService: AuthService,
@@ -85,9 +86,12 @@ export class PointagePage implements OnInit, OnDestroy {
     this.intervalPositionId = setInterval(() => this.updateUserPosition(), 15000);
   }
   getFirstThreeWords(text: string | undefined): string {
+    let address = this.planning?.intervention?.address;
+    address = [address?.postal_code, address?.street, address?.complement, address?.city, address?.country].filter(v => v && v.toString().trim() !== ""); // remove null, undefined, or empty strings
     if (!text) return "";
-    const words = text.split(" ");
-    return words.length > 3 ? words.slice(0, 3).join(" ") + "..." : text;
+    // const words = text.split(" ");
+    // return words.length > 3 ? words.slice(0, 3).join(" ") + "..." : text;
+    return address.join(", ");
   }
 
   async updateUserPosition() {

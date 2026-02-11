@@ -1,13 +1,13 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
-import {Router} from "@angular/router";
-import {Ocr} from "@capacitor-community/image-to-text";
-import {CameraSource, Camera, CameraResultType} from "@capacitor/camera";
-import {ActionSheetController, ModalController} from "@ionic/angular";
-import {AuthService} from "src/app/pages/login/service/auth.service";
-import {OcrScannerPage} from "src/app/pages/ocr-scanner/ocr-scanner.page";
-import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
-import {LoadingControllerService} from "../../loading-controller/loading-controller.service";
-import {ToastControllerService} from "../../toast-controller/toast-controller.service";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ElementRef } from "@angular/core";
+import { Router } from "@angular/router";
+import { Ocr } from "@capacitor-community/image-to-text";
+import { CameraSource, Camera, CameraResultType } from "@capacitor/camera";
+import { ActionSheetController, ModalController } from "@ionic/angular";
+import { AuthService } from "src/app/pages/login/service/auth.service";
+import { OcrScannerPage } from "src/app/pages/ocr-scanner/ocr-scanner.page";
+import { OcrService } from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
+import { LoadingControllerService } from "../../loading-controller/loading-controller.service";
+import { ToastControllerService } from "../../toast-controller/toast-controller.service";
 
 @Component({
   selector: "app-main",
@@ -15,8 +15,10 @@ import {ToastControllerService} from "../../toast-controller/toast-controller.se
   styleUrls: ["./main.component.scss"],
   standalone: false
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnChanges {
   @Input() counts: any;
+  @Input() punctuals: any;
+
   user = this.authService.getCurrentUser();
   imageUrl: string | any = null;
   detectedTexts: string[] = [];
@@ -33,18 +35,25 @@ export class MainComponent implements OnInit {
     private modalCtrl: ModalController
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["counts"]) {
+      this.counts = changes["counts"].currentValue;
+    }
+  }
+
   ngOnInit() {}
 
   goSuperVisorAbsences() {
     this.router.navigate(["absence-supervisor"]);
   }
+
   goSuperVisorMaterials() {
     this.router.navigate(["materials-requests-supervisor"]);
   }
 
   goSuperVisorMissions() {
     this.router.navigate(["missions"], {
-      state: {counts: this.counts}
+      state: { counts: this.counts }
     });
   }
 
@@ -59,9 +68,10 @@ export class MainComponent implements OnInit {
   placementOfAgents() {
     this.router.navigate(["/placement-of-agents"]);
   }
+
   goSuperVisorAgentMissions() {
     this.router.navigate(["supervisor-plannings"], {
-      state: {counts: this.counts}
+      state: { counts: this.counts }
     });
   }
 
@@ -73,15 +83,9 @@ export class MainComponent implements OnInit {
     const sheet = await this.actionSheetCtrl.create({
       header: "Select Image Source",
       buttons: [
-        {
-          text: "📷 Camera",
-          handler: () => this.takePhoto(CameraSource.Camera)
-        },
-        {
-          text: "🖼️ Gallery",
-          handler: () => this.takePhoto(CameraSource.Photos)
-        },
-        {text: "Cancel", role: "cancel"}
+        { text: "📷 Camera", handler: () => this.takePhoto(CameraSource.Camera) },
+        { text: "🖼️ Gallery", handler: () => this.takePhoto(CameraSource.Photos) },
+        { text: "Cancel", role: "cancel" }
       ]
     });
 
@@ -96,6 +100,7 @@ export class MainComponent implements OnInit {
         resultType: CameraResultType.Uri,
         source
       });
+
       if (!photo.path && !photo.webPath) return;
 
       this.imageUrl = photo.webPath || photo.path;
@@ -103,36 +108,38 @@ export class MainComponent implements OnInit {
       const blob = await response.blob();
 
       await this.loadingCtrl.present("analyse de reçu...");
-      const result: any = await Ocr.detectText({filename: photo.path});
+      const result: any = await Ocr.detectText({ filename: photo.path });
+
       this.detectedTexts = result.textDetections.map((d: any) => d.text);
       this.extractedText = this.detectedTexts.join(" | ");
+
       const formData = new FormData();
       formData.append("extracted_text", this.extractedText);
-      formData.append("image", blob, new Date().getTime() + ".jpg");
+      formData.append("image", blob, `${Date.now()}.jpg`);
       formData.append("planning_id", "-");
       formData.append("planning_type", "-");
+
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      formData.append("user_id", user.id); // Example user ID
+      formData.append("user_id", user.id);
+
       this.ocrService.extractText(formData).subscribe({
         next: async (res: any) => {
           this.generatedJson = res.data || {};
           await this.loadingCtrl.dimiss();
           await this.toast.presentToast("Reçu scanné avec succès", "success");
+
           const modal = await this.modalCtrl.create({
             component: OcrScannerPage,
-            componentProps: {
-              result: res // Pass full response here
-            }
+            componentProps: { result: res }
           });
+
           await modal.present();
         },
-        error: async err => {
+        error: async () => {
           await this.toast.presentToast("Une erreur s'est produite", "danger");
           await this.loadingCtrl.dimiss();
         }
       });
-
-      // await loading.dismiss();
     } catch (error) {
       console.error("OCR Error:", error);
     }

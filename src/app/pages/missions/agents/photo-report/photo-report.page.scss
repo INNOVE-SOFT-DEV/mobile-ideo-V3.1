@@ -4,6 +4,7 @@
   flex-grow: 1;
   display: flex;
   justify-content: center;
+  color : black;
 }
 .card-footer {
   width: 100%;
@@ -14,7 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -23,7 +23,6 @@
   ion-icon {
     font-size: 16px;
     margin-right: 5px;
-    color: #ffffff;
   }
 }
 .photo-card {
@@ -95,9 +94,10 @@
   color: #233341;
 }
 .custom-button-send {
-  --background: #00a2e1;
-  --background-hover: #00a2e1;
-  --background-activated: #00a2e1;
+  --background:  #00a2e1;
+
+  --background-hover: #556f91;
+  --background-activated: #556f91;
   --border-radius: 50px;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
@@ -173,9 +173,10 @@
 .custom-button {
   margin-top: 10px;
   --border-radius: 50px;
-  --background: #00a2e1;
-  --background-hover: #00a2e1;
-  --background-activated: #00a2e1;
+  --background:  #00a2e1;
+
+  --background-hover: #9a9a9a;
+  --background-activated: #929292;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -185,6 +186,176 @@
 .btn-icon {
   margin-right: 5px;
 }
-ion-card-content {
-  padding-top: 0px;
+
+
+.center-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
 }
+
+.header-button {
+  background: transparent;
+  --background-hover: #f3f4f6;
+  --border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  ion-icon {
+    font-size: 20px;
+    color:black;
+    --background:      
+  ;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.notification-button {
+  position: relative;
+}
+
+
+ion-button {
+  --background: transparent;
+}
+
+/* 
+ * Custom SVG Animations for Ionic Template
+ * Add this to your component's SCSS file
+ * Make sure animate.css is imported in your angular.json or index.html
+ */
+
+/* Ensure animate.css is loaded - add this to your global styles or index.html:
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+*/
+
+/* SVG Animation Base Styles */
+svg {
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hover effects for interactive SVGs */
+.custom-block svg:hover,
+.call-link svg:hover {
+  transform: scale(1.1);
+}
+
+/* Custom animation delays for grid items */
+.custom-block:nth-child(1) svg {
+  animation-delay: 0.1s;
+}
+
+.custom-block:nth-child(2) svg {
+  animation-delay: 0.2s;
+}
+
+.custom-block:nth-child(3) svg {
+  animation-delay: 0.3s;
+}
+
+.custom-block:nth-child(4) svg {
+  animation-delay: 0.4s;
+}
+
+.custom-block:nth-child(5) svg {
+  animation-delay: 0.5s;
+}
+
+.custom-block:nth-child(6) svg {
+  animation-delay: 0.6s;
+}
+
+/* Slow down infinite animations for phone icons */
+svg.animate__infinite {
+  animation-duration: 2s;
+}
+
+/* Optional: Add rotation animation on hover for direction icon */
+.custom-block[onclick*="direction"] svg:hover {
+  animation: rotate 0.5s ease-in-out;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Optional: Add bounce effect on click */
+svg:active {
+  animation: bounceClick 0.3s ease;
+}
+
+@keyframes bounceClick {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+/* Stagger animation for contact cards */
+.cls-card-light {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+/* Optional: Add subtle floating animation to specific SVGs */
+.animate__pulse.animate__infinite {
+  animation-timing-function: ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Animation variations you can use - replace classes as needed */
+
+/* Alternative animations for top grid icons:
+   - animate__bounceIn (currently used)
+   - animate__fadeInDown
+   - animate__flipInX
+   - animate__rotateIn
+   - animate__zoomIn
+   - animate__slideInUp
+*/
+
+/* Alternative animations for middle grid icons:
+   - animate__zoomIn (currently used)
+   - animate__fadeInUp
+   - animate__backInUp
+   - animate__lightSpeedInRight
+   - animate__rollIn
+*/
+
+/* Alternative animations for phone icons:
+   - animate__pulse (currently used - infinite)
+   - animate__heartBeat
+   - animate__tada
+   - animate__swing
+   - animate__rubberBand
+*/
+
+/* Quick reference for changing animations:
+   1. Replace the class on the SVG element
+   2. Adjust animation-delay in the style attribute
+   3. Add animate__infinite for continuous animations
+   4. Use animate__slow, animate__slower, animate__fast, animate__faster for speed control
+*/

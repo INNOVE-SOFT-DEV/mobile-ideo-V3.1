@@ -7,15 +7,15 @@ export const environment = {
   // newWebUrl: "http://127.0.0.1:3000/",
   //server DEV
 
-  newApiUrl: "https://ideo.webo.tn/api/v1/",
-  newWebUrl: "https://ideo.webo.tn/",
+  //newApiUrl: "https://ideo.webo.tn/api/v1/",
+  //newWebUrl: "https://ideo.webo.tn/",
 
   // ws_api_url: "wss://api.ideogroupe.com/cable",
   // urlAPI: "https://api.ideogroupe.com/",
   // url_web: "https://backend.ideogroupe.com/",
 
-  // newApiUrl: "https://ideo.webo.tn/api/v1/",
-  // newWebUrl: "https://ideo.webo.tn/",
+  newApiUrl: "https://ideo.webo.tn/api/v1/",
+  newWebUrl: "https://ideo.webo.tn/",
 
   ws_api_url: "wss://apideo.webo.tn/cable",
   urlAPI: "https://apideo.webo.tn/",

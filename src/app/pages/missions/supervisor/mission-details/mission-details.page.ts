@@ -9,6 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {FormControl} from "@angular/forms";
 import {debounceTime} from "rxjs";
+
 @Component({
   selector: "app-mission-details",
   templateUrl: "./mission-details.page.html",
@@ -47,7 +48,8 @@ export class MissionDetailsPage implements OnInit {
     private router: Router,
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private el: ElementRef
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.type = navigation?.extras.state?.["type"];
@@ -87,6 +89,21 @@ export class MissionDetailsPage implements OnInit {
         this.plannings = this.planningsCached;
       }
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   foramtplannings(data: any) {

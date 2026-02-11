@@ -10,6 +10,7 @@ import {MaterialsService} from "src/app/pages/materials/service/materials.servic
 import {ChangeDetectorRef} from "@angular/core";
 import {AgentSheetComponent} from "src/app/widgets/modals/agent-sheet/agent-sheet.component";
 import {CamionSheetComponent} from "src/app/widgets/modals/camion-sheet/camion-sheet.component";
+
 @Component({
   selector: "app-agent-tracking",
   templateUrl: "./agent-tracking.page.html",
@@ -51,7 +52,8 @@ export class AgentTrackingPage implements OnInit {
     private materialsService: MaterialsService,
     private cdr: ChangeDetectorRef,
     private injector: Injector,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -69,6 +71,22 @@ export class AgentTrackingPage implements OnInit {
     this.mapService.addUserMarker(userPosition, "Moi", "assets/img/user.png");
     this.mapService.addCircle(userPosition.lat, userPosition.lng, 500);
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
+
   loadCamionsMarkers() {
     if (!this.vehicules || this.vehicules.length === 0) {
       console.warn("Aucun vehicule à afficher");

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
+      <ion-button class="header-button" (click)="goBack()">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -9,7 +9,7 @@
     <ion-title class="center-title">{{ planning?.today_schedule?.date ? transform() : "planning?.today_schedule?.date" }}</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button class="header-button">
         <ion-icon name="notifications-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -18,26 +18,23 @@
 
 <ion-content [fullscreen]="true">
   <div class="cls-details">
-    <ion-card>
+    <ion-card class="animate__animated animate__slideInRight animate__faster">
       <ion-card-content>
         <ion-grid>
           <ion-row>
             <ion-col>
-              <img
-                src="{{
-             planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'
-            }}"
-                class="logo"
-              />
+              <img src="{{ planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png' }}" class="logo" />
             </ion-col>
+
             <ion-col size="8">
               <div class="cls-title">
-                <p class="cls-p-title">{{planning?.intervention.name?.split('-')[0]}}</p>
+                <p class="cls-p-title">{{address}}</p>
               </div>
               <div class="cls-address">
-                <p class="cls-p-address">{{planning?.intervention.name?.split('-')[1]}}</p>
+                <p class="cls-p-address">{{ planning?.intervention.name?.split('-')[1] }}</p>
               </div>
             </ion-col>
+
             <ion-col>
               <img *ngIf="planningType =='punctual' && planning?.punctual_info_photos?.length > 0" src="../../../../assets/img/icon-img.png" class="cls-img" />
             </ion-col>
@@ -50,56 +47,17 @@
       <ion-row class="custom-row" responsive>
         <ion-col size="6" size-md="6" class="custom-block">
           <div class="block-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <path
-                d="M25.2998 5L40.5 20.2002V40.4668C40.4999 41.8658 39.3658 42.9999 37.9668 43H9.0332C7.63418 42.9999 6.50007 41.8658 6.5 40.4668V7.53321C6.50007 6.13419 7.63418 5.00007 9.0332 5H25.2998Z"
-                fill="#CEECFF"
-              />
-              <path d="M26.5667 20.1999L40.5 20.1999L25.3 4.99992L25.3 18.9333C25.3 19.6328 25.8671 20.1999 26.5667 20.1999Z" fill="#00A2E1" />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M11.1151 26.7112C11.5089 26.3173 12.043 26.0961 12.6 26.0961H14.7C15.2569 26.0961 15.7911 26.3173 16.1849 26.7112C16.5787 27.105 16.8 27.6391 16.8 28.1961V35.196C16.8 36.4956 16.2837 37.7419 15.3648 38.6608C14.4459 39.5798 13.1995 40.096 11.9 40.096C11.5287 40.096 11.1726 39.9485 10.91 39.686C10.6475 39.4234 10.5 39.0673 10.5 38.696V37.296C10.5 36.9247 10.6475 36.5686 10.91 36.3061C11.1726 36.0435 11.5287 35.896 11.9 35.896C12.0856 35.896 12.2637 35.8223 12.395 35.691C12.5262 35.5597 12.6 35.3817 12.6 35.196V34.496C12.043 34.496 11.5089 34.2748 11.1151 33.881C10.7212 33.4872 10.5 32.953 10.5 32.3961V28.1961C10.5 27.6391 10.7212 27.105 11.1151 26.7112Z"
-                fill="#00A2E1"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M18.8153 26.7112C19.2091 26.3173 19.7432 26.0961 20.3002 26.0961H22.4002C22.9571 26.0961 23.4913 26.3173 23.8851 26.7112C24.2789 27.105 24.5002 27.6391 24.5002 28.1961V35.196C24.5002 36.4956 23.9839 37.7419 23.065 38.6608C22.1461 39.5798 20.8997 40.096 19.6002 40.096C19.2289 40.096 18.8728 39.9485 18.6102 39.686C18.3477 39.4234 18.2002 39.0673 18.2002 38.696V37.296C18.2002 36.9247 18.3477 36.5686 18.6102 36.3061C18.8728 36.0435 19.2289 35.896 19.6002 35.896C19.7858 35.896 19.9639 35.8223 20.0952 35.691C20.2264 35.5597 20.3002 35.3817 20.3002 35.196V34.496C19.7432 34.496 19.2091 34.2748 18.8153 33.881C18.4214 33.4872 18.2002 32.953 18.2002 32.3961V28.1961C18.2002 27.6391 18.4214 27.105 18.8153 26.7112Z"
-                fill="#00A2E1"
-              />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M18,20H6V4h7v5h5V20z M8,15.01l1.41-1.41L11,15.17 l4.59-4.59L17,12l-6,6L8,15.01z" />
             </svg>
             <div class="block-text">Tâches</div>
           </div>
         </ion-col>
         <ion-col size="6" size-md="6" class="custom-block" (click)="chooseSource()">
           <div class="block-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <mask id="path-1-inside-1_2009_598" fill="white">
-                <path
-                  d="M12.656 14L12.6 13.532C12.4854 12.5592 12.0178 11.6623 11.286 11.0113C10.5541 10.3603 9.60884 10.0005 8.62933 10H8.33333C7.97971 10 7.64057 10.1405 7.39052 10.3905C7.14048 10.6406 7 10.9797 7 11.3333C7 11.687 7.14048 12.0261 7.39052 12.2761C7.64057 12.5262 7.97971 12.6667 8.33333 12.6667H8.62933C8.95591 12.6667 9.27112 12.7866 9.51516 13.0036C9.75921 13.2206 9.91512 13.5197 9.95333 13.844L11.788 29.444C11.9785 31.0664 12.758 32.5624 13.9785 33.648C15.1991 34.7337 16.7758 35.3334 18.4093 35.3333H32.3333C32.687 35.3333 33.0261 35.1929 33.2761 34.9428C33.5262 34.6928 33.6667 34.3536 33.6667 34C33.6667 33.6464 33.5262 33.3072 33.2761 33.0572C33.0261 32.8071 32.687 32.6667 32.3333 32.6667H18.4093C17.5841 32.6643 16.7797 32.4068 16.1066 31.9294C15.4334 31.452 14.9244 30.7781 14.6493 30C13.1523 22 13.1523 20 12.656 14Z"
-                />
-              </mask>
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
               <path
-                d="M12.656 14L12.6 13.532C12.4854 12.5592 12.0178 11.6623 11.286 11.0113C10.5541 10.3603 9.60884 10.0005 8.62933 10H8.33333C7.97971 10 7.64057 10.1405 7.39052 10.3905C7.14048 10.6406 7 10.9797 7 11.3333C7 11.687 7.14048 12.0261 7.39052 12.2761C7.64057 12.5262 7.97971 12.6667 8.33333 12.6667H8.62933C8.95591 12.6667 9.27112 12.7866 9.51516 13.0036C9.75921 13.2206 9.91512 13.5197 9.95333 13.844L11.788 29.444C11.9785 31.0664 12.758 32.5624 13.9785 33.648C15.1991 34.7337 16.7758 35.3334 18.4093 35.3333H32.3333C32.687 35.3333 33.0261 35.1929 33.2761 34.9428C33.5262 34.6928 33.6667 34.3536 33.6667 34C33.6667 33.6464 33.5262 33.3072 33.2761 33.0572C33.0261 32.8071 32.687 32.6667 32.3333 32.6667H18.4093C17.5841 32.6643 16.7797 32.4068 16.1066 31.9294C15.4334 31.452 14.9244 30.7781 14.6493 30C13.1523 22 13.1523 20 12.656 14Z"
-                fill="#CEECFF"
-              />
-              <path
-                d="M-1.46549 15.6898C7.94884 14.5633 17.3632 13.4367 26.7775 12.3102C26.7588 12.1542 26.7402 11.9982 26.7215 11.8422L26.7245 11.868C26.4928 9.89566 25.9344 7.95951 25.08 6.16657C24.0386 3.97619 22.5518 1.99599 20.7385 0.384829C19.3814 -0.822985 17.8399 -1.82718 16.1863 -2.58053C13.8262 -3.65831 11.2309 -4.22272 8.63595 -4.22222C8.53067 -4.22222 8.432 -4.22222 8.33333 -4.22222C4.25551 -4.23657 0.207203 -2.5597 -2.66611 0.333894C-5.5597 3.2072 -7.23657 7.25551 -7.22222 11.3333C-7.23657 15.4112 -5.55971 19.4595 -2.66611 22.3328C0.207204 25.2264 4.25552 26.9032 8.33333 26.8889C8.432 26.8889 8.53067 26.8889 8.62933 26.8889C5.50222 26.8972 2.39404 25.7149 0.0644386 23.6317C-2.27682 21.5615 -3.81427 18.6128 -4.17121 15.508C-3.55999 20.7052 -2.94843 25.9052 -2.33688 31.1052C-1.76069 36.1361 0.731103 40.9183 4.52649 44.2749C8.3028 47.6529 13.343 49.57 18.4096 49.5556C23.0507 49.5556 27.692 49.5556 32.3333 49.5556C36.4111 49.5699 40.4594 47.8931 43.3328 44.9994C46.2264 42.1261 47.9032 38.0778 47.8889 34C47.9032 29.9222 46.2264 25.8739 43.3328 23.0006C40.4594 20.1069 36.4111 18.4301 32.3333 18.4444C27.692 18.4444 23.0507 18.4444 18.4093 18.4444L18.4493 18.4445C20.5428 18.4468 22.6285 19.1146 24.3341 20.3286C26.0439 21.5368 27.3638 23.2843 28.0582 25.2593L28.6289 27.3841C27.9396 23.6883 27.4538 20.7378 27.1926 17.3728C27.0766 15.9824 26.9617 14.4133 26.8298 12.8275C17.3806 13.6092 7.9314 14.3908 -1.51781 15.1725C-1.39628 16.6306 -1.28966 18.0977 -1.15249 19.7484C-0.827042 24.0678 -0.0653345 28.73 0.669753 32.6159L1.24047 34.7407C2.47829 38.2612 4.83134 41.3767 7.87904 43.5302C10.9192 45.6944 14.6376 46.8848 18.3694 46.8888L18.4093 46.8889C23.0507 46.8889 27.692 46.8889 32.3333 46.8889C28.9545 46.9007 25.6004 45.5115 23.2195 43.1138C20.8219 40.7329 19.4326 37.3789 19.4444 34C19.4326 30.6211 20.8219 27.2671 23.2195 24.8862C25.6004 22.4886 28.9545 21.0993 32.3333 21.1111C27.692 21.1111 23.0507 21.1111 18.4093 21.1111C20.2419 21.106 22.0644 21.7992 23.4306 23.0211C24.8035 24.2355 25.7045 25.9647 25.9132 27.7857C25.3013 22.5828 24.6898 17.3828 24.0782 12.1828C23.6471 8.43293 21.7915 4.87395 18.9659 2.37557C16.1544 -0.138698 12.403 -1.56568 8.63121 -1.55556C8.53067 -1.55556 8.432 -1.55556 8.33333 -1.55556C11.7122 -1.56739 15.0663 -0.178082 17.4472 2.21951C19.8447 4.60037 21.2341 7.95446 21.2222 11.3333C21.2341 14.7122 19.8447 18.0663 17.4472 20.4472C15.0663 22.8447 11.7122 24.2341 8.33333 24.2222C8.432 24.2222 8.53067 24.2222 8.62933 24.2222C7.1674 24.2225 5.71076 23.9058 4.38726 23.3013C3.45979 22.8788 2.5944 22.315 1.83349 21.6378C0.816582 20.7343 -0.018039 19.6228 -0.60199 18.3944C-1.08117 17.3889 -1.39466 16.3019 -1.52454 15.196L-1.52149 15.2218C-1.50282 15.3778 -1.48415 15.5338 -1.46549 15.6898ZM26.7775 12.3102L-1.46549 15.6898L-1.51781 15.1725L26.8298 12.8275L26.7775 12.3102Z"
-                fill="#CEECFF"
-                mask="url(#path-1-inside-1_2009_598)"
-              />
-              <path
-                d="M19.6667 42.3333C21.1394 42.3333 22.3333 41.1394 22.3333 39.6667C22.3333 38.1939 21.1394 37 19.6667 37C18.1939 37 17 38.1939 17 39.6667C17 41.1394 18.1939 42.3333 19.6667 42.3333Z"
-                fill="#00A2E1"
-              />
-              <path
-                d="M32.9997 42.3333C34.4724 42.3333 35.6663 41.1394 35.6663 39.6667C35.6663 38.1939 34.4724 37 32.9997 37C31.5269 37 30.333 38.1939 30.333 39.6667C30.333 41.1394 31.5269 42.3333 32.9997 42.3333Z"
-                fill="#00A2E1"
-              />
-              <path
-                d="M14.0879 16.0826C14.0414 15.4997 14.5013 15 15.0861 15H35.5566C36.1425 14.9993 36.7222 15.1278 37.2529 15.376C37.7834 15.6241 38.253 15.9857 38.6279 16.4355C39.0036 16.8844 39.276 17.4107 39.4258 17.9766C39.5756 18.5425 39.5986 19.1349 39.4941 19.7109L38.4473 25.5156C38.17 27.0538 37.3614 28.4459 36.1621 29.4482C34.9629 30.4506 33.4497 31 31.8867 31H17.6536C16.6909 31 15.863 30.3111 15.6927 29.3636C14.5745 23.1419 14.4704 20.8758 14.0879 16.0826Z"
-                fill="#00A2E1"
+                d="M7,18c-1.1,0-1.99,0.9-1.99,2S5.9,22,7,22s2-0.9,2-2S8.1,18,7,18z M1,2v2h2l3.6,7.59l-1.35,2.45C5.1,14.33,5.7,15,6.4,15H19v-2 H7.42c-0.14,0-0.25-0.11-0.25-0.25L7.2,12.6L8.1,11h7.45c0.75,0,1.41-0.41,1.75-1.03l3.58-6.49C21.22,2.83,20.75,2,20,2H4.21 L3.27,0H1V2z M17,18c-1.1,0-1.99,0.9-1.99,2s0.89,2,1.99,2s2-0.9,2-2S18.1,18,17,18z"
               />
             </svg>
             <div class="block-text">Dépenses</div>
@@ -112,46 +70,68 @@
       <ion-row class="custom-row" responsive>
         <ion-col size="4" size-md="4" class="custom-block" (click)="direction()">
           <div class="block-content">
-            <img src="../../../../assets/img/Location.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2z" />
+            </svg>
             <div class="block-text">{{'Direction' | translate}}</div>
           </div>
         </ion-col>
         <ion-col size="4" size-md="4" class="custom-block" (click)="pointage()">
           <div class="block-content">
-            <img src="../../../../assets/img/pointage.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path
+                d="M12,2C8.13,2,5,5.13,5,9c0,5.25,7,13,7,13s7-7.75,7-13C19,5.13,15.87,2,12,2z M12,11.5c-1.38,0-2.5-1.12-2.5-2.5s1.12-2.5,2.5-2.5s2.5,1.12,2.5,2.5S13.38,11.5,12,11.5z"
+              />
+            </svg>
             <div class="block-text">{{'Scores' | translate}}</div>
           </div>
         </ion-col>
         <ion-col size="4" size-md="4" class="custom-block" (click)="photoReport()">
           <div class="block-content">
-            <img src="../../../../assets/img/camera change.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path
+                d="M9,2L7.17,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6c0-1.1-0.9-2-2-2h-3.17L15,2H9z M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5S14.76,17,12,17z M12,9c-1.65,0-3,1.35-3,3s1.35,3,3,3s3-1.35,3-3S13.65,9,12,9z"
+              />
+            </svg>
             <div class="block-text">{{'Reports' | translate}}</div>
           </div>
         </ion-col>
 
         <ion-col size="4" size-md="4" class="custom-block">
           <div class="block-content">
-            <img src="../../../../assets/img/Chat.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path d="M20,2H4C2.9,2,2,2.9,2,4v18l4-4h14c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M17,12H7v-2h10V12z M17,9H7V7h10V9z" />
+            </svg>
             <div class="block-text">{{'Chat' | translate}}</div>
           </div>
         </ion-col>
 
         <ion-col *ngIf="planningType != 'regular'" size="4" size-md="4" class="custom-block" (click)="changeVehicle()">
           <div class="block-content">
-            <img src="../../../../assets/img/Car.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="60" height="50" fill="#00a2e1">
+              <path
+                d="M18.92,6.01C18.72,5.42,18.16,5,17.5,5h-11c-0.66,0-1.21,0.42-1.42,1.01L3,12v8c0,0.55,0.45,1,1,1h1c0.55,0,1-0.45,1-1v-1h12 v1c0,0.55,0.45,1,1,1h1c0.55,0,1-0.45,1-1v-8L18.92,6.01z M6.5,16c-0.83,0-1.5-0.67-1.5-1.5S5.67,13,6.5,13s1.5,0.67,1.5,1.5 S7.33,16,6.5,16z M17.5,16c-0.83,0-1.5-0.67-1.5-1.5s0.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S18.33,16,17.5,16z M5,11l1.5-4.5h11L19,11H5z"
+              />
+              <path d="M20,2c-1.1,0-2,0.9-2,2h2v2l3-3L20,0V2z" />
+            </svg>
             <div class="block-text">{{'Change vehicle' | translate}}</div>
           </div>
         </ion-col>
-        <ion-col *ngIf="planningType == 'regular'" size="4" size-md="4" class="custom-block" (click)="gdc()">
+        <ion-col *ngIf="planning?.type == 'regular'" size="4" size-md="4" (click)="gdc()">
           <div class="block-content">
-            <img src="../../../../assets/img/gdc.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path d="M1,21h22L12,2L1,21z M13,18h-2v-2h2V18z M13,14h-2v-4h2V14z" />
+            </svg>
             <div class="block-text">Consignes GDC</div>
           </div>
         </ion-col>
 
         <ion-col size="4" size-md="4" class="custom-block" (click)="missionReturns()">
           <div class="block-content">
-            <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="block-image" />
+            <svg viewBox="0 0 24 24" width="50" height="50" fill="#00a2e1">
+              <path d="M12,14c1.66,0,3-1.34,3-3V5c0-1.66-1.34-3-3-3S9,3.34,9,5v6C9,12.66,10.34,14,12,14z" />
+              <path d="M17,11c0,2.76-2.24,5-5,5s-5-2.24-5-5H5c0,3.53,2.61,6.43,6,6.92V21h2v-3.08c3.39-0.49,6-3.39,6-6.92H17z" />
+            </svg>
             <div class="block-text">{{'Mission returns' | translate}}</div>
           </div>
         </ion-col>
@@ -168,7 +148,12 @@
     <div class="cls-title-contact">
       <p class="cls-p-contact">{{'Contacts' | translate}}</p>
     </div>
-    <ion-card *ngFor="let contact of planning?.contacts" color="light" class="cls-card-light">
+    <!-- <ion-card
+      *ngFor="let contact of planning?.contacts; let i = index"
+      color="light"
+      class="cls-card-light animate__animated animate__fadeInUp card-animate"
+      [style.animationDelay]="(i * 80) + 'ms'"
+    >
       <ion-card-content>
         <ion-grid>
           <ion-row class="align-center">
@@ -176,19 +161,67 @@
               <div class="title-c-txt">
                 <p class="cls-card-title wrap-text">{{ `${contact.first_name} ${contact.last_name}` }}</p>
               </div>
-              <div class="title-c-txt">
-                <ion-chip class="chip-job"><span class="cls-title-job">{{contact.job}}</span></ion-chip>
+
+              <div class="title-c-txt animate__animated animate__fadeIn">
+                <ion-chip class="chip-job">
+                  <span class="cls-title-job">{{ contact.job }}</span>
+                </ion-chip>
               </div>
             </ion-col>
+
+            <ion-col size="3" class="animate__animated animate__zoomIn">
+              <a class="call-link" href="tel://{{ contact?.phone?.split(' ')?.join() }}">
+                <svg viewBox="0 0 50 50" width="50" height="50">
+                  <circle cx="25" cy="25" r="24" fill="#CDFFED" />
+
+                  <path
+                    d="M13.25,21.59c2.88,5.66,7.51,10.29,13.18,13.17l4.4-4.41c0.55-0.55,1.34-0.71,2.03-0.49c2.24,0.74,4.65,1.14,7.14,1.14c1.11,0,2,0.89,2,2v7c0,1.11-0.89,2-2,2C18.15,42,6,29.85,6,8c0-1.11,0.9-2,2-2h7c1.11,0,2,0.89,2,2c0,2.49,0.4,4.9,1.14,7.14c0.22,0.69,0.06,1.48-0.49,2.03l-4.4,4.42z"
+                    fill="#308451"
+                    transform="scale(0.7) translate(10, 10)"
+                  />
+                </svg>
+              </a>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card> -->
+    
+        <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center"       *ngFor="let contact of planning?.contacts; let i = index"
+>
+            <ion-col size="9">
+              <div class="title-c-txt">
+                <p class="c-text wrap-text">{{ contact?.first_name }} {{ contact?.last_name }}</p>
+              </div>
+                <ion-chip class="chip-job">
+                  <span class="cls-title-job">{{ contact.job }}</span>
+                </ion-chip>
+            </ion-col>
+
             <ion-col size="3">
-              <a class="call-link" href="tel://{{contact?.phone?.split(' ')?.join()}}">
-                <img src="../../../../assets/img/icon-call.png" />
+              <a class="call-link" href="tel://{{ contact?.phone?.split(' ')?.join() }}">
+                <!-- Phone Call Button -->
+         <svg viewBox="0 0 50 50" width="50" height="50">
+                  <!-- Background circle (lighter color) -->
+                  <circle cx="25" cy="25" r="24" fill="#CDFFED" />
+
+                  <!-- Phone icon (original color) -->
+                  <path
+                    d="M13.25,21.59c2.88,5.66,7.51,10.29,13.18,13.17l4.4-4.41c0.55-0.55,1.34-0.71,2.03-0.49c2.24,0.74,4.65,1.14,7.14,1.14c1.11,0,2,0.89,2,2v7c0,1.11-0.89,2-2,2C18.15,42,6,29.85,6,8c0-1.11,0.9-2,2-2h7c1.11,0,2,0.89,2,2c0,2.49,0.4,4.9,1.14,7.14c0.22,0.69,0.06,1.48-0.49,2.03l-4.4,4.42z"
+                    fill="#308451"
+                    transform="scale(0.7) translate(10, 10)"
+                  />
+                </svg>
               </a>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
+
     <ion-card class="cls-ionc-card-mission">
       <ion-card-header>
         <ion-card-title>
@@ -205,9 +238,9 @@
         </ion-card-title>
         <ion-card-subtitle><ion-chip class="cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content class="cls-desc" [innerHTML]="planning?.note"></ion-card-content>
+      <ion-card-content class="cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
     </ion-card>
-    <ion-card class="cls-ion-card-notice">
+    <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
       <ion-card-header>
         <ion-card-title class="mission-text">{{'Noticed' | translate}}</ion-card-title>
       </ion-card-header>
@@ -216,21 +249,33 @@
     <div class="cls-title-contact">
       <p class="cls-p-contact">{{'Team' | translate}}</p>
     </div>
-    <ion-card class="cls-ion-crad-c">
+    <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast">
       <ion-card-content>
         <ion-grid>
           <ion-row class="align-center" *ngFor="let item of supervisors">
             <ion-col size="9">
               <div class="title-c-txt">
-                <p class="c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
+                <p class="c-text wrap-text">{{ item.first_name }} {{ item.last_name }}</p>
               </div>
               <div class="title-c-txt">
-                <ion-chip class="cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
+                <ion-chip class="cls-chip-agent-name">{{ 'Supervisor' | translate }}</ion-chip>
               </div>
             </ion-col>
+
             <ion-col size="3">
-              <a class="call-link" href="tel://{{item?.phone?.split(' ')?.join()}}">
-                <img src="../../../../assets/img/icon-call.png" />
+              <a class="call-link" href="tel://{{ item?.phone?.split(' ')?.join() }}">
+                <!-- Phone Call Button -->
+         <svg viewBox="0 0 50 50" width="50" height="50">
+                  <!-- Background circle (lighter color) -->
+                  <circle cx="25" cy="25" r="24" fill="#CDFFED" />
+
+                  <!-- Phone icon (original color) -->
+                  <path
+                    d="M13.25,21.59c2.88,5.66,7.51,10.29,13.18,13.17l4.4-4.41c0.55-0.55,1.34-0.71,2.03-0.49c2.24,0.74,4.65,1.14,7.14,1.14c1.11,0,2,0.89,2,2v7c0,1.11-0.89,2-2,2C18.15,42,6,29.85,6,8c0-1.11,0.9-2,2-2h7c1.11,0,2,0.89,2,2c0,2.49,0.4,4.9,1.14,7.14c0.22,0.69,0.06,1.48-0.49,2.03l-4.4,4.42z"
+                    fill="#308451"
+                    transform="scale(0.7) translate(10, 10)"
+                  />
+                </svg>
               </a>
             </ion-col>
           </ion-row>
@@ -239,7 +284,7 @@
     </ion-card>
 
     <ng-container *ngIf="planning?.team.length >0">
-      <div class="cls-list-c-b">
+      <!-- <div class="cls-list-c-b">
         <ion-list class="cls-ion-list-c" *ngIf="hasSubcontractor">
           <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? '' : 'none' }">
             <ion-grid *ngIf="agent?.manager && !agent.platform">
@@ -268,15 +313,48 @@
             </ion-grid>
           </ion-item>
         </ion-list>
-      </div>
+      </div> -->
+          <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast" *ngIf="hasSubcontractor">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center" *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? '' : 'none' }">
+          <ion-col size="9">
+                  <div class="title-c-txt">
+                    <p class="c-text wrap-text">{{ agent?.first_name}} {{ agent?.last_name}}</p>
+                  </div>
+                  <div class="title-c-txt">
+                    <ion-chip class="cls-chip-f-name">{{agent?.company_name}}</ion-chip>
+                  </div>
+                </ion-col>
+
+            <ion-col size="3">
+              <a class="call-link" href="tel://{{ agent?.phone?.split(' ')?.join() }}">
+                <!-- Phone Call Button -->
+         <svg viewBox="0 0 50 50" width="50" height="50">
+                  <!-- Background circle (lighter color) -->
+                  <circle cx="25" cy="25" r="24" fill="#CDFFED" />
+
+                  <!-- Phone icon (original color) -->
+                  <path
+                    d="M13.25,21.59c2.88,5.66,7.51,10.29,13.18,13.17l4.4-4.41c0.55-0.55,1.34-0.71,2.03-0.49c2.24,0.74,4.65,1.14,7.14,1.14c1.11,0,2,0.89,2,2v7c0,1.11-0.89,2-2,2C18.15,42,6,29.85,6,8c0-1.11,0.9-2,2-2h7c1.11,0,2,0.89,2,2c0,2.49,0.4,4.9,1.14,7.14c0.22,0.69,0.06,1.48-0.49,2.03l-4.4,4.42z"
+                    fill="#308451"
+                    transform="scale(0.7) translate(10, 10)"
+                  />
+                </svg>
+              </a>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
     </ng-container>
     <ng-container *ngIf="planning?.team.length >0">
-      <div class="cls-list-c-b">
+      <!-- <div class="cls-list-c-b">
         <ion-list class="cls-ion-list-c">
           <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? 'none' : '' }">
             <ion-grid *ngIf="!agent.manager">
               <ion-row class="align-center">
-                <ion-col size="9">
+                <ion-col class="agent-col" size="9">
                   <div class="title-c-txt">
                     <p class="c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
                   </div>
@@ -284,16 +362,60 @@
                     <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
                   </div>
                 </ion-col>
-                <ion-col size="3">
+                <ion-col class="agent-col" size="3">
                   <a class="call-link" href="tel://{{agent?.phone.split(' ').join()}}">
-                    <img src="../../../../assets/img/icon-call.png" />
+              <svg viewBox="0 0 50 50" width="50" height="50">
+                  <circle cx="25" cy="25" r="24" fill="#CDFFED" />
+
+                  <path
+                    d="M13.25,21.59c2.88,5.66,7.51,10.29,13.18,13.17l4.4-4.41c0.55-0.55,1.34-0.71,2.03-0.49c2.24,0.74,4.65,1.14,7.14,1.14c1.11,0,2,0.89,2,2v7c0,1.11-0.89,2-2,2C18.15,42,6,29.85,6,8c0-1.11,0.9-2,2-2h7c1.11,0,2,0.89,2,2c0,2.49,0.4,4.9,1.14,7.14c0.22,0.69,0.06,1.48-0.49,2.03l-4.4,4.42z"
+                    fill="#308451"
+                    transform="scale(0.7) translate(10, 10)"
+                  />
+                </svg>
                   </a>
                 </ion-col>
               </ion-row>
             </ion-grid>
           </ion-item>
         </ion-list>
-      </div>
+      </div> -->
+  <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="align-center" *ngFor="let agent of planning?.team" [ngStyle]="{ 'display': agent.manager ? 'none' : '' }">
+                  <ion-col class="agent-col" size="9">
+                  <div class="title-c-txt">
+                    <p class="c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
+                  </div>
+                  <div class="title-c-txt">
+                    <ion-chip class="cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
+                  </div>
+                </ion-col>
+
+            <ion-col size="3">
+              <a class="call-link" href="tel://{{ agent?.phone?.split(' ')?.join() }}">
+                <!-- Phone Call Button -->
+         <svg viewBox="0 0 50 50" width="50" height="50">
+                  <!-- Background circle (lighter color) -->
+                  <circle cx="25" cy="25" r="24" fill="#CDFFED" />
+
+                  <!-- Phone icon (original color) -->
+                  <path
+                    d="M13.25,21.59c2.88,5.66,7.51,10.29,13.18,13.17l4.4-4.41c0.55-0.55,1.34-0.71,2.03-0.49c2.24,0.74,4.65,1.14,7.14,1.14c1.11,0,2,0.89,2,2v7c0,1.11-0.89,2-2,2C18.15,42,6,29.85,6,8c0-1.11,0.9-2,2-2h7c1.11,0,2,0.89,2,2c0,2.49,0.4,4.9,1.14,7.14c0.22,0.69,0.06,1.48-0.49,2.03l-4.4,4.42z"
+                    fill="#308451"
+                    transform="scale(0.7) translate(10, 10)"
+                  />
+                </svg>
+              </a>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+
+
     </ng-container>
   </div>
 </ion-content>

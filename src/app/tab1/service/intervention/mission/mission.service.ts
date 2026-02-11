@@ -30,7 +30,7 @@ export class MissionService implements MissionInterface {
     });
     App.addListener("appStateChange", ({isActive}) => {
       if (isActive) {
-        this.refreshEvent.emit();
+        // this.refreshEvent.emit();
       }
     });
   }
@@ -72,8 +72,8 @@ export class MissionService implements MissionInterface {
   getSuperVisorPlanningCounts(date?: string): Observable<any> {
     return this.missionRepo.getSuperVisorPlanningCounts(date);
   }
-  getPlannings(isAgent: boolean, date?: string, type?: string): Observable<any> {
-    return this.missionRepo.getPlannings(isAgent, date, type);
+  getPlannings(isAgent: boolean, date?: string, type?: string , our_missions?: boolean): Observable<any> {
+    return this.missionRepo.getPlannings(isAgent, date, type , our_missions);
   }
   deletePhoto(id: string, type: string, uuid: string, typePhoroto: string): Observable<any> {
     return this.missionRepo.deletePhoto(id, type, uuid, typePhoroto);

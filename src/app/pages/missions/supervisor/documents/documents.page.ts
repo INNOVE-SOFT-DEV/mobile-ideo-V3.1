@@ -5,6 +5,7 @@ import {User} from "src/app/models/auth/user";
 import {Router} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
+import {AfterViewInit, ElementRef} from "@angular/core";
 
 @Component({
   selector: "app-documents",
@@ -22,13 +23,27 @@ export class DocumentsPage implements OnInit {
     private authService: AuthService,
     private route: Router,
     private translateService: TranslateService,
-    private loadingCtrl: LoadingControllerService
+    private loadingCtrl: LoadingControllerService,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {
     this.getAllAgents();
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
   async getAllAgents() {
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     await this.loadingCtrl.present(this.loadingMessage);

@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PopoverController} from "@ionic/angular";
@@ -37,7 +37,8 @@ export class VehicleDrivingPage implements OnInit {
     private router: Router,
     private materialsService: MaterialsService,
     private loadingService: LoadingControllerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private el: ElementRef
   ) {}
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
@@ -63,6 +64,21 @@ export class VehicleDrivingPage implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
   setCurrentMonth() {
     const date = new Date();

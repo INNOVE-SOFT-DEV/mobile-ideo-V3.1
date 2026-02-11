@@ -40,7 +40,6 @@
   border-radius: 14px;
   padding-top: 10px;
   padding-bottom: 10px;
-  background: #ffffff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -74,7 +73,6 @@
   margin-top: 6px;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 24px;
   line-height: 100%;
   letter-spacing: -0.015em;
   text-align: right;
@@ -209,4 +207,20 @@ ion-row.ion-align-items-center {
   background-color: rgb(53, 209, 139);
   color: #fff;
   text-align: center;
+}
+
+
+
+.header-button {
+  --color: black;
+  --background: transparent;
+}
+
+ion-title {
+  color: black;
+}
+
+#map {
+  width: 100%;
+  height: 50%;
 }

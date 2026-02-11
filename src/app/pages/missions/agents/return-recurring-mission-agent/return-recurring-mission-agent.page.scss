@@ -46,7 +46,6 @@
   width: 100%;
   border-radius: 14px;
   padding: 20px 10px;
-  background: #ffffff;
   box-shadow: 5px 4px 10px 0px #dfdfdf;
   border: 0.4px solid transparent;
   box-sizing: border-box;
@@ -110,11 +109,13 @@
 }
 .bg-update {
   --border-radius: 50px;
-  --background: #00a2e1;
   --background-hover: #00a2e1;
   --background-activated: #00a2e1;
   color: white;
   gap: 8px;
+  --background: #00a2e1;
+  --background-hover: #00a2e1;
+  --background-activated: #00a2e1;
 }
 .btn-container {
   width: 100%;
@@ -122,4 +123,15 @@
 }
 .icon-space {
   font-size: 20px;
+}
+
+
+
+.header-button {
+  --color: black;
+  --background: transparent;
+}
+
+ion-title {
+  color: black;
 }

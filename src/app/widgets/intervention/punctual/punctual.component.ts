@@ -16,13 +16,13 @@ import {trigger, state, style, transition, animate, query, stagger, keyframes} f
   standalone: false,
   animations: [
     // Card entrance animation - staggered fade in from bottom
-    trigger("cardAnimation", [
-      transition(
-        ":enter",
-        [style({opacity: 0, transform: "translateY(30px)"}), animate("400ms {{delay}}ms cubic-bezier(0.35, 0, 0.25, 1)", style({opacity: 1, transform: "translateY(0)"}))],
-        {params: {delay: 0}}
-      )
-    ]),
+    // trigger("cardAnimation", [
+    //   transition(
+    //     ":enter",
+    //     [style({opacity: 0, transform: "translateY(30px)"}), animate("400ms {{delay}}ms cubic-bezier(0.35, 0, 0.25, 1)", style({opacity: 1, transform: "translateY(0)"}))],
+    //     {params: {delay: 0}}
+    //   )
+    // ]),
 
     // Team member list animation - staggered entrance
     trigger("listAnimation", [

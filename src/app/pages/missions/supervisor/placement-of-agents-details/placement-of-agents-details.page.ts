@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, ElementRef, OnDestroy, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
@@ -19,7 +19,8 @@ export class PlacementOfAgentsDetailsPage implements OnInit, OnDestroy {
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
     private translationService: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private el: ElementRef
   ) {}
   ngOnDestroy(): void {
     if (this.refreshEvent) {
@@ -43,6 +44,21 @@ export class PlacementOfAgentsDetailsPage implements OnInit, OnDestroy {
         this.location.back();
       }
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   async getPlannings() {
