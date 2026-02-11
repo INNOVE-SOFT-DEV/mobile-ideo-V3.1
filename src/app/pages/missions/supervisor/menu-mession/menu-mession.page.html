@@ -199,12 +199,9 @@
       </ion-card-title>
       <ion-card-subtitle><ion-chip class="anumation-block cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="anumation-block cls-desc" [innerHTML]="planning?.note"></ion-card-content>
+    <ion-card-content class="anumation-block cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
   </ion-card>
-  <ion-card class="anumation-block cls-ion-card-notice">
-    <ion-card-content class="cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
-  </ion-card>
-  <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
+   <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
     <ion-card-header>
       <ion-card-title class="anumation-block mission-text">{{'Noticed' | translate}}</ion-card-title>
     </ion-card-header>
