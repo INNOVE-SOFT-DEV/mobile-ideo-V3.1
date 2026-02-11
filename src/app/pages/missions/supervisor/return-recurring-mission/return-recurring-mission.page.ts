@@ -165,18 +165,16 @@ export class ReturnRecurringMissionPage implements OnInit, AfterViewChecked {
     }
   }
   ionViewDidEnter() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+    const blocks = this.el.nativeElement.querySelectorAll(".anumation-block");
 
-      blocks.forEach((block, index) => {
+    blocks.forEach((block: HTMLElement, index: number) => {
+      if (!block.classList.contains("animated-done")) {
         setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
           block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
+          block.classList.add("animate__animated", "animate__fadeInUp", "animated-done");
+        }, index * 80);
+      }
+    });
   }
   formatDuration(seconds: number): string {
     const mins = Math.floor(seconds / 60);
