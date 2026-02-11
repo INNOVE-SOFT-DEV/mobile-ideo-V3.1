@@ -123,21 +123,18 @@ ion-card {
 .cls-chip-agent-name {
   background-color: #ffceaa;
   font-family: Montserrat, sans-serif;
-  font-size: 16px;
   font-weight: 700;
   color: #233341;
 }
 .cls-chip-m-name {
   background-color: #cdf3ff;
   font-family: Montserrat, sans-serif;
-  font-size: 16px;
   font-weight: 700;
   color: #233341;
 }
 .cls-chip-f-name {
   background-color: #d6bdff;
   font-family: Montserrat, sans-serif;
-  font-size: 16px;
   font-weight: 700;
   color: #233341;
 }
@@ -164,7 +161,6 @@ ion-card {
 .c-text {
   margin: 0;
   font-family: Montserrat, sans-serif;
-  font-size: 18px;
   font-weight: 700;
   color: #233341;
 }
@@ -258,10 +254,8 @@ ion-col.custom-block {
   margin-top: 30px;
 }
 .wrap-text {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
 }
 .anumation-block {
   opacity: 0;
