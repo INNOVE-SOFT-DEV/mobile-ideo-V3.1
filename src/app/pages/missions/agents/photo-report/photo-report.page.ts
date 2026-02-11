@@ -80,8 +80,12 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     Network.addListener("networkStatusChange", async status => {
       this.isConneted = status.connected;
+      console.log(this.isConneted ,"isconncted changed");
+      
     });
     this.isConneted = (await Network.getStatus()).connected;
+    console.log(this.isConneted , "is conncected init ");
+    
     await this.loadingService.dimiss();
 
     let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
