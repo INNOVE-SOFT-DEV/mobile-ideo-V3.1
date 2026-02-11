@@ -15,8 +15,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="!isSliderOpen">
-  <div class="anumation-block  cls-details">
-    <div class="anumation-block  date-select-container">
+  <div class=" animate__animated animate__fadeInUp  cls-details">
+    <div class=" animate__animated animate__fadeInUp  date-select-container">
       <ion-item lines="none" class=" custom-date-item" (click)="showPicker = !showPicker">
         <ion-input [value]="formattedDate" readonly class=" custom-date-input"></ion-input>
         <ion-icon name="calendar-outline" slot="end" class=" calendar-icon"></ion-icon>
@@ -25,7 +25,7 @@
       <ion-datetime *ngIf="showPicker" presentation="date" [(ngModel)]="selectedDate" (ionChange)="onDateChange($event)" class="  date-picker"></ion-datetime>
     </div>
 
-    <div class="anumation-block center-toggle" *ngIf="!isNotice">
+    <div class=" animate__animated animate__fadeInUp center-toggle" *ngIf="!isNotice">
       <div class="  toggle-option left-option" (click)="noticesOrPhotos(false)">
         <span class="  text-site">{{'Photos' | translate}}</span>
       </div>
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="anumation-block  center-toggle" *ngIf="isNotice">
+    <div class=" animate__animated animate__fadeInUp  center-toggle" *ngIf="isNotice">
       <div class="  toggle-option right-option" (click)="noticesOrPhotos(false)">
         <span class="  text-agent">{{'Photos' | translate}}</span>
       </div>
@@ -44,7 +44,7 @@
     </div>
 
     <ng-container *ngIf="!isNotice">
-      <div class="anumation-block  custom-select-wrapper" (click)="toggleDropdown()">
+      <div class=" animate__animated animate__fadeInUp  custom-select-wrapper" (click)="toggleDropdown()">
         <div class="  select-left">{{ selectedOption }}</div>
         <div class="  select-right">
           <span class="  select-text">Select</span>
@@ -66,7 +66,7 @@
         </ion-row>
       </ion-grid>
 
-      <div class="anumation-block  empty-container" *ngIf="!display || display.length === 0">
+      <div class=" animate__animated animate__fadeInUp  empty-container" *ngIf="!display || display.length === 0">
         <img src="assets/img/emty-icon.png" />
         <p class="  cls-empty-title">{{'No data found' | translate}}</p>
         <p class="  cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
@@ -93,7 +93,7 @@
       </ion-card>
 
       <ng-container *ngIf="voices?.length == 0 && notes?.length == 0">
-        <div class="anumation-block  empty-container">
+        <div class=" animate__animated animate__fadeInUp  empty-container">
           <img src="assets/img/emty-icon.png" />
           <p class="  cls-empty-title">{{'No data found' | translate}}</p>
           <p class="  cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
