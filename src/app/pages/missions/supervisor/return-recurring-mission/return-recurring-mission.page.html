@@ -52,11 +52,11 @@
         </div>
       </div>
 
-      <ion-list *ngIf="showDropdown" class="anumation-block  select-options">
+      <ion-list *ngIf="showDropdown" class="  select-options">
         <ion-item button detail="false" *ngFor="let option of options" (click)="selectOption(option)">{{ option }}</ion-item>
       </ion-list>
 
-      <ion-grid class="anumation-block  custom-image-grid">
+      <ion-grid class="acustom-image-grid">
         <ion-row>
           <ion-col size="6" *ngFor="let img of display; let i = index" (click)="openSlides(i)">
             <div class="  image-wrapper">
@@ -74,7 +74,7 @@
     </ng-container>
 
     <ng-container *ngIf="isNotice">
-      <ion-card class="anumation-block  custom-card" *ngIf="notes && notes.length ">
+      <ion-card class="custom-card" *ngIf="notes && notes.length ">
         <div *ngIf="notes.length > 0" class="  card-title">Notes</div>
         <ng-container *ngIf="notes.length > 0">
           <ion-item *ngFor="let item of notes">
@@ -83,7 +83,7 @@
         </ng-container>
       </ion-card>
 
-      <ion-card class="anumation-block  custom-card voice" *ngIf="voices && voices?.length">
+      <ion-card class=" custom-card voice" *ngIf="voices && voices?.length">
         <div *ngFor="let item of voices ; let i = index" class="  card-title voice-item">
           <ion-button class="  play" (click)="playRecordingAgain(i)">
             <ion-icon class="  play-icon" name="play-circle-outline" slot="start"></ion-icon>
