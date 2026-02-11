@@ -17,6 +17,7 @@ import {ToastControllerService} from "../../toast-controller/toast-controller.se
 })
 export class MainComponent implements OnInit {
   @Input() counts: any;
+  @Input() punctuals: any;
   user = this.authService.getCurrentUser();
   imageUrl: string | any = null;
   detectedTexts: string[] = [];
@@ -61,7 +62,7 @@ export class MainComponent implements OnInit {
   }
   goSuperVisorAgentMissions() {
     this.router.navigate(["supervisor-plannings"], {
-      state: {counts: this.counts}
+      state: {counts: this.counts , }
     });
   }
 

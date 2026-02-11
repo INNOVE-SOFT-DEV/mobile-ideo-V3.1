@@ -199,9 +199,9 @@
       </ion-card-title>
       <ion-card-subtitle><ion-chip class="cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="cls-desc" [innerHTML]="planning?.note"></ion-card-content>
+    <ion-card-content class="cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
   </ion-card>
-  <ion-card class="cls-ion-card-notice">
+  <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
     <ion-card-header>
       <ion-card-title class="mission-text">{{'Noticed' | translate}}</ion-card-title>
     </ion-card-header>
@@ -210,7 +210,7 @@
   <div class="cls-title-contact">
     <p class="cls-p-contact">{{'Team' | translate}}</p>
   </div>
-  <ion-card class="cls-ion-crad-c">
+  <ion-card class="cls-ion-crad-c" *ngIf="supervisors.length > 0">
     <ion-card-content>
       <ion-grid>
         <ion-row class="align-center" *ngFor="let item of supervisors">
@@ -249,7 +249,7 @@
               <ion-col size="6">
                 <ion-grid>
                   <ion-row>
-                    <ion-col size="6">
+                    <ion-col size="6" (click)="notice(agent)">
                       <img src="../../../../assets/img/btn-notice.png" />
                     </ion-col>
                     <ion-col size="6">

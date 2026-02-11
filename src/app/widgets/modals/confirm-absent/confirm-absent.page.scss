@@ -1,0 +1,131 @@
+ion-content {
+    --ion-background-color: #F4F9FF;
+    text-align: center;
+    color: #233341;
+    font-family: Montserrat,sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.24px;
+    margin-bottom: 100px;
+}
+
+
+#header_title {
+    color: var(--IDEO-SAS-Text-dark, #233341);
+    font-family: Montserrat,sans-serif;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px;
+    /* 118.182% */
+    letter-spacing: -0.33px;
+}
+
+.popover-inner {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    /* Adjust the border radius as needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.agent_name {
+    color: var(--IDEO-SAS-Text-dark, #233341);
+    font-family: Montserrat,sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.27px;
+}
+
+.role {
+    color: #233341;
+    font-family: Montserrat,sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.21px;
+    text-align: center;
+}
+
+.card_header {
+    text-align: center;
+    border-radius: 14px;
+    // background: linear-gradient(180deg, rgba(0, 0, 0, 0.40) 35.03%, rgba(0, 0, 0, 0.40) 59.72%), url("../../../../assets/images/sigma.png") center center / cover no-repeat;
+    width: 90%;
+    color: #FFF;
+}
+
+.row_cancel {
+    border-radius: 25px;
+    border: 0px;
+    background-color: #FFCDCD;
+    color: #233341;
+    margin: 0 auto;
+
+    font-family: Montserrat,sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.3px;
+}
+
+.btn_cancel {
+    border: 0px;
+    background-color: #FFCDCD;
+    color: #233341;
+    margin: 0 auto;
+
+    font-family: Montserrat,sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.3px;
+}
+
+.row_confirm {
+    border-radius: 25px;
+    border: 0px;
+    background-color: #CDFFED;
+    color: #233341;
+    margin: 0 auto;
+
+    font-family: Montserrat,sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.3px;
+}
+
+.btn_confirm {
+    border-radius: 25px;
+    border: 0px;
+    background-color: #CDFFED;
+    color: #233341;
+    margin: 0 auto;
+
+    font-family: Montserrat,sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.3px;
+}
+
+#title_absence {
+    color: #233341;
+    font-family: Montserrat,sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px;
+    /* 118.182% */
+    letter-spacing: -0.33px;
+}
