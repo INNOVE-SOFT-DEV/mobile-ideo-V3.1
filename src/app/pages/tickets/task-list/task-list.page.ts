@@ -4,6 +4,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Subject, Subscription, switchMap, takeUntil} from "rxjs";
 import {TicketService} from "src/app/pages/tickets/ticket.service";
 import {AuthService} from "../../login/service/auth.service";
+import {AfterViewInit, ElementRef} from "@angular/core";
+
 @Component({
   selector: "app-task-list",
   templateUrl: "./task-list.page.html",
@@ -16,7 +18,8 @@ export class TaskListPage implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private taskmanagerService: TicketService,
-    private authService: AuthService
+    private authService: AuthService,
+    private el: ElementRef
   ) {}
   tasks: any = [];
   data: any[] = [];
@@ -50,6 +53,21 @@ export class TaskListPage implements OnInit, OnDestroy {
         },
         error: err => console.error(err)
       });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   ngOnDestroy() {

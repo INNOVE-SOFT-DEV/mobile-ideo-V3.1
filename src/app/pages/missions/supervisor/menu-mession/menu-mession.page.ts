@@ -12,6 +12,7 @@ import {OcrScannerPage} from "src/app/pages/ocr-scanner/ocr-scanner.page";
 import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
+import {AfterViewInit, ElementRef} from "@angular/core";
 import { ConfirmAbsentPage } from "src/app/widgets/modals/confirm-absent/confirm-absent.page";
 
 @Component({
@@ -45,6 +46,7 @@ export class MenuMessionPage implements OnInit {
     private ocrService: OcrService,
     private toast: ToastControllerService,
     private modalCtrl: ModalController,
+    private el: ElementRef
         private popoverController: PopoverController,
 
   ) {}
@@ -67,6 +69,21 @@ export class MenuMessionPage implements OnInit {
     this.address = [address.postal_code, address.street, address.complement, address.city, address.country]
       .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
       .join(", ");
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 20);
+      });
+    }, 200);
   }
 
   createTicket() {

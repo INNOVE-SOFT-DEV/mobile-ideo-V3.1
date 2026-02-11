@@ -15,47 +15,47 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="!sliderOpen">
-  <div class="cls-details" *ngFor="let item of returns">
-    <div class="vehicle-label">{{'Vehicle1' | translate}}</div>
-    <ion-card class="custom-card">
-      <div class="card-header">
-        <img [src]="item?.material.photo?.url" alt="Vehicle photo" class="vehicle-image" />
-        <div class="car-info">
-          <h2 class="car-name">{{item?.material.name}}</h2>
-          <p class="car-name-user">{{item?.user.first_name + ' ' + item?.user.last_name + ' ' }}</p>
+  <div class="anumation-block cls-details" *ngFor="let item of returns">
+    <div class="anumation-block vehicle-label">{{'Vehicle1' | translate}}</div>
+    <ion-card class="anumation-block custom-card">
+      <div class="anumation-block card-header">
+        <img [src]="item?.material.photo?.url" alt="Vehicle photo" class="anumation-block vehicle-image" />
+        <div class="anumation-block car-info">
+          <h2 class="anumation-block car-name">{{item?.material.name}}</h2>
+          <p class="anumation-block car-name-user">{{item?.user.first_name + ' ' + item?.user.last_name + ' ' }}</p>
         </div>
       </div>
     </ion-card>
 
-    <div class="vehicle-label">{{'Vehicle return history' | translate}}</div>
-    <ion-card class="custom-card" *ngFor="let raison of item?.return_raison.split(',')">
-      <div class="card-header">
-        <img [src]="getRaisonIcon(raison)" class="icon-image" />
+    <div class="anumation-block vehicle-label">{{'Vehicle return history' | translate}}</div>
+    <ion-card class="anumation-block custom-card" *ngFor="let raison of item?.return_raison.split(',')">
+      <div class="anumation-block card-header">
+        <img [src]="getRaisonIcon(raison)" class="anumation-block icon-image" />
 
-        <div class="car-info">
-          <h2 class="car-name">
+        <div class="anumation-block car-info">
+          <h2 class="anumation-block car-name">
             {{ raison == 'has_issue' ? "Défaut" : "" }} {{ raison == 'not_functional' ? "Non roulat" : "" }} {{ raison == 'get_vehicule' ? "Atrribution" : "" }} {{ raison ==
             'not_adapted' ? "Non adapter" : "" }} {{ raison == 'first' ? "Premier" : "" }}
           </h2>
-          <span class="status-badge">{{item?.date}}</span>
+          <span class="anumation-block status-badge">{{item?.date}}</span>
         </div>
-        <ion-icon name="eye-outline" class="arrow-icon" (click)="openSliderModal(item, raison)"></ion-icon>
+        <ion-icon name="eye-outline" class="anumation-block arrow-icon" (click)="openSliderModal(item, raison)"></ion-icon>
       </div>
     </ion-card>
   </div>
 </ion-content>
 <ion-content *ngIf="sliderOpen">
   <app-glide [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
-  <div *ngFor="let voice of voices; let i = index" class="flex">
-    <ion-button class="custom-button-update bg-record-lisen grid-item" (click)="playRecordingAgain(i)">
-      <ion-icon class="play-icon" name="play-circle-outline" slot="start"></ion-icon>
+  <div *ngFor="let voice of voices; let i = index" class="anumation-block flex">
+    <ion-button class="anumation-block custom-button-update bg-record-lisen grid-item" (click)="playRecordingAgain(i)">
+      <ion-icon class="anumation-block play-icon" name="play-circle-outline" slot="start"></ion-icon>
     </ion-button>
-    <div #waveformContainer [id]="'waveform-' + i" class="grid-item waveform"></div>
+    <div #waveformContainer [id]="'waveform-' + i" class="anumation-block grid-item waveform"></div>
   </div>
 
-  <div class="blue-box">
-    <ion-list class="gradient-list">
-      <ion-item *ngFor="let note of notes" class="gradient-item">{{ note }}</ion-item>
+  <div class="anumation-block blue-box">
+    <ion-list class="anumation-block gradient-list">
+      <ion-item *ngFor="let note of notes" class="anumation-block gradient-item">{{ note }}</ion-item>
     </ion-list>
   </div>
 </ion-content>

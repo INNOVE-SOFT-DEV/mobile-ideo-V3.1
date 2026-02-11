@@ -20,7 +20,7 @@
       <div class="task-header">
         <h3>Tickets</h3>
       </div>
-      <div class="task-item" (click)="addTicket(task)" *ngFor="let task of tasks">
+      <div class="task-item custom-block" (click)="addTicket(task)" *ngFor="let task of tasks">
         <div class="task-col-left" *ngIf="task.is_archived == false">
           <div class="task-row">
             <span class="task-title">
@@ -41,13 +41,13 @@
         </div>
       </div>
 
-      <div #emprtyState class="empty-state" *ngIf="tasks.length === 0">
+      <div #emprtyState class="empty-state custom-block" *ngIf="tasks.length === 0">
         <p class="empty-text">Aucun ticket disponible</p>
       </div>
     </div>
   </div>
 </ion-content>
-<ion-button class="fixed-btn" expand="block" (click)="createNewTicket( )">
+<ion-button class="fixed-btn custom-block" expand="block" (click)="createNewTicket( )">
   <div class="btn-content">
     <img src="assets/img/add.png" class="btn-img" />
     <span class="btn-text">Ajouter une ticket</span>

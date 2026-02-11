@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
@@ -39,7 +39,8 @@ export class ReportsPhotosPage implements OnInit {
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
     private translateService: TranslateService,
-    private photoReportService: PhotoReportService
+    private photoReportService: PhotoReportService,
+    private el: ElementRef
   ) {}
 
   onChange(event: any) {
@@ -65,6 +66,21 @@ export class ReportsPhotosPage implements OnInit {
       this.images = [];
       this.imagesCamions = [];
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   async ngOnInit() {

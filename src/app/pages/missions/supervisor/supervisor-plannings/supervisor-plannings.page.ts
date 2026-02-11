@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, ElementRef, OnDestroy, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
@@ -32,7 +32,8 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
     private missionService: MissionService,
     private popoverController: PopoverController,
     private translateService: TranslateService,
-    private loadingService: LoadingControllerService
+    private loadingService: LoadingControllerService,
+    private el: ElementRef
   ) {}
 
   async ngOnInit() {
@@ -50,7 +51,20 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
       this.refreshEvent.unsubscribe();
     }
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
 
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
+  }
     formatPlannings(data: any) {
     this.noSchedule = 0;
     return data?.map((el: any) => {

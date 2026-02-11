@@ -6,6 +6,7 @@ import {LoadingControllerService} from "src/app/widgets/loading-controller/loadi
 import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs";
 import {environment} from "src/environments/environment";
+import {AfterViewInit, ElementRef} from "@angular/core";
 
 @Component({
   selector: "app-placement-of-agents",
@@ -25,7 +26,8 @@ export class PlacementOfAgentsPage implements OnInit, OnDestroy {
     private router: Router,
     private missionService: MissionService,
     private loadingService: LoadingControllerService,
-    private translationService: TranslateService
+    private translationService: TranslateService,
+    private el: ElementRef
   ) {}
   ngOnDestroy(): void {
     if (this.refreshEvent) {
@@ -53,6 +55,20 @@ export class PlacementOfAgentsPage implements OnInit, OnDestroy {
         await this.loadingService.dimiss();
       }
     });
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
+
+      blocks.forEach((block, index) => {
+        setTimeout(() => {
+          block.classList.add("animate__animated", "animate__fadeInUp");
+          block.style.opacity = "1";
+          block.style.transform = "translateY(0)";
+          block.style.animationDuration = "500ms";
+        }, index * 100);
+      });
+    }, 200);
   }
 
   placementOfAgentsDetails(agent: any) {

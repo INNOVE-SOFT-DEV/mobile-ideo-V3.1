@@ -5,7 +5,7 @@
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="center-title">{{ headerTitle | translate }}</ion-title>
+    <ion-title class="anumation-block center-title">{{ headerTitle | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon name="notifications-outline"></ion-icon>
@@ -15,92 +15,92 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card class="custom-card card">
-    <ion-card-content class="filter-container">
-      <div class="input-container">
-        <ion-input placeholder="Rechercher..." #search_input [formControl]="searchControl" class="custom-input"></ion-input>
-        <ion-icon name="search-outline" class="input-icon"></ion-icon>
+  <ion-card class="anumation-block custom-card card">
+    <ion-card-content class="anumation-block filter-container">
+      <div class="anumation-block input-container">
+        <ion-input placeholder="Rechercher..." #search_input [formControl]="searchControl" class="anumation-block custom-input"></ion-input>
+        <ion-icon name="search-outline" class="anumation-block input-icon"></ion-icon>
       </div>
-      <div class="header-container">
-        <div class="month-block" (click)="openPopover($event)">
-          <span class="month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
-          <ion-icon name="calendar-outline" class="icon-calendar"></ion-icon>
+      <div class="anumation-block header-container">
+        <div class="anumation-block month-block" (click)="openPopover($event)">
+          <span class="anumation-block month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
+          <ion-icon name="calendar-outline" class="anumation-block icon-calendar"></ion-icon>
         </div>
 
-        <div *ngIf="plannings.length" class="document-block">{{plannings.length}}</div>
+        <div *ngIf="plannings.length" class="anumation-block document-block">{{plannings.length}}</div>
       </div>
-      <div class="button-container">
-        <ion-button expand="block" (click)="getByDate()" class="custom-button">{{'Filter' | translate}}</ion-button>
+      <div class="anumation-block button-container">
+        <ion-button expand="block" (click)="getByDate()" class="anumation-block custom-button">{{'Filter' | translate}}</ion-button>
       </div>
     </ion-card-content>
   </ion-card>
 
   <ng-container *ngIf="type =='regular'">
-    <div class="center-toggle" *ngIf="!isAgent">
-      <div class="toggle-option left-option" (click)="siteOrAgent(false)">
-        <ion-icon name="newspaper-outline" class="icon-site"></ion-icon>
-        <span class="text-site">{{'Site' | translate}}</span>
+    <div class="anumation-block center-toggle" *ngIf="!isAgent">
+      <div class="anumation-block toggle-option left-option" (click)="siteOrAgent(false)">
+        <ion-icon name="newspaper-outline" class="anumation-block icon-site"></ion-icon>
+        <span class="anumation-block text-site">{{'Site' | translate}}</span>
       </div>
-      <div class="toggle-option right-option" (click)="siteOrAgent(true)">
-        <span class="text-agent">{{'Agent' | translate}}</span>
-        <ion-icon name="person-outline" class="icon-agent"></ion-icon>
+      <div class="anumation-block toggle-option right-option" (click)="siteOrAgent(true)">
+        <span class="anumation-block text-agent">{{'Agent' | translate}}</span>
+        <ion-icon name="person-outline" class="anumation-block icon-agent"></ion-icon>
       </div>
     </div>
 
-    <div class="center-toggle" *ngIf="isAgent">
-      <div class="toggle-option right-option" (click)="siteOrAgent(false)">
-        <ion-icon name="newspaper-outline" class="icon-agent"></ion-icon>
-        <span class="text-agent">{{'Site' | translate}}</span>
+    <div class="anumation-block center-toggle" *ngIf="isAgent">
+      <div class="anumation-block toggle-option right-option" (click)="siteOrAgent(false)">
+        <ion-icon name="newspaper-outline" class="anumation-block icon-agent"></ion-icon>
+        <span class="anumation-block text-agent">{{'Site' | translate}}</span>
       </div>
-      <div class="toggle-option left-option" (click)="siteOrAgent(true)">
-        <span class="text-site">{{'Agent' | translate}}</span>
-        <ion-icon name="person-outline" class="icon-site"></ion-icon>
+      <div class="anumation-block toggle-option left-option" (click)="siteOrAgent(true)">
+        <span class="anumation-block text-site">{{'Agent' | translate}}</span>
+        <ion-icon name="person-outline" class="anumation-block icon-site"></ion-icon>
       </div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="plannings.length == noSchedule">
-    <div class="empty-container">
+    <div class="anumation-block empty-container">
       <img src="assets/img/emty-icon.png" />
-      <p class="cls-empty-title">{{'No data found' | translate}}</p>
-      <p class="cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
+      <p class="anumation-block cls-empty-title">{{'No data found' | translate}}</p>
+      <p class="anumation-block cls-empty-d">{{'It appears that this list is currently empty' | translate}}</p>
     </div>
   </ng-container>
 
-  <div class="bi"></div>
+  <div class="anumation-block bi"></div>
   <ng-container>
-    <div class="item-missions" (click)="menuMession(item)" *ngFor="let item of plannings; let i = index">
-      <ion-card class="card" *ngIf="item?.today_schedule">
-        <ion-card-header class="card-header">
+    <div class="anumation-block item-missions" (click)="menuMession(item)" *ngFor="let item of plannings; let i = index">
+      <ion-card class="anumation-block card" *ngIf="item?.today_schedule">
+        <ion-card-header class="anumation-block card-header">
           <ion-card-title>
             <ion-grid>
               <ion-row>
                 <ion-col size="9" push="3">
-                  <p class="name-campany">{{ item.intervention?.name }}</p>
+                  <p class="anumation-block name-campany">{{ item.intervention?.name }}</p>
                 </ion-col>
-                <ion-col class="logo" size="3" pull="9">
+                <ion-col class="anumation-block logo" size="3" pull="9">
                   <img
                     src="{{
              item?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'
             }}"
-                    class="logo"
+                    class="anumation-block logo"
                   />
                 </ion-col>
               </ion-row>
             </ion-grid>
-            <ion-chip color="tertiary" class="custom-chip">
+            <ion-chip color="tertiary" class="anumation-block custom-chip">
               <ion-icon name="people-outline"></ion-icon>
               {{ "team" | translate }}
             </ion-chip>
           </ion-card-title>
         </ion-card-header>
 
-        <ion-card-content class="card-content">
-          <ion-list class="list">
+        <ion-card-content class="anumation-block card-content">
+          <ion-list class="anumation-block list">
             <ion-item *ngFor="let agent of item?.team.slice(0, 2); let last = last" [attr.lines]="item.team.length <= 2 && last ? 'none' : null">
               <ng-container *ngIf="!agent.manager">
                 <ion-thumbnail *ngIf="agent.is_teamleader" slot="start">
-                  <div class="avatar-container">
+                  <div class="anumation-block avatar-container">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M20 21C20 18.2386 16.4183 16 12 16C7.58172 16 4 18.2386 4 21" stroke="#233341" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                       <path
@@ -114,19 +114,19 @@
                     </svg>
                   </div>
                 </ion-thumbnail>
-                <ion-grid *ngIf="agent.is_teamleader" class="custom-grid">
+                <ion-grid *ngIf="agent.is_teamleader" class="anumation-block custom-grid">
                   <ion-row>
                     <ion-col size="12">
-                      <p class="name-agent wrap-text">
+                      <p class="anumation-block name-agent wrap-text">
                         {{ agent.first_name }} {{ agent.last_name }}
                         <br />
-                        <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                        <span *ngIf="agent.vehicule" class="anumation-block job-agent wrap-text">{{ agent.vehicule.name }}</span>
                       </p>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
                 <ion-thumbnail *ngIf="agent.is_driver && !agent.is_teamleader" slot="start">
-                  <div class="avatar-container">
+                  <div class="anumation-block avatar-container">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
@@ -138,19 +138,19 @@
                     </svg>
                   </div>
                 </ion-thumbnail>
-                <ion-grid *ngIf="agent.is_driver && !agent.is_teamleader" class="custom-grid">
+                <ion-grid *ngIf="agent.is_driver && !agent.is_teamleader" class="anumation-block custom-grid">
                   <ion-row>
                     <ion-col size="12">
-                      <p class="name-agent wrap-text">
+                      <p class="anumation-block name-agent wrap-text">
                         {{ agent.first_name }} {{ agent.last_name }}
                         <br />
-                        <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                        <span *ngIf="agent.vehicule" class="anumation-block job-agent wrap-text">{{ agent.vehicule.name }}</span>
                       </p>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
                 <ion-thumbnail *ngIf="!agent.is_driver && !agent.is_teamleader " slot="start">
-                  <div class="avatar-container">
+                  <div class="anumation-block avatar-container">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
@@ -162,13 +162,13 @@
                     </svg>
                   </div>
                 </ion-thumbnail>
-                <ion-grid *ngIf="!agent.is_driver && !agent.is_teamleader " class="custom-grid">
+                <ion-grid *ngIf="!agent.is_driver && !agent.is_teamleader " class="anumation-block custom-grid">
                   <ion-row>
                     <ion-col size="12">
-                      <p class="name-agent wrap-text">
+                      <p class="anumation-block name-agent wrap-text">
                         {{ agent.first_name }} {{ agent.last_name }}
                         <br />
-                        <span class="job-agent wrap-text">{{ "company name" | translate }}</span>
+                        <span class="anumation-block job-agent wrap-text">{{ "company name" | translate }}</span>
                       </p>
                     </ion-col>
                   </ion-row>
@@ -177,7 +177,7 @@
               </ng-container>
               <ng-container *ngIf="agent.manager">
                 <ion-thumbnail slot="start">
-                  <div class="avatar-container">
+                  <div class="anumation-block avatar-container">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
@@ -189,13 +189,13 @@
                     </svg>
                   </div>
                 </ion-thumbnail>
-                <ion-grid class="custom-grid">
+                <ion-grid class="anumation-block custom-grid">
                   <ion-row>
                     <ion-col size="12">
-                      <p class="name-agent wrap-text">
+                      <p class="anumation-block name-agent wrap-text">
                         {{ agent.first_name }} {{ agent.last_name }}
                         <br />
-                        <span class="job-agent wrap-text">{{ agent.company_name}}</span>
+                        <span class="anumation-block job-agent wrap-text">{{ agent.company_name}}</span>
                       </p>
                     </ion-col>
                   </ion-row>
@@ -203,11 +203,11 @@
               </ng-container>
             </ion-item>
 
-            <div class="expandable-content" [class.expanded]="item.showDetails" *ngIf="item.team.length > 2">
-              <ion-item *ngFor="let agent of item?.team.slice(2); let last = last" [attr.lines]="last ? 'none' : null" class="expandable-item">
+            <div class="anumation-block expandable-content" [class.expanded]="item.showDetails" *ngIf="item.team.length > 2">
+              <ion-item *ngFor="let agent of item?.team.slice(2); let last = last" [attr.lines]="last ? 'none' : null" class="anumation-block expandable-item">
                 <ng-container *ngIf="!agent.manager">
                   <ion-thumbnail *ngIf="agent.is_teamleader" slot="start">
-                    <div class="avatar-container">
+                    <div class="anumation-block avatar-container">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20 21C20 18.2386 16.4183 16 12 16C7.58172 16 4 18.2386 4 21" stroke="#233341" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         <path
@@ -221,19 +221,19 @@
                       </svg>
                     </div>
                   </ion-thumbnail>
-                  <ion-grid *ngIf="agent.is_teamleader" class="custom-grid">
+                  <ion-grid *ngIf="agent.is_teamleader" class="anumation-block custom-grid">
                     <ion-row>
                       <ion-col size="12">
-                        <p class="name-agent wrap-text">
+                        <p class="anumation-block name-agent wrap-text">
                           {{ agent.first_name }} {{ agent.last_name }}
                           <br />
-                          <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                          <span *ngIf="agent.vehicule" class="anumation-block job-agent wrap-text">{{ agent.vehicule.name }}</span>
                         </p>
                       </ion-col>
                     </ion-row>
                   </ion-grid>
                   <ion-thumbnail *ngIf="agent.is_driver && !agent.is_teamleader" slot="start">
-                    <div class="avatar-container">
+                    <div class="anumation-block avatar-container">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
@@ -245,19 +245,19 @@
                       </svg>
                     </div>
                   </ion-thumbnail>
-                  <ion-grid *ngIf="agent.is_driver && !agent.is_teamleader" class="custom-grid">
+                  <ion-grid *ngIf="agent.is_driver && !agent.is_teamleader" class="anumation-block custom-grid">
                     <ion-row>
                       <ion-col size="12">
-                        <p class="name-agent wrap-text">
+                        <p class="anumation-block name-agent wrap-text">
                           {{ agent.first_name }} {{ agent.last_name }}
                           <br />
-                          <span *ngIf="agent.vehicule" class="job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                          <span *ngIf="agent.vehicule" class="anumation-block job-agent wrap-text">{{ agent.vehicule.name }}</span>
                         </p>
                       </ion-col>
                     </ion-row>
                   </ion-grid>
                   <ion-thumbnail *ngIf="!agent.is_driver && !agent.is_teamleader " slot="start">
-                    <div class="avatar-container">
+                    <div class="anumation-block avatar-container">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
@@ -269,13 +269,13 @@
                       </svg>
                     </div>
                   </ion-thumbnail>
-                  <ion-grid *ngIf="!agent.is_driver && !agent.is_teamleader " class="custom-grid">
+                  <ion-grid *ngIf="!agent.is_driver && !agent.is_teamleader " class="anumation-block custom-grid">
                     <ion-row>
                       <ion-col size="12">
-                        <p class="name-agent wrap-text">
+                        <p class="anumation-block name-agent wrap-text">
                           {{ agent.first_name }} {{ agent.last_name }}
                           <br />
-                          <span class="job-agent wrap-text">{{ "company name" | translate }}</span>
+                          <span class="anumation-block job-agent wrap-text">{{ "company name" | translate }}</span>
                         </p>
                       </ion-col>
                     </ion-row>
@@ -284,7 +284,7 @@
                 </ng-container>
                 <ng-container *ngIf="agent.manager">
                   <ion-thumbnail slot="start">
-                    <div class="avatar-container">
+                    <div class="anumation-block avatar-container">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
@@ -296,13 +296,13 @@
                       </svg>
                     </div>
                   </ion-thumbnail>
-                  <ion-grid class="custom-grid">
+                  <ion-grid class="anumation-block custom-grid">
                     <ion-row>
                       <ion-col size="12">
-                        <p class="name-agent wrap-text">
+                        <p class="anumation-block name-agent wrap-text">
                           {{ agent.first_name }} {{ agent.last_name }}
                           <br />
-                          <span class="job-agent wrap-text">{{ agent.company_name}}</span>
+                          <span class="anumation-block job-agent wrap-text">{{ agent.company_name}}</span>
                         </p>
                       </ion-col>
                     </ion-row>
@@ -313,24 +313,24 @@
           </ion-list>
         </ion-card-content>
 
-        <div class="show-more-container" *ngIf="item?.team.length > 2" (click)="toggleDetails(item); $event.stopPropagation()">
-          <p class="show-more-text">{{ item.showDetails ? ("Show less" | translate) : ("Show more" | translate) }}</p>
-          <ion-icon class="icon-show-more" [class.rotated]="item.showDetails" [name]="item.showDetails ? 'caret-up-circle-outline' : 'caret-down-circle-outline'"></ion-icon>
+        <div class="anumation-block show-more-container" *ngIf="item?.team.length > 2" (click)="toggleDetails(item); $event.stopPropagation()">
+          <p class="anumation-block show-more-text">{{ item.showDetails ? ("Show less" | translate) : ("Show more" | translate) }}</p>
+          <ion-icon class="anumation-block icon-show-more" [class.rotated]="item.showDetails" [name]="item.showDetails ? 'caret-up-circle-outline' : 'caret-down-circle-outline'"></ion-icon>
         </div>
       </ion-card>
     </div>
   </ng-container>
 
   <ng-container *ngIf="isAgent">
-    <div class="card-agent" *ngFor="let agent of planningsPerAgent; let i = index" (click)="goRegularPerAgent(agent)">
+    <div class="anumation-block card-agent" *ngFor="let agent of planningsPerAgent; let i = index" (click)="goRegularPerAgent(agent)">
       <ion-grid>
-        <ion-row class="ion-align-items-center">
+        <ion-row class="anumation-block ion-align-items-center">
           <ion-col size="auto">
-            <img [src]="agent?.photo?.url" alt="Agent" class="agent-img" />
+            <img [src]="agent?.photo?.url" alt="Agent" class="anumation-block agent-img" />
           </ion-col>
-          <ion-col class="agent-info">
-            <div class="agent-name">{{`${agent.first_name} ${agent.last_name}`}}</div>
-            <div class="agent-missions">{{agent.plannings.length}} {{agent.plannings.length > 1 ? 'missions' : 'mission'}}</div>
+          <ion-col class="anumation-block agent-info">
+            <div class="anumation-block agent-name">{{`${agent.first_name} ${agent.last_name}`}}</div>
+            <div class="anumation-block agent-missions">{{agent.plannings.length}} {{agent.plannings.length > 1 ? 'missions' : 'mission'}}</div>
           </ion-col>
         </ion-row>
       </ion-grid>
