@@ -26,7 +26,7 @@
       </div>
       <select [(ngModel)]="selectedOption" (change)="onChange($event)" class="select-native" name="select">
         <option value="Tous les agents">Tous les agents</option>
-        <option *ngFor="let agent of team" value="{{`${agent?.first_name} ${agent?.last_name}`}}">{{`${agent?.first_name} ${agent?.last_name}`}}</option>
+        <option *ngFor="let agent of team" value="{{agent?.full_name}}">{{agent?.full_name}}</option>
       </select>
     </div>
 
@@ -54,15 +54,18 @@
           </ng-container>
           <div class="image-grid">
             <div class="grid-item" *ngFor="let pair of images; let i = index ">
+              
+              <div class="label" *ngIf="pair?.agent != images[i-1]?.agent">{{pair?.agent}}</div>
               <div class="image-pair">
                 <div class="image-column" *ngIf="pair?.before?.image_url?.url">
                   <img [src]="pair.before.image_url.thumb" alt="Before" (click)="openSlides('photo_before', i)" />
-                  <div class="label">Before</div>
+                  <!-- <div class="label">Before</div> -->
                 </div>
 
                 <div class="image-column" *ngIf="pair?.after?.image_url?.url">
                   <img [src]="pair.after.image_url.thumb" alt="After" (click)="openSlides('photo_after', i)" />
-                  <div class="label">After</div>
+                  <!-- <div class="label">After</div> -->
+
                 </div>
               </div>
 

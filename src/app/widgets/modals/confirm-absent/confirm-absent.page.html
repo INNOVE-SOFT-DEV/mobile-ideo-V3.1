@@ -1,0 +1,90 @@
+<ion-content class="ion-padding">
+  <!--<p id="header_title">Confirmer l’absence de </p>-->
+
+  <ion-grid id="card_header" style="border: 1px solid #4a80b2; border-radius: 14px; text-align: center; min-width: 200px;">
+    <ion-row>
+      <ion-col class="agent_name">
+        {{agent?.first_name + ' ' + agent?.last_name}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <div class="role"
+          style="background-color: #cdf3ff; border-radius: 12px; width: 100px; height: 25px; padding: 5px; margin-top: 5px;">
+          {{agent?.company_name}}</div>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <p id="title_absence">Signaler ..</p>
+
+  <ion-grid style="background-color: #FFF; border-radius: 6px; padding: 0px;">
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-radio-group [(ngModel)]="is_absence">
+            <ion-item>
+              <ion-radio aria-label="Une absence" style="font-size: 15px; margin-left: 5px;" value="is_absence" (click)="radioClicked()">Une absence</ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox  aria-label="Un retard:"  style="font-size: 15px; margin-left: 5px;" [(ngModel)]="is_late" (ionChange)="checkboxChanged()">Un retard:</ion-checkbox>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox  aria-label="Manque d'EPI:"  style="font-size: 15px; margin-left: 5px;"  [(ngModel)]="is_without_EPI" (ionChange)="checkboxChanged()">Manque d'EPI:</ion-checkbox>
+            </ion-item>
+          </ion-radio-group>
+          <ion-item>
+            <ion-input [(ngModel)]="note" placeholder="Ajouter une remarque"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid id="card_header" style="border-radius: 14px; text-align: center;"  *ngIf="is_late == true">
+    <ion-row>
+      <ion-col style="font-size: 14px;">
+        Arrivée à
+      </ion-col>
+
+      <ion-col>
+        <ion-datetime-button (click)="openModal()" datetime="datetime"></ion-datetime-button>
+
+        <ion-modal [keepContentsMounted]="true" [isOpen]="modalOpen">
+          <ng-template>
+            <ion-datetime id="datetime" displayFormat="HH:mm"  [(ngModel)]="selectedTime" presentation="time"></ion-datetime>
+            <ion-button (click)="closeModal()">Fermer</ion-button>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid>
+    <ion-row class="row_confirm" style="margin-bottom: 10px;">
+      <ion-col style="text-align:center;" size="3">
+        <ion-icon name="checkmark-outline" style="font-size:25px;"></ion-icon>
+      </ion-col>
+      <ion-col style="text-align:center; padding-top: 7px;" size="2">
+        <input type="button" class="btn_confirm" style="color: #233341" value="Confirmer" (click)="confirmAbsent()">
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="row_cancel">
+      <ion-col style="text-align:center;" size="3">
+        <ion-icon name="close-outline" style="font-size:25px;"></ion-icon>
+      </ion-col>
+      <ion-col style="text-align:center; padding-top: 7px;" size="2">
+        <input type="button" class="btn_cancel" style="color: #233341" value="Annuler" (click)="closePopover()">
+      </ion-col>
+    </ion-row>
+
+
+
+  </ion-grid>
+
+</ion-content>

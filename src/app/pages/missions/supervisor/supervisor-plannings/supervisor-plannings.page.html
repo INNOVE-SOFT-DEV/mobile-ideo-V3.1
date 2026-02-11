@@ -21,7 +21,7 @@
     </div>
     <ion-button expand="block" (click)="getByDate()" class="custom-button">{{ "Filter" | translate }}</ion-button>
   </div>
-  <ng-container *ngIf="punctuals?.length == 0">
+  <ng-container *ngIf="punctuals.length == 0">
     <div class="empty-container">
       <img src="assets/img/emty-icon.png" />
       <p class="cls-empty-title">{{'No data found' | translate}}</p>

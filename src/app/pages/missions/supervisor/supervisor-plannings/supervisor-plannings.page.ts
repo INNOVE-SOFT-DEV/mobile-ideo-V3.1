@@ -23,6 +23,9 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   isTodayPlannings: boolean = true;
   laodingMessage: string = "Loading...";
   superVisors: any[] = [];
+  date: string = new Date().toISOString().split("T")[0];
+  noSchedule: number = 0;
+
 
   constructor(
     private location: Location,
@@ -48,12 +51,40 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
     }
   }
 
+    formatPlannings(data: any) {
+    this.noSchedule = 0;
+    return data?.map((el: any) => {
+      el.showDetails = false;
+      el.today_schedule = el?.schedules?.find((s: any) => s.date === this.date) || el?.schedule?.find((s: any) => s.date === this.date) || null;
+      el.today_schedule?.agents?.forEach((agent: any) => {
+        agent.first_name = agent.full_name.split(" ")[0];
+        agent.last_name = agent.full_name.split(" ")[1] || "";
+        agent.role = agent.role_name;
+      });
+      console.log(el.today_schedule)
+      
+
+      let subcontractors: any[] = [];
+      if (!el.today_schedule) {
+        this.noSchedule++;
+        return el;
+      }
+
+      el.today_schedule.subcontractors.forEach((sub: any) => {
+        sub.agents.forEach((agent: any) => subcontractors.push({...sub, ...agent}));
+      });
+
+      el.team = [...el.today_schedule.agents, ...subcontractors];
+      return el;
+    });
+  }
+
   async getAllMissions() {
     this.executed = true;
     await this.loadingService.present(this.laodingMessage);
     this.missionService.getPlannings(true, this.punctualDate, "punctual").subscribe(async (data: any) => {
-      this.superVisors = data.supervisors_contact;
-      this.punctuals = data.punctuals;
+      this.superVisors = data.punctuals?.supervisors
+      this.punctuals = this.formatPlannings (data.punctuals);
       await this.loadingService.dimiss();
       this.executed = false;
     });
