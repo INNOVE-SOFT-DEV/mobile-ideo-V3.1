@@ -78,13 +78,14 @@ export class MissionRepository implements MissionInterface {
     return this.http.post<any>(`${this.backendUrl}interventions/report`, data);
   }
 
-  getPlannings(isAgent: boolean, date?: string, type?: string): Observable<any> {
+  getPlannings(isAgent: boolean, date?: string, type?: string , our_missions?: boolean): Observable<any> {
     const cacheKey = `plannings_${date}_${type}_${isAgent}`;
     let url = `${environment.newApiUrl}plannings`;
     const isToDayPlannings = date == new Date().toISOString().split("T")[0] ? true : false;
     const timestamp = new Date(date as string).getTime();
     url = isToDayPlannings ? `${url}?date=${timestamp}` : `${url}?date=${timestamp}`;
     type != "all" ? (url = `${url}&type=${type}`) : url;
+    our_missions == true ? (url = `${url}&our_missions=true`) : url;
     return this.http.get<any>(url).pipe(
       switchMap(async data => {
         await Preferences.set({

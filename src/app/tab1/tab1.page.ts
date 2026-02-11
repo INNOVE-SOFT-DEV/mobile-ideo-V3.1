@@ -109,9 +109,12 @@ export class Tab1Page implements OnInit, OnDestroy {
             punctuals_count: value.punctuals,
             regulars_count: value.regulars,
             forfaitaires_count: value.flat_rates, 
-            // supervisor_punctuals_count :this.punctuals.filter((punctual: any) => punctual.today_schedule?.agents?.some((agent: any) => agent.id === this.user?.id))?.length
+            supervisor_punctuals_count : value?.our_missions
   
           };
+
+          console.log(this.counts);
+          
           // this.superVisors = value.supervisors_contact;
           
   
@@ -138,7 +141,6 @@ export class Tab1Page implements OnInit, OnDestroy {
             punctuals_count: this.punctuals.length,
             regulars_count: this.regulars?.length || 0,
             forfaitaires_count: this.forfaitaires?.length || 0,
-            supervisor_punctuals_count :this.punctuals.filter((punctual: any) => punctual.today_schedule?.agents?.some((agent: any) => agent.id === this.user?.id))?.length
   
           };
           this.superVisors = value.supervisors_contact;

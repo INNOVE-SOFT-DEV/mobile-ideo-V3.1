@@ -94,7 +94,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   async getAllMissions() {
     this.executed = true;
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(true, this.punctualDate, "punctual").subscribe(async (data: any) => {
+    this.missionService.getPlannings(true, this.punctualDate, 'all',true).subscribe(async (data: any) => {
       this.superVisors = data.punctuals?.supervisors;
       this.punctuals = this.formatPlannings(data.punctuals);
       await this.loadingService.dimiss();
