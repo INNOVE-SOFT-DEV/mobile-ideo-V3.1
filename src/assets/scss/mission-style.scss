@@ -213,10 +213,8 @@ ion-item {
   --min-height: 48px;
 }
 .wrap-text {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
 }
 @media (max-width: 576px) {
   .center-container {
@@ -245,9 +243,7 @@ ion-item {
     font-size: 15px;
     gap: 4px;
   }
-  .wrap-text {
-    max-width: 120px;
-  }
+
   ion-thumbnail {
     --size: 32px;
   }
@@ -258,9 +254,7 @@ ion-item {
   }
 }
 @media (max-width: 360px) {
-  .wrap-text {
-    max-width: 100px;
-  }
+
   .name-campany {
     font-size: 14px;
   }
