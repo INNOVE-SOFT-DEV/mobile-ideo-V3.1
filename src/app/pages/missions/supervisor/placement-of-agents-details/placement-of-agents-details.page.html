@@ -15,43 +15,43 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-supervisor">
-    <div class="anumation-block cards-list">
+  <div class="animate__animated animate__fadeInUp cls-supervisor">
+    <div class="animate__animated animate__fadeInUp cards-list">
       <ion-grid>
-        <ion-row class="anumation-block ion-align-items-center ion-justify-content-between">
-          <ion-col size="2" class="anumation-block avatar-col">
-            <img [src]="agentData?.user?.photo?.url || 'assets/img/avatar.png'" alt="Avatar" class="anumation-block avatar-img" />
+        <ion-row class="animate__animated animate__fadeInUp ion-align-items-center ion-justify-content-between">
+          <ion-col size="2" class="animate__animated animate__fadeInUp avatar-col">
+            <img [src]="agentData?.user?.photo?.url || 'assets/img/avatar.png'" alt="Avatar" class="animate__animated animate__fadeInUp avatar-img" />
           </ion-col>
-          <ion-col size="10" class="anumation-block info-col">
-            <ion-row class="anumation-block name-row">{{ agentData?.user?.first_name + ' ' + agentData?.user?.last_name }}</ion-row>
-            <ion-row class="anumation-block missions-row">{{ agentData?.planning_punctuals }} {{ agentData?.planning_punctuals == 1 ? 'mission' : 'missions' }}</ion-row>
+          <ion-col size="10" class="animate__animated animate__fadeInUp info-col">
+            <ion-row class="animate__animated animate__fadeInUp name-row">{{ agentData?.user?.first_name + ' ' + agentData?.user?.last_name }}</ion-row>
+            <ion-row class="animate__animated animate__fadeInUp missions-row">{{ agentData?.planning_punctuals }} {{ agentData?.planning_punctuals == 1 ? 'mission' : 'missions' }}</ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
-    <div class="anumation-block date-display">{{ tommorrow }}</div>
+    <div class="animate__animated animate__fadeInUp date-display">{{ tommorrow }}</div>
   </div>
 
-  <ion-card class="anumation-block card pd-15" *ngFor="let planning of plannings">
-    <ion-card-header class="anumation-block card-header">
+  <ion-card class="animate__animated animate__fadeInUp card pd-15" *ngFor="let planning of plannings">
+    <ion-card-header class="animate__animated animate__fadeInUp card-header">
       <ion-card-title>
         <ion-grid>
           <ion-row>
             <ion-col size="9" push="3">
-              <p class="anumation-block name-campany">{{ planning.intervention_name }}</p>
+              <p class="animate__animated animate__fadeInUp name-campany">{{ planning.intervention_name }}</p>
             </ion-col>
-            <ion-col class="anumation-block logo" size="3" pull="9">
-              <img class="anumation-block logo" [src]="planning.logo?.url || 'assets/img/logo_pitch 5.png'" style="min-height: 54px" />
+            <ion-col class="animate__animated animate__fadeInUp logo" size="3" pull="9">
+              <img class="animate__animated animate__fadeInUp logo" [src]="planning.logo?.url || 'assets/img/logo_pitch 5.png'" style="min-height: 54px" />
             </ion-col>
           </ion-row>
         </ion-grid>
-        <ion-chip class="anumation-block custom-chip">{{planning.prestation}}</ion-chip>
-        <ion-row class="anumation-block agent-row">
-          <ion-col size="6" class="anumation-block img-text-col">
-            <div class="anumation-block img-text-wrapper">
-              <img src="assets/img/agent.png" alt="Agent" class="anumation-block agent-img" />
+        <ion-chip class="animate__animated animate__fadeInUp custom-chip">{{planning.prestation}}</ion-chip>
+        <ion-row class="animate__animated animate__fadeInUp agent-row">
+          <ion-col size="6" class="animate__animated animate__fadeInUp img-text-col">
+            <div class="animate__animated animate__fadeInUp img-text-wrapper">
+              <img src="assets/img/agent.png" alt="Agent" class="animate__animated animate__fadeInUp agent-img" />
               <span
-                class="anumation-block agents-text"
+                class="animate__animated animate__fadeInUp agents-text"
                 [ngStyle]="{
   'color': planning.team.length>planning.agent_needed ? 'orange' :
              planning.team.length == planning.agent_needed ? 'green' : 'red'
@@ -62,8 +62,8 @@
               </span>
             </div>
           </ion-col>
-          <ion-col size="6" class="anumation-block chip-col">
-            <div class="anumation-block chip-custom">
+          <ion-col size="6" class="animate__animated animate__fadeInUp chip-col">
+            <div class="animate__animated animate__fadeInUp chip-custom">
               <ion-icon name="navigate-outline"></ion-icon>
               <span>{{calculateDistance(planning.lat , planning.long , agentData?.user?.lat , agentData?.user?.long ).toFixed(2 )}} km</span>
             </div>
@@ -73,7 +73,7 @@
     </ion-card-header>
   </ion-card>
 
-  <div class="anumation-block button-container" *ngIf="loadded == true">
-    <button class="anumation-block custom-button" (click)="placementOfAgentsAffect()">Ajouter une mission</button>
+  <div class="animate__animated animate__fadeInUp button-container" *ngIf="loadded == true">
+    <button class="animate__animated animate__fadeInUp custom-button" (click)="placementOfAgentsAffect()">Ajouter une mission</button>
   </div>
 </ion-content>

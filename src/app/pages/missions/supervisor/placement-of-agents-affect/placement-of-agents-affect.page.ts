@@ -7,8 +7,12 @@ import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-placement-of-agents-affect",
   templateUrl: "./placement-of-agents-affect.page.html",
   styleUrls: ["./placement-of-agents-affect.page.scss"],
@@ -73,20 +77,6 @@ export class PlacementOfAgentsAffectPage implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   goBack() {
     this.location.back();
   }

@@ -6,8 +6,12 @@ import {IonDatetime, PopoverController} from "@ionic/angular";
 import {Subscription} from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-supervisor-plannings",
   templateUrl: "./supervisor-plannings.page.html",
   styleUrls: ["./supervisor-plannings.page.scss"],
@@ -50,20 +54,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
       this.refreshEvent.unsubscribe();
     }
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   formatPlannings(data: any) {
     this.noSchedule = 0;
     return data?.map((el: any) => {
@@ -94,7 +85,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   async getAllMissions() {
     this.executed = true;
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(true, this.punctualDate, 'all',true).subscribe(async (data: any) => {
+    this.missionService.getPlannings(true, this.punctualDate, "all", true).subscribe(async (data: any) => {
       this.superVisors = data.punctuals?.supervisors;
       this.punctuals = this.formatPlannings(data.punctuals);
       await this.loadingService.dimiss();

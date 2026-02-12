@@ -4,8 +4,12 @@ import {ActivatedRoute} from "@angular/router";
 import {ModalController} from "@ionic/angular";
 import {environment} from "src/environments/environment";
 import WaveSurfer from "wavesurfer.js";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-vehicle-driving-details",
   templateUrl: "./vehicle-driving-details.page.html",
   styleUrls: ["./vehicle-driving-details.page.scss"],
@@ -38,20 +42,7 @@ export class VehicleDrivingDetailsPage implements OnInit, AfterViewChecked {
     this.image = decodeURIComponent(this.route.snapshot.paramMap.get("image") || "");
     this.name = this.route.snapshot.paramMap.get("name") || "";
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   openSliderModal(item: any, title: any) {
     this.notes = [];
     let photos = item.photo.filter((photo: any) => photo.type == title);

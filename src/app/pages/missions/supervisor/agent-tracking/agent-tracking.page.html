@@ -14,28 +14,28 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <div class="cls-supervisor custom-block" >
-    <div class="custom-search custom-block">
-      <input type="text" placeholder="Rechercher..." class="search-input custom-block" [(ngModel)]="searchTerm" (input)="onSearchChange()" />
+  <div class="cls-supervisor custom-block animate__animated animate__fadeInUp" >
+    <div class="custom-search custom-block animate__animated animate__fadeInUp">
+      <input type="text" placeholder="Rechercher..." class="search-input custom-block animate__animated animate__fadeInUp" [(ngModel)]="searchTerm" (input)="onSearchChange()" />
 
-      <ion-icon name="search-outline" class="input-icon custom-block"></ion-icon>
+      <ion-icon name="search-outline" class="input-icon custom-block animate__animated animate__fadeInUp"></ion-icon>
     </div>
-    <ion-grid class="toggle-grid custom-block">
-      <ion-row class="ion-justify-content-center toggle-row custom-block">
-        <ion-col size="auto" class="toggle-item custom-block">
-          <div class="toggle-wrapper custom-block">
-            <span class="toggle-label custom-block">Agent</span>
-            <ion-toggle [(ngModel)]="isAgent" class="green-toggle custom-block" (ionChange)="onAgentToggleChange($event)"></ion-toggle>
+    <ion-grid class="toggle-grid custom-block animate__animated animate__fadeInUp">
+      <ion-row class="ion-justify-content-center toggle-row custom-block animate__animated animate__fadeInUp">
+        <ion-col size="auto" class="toggle-item custom-block animate__animated animate__fadeInUp">
+          <div class="toggle-wrapper custom-block animate__animated animate__fadeInUp">
+            <span class="toggle-label custom-block animate__animated animate__fadeInUp">Agent</span>
+            <ion-toggle [(ngModel)]="isAgent" class="green-toggle custom-block animate__animated animate__fadeInUp" (ionChange)="onAgentToggleChange($event)"></ion-toggle>
           </div>
         </ion-col>
-        <ion-col size="auto" class="toggle-item custom-block">
-          <div class="toggle-wrapper custom-block">
-            <span class="toggle-label custom-block">Camion</span>
-            <ion-toggle [(ngModel)]="isCamion" class="green-toggle custom-block" (ionChange)="onCamionToggleChange($event)"></ion-toggle>
+        <ion-col size="auto" class="toggle-item custom-block animate__animated animate__fadeInUp">
+          <div class="toggle-wrapper custom-block animate__animated animate__fadeInUp">
+            <span class="toggle-label custom-block animate__animated animate__fadeInUp">Camion</span>
+            <ion-toggle [(ngModel)]="isCamion" class="green-toggle custom-block animate__animated animate__fadeInUp" (ionChange)="onCamionToggleChange($event)"></ion-toggle>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <div class="custom-block " #map id="map"></div>
+    <div class="custom-block animate__animated animate__fadeInUp " #map id="map"></div>
   </div>
 </ion-content>

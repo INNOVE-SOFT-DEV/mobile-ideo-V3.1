@@ -2,8 +2,12 @@ import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {Router} from "@angular/router";
 import {ActivatedRoute} from "@angular/router";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-send-report",
   templateUrl: "./send-report.page.html",
   styleUrls: ["./send-report.page.scss"],
@@ -27,20 +31,7 @@ export class SendReportPage implements OnInit {
       }
     });
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   shareReport() {
     if (this.selectedContactId === null) {
       console.warn("No contact selected");

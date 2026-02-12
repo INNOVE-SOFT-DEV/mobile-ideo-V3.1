@@ -10,8 +10,12 @@ import {MaterialsService} from "src/app/pages/materials/service/materials.servic
 import {ChangeDetectorRef} from "@angular/core";
 import {AgentSheetComponent} from "src/app/widgets/modals/agent-sheet/agent-sheet.component";
 import {CamionSheetComponent} from "src/app/widgets/modals/camion-sheet/camion-sheet.component";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-agent-tracking",
   templateUrl: "./agent-tracking.page.html",
   styleUrls: ["./agent-tracking.page.scss"],
@@ -70,21 +74,6 @@ export class AgentTrackingPage implements OnInit {
     await this.mapService.initMap(this.mapElement, userPosition.lat, userPosition.lng);
     this.mapService.addUserMarker(userPosition, "Moi", "assets/img/user.png");
     this.mapService.addCircle(userPosition.lat, userPosition.lng, 500);
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
   }
 
   loadCamionsMarkers() {

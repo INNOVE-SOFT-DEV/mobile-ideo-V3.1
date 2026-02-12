@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-details">
+  <div class="animate__animated animate__fadeInUp cls-details">
     <ion-card>
       <ion-card-content>
         <ion-grid>
@@ -27,19 +27,19 @@
                 src="{{
              planning?.intervention?.logos?.url || 'https://backend.ideogroupe.com/assets/img/default-company.png'
             }}"
-                class="anumation-block logo"
+                class="animate__animated animate__fadeInUp logo"
               />
             </ion-col>
             <ion-col size="8">
-              <div class="anumation-block cls-title">
-                <p class="anumation-block cls-p-title">{{planning?.intervention.name?.split('-')[0]}}</p>
+              <div class="animate__animated animate__fadeInUp cls-title">
+                <p class="animate__animated animate__fadeInUp cls-p-title">{{planning?.intervention.name?.split('-')[0]}}</p>
               </div>
-              <div class="anumation-block cls-address">
-                <p class="anumation-block cls-p-address">{{planning?.intervention.name?.split('-')[1]}}</p>
+              <div class="animate__animated animate__fadeInUp cls-address">
+                <p class="animate__animated animate__fadeInUp cls-p-address">{{planning?.intervention.name?.split('-')[1]}}</p>
               </div>
             </ion-col>
             <ion-col>
-              <img *ngIf="planningType =='punctual' && planning?.punctual_info_photos?.length > 0" src="../../../../assets/img/icon-img.png" class="anumation-block cls-img" />
+              <img *ngIf="planningType =='punctual' && planning?.punctual_info_photos?.length > 0" src="../../../../assets/img/icon-img.png" class="animate__animated animate__fadeInUp cls-img" />
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -47,9 +47,9 @@
     </ion-card>
 
     <ion-grid>
-      <ion-row class="anumation-block custom-row" responsive>
-        <ion-col size="6" size-md="6" class="anumation-block custom-block" (click)="createTicket()">
-          <div class="anumation-block block-content">
+      <ion-row class="animate__animated animate__fadeInUp custom-row" responsive>
+        <ion-col size="6" size-md="6" class="animate__animated animate__fadeInUp custom-block" (click)="createTicket()">
+          <div class="animate__animated animate__fadeInUp block-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
               <path
                 d="M25.2998 5L40.5 20.2002V40.4668C40.4999 41.8658 39.3658 42.9999 37.9668 43H9.0332C7.63418 42.9999 6.50007 41.8658 6.5 40.4668V7.53321C6.50007 6.13419 7.63418 5.00007 9.0332 5H25.2998Z"
@@ -69,11 +69,11 @@
                 fill="#00A2E1"
               />
             </svg>
-            <div class="anumation-block block-text">Tâches</div>
+            <div class="animate__animated animate__fadeInUp block-text">Tâches</div>
           </div>
         </ion-col>
-        <ion-col size="6" size-md="6" class="anumation-block custom-block" (click)="chooseSource()">
-          <div class="anumation-block block-content">
+        <ion-col size="6" size-md="6" class="animate__animated animate__fadeInUp custom-block" (click)="chooseSource()">
+          <div class="animate__animated animate__fadeInUp block-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
               <mask id="path-1-inside-1_2009_598" fill="white">
                 <path
@@ -102,80 +102,80 @@
                 fill="#00A2E1"
               />
             </svg>
-            <div class="anumation-block block-text">Dépenses</div>
+            <div class="animate__animated animate__fadeInUp block-text">Dépenses</div>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
 
     <ion-grid>
-      <ion-row class="anumation-block custom-row" responsive>
-        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="direction()">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/Location.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">{{'Direction' | translate}}</div>
+      <ion-row class="animate__animated animate__fadeInUp custom-row" responsive>
+        <ion-col size="4" size-md="4" class="animate__animated animate__fadeInUp custom-block" (click)="direction()">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/Location.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">{{'Direction' | translate}}</div>
           </div>
         </ion-col>
-        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="pointages()">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/pointage.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">{{'Scores' | translate}}</div>
+        <ion-col size="4" size-md="4" class="animate__animated animate__fadeInUp custom-block" (click)="pointages()">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/pointage.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">{{'Scores' | translate}}</div>
           </div>
         </ion-col>
-        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="reportsPhotos()">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/camera change.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">{{'Reports' | translate}}</div>
-          </div>
-        </ion-col>
-
-        <ion-col size="4" size-md="4" class="anumation-block custom-block">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/Chat.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">{{'Chat' | translate}}</div>
+        <ion-col size="4" size-md="4" class="animate__animated animate__fadeInUp custom-block" (click)="reportsPhotos()">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/camera change.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">{{'Reports' | translate}}</div>
           </div>
         </ion-col>
 
-        <ion-col size="4" size-md="4" *ngIf="planningType != 'regular'" class="anumation-block custom-block" (click)="openVehiculeReturn()">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/Car.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">{{'Change vehicle' | translate}}</div>
-          </div>
-        </ion-col>
-        <ion-col *ngIf="planningType == 'regular'" size="4" size-md="4" class="anumation-block custom-block" (click)="gdc()">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/gdc.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">Consignes GDC</div>
+        <ion-col size="4" size-md="4" class="animate__animated animate__fadeInUp custom-block">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/Chat.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">{{'Chat' | translate}}</div>
           </div>
         </ion-col>
 
-        <ion-col size="4" size-md="4" class="anumation-block custom-block" (click)="missionReturns()">
-          <div class="anumation-block block-content">
-            <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="anumation-block block-image" />
-            <div class="anumation-block block-text">{{'Mission returns' | translate}}</div>
+        <ion-col size="4" size-md="4" *ngIf="planningType != 'regular'" class="animate__animated animate__fadeInUp custom-block" (click)="openVehiculeReturn()">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/Car.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">{{'Change vehicle' | translate}}</div>
+          </div>
+        </ion-col>
+        <ion-col *ngIf="planningType == 'regular'" size="4" size-md="4" class="animate__animated animate__fadeInUp custom-block" (click)="gdc()">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/gdc.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">Consignes GDC</div>
+          </div>
+        </ion-col>
+
+        <ion-col size="4" size-md="4" class="animate__animated animate__fadeInUp custom-block" (click)="missionReturns()">
+          <div class="animate__animated animate__fadeInUp block-content">
+            <img src="../../../../assets/img/Mic.png" alt="Location Icon" class="animate__animated animate__fadeInUp block-image" />
+            <div class="animate__animated animate__fadeInUp block-text">{{'Mission returns' | translate}}</div>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
 
-  <div class="anumation-block cls-title-contact">
-    <p class="anumation-block cls-p-contact">{{'Contacts' | translate}}</p>
+  <div class="animate__animated animate__fadeInUp cls-title-contact">
+    <p class="animate__animated animate__fadeInUp cls-p-contact">{{'Contacts' | translate}}</p>
   </div>
-  <ion-card *ngFor="let contact of planning?.contacts" color="light" class="anumation-block cls-card-light">
+  <ion-card *ngFor="let contact of planning?.contacts" color="light" class="animate__animated animate__fadeInUp cls-card-light">
     <ion-card-content>
       <ion-grid>
-        <ion-row class="anumation-block align-center">
+        <ion-row class="animate__animated animate__fadeInUp align-center">
           <ion-col size="9">
-            <div class="anumation-block title-c-txt">
-              <p class="anumation-block cls-card-title wrap-text">{{ `${contact.first_name} ${contact.last_name}` }}</p>
+            <div class="animate__animated animate__fadeInUp title-c-txt">
+              <p class="animate__animated animate__fadeInUp cls-card-title wrap-text">{{ `${contact.first_name} ${contact.last_name}` }}</p>
             </div>
-            <div class="anumation-block title-c-txt">
-              <ion-chip class="anumation-block chip-job"><span class="anumation-block cls-title-job">{{contact.job}}</span></ion-chip>
+            <div class="animate__animated animate__fadeInUp title-c-txt">
+              <ion-chip class="animate__animated animate__fadeInUp chip-job"><span class="animate__animated animate__fadeInUp cls-title-job">{{contact.job}}</span></ion-chip>
             </div>
           </ion-col>
           <ion-col size="3">
-            <a class="anumation-block call-link" href="tel://{{contact?.phone?.split(' ')?.join()}}">
+            <a class="animate__animated animate__fadeInUp call-link" href="tel://{{contact?.phone?.split(' ')?.join()}}">
               <img src="../../../../assets/img/icon-call.png" />
             </a>
           </ion-col>
@@ -183,47 +183,47 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <ion-card class="anumation-block cls-ionc-card-mission">
+  <ion-card class="animate__animated animate__fadeInUp cls-ionc-card-mission">
     <ion-card-header>
       <ion-card-title>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
+          <ion-row class="animate__animated animate__fadeInUp align-center">
             <ion-col size="4">
-              <p class="anumation-block mission-text">{{'Assignment' | translate}}</p>
+              <p class="animate__animated animate__fadeInUp mission-text">{{'Assignment' | translate}}</p>
             </ion-col>
             <ion-col size="8">
-              <ion-chip class="anumation-block cls-in-progress">{{'In progress' | translate}}</ion-chip>
+              <ion-chip class="animate__animated animate__fadeInUp cls-in-progress">{{'In progress' | translate}}</ion-chip>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-title>
-      <ion-card-subtitle><ion-chip class="anumation-block cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
+      <ion-card-subtitle><ion-chip class="animate__animated animate__fadeInUp cls-chip-agent-name">{{planning?.prestation}}</ion-chip></ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="anumation-block cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
+    <ion-card-content class="animate__animated animate__fadeInUp cls-desc" [innerHTML]="planning?.needs"></ion-card-content>
   </ion-card>
    <ion-card class="cls-ion-card-notice" *ngIf="planning?.remark?.length > 0">
     <ion-card-header>
-      <ion-card-title class="anumation-block mission-text">{{'Noticed' | translate}}</ion-card-title>
+      <ion-card-title class="animate__animated animate__fadeInUp mission-text">{{'Noticed' | translate}}</ion-card-title>
     </ion-card-header>
-    <ion-card-content class="anumation-block cls-desc" [innerHTML]="planning?.remark"></ion-card-content>
+    <ion-card-content class="animate__animated animate__fadeInUp cls-desc" [innerHTML]="planning?.remark"></ion-card-content>
   </ion-card>
-  <div class="anumation-block cls-title-contact">
-    <p class="anumation-block cls-p-contact">{{'Team' | translate}}</p>
+  <div class="animate__animated animate__fadeInUp cls-title-contact">
+    <p class="animate__animated animate__fadeInUp cls-p-contact">{{'Team' | translate}}</p>
   </div>
   <ion-card class="cls-ion-crad-c" *ngIf="supervisors.length > 0">
     <ion-card-content>
       <ion-grid>
-        <ion-row class="anumation-block align-center" *ngFor="let item of supervisors">
+        <ion-row class="animate__animated animate__fadeInUp align-center" *ngFor="let item of supervisors">
           <ion-col size="9">
-            <div class="anumation-block title-c-txt">
-              <p class="anumation-block c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
+            <div class="animate__animated animate__fadeInUp title-c-txt">
+              <p class="animate__animated animate__fadeInUp c-text wrap-text">{{item.first_name}} {{item.last_name}}</p>
             </div>
-            <div class="anumation-block title-c-txt">
-              <ion-chip class="anumation-block cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
+            <div class="animate__animated animate__fadeInUp title-c-txt">
+              <ion-chip class="animate__animated animate__fadeInUp cls-chip-agent-name">{{'Supervisor' | translate}}</ion-chip>
             </div>
           </ion-col>
           <ion-col size="3">
-            <a class="anumation-block call-link" href="tel://{{item?.phone?.split(' ')?.join()}}">
+            <a class="animate__animated animate__fadeInUp call-link" href="tel://{{item?.phone?.split(' ')?.join()}}">
               <img src="../../../../assets/img/icon-call.png" />
             </a>
           </ion-col>
@@ -233,17 +233,17 @@
   </ion-card>
 
   <ng-container *ngIf="planning?.team.length >0">
-    <div class="anumation-block cls-list-c-b">
-      <ion-list class="anumation-block cls-ion-list-c">
+    <div class="animate__animated animate__fadeInUp cls-list-c-b">
+      <ion-list class="animate__animated animate__fadeInUp cls-ion-list-c">
         <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? '' : 'none' }">
           <ion-grid *ngIf="agent?.manager && !agent.platform">
-            <ion-row class="anumation-block align-center">
+            <ion-row class="animate__animated animate__fadeInUp align-center">
               <ion-col size="6">
-                <div class="anumation-block title-c-txt">
-                  <p class="anumation-block c-text wrap-text">{{ agent?.first_name}} {{ agent?.last_name}}</p>
+                <div class="animate__animated animate__fadeInUp title-c-txt">
+                  <p class="animate__animated animate__fadeInUp c-text wrap-text">{{ agent?.first_name}} {{ agent?.last_name}}</p>
                 </div>
-                <div class="anumation-block title-c-txt">
-                  <ion-chip class="anumation-block cls-chip-f-name">{{agent?.company_name}}</ion-chip>
+                <div class="animate__animated animate__fadeInUp title-c-txt">
+                  <ion-chip class="animate__animated animate__fadeInUp cls-chip-f-name">{{agent?.company_name}}</ion-chip>
                 </div>
               </ion-col>
               <ion-col size="6">
@@ -253,7 +253,7 @@
                       <img src="../../../../assets/img/btn-notice.png" />
                     </ion-col>
                     <ion-col size="6">
-                      <a class="anumation-block call-link" href="tel://{{agent?.phone?.split(' ')?.join()}}">
+                      <a class="animate__animated animate__fadeInUp call-link" href="tel://{{agent?.phone?.split(' ')?.join()}}">
                         <img src="../../../../assets/img/icon-call.png" />
                       </a>
                     </ion-col>
@@ -267,21 +267,21 @@
     </div>
   </ng-container>
   <ng-container *ngIf="planning?.team.length >0">
-    <div class="anumation-block cls-list-c-b">
-      <ion-list class="anumation-block cls-ion-list-c">
+    <div class="animate__animated animate__fadeInUp cls-list-c-b">
+      <ion-list class="animate__animated animate__fadeInUp cls-ion-list-c">
         <ion-item *ngFor="let agent of planning?.team" lines="none" [ngStyle]="{ 'display': agent.manager ? 'none' : '' }">
           <ion-grid *ngIf="!agent.manager">
-            <ion-row class="anumation-block align-center">
+            <ion-row class="animate__animated animate__fadeInUp align-center">
               <ion-col size="9">
-                <div class="anumation-block title-c-txt">
-                  <p class="anumation-block c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
+                <div class="animate__animated animate__fadeInUp title-c-txt">
+                  <p class="animate__animated animate__fadeInUp c-text wrap-text">{{agent.first_name}} {{agent.last_name}}</p>
                 </div>
-                <div class="anumation-block title-c-txt">
-                  <ion-chip class="anumation-block cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
+                <div class="animate__animated animate__fadeInUp title-c-txt">
+                  <ion-chip class="animate__animated animate__fadeInUp cls-chip-m-name">{{agent.role == 'teamleader' ? "Chef d'equipe" : agent.role}}</ion-chip>
                 </div>
               </ion-col>
               <ion-col size="3">
-                <a class="anumation-block call-link" href="tel://{{agent?.phone.split(' ').join()}}">
+                <a class="animate__animated animate__fadeInUp call-link" href="tel://{{agent?.phone.split(' ').join()}}">
                   <img src="../../../../assets/img/icon-call.png" />
                 </a>
               </ion-col>

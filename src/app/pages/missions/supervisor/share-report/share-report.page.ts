@@ -12,8 +12,12 @@ import {environment} from "src/environments/environment";
 import {Clipboard} from "@capacitor/clipboard";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {EmailComposer} from "capacitor-email-composer";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-share-report",
   templateUrl: "./share-report.page.html",
   styleUrls: ["./share-report.page.scss"],
@@ -55,20 +59,7 @@ export class ShareReportPage implements OnInit {
       this.isConnected = status.connected;
     });
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   async openPhotoReportModal(option: string) {
     const modal = await this.modalController.create({
       component: PhotoReportModalComponent,

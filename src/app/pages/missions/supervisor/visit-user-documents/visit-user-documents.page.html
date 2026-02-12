@@ -17,22 +17,22 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-details">
+  <div class="animate__animated animate__fadeInUp cls-details">
     <ion-card [ngClass]="{'card-success': user?.btp.url != null, 'card-not-success': user?.btp.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
+          <ion-row class="animate__animated animate__fadeInUp align-center">
             <ion-col size="1" *ngIf="user?.btp.url != null">
-              <ion-checkbox [(ngModel)]="btp" class="anumation-block checkbox-col"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="btp" class="animate__animated animate__fadeInUp checkbox-col"></ion-checkbox>
             </ion-col>
-            <ion-col size="9" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.btp.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.btp.url == null" name="cloud-upload-outline"></ion-icon>
+            <ion-col size="9" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.btp.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.btp.url == null" name="cloud-upload-outline"></ion-icon>
 
-              <span class="anumation-block cls-title">{{'BTP card' | translate}}</span>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'BTP card' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.btp.url != null" (click)="displayDocument(user?.btp.url,'Carte BTP')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.btp.url != null" (click)="displayDocument(user?.btp.url,'Carte BTP')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -42,18 +42,18 @@
     <ion-card [ngClass]="{'card-success': user?.cin.url != null, 'card-not-success': user?.cin.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
+          <ion-row class="animate__animated animate__fadeInUp align-center">
             <ion-col size="1" *ngIf="user?.cin.url != null">
-              <ion-checkbox [(ngModel)]="cin" class="anumation-block checkbox-col"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="cin" class="animate__animated animate__fadeInUp checkbox-col"></ion-checkbox>
             </ion-col>
 
-            <ion-col size="9" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.cin.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.cin.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Identity document' | translate}}</span>
+            <ion-col size="9" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.cin.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.cin.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Identity document' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.cin.url != null" (click)="displayDocument(user?.cin.url,'Pièce d’identité')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.cin.url != null" (click)="displayDocument(user?.cin.url,'Pièce d’identité')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -63,18 +63,18 @@
     <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.driving_license.url != null, 'card-not-success': user?.driving_license.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
+          <ion-row class="animate__animated animate__fadeInUp align-center">
             <ion-col size="1" *ngIf="user?.driving_license.url != null">
-              <ion-checkbox [(ngModel)]="driving_license" class="anumation-block checkbox-col"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="driving_license" class="animate__animated animate__fadeInUp checkbox-col"></ion-checkbox>
             </ion-col>
 
-            <ion-col size="9" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.driving_license.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.driving_license.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Driving license' | translate}}</span>
+            <ion-col size="9" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.driving_license.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.driving_license.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Driving license' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.driving_license.url != null" (click)="displayDocument(user?.driving_license.url ,'Permis de conduire')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.driving_license.url != null" (click)="displayDocument(user?.driving_license.url ,'Permis de conduire')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -84,14 +84,14 @@
     <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.gray_card.url != null, 'card-not-success': user?.gray_card.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
-            <ion-col size="10" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.gray_card.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.gray_card.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Gray card' | translate}}</span>
+          <ion-row class="animate__animated animate__fadeInUp align-center">
+            <ion-col size="10" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.gray_card.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.gray_card.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Gray card' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.gray_card.url != null" (click)="displayDocument(user?.gray_card.url,'Carte grise')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.gray_card.url != null" (click)="displayDocument(user?.gray_card.url,'Carte grise')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -101,14 +101,14 @@
     <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.vehicle_insurance.url != null, 'card-not-success': user?.vehicle_insurance.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
-            <ion-col size="10" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.vehicle_insurance.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.vehicle_insurance.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Vehicle insurance' | translate}}</span>
+          <ion-row class="animate__animated animate__fadeInUp align-center">
+            <ion-col size="10" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.vehicle_insurance.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.vehicle_insurance.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Vehicle insurance' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.vehicle_insurance.url != null" (click)="displayDocument(user?.vehicle_insurance.url,'Assurance véhicule')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.vehicle_insurance.url != null" (click)="displayDocument(user?.vehicle_insurance.url,'Assurance véhicule')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -118,14 +118,14 @@
     <ion-card *ngIf="user?.is_driver" [ngClass]="{'card-success': user?.mutuelle.url != null, 'card-not-success': user?.mutuelle.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
-            <ion-col size="10" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.mutuelle.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.mutuelle.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Mutual' | translate}}</span>
+          <ion-row class="animate__animated animate__fadeInUp align-center">
+            <ion-col size="10" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.mutuelle.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.mutuelle.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Mutual' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.mutuelle.url != null" (click)="displayDocument(user?.mutuelle.url,'Mutuelle')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.mutuelle.url != null" (click)="displayDocument(user?.mutuelle.url,'Mutuelle')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -135,14 +135,14 @@
     <ion-card [ngClass]="{'card-success': user?.social_security.url != null, 'card-not-success': user?.social_security.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
-            <ion-col size="10" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.social_security.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.social_security.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Social security' | translate}}</span>
+          <ion-row class="animate__animated animate__fadeInUp align-center">
+            <ion-col size="10" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.social_security.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.social_security.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Social security' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.social_security.url != null" (click)="displayDocument(user?.social_security.url,'Sécurité sociale')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.social_security.url != null" (click)="displayDocument(user?.social_security.url,'Sécurité sociale')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -152,18 +152,18 @@
     <ion-card [ngClass]="{'card-success': user?.rib.url != null, 'card-not-success': user?.rib.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
+          <ion-row class="animate__animated animate__fadeInUp align-center">
             <ion-col size="1" *ngIf="user?.rib.url != null">
-              <ion-checkbox [(ngModel)]="rib" class="anumation-block checkbox-col"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="rib" class="animate__animated animate__fadeInUp checkbox-col"></ion-checkbox>
             </ion-col>
 
-            <ion-col size="9" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.rib.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.rib.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'RIB' | translate}}</span>
+            <ion-col size="9" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.rib.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.rib.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'RIB' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.rib.url != null" (click)="displayDocument(user?.rib.url,'RIB')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.rib.url != null" (click)="displayDocument(user?.rib.url,'RIB')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -173,14 +173,14 @@
     <ion-card [ngClass]="{'card-success': user?.proof_address.url != null, 'card-not-success': user?.proof_address.url == null}">
       <ion-card-content>
         <ion-grid>
-          <ion-row class="anumation-block align-center">
-            <ion-col size="10" class="anumation-block d-flex align-center">
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.proof_address.url != null" name="checkmark-circle-outline"></ion-icon>
-              <ion-icon class="anumation-block cls-title-icon" *ngIf="user?.proof_address.url == null" name="cloud-upload-outline"></ion-icon>
-              <span class="anumation-block cls-title">{{'Proof of address' | translate}}</span>
+          <ion-row class="animate__animated animate__fadeInUp align-center">
+            <ion-col size="10" class="animate__animated animate__fadeInUp d-flex align-center">
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.proof_address.url != null" name="checkmark-circle-outline"></ion-icon>
+              <ion-icon class="animate__animated animate__fadeInUp cls-title-icon" *ngIf="user?.proof_address.url == null" name="cloud-upload-outline"></ion-icon>
+              <span class="animate__animated animate__fadeInUp cls-title">{{'Proof of address' | translate}}</span>
             </ion-col>
-            <ion-col size="2" class="anumation-block d-flex align-end">
-              <p class="anumation-block show" *ngIf="user?.proof_address.url != null" (click)="displayDocument(user?.proof_address.url, 'Justificatif de domicile')">{{'show' | translate}}</p>
+            <ion-col size="2" class="animate__animated animate__fadeInUp d-flex align-end">
+              <p class="animate__animated animate__fadeInUp show" *ngIf="user?.proof_address.url != null" (click)="displayDocument(user?.proof_address.url, 'Justificatif de domicile')">{{'show' | translate}}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
