@@ -187,7 +187,7 @@
       </ion-card-content>
     </ion-card> -->
     
-        <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast">
+        <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast" *ngIf="planning?.contacts?.length > 0">
       <ion-card-content>
         <ion-grid>
           <ion-row class="align-center"       *ngFor="let contact of planning?.contacts; let i = index"
@@ -249,9 +249,9 @@
     <div class="cls-title-contact">
       <p class="cls-p-contact">{{'Team' | translate}}</p>
     </div>
-    <ion-card class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast">
+    <ion-card *ngIf="supervisors.length > 0" class="cls-ion-crad-c animate__animated animate__slideInRight animate__fast">
       <ion-card-content>
-        <ion-grid>
+        <ion-grid >
           <ion-row class="align-center" *ngFor="let item of supervisors">
             <ion-col size="9">
               <div class="title-c-txt">

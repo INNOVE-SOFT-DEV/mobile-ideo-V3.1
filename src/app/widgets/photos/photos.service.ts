@@ -27,7 +27,7 @@ export class PhotosService {
         quality: quality,
         correctOrientation: true,
         presentationStyle: "fullscreen",
-        allowEditing: false,
+        allowEditing: true,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
         direction: CameraDirection.Rear
@@ -37,7 +37,7 @@ export class PhotosService {
         quality: quality,
         correctOrientation: true,
         presentationStyle: "fullscreen",
-        allowEditing: false,
+        allowEditing: true,
         resultType: CameraResultType.Base64,
         source: CameraSource.Photos
       });
