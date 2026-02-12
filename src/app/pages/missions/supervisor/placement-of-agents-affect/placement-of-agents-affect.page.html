@@ -15,52 +15,52 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-supervisor">
-    <div class="anumation-block cards-list">
+  <div class="animate__animated animate__fadeInUp cls-supervisor">
+    <div class="animate__animated animate__fadeInUp cards-list">
       <ion-grid>
-        <ion-row class="anumation-block ion-align-items-center ion-justify-content-between">
-          <ion-col size="2" class="anumation-block avatar-col">
-            <img [src]="data.agent.user.photo.url || 'assets/img/avatar.png'" alt="Avatar" class="anumation-block avatar-img" />
+        <ion-row class="animate__animated animate__fadeInUp ion-align-items-center ion-justify-content-between">
+          <ion-col size="2" class="animate__animated animate__fadeInUp avatar-col">
+            <img [src]="data.agent.user.photo.url || 'assets/img/avatar.png'" alt="Avatar" class="animate__animated animate__fadeInUp avatar-img" />
           </ion-col>
-          <ion-col size="10" class="anumation-block info-col">
-            <ion-row class="anumation-block name-row">{{data.agent.user.first_name + ' ' + data.agent.user.last_name}}</ion-row>
-            <ion-row class="anumation-block missions-row">{{data.agent.planning_punctuals}} {{data.agent.planning_punctuals == 1 ? 'mission' : 'missions'}}</ion-row>
+          <ion-col size="10" class="animate__animated animate__fadeInUp info-col">
+            <ion-row class="animate__animated animate__fadeInUp name-row">{{data.agent.user.first_name + ' ' + data.agent.user.last_name}}</ion-row>
+            <ion-row class="animate__animated animate__fadeInUp missions-row">{{data.agent.planning_punctuals}} {{data.agent.planning_punctuals == 1 ? 'mission' : 'missions'}}</ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
-    <div class="anumation-block section-title">Missions ponctuels disponibles</div>
-    <div class="anumation-block custom-search">
-      <input type="text" placeholder="Rechercher Mission" class="anumation-block search-input" name="search" />
-      <ion-icon name="search-outline" class="anumation-block input-icon"></ion-icon>
+    <div class="animate__animated animate__fadeInUp section-title">Missions ponctuels disponibles</div>
+    <div class="animate__animated animate__fadeInUp custom-search">
+      <input type="text" placeholder="Rechercher Mission" class="animate__animated animate__fadeInUp search-input" name="search" />
+      <ion-icon name="search-outline" class="animate__animated animate__fadeInUp input-icon"></ion-icon>
     </div>
-    <div class="anumation-block date-display">{{tommorrow }}</div>
+    <div class="animate__animated animate__fadeInUp date-display">{{tommorrow }}</div>
   </div>
 
-  <ion-radio-group [(ngModel)]="selectedSite" class="anumation-block radio-group">
-    <ion-card class="anumation-block card pd-15" *ngFor="let item of data.plannings" (click)="selectedSite = item.id" [class.selected]="selectedSite === item.id">
-      <ion-card-header class="anumation-block card-header">
+  <ion-radio-group [(ngModel)]="selectedSite" class="animate__animated animate__fadeInUp radio-group">
+    <ion-card class="animate__animated animate__fadeInUp card pd-15" *ngFor="let item of data.plannings" (click)="selectedSite = item.id" [class.selected]="selectedSite === item.id">
+      <ion-card-header class="animate__animated animate__fadeInUp card-header">
         <ion-card-title>
           <ion-grid>
             <ion-row>
-              <ion-col size="3" class="anumation-block logo-col">
-                <img class="anumation-block logo" [src]="item.logo?.url || 'assets/img/logo_pitch 5.png'" style="min-height: 54px" />
+              <ion-col size="3" class="animate__animated animate__fadeInUp logo-col">
+                <img class="animate__animated animate__fadeInUp logo" [src]="item.logo?.url || 'assets/img/logo_pitch 5.png'" style="min-height: 54px" />
               </ion-col>
-              <ion-col size="7" class="anumation-block text-col">
-                <p class="anumation-block name-campany">{{ item.intervention_name }}</p>
+              <ion-col size="7" class="animate__animated animate__fadeInUp text-col">
+                <p class="animate__animated animate__fadeInUp name-campany">{{ item.intervention_name }}</p>
               </ion-col>
-              <ion-col size="2" class="anumation-block radio-col">
-                <ion-radio [value]="item.id" class="anumation-block custom-radio"></ion-radio>
+              <ion-col size="2" class="animate__animated animate__fadeInUp radio-col">
+                <ion-radio [value]="item.id" class="animate__animated animate__fadeInUp custom-radio"></ion-radio>
               </ion-col>
             </ion-row>
           </ion-grid>
-          <ion-chip class="anumation-block custom-chip" [class.chipSelected]="selectedSite === item.id">{{ item.prestation }}</ion-chip>
-          <ion-row class="anumation-block agent-row">
-            <ion-col size="6" class="anumation-block img-text-col">
-              <div class="anumation-block img-text-wrapper">
-                <img src="assets/img/agent.png" alt="Agent" class="anumation-block agent-img" />
+          <ion-chip class="animate__animated animate__fadeInUp custom-chip" [class.chipSelected]="selectedSite === item.id">{{ item.prestation }}</ion-chip>
+          <ion-row class="animate__animated animate__fadeInUp agent-row">
+            <ion-col size="6" class="animate__animated animate__fadeInUp img-text-col">
+              <div class="animate__animated animate__fadeInUp img-text-wrapper">
+                <img src="assets/img/agent.png" alt="Agent" class="animate__animated animate__fadeInUp agent-img" />
                 <span
-                  class="anumation-block agents-text"
+                  class="animate__animated animate__fadeInUp agents-text"
                   [ngStyle]="{
                   'color': item.team.length > item.agent_needed ? 'orange' :
                             item.team.length == item.agent_needed ? 'green' : 'red'
@@ -70,8 +70,8 @@
                 </span>
               </div>
             </ion-col>
-            <ion-col size="6" class="anumation-block chip-col">
-              <div class="anumation-block chip-custom">
+            <ion-col size="6" class="animate__animated animate__fadeInUp chip-col">
+              <div class="animate__animated animate__fadeInUp chip-custom">
                 <ion-icon name="navigate-outline"></ion-icon>
                 <span>{{calculateDistance(item.lat , item.long , data.agent?.user?.lat , data.agent?.user?.long ).toFixed(2 )}} km</span>
               </div>
@@ -82,8 +82,8 @@
     </ion-card>
   </ion-radio-group>
 
-  <div class="anumation-block button-container">
-    <button class="anumation-block custom-button" (click)="placementOfAgentsConfirmModal()">Affecter</button>
+  <div class="animate__animated animate__fadeInUp button-container">
+    <button class="animate__animated animate__fadeInUp custom-button" (click)="placementOfAgentsConfirmModal()">Affecter</button>
   </div>
   <ion-alert
     [isOpen]="isAlertOpen"

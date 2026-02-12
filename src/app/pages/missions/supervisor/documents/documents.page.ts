@@ -6,8 +6,12 @@ import {Router} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {AfterViewInit, ElementRef} from "@angular/core";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-documents",
   templateUrl: "./documents.page.html",
   styleUrls: ["./documents.page.scss"],
@@ -30,20 +34,7 @@ export class DocumentsPage implements OnInit {
   ngOnInit() {
     this.getAllAgents();
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".custom-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   async getAllAgents() {
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     await this.loadingCtrl.present(this.loadingMessage);

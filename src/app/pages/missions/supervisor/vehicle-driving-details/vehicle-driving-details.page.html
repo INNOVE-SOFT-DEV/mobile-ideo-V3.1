@@ -14,29 +14,29 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" *ngIf="!sliderOpen">
-  <div class="anumation-block cls-details">
-    <div class="anumation-block vehicle-label">{{'Vehicle1' | translate}}</div>
-    <ion-card class="anumation-block custom-card">
-      <div class="anumation-block card-header">
-        <img [src]="image" alt="Vehicle photo" class="anumation-block vehicle-image" />
-        <div class="anumation-block car-info">
-          <h2 class="anumation-block car-name">{{name}}</h2>
+  <div class="animate__animated animate__fadeInUp cls-details">
+    <div class="animate__animated animate__fadeInUp vehicle-label">{{'Vehicle1' | translate}}</div>
+    <ion-card class="animate__animated animate__fadeInUp custom-card">
+      <div class="animate__animated animate__fadeInUp card-header">
+        <img [src]="image" alt="Vehicle photo" class="animate__animated animate__fadeInUp vehicle-image" />
+        <div class="animate__animated animate__fadeInUp car-info">
+          <h2 class="animate__animated animate__fadeInUp car-name">{{name}}</h2>
         </div>
       </div>
     </ion-card>
-    <div class="anumation-block vehicle-label">{{'Vehicle return history' | translate}}</div>
-    <ion-card class="anumation-block custom-card" *ngFor="let raison of data.return_raison.split(',')">
-      <div class="anumation-block card-header">
-        <img [src]="getRaisonIcon(raison)" class="anumation-block icon-image" />
+    <div class="animate__animated animate__fadeInUp vehicle-label">{{'Vehicle return history' | translate}}</div>
+    <ion-card class="animate__animated animate__fadeInUp custom-card" *ngFor="let raison of data.return_raison.split(',')">
+      <div class="animate__animated animate__fadeInUp card-header">
+        <img [src]="getRaisonIcon(raison)" class="animate__animated animate__fadeInUp icon-image" />
 
-        <div class="anumation-block car-info">
-          <h2 class="anumation-block car-name">
+        <div class="animate__animated animate__fadeInUp car-info">
+          <h2 class="animate__animated animate__fadeInUp car-name">
             {{ raison == 'has_issue' ? "Défaut" : "" }} {{ raison == 'not_functional' ? "Non roulat" : "" }} {{ raison == 'get_vehicule' ? "Atrribution" : "" }} {{ raison ==
             'not_adapted' ? "Non adapter" : "" }} {{ raison == 'first' ? "Premier" : "" }}
           </h2>
-          <span class="anumation-block status-badge">{{data.date}}</span>
+          <span class="animate__animated animate__fadeInUp status-badge">{{data.date}}</span>
         </div>
-        <ion-icon name="eye-outline" class="anumation-block arrow-icon" (click)="openSliderModal(data, raison)"></ion-icon>
+        <ion-icon name="eye-outline" class="animate__animated animate__fadeInUp arrow-icon" (click)="openSliderModal(data, raison)"></ion-icon>
       </div>
     </ion-card>
   </div>
@@ -44,16 +44,16 @@
 
 <ion-content *ngIf="sliderOpen">
   <app-glide [images]="sliderPhotos" [index]="initialIndexPhoto"></app-glide>
-  <div *ngFor="let voice of voices; let i = index" class="anumation-block flex">
-    <ion-button class="anumation-block custom-button-update bg-record-lisen grid-item" (click)="playRecordingAgain(i)">
-      <ion-icon class="anumation-block play-icon" name="play-circle-outline" slot="start"></ion-icon>
+  <div *ngFor="let voice of voices; let i = index" class="animate__animated animate__fadeInUp flex">
+    <ion-button class="animate__animated animate__fadeInUp custom-button-update bg-record-lisen grid-item" (click)="playRecordingAgain(i)">
+      <ion-icon class="animate__animated animate__fadeInUp play-icon" name="play-circle-outline" slot="start"></ion-icon>
     </ion-button>
-    <div #waveformContainer [id]="'waveform-' + i" class="anumation-block grid-item waveform"></div>
+    <div #waveformContainer [id]="'waveform-' + i" class="animate__animated animate__fadeInUp grid-item waveform"></div>
   </div>
 
-  <div class="anumation-block blue-box">
-    <ion-list class="anumation-block gradient-list">
-      <ion-item *ngFor="let note of notes" class="anumation-block gradient-item">{{ note }}</ion-item>
+  <div class="animate__animated animate__fadeInUp blue-box">
+    <ion-list class="animate__animated animate__fadeInUp gradient-list">
+      <ion-item *ngFor="let note of notes" class="animate__animated animate__fadeInUp gradient-item">{{ note }}</ion-item>
     </ion-list>
   </div>
 </ion-content>

@@ -6,8 +6,12 @@ import {LoadingControllerService} from "src/app/widgets/loading-controller/loadi
 import {Location} from "@angular/common";
 import {environment} from "src/environments/environment";
 import WaveSurfer from "wavesurfer.js";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-see-vehicule-by-planning",
   templateUrl: "./see-vehicule-by-planning.page.html",
   styleUrls: ["./see-vehicule-by-planning.page.scss"],
@@ -91,21 +95,6 @@ export class SeeVehiculeByPlanningPage implements OnInit {
     const data = JSON.parse(this.route.snapshot.paramMap.get("data")!) || {};
     this.planning = data;
     await this.getReturns();
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
   }
 
   async getReturns() {

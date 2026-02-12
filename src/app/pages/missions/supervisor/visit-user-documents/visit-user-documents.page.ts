@@ -8,8 +8,12 @@ import {ModalController} from "@ionic/angular";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {TranslateService} from "@ngx-translate/core";
 import {Share} from "@capacitor/share";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-visit-user-documents",
   templateUrl: "./visit-user-documents.page.html",
   styleUrls: ["./visit-user-documents.page.scss"],
@@ -46,21 +50,6 @@ export class VisitUserDocumentsPage implements OnInit {
         }
       });
     });
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
   }
 
   async displayDocument(url: string, type: string) {

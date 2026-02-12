@@ -13,33 +13,33 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="anumation-block ion-padding">
-  <div class="anumation-block item-missions" (click)="menuMession(item)" *ngFor="let item of regulars; let i = index">
-    <ion-card class="anumation-block card">
-      <ion-card-header class="anumation-block card-header">
+<ion-content class="animate__animated animate__fadeInUp ion-padding">
+  <div class="animate__animated animate__fadeInUp item-missions" (click)="menuMession(item)" *ngFor="let item of regulars; let i = index">
+    <ion-card class="animate__animated animate__fadeInUp card">
+      <ion-card-header class="animate__animated animate__fadeInUp card-header">
         <ion-card-title>
           <ion-grid>
             <ion-row>
               <ion-col size="9" push="3">
-                <p class="anumation-block name-campany">{{ item.intervention_name }}</p>
+                <p class="animate__animated animate__fadeInUp name-campany">{{ item.intervention_name }}</p>
               </ion-col>
-              <ion-col class="anumation-block logo" size="3" pull="9">
-                <img class="anumation-block logo" src="{{ item?.logo?.url }}" />
+              <ion-col class="animate__animated animate__fadeInUp logo" size="3" pull="9">
+                <img class="animate__animated animate__fadeInUp logo" src="{{ item?.logo?.url }}" />
               </ion-col>
             </ion-row>
           </ion-grid>
-          <ion-chip color="tertiary" class="anumation-block custom-chip">
+          <ion-chip color="tertiary" class="animate__animated animate__fadeInUp custom-chip">
             <ion-icon style="font-size: 23px" name="people-outline"></ion-icon>
             {{ "team" | translate }}
           </ion-chip>
         </ion-card-title>
       </ion-card-header>
 
-      <ion-card-content class="anumation-block card-content">
-        <ion-list class="anumation-block list">
+      <ion-card-content class="animate__animated animate__fadeInUp card-content">
+        <ion-list class="animate__animated animate__fadeInUp list">
           <ion-item *ngFor="let agent of item.team.slice(0, 2); let last = last" [attr.lines]="item.team.length <= 2 && last ? 'none' : null">
             <ion-thumbnail *ngIf="agent.is_driver" slot="start">
-              <div class="anumation-block avatar-container">
+              <div class="animate__animated animate__fadeInUp avatar-container">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
@@ -51,20 +51,20 @@
                 </svg>
               </div>
             </ion-thumbnail>
-            <ion-grid *ngIf="agent.is_driver" class="anumation-block custom-grid">
+            <ion-grid *ngIf="agent.is_driver" class="animate__animated animate__fadeInUp custom-grid">
               <ion-row>
                 <ion-col size="12">
-                  <p class="anumation-block name-agent wrap-text">
+                  <p class="animate__animated animate__fadeInUp name-agent wrap-text">
                     {{ agent.first_name }} {{ agent.last_name }}
                     <br />
-                    <span *ngIf="agent.vehicule" class="anumation-block job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                    <span *ngIf="agent.vehicule" class="animate__animated animate__fadeInUp job-agent wrap-text">{{ agent.vehicule.name }}</span>
                   </p>
                 </ion-col>
               </ion-row>
             </ion-grid>
 
             <ion-thumbnail *ngIf="!agent.is_driver" slot="start">
-              <div class="anumation-block avatar-container">
+              <div class="animate__animated animate__fadeInUp avatar-container">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
@@ -76,23 +76,23 @@
                 </svg>
               </div>
             </ion-thumbnail>
-            <ion-grid *ngIf="!agent.is_driver" class="anumation-block custom-grid">
+            <ion-grid *ngIf="!agent.is_driver" class="animate__animated animate__fadeInUp custom-grid">
               <ion-row>
                 <ion-col size="12">
-                  <p class="anumation-block name-agent wrap-text">
+                  <p class="animate__animated animate__fadeInUp name-agent wrap-text">
                     {{ agent.first_name }} {{ agent.last_name }}
                     <br />
-                    <span class="anumation-block job-agent wrap-text">{{ "company name" | translate }}</span>
+                    <span class="animate__animated animate__fadeInUp job-agent wrap-text">{{ "company name" | translate }}</span>
                   </p>
                 </ion-col>
               </ion-row>
             </ion-grid>
             <app-pointing-status-indicators [agent]="agent"></app-pointing-status-indicators>
           </ion-item>
-          <div class="anumation-block expandable-content" [class.expanded]="item.showDetails" *ngIf="item.team.length > 2">
-            <ion-item *ngFor="let agent of item.team.slice(2); let last = last" [attr.lines]="last ? 'none' : null" class="anumation-block expandable-item">
+          <div class="animate__animated animate__fadeInUp expandable-content" [class.expanded]="item.showDetails" *ngIf="item.team.length > 2">
+            <ion-item *ngFor="let agent of item.team.slice(2); let last = last" [attr.lines]="last ? 'none' : null" class="animate__animated animate__fadeInUp expandable-item">
               <ion-thumbnail *ngIf="agent.is_driver" slot="start">
-                <div class="anumation-block avatar-container">
+                <div class="animate__animated animate__fadeInUp avatar-container">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M3 11H21M20 17V11.6791C20 11.4256 20.0001 11.2988 19.9844 11.1742C19.9704 11.0635 19.947 10.954 19.9148 10.8472C19.8786 10.7269 19.827 10.6112 19.724 10.3795L18.1777 6.90039C17.872 6.21253 17.7192 5.86852 17.4775 5.61633C17.264 5.39341 17.0021 5.223 16.7116 5.11837C16.383 5 16.0063 5 15.2536 5H8.74609C7.99336 5 7.61716 5 7.28857 5.11837C6.99813 5.223 6.73604 5.39341 6.52246 5.61633C6.28084 5.86852 6.12785 6.21253 5.82214 6.90039L4.27588 10.3795C4.17291 10.6112 4.12122 10.7269 4.08496 10.8472C4.05276 10.954 4.02969 11.0635 4.01572 11.1742C4 11.2988 4 11.4256 4 11.6791V17M20 17L4 17M20 17V18C20 19.1046 19.1046 20 18 20C16.8954 20 16 19.1046 16 18V17M4 17V18C4 19.1046 4.89543 20 6 20C7.10457 20 8 19.1046 8 18V17"
@@ -104,20 +104,20 @@
                   </svg>
                 </div>
               </ion-thumbnail>
-              <ion-grid *ngIf="agent.is_driver" class="anumation-block custom-grid">
+              <ion-grid *ngIf="agent.is_driver" class="animate__animated animate__fadeInUp custom-grid">
                 <ion-row>
                   <ion-col size="12">
-                    <p class="anumation-block name-agent wrap-text">
+                    <p class="animate__animated animate__fadeInUp name-agent wrap-text">
                       {{ agent.first_name }} {{ agent.last_name }}
                       <br />
-                      <span *ngIf="agent.vehicule" class="anumation-block job-agent wrap-text">{{ agent.vehicule.name }}</span>
+                      <span *ngIf="agent.vehicule" class="animate__animated animate__fadeInUp job-agent wrap-text">{{ agent.vehicule.name }}</span>
                     </p>
                   </ion-col>
                 </ion-row>
               </ion-grid>
 
               <ion-thumbnail *ngIf="!agent.is_driver" slot="start">
-                <div class="anumation-block avatar-container">
+                <div class="animate__animated animate__fadeInUp avatar-container">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M21 19.9999C21 18.2583 19.3304 16.7767 17 16.2275M15 20C15 17.7909 12.3137 16 9 16C5.68629 16 3 17.7909 3 20M15 13C17.2091 13 19 11.2091 19 9C19 6.79086 17.2091 5 15 5M9 13C6.79086 13 5 11.2091 5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13Z"
@@ -129,13 +129,13 @@
                   </svg>
                 </div>
               </ion-thumbnail>
-              <ion-grid *ngIf="!agent.is_driver" class="anumation-block custom-grid">
+              <ion-grid *ngIf="!agent.is_driver" class="animate__animated animate__fadeInUp custom-grid">
                 <ion-row>
                   <ion-col size="12">
-                    <p class="anumation-block name-agent wrap-text">
+                    <p class="animate__animated animate__fadeInUp name-agent wrap-text">
                       {{ agent.first_name }} {{ agent.last_name }}
                       <br />
-                      <span class="anumation-block job-agent wrap-text">{{ "company name" | translate }}</span>
+                      <span class="animate__animated animate__fadeInUp job-agent wrap-text">{{ "company name" | translate }}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -146,9 +146,9 @@
         </ion-list>
       </ion-card-content>
 
-      <div class="anumation-block show-more-container" *ngIf="item.team.length > 2" (click)="toggleDetails(item) ;$event.stopPropagation()">
-        <p class="anumation-block show-more-text">{{ item.showDetails ? ("Show less" | translate) : ("Show more" | translate) }}</p>
-        <ion-icon class="anumation-block icon-show-more" [class.rotated]="item.showDetails" [name]="item.showDetails ? 'caret-up-circle-outline' : 'caret-down-circle-outline'"></ion-icon>
+      <div class="animate__animated animate__fadeInUp show-more-container" *ngIf="item.team.length > 2" (click)="toggleDetails(item) ;$event.stopPropagation()">
+        <p class="animate__animated animate__fadeInUp show-more-text">{{ item.showDetails ? ("Show less" | translate) : ("Show more" | translate) }}</p>
+        <ion-icon class="animate__animated animate__fadeInUp icon-show-more" [class.rotated]="item.showDetails" [name]="item.showDetails ? 'caret-up-circle-outline' : 'caret-down-circle-outline'"></ion-icon>
       </div>
     </ion-card>
   </div>

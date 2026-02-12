@@ -6,7 +6,11 @@ import {LoadingControllerService} from "../../loading-controller/loading-control
 import WaveSurfer from "wavesurfer.js";
 import {ElementRef, ViewChild} from "@angular/core";
 import {FeedbackModalPage} from "../feedback-modal/feedback-modal.page";
+import {trigger, style, animate, transition} from "@angular/animations";
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-mission-returns-supervisor",
   templateUrl: "./mission-returns-supervisor.page.html",
   styleUrls: ["./mission-returns-supervisor.page.scss"],
@@ -64,20 +68,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
       await this.loadingService.dimiss();
     });
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
 
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   async getId() {
     return this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
   }

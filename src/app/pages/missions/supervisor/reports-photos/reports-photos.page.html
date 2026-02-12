@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-details" *ngIf="!isSliderOpen">
+  <div class="animate__animated animate__fadeInUp cls-details" *ngIf="!isSliderOpen">
 
     <!-- Select -->
     <div class=" custom-select-container">
@@ -25,7 +25,7 @@
         <span class=" selected-text">{{ selectedOption }}</span>
       </div>
 
-      <div class=" anumation-blockright">
+      <div class=" animate__animated animate__fadeInUpright">
         <span class=" select-label">Select</span>
         <ion-icon
           name="chevron-down-outline"
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Tabs -->
-    <div class="anumation-block custom-tab-container">
+    <div class="animate__animated animate__fadeInUp custom-tab-container">
       <div class="tabs">
         <div
           class=" tab"
@@ -59,7 +59,7 @@
         </div>
 
         <div
-          class="anumation-block tab"
+          class="animate__animated animate__fadeInUp tab"
           [class.active]="activeTab === 'Camion'"
           (click)="setActiveTab('Camion')">
           <ion-icon name="car-outline"></ion-icon>
@@ -73,7 +73,7 @@
         <div *ngIf="activeTab === 'prestation'">
 
           <ng-container *ngIf="images.length === 0">
-            <div class="anumation-block empty-container">
+            <div class="animate__animated animate__fadeInUp empty-container">
               <img src="assets/img/emty-icon.png" />
               <p class=" cls-empty-title">
                 {{ 'No data found' | translate }}
@@ -84,9 +84,9 @@
             </div>
           </ng-container>
 
-          <div class="anumation-block image-grid">
+          <div class="animate__animated animate__fadeInUp image-grid">
             <div
-              class="anumation-block grid-item"
+              class="animate__animated animate__fadeInUp grid-item"
               *ngFor="let pair of images; let i = index">
 
               <div
@@ -125,7 +125,7 @@
         <div *ngIf="activeTab === 'Camion'">
 
           <ng-container *ngIf="imagesCamions.length === 0">
-            <div class="anumation-block empty-container">
+            <div class="animate__animated animate__fadeInUp empty-container">
               <img src="assets/img/emty-icon.png" />
               <p class="cls-empty-title">
                 {{ 'No data found' | translate }}
@@ -136,8 +136,8 @@
             </div>
           </ng-container>
 
-          <div class="anumation-block truck-grid">
-            <div class="anumation-block camions-grid">
+          <div class="animate__animated animate__fadeInUp truck-grid">
+            <div class="animate__animated animate__fadeInUp camions-grid">
               <div
                 class=" camion-item"
                 *ngFor="let obj of imagesCamions; let i = index">
@@ -154,7 +154,7 @@
     </div>
 
     <!-- Buttons -->
-    <div class="anumation-block btn-container">
+    <div class="animate__animated animate__fadeInUp btn-container">
       <ion-button
         class="custom-button"
         expand="block"
@@ -168,7 +168,7 @@
       </ion-button>
 
       <ion-button
-        class="anumation-block custom-button"
+        class="animate__animated animate__fadeInUp custom-button"
         expand="block"
         (click)="sendReport()">
         <ion-img

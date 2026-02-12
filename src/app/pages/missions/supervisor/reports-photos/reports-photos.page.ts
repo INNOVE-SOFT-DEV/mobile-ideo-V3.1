@@ -6,8 +6,12 @@ import {LoadingControllerService} from "src/app/widgets/loading-controller/loadi
 import {TranslateService} from "@ngx-translate/core";
 import {Network} from "@capacitor/network";
 import {PhotoReportService} from "../../agents/photo-report/service/photo-report.service";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-reports-photos",
   templateUrl: "./reports-photos.page.html",
   styleUrls: ["./reports-photos.page.scss"],
@@ -65,21 +69,6 @@ export class ReportsPhotosPage implements OnInit {
       this.images = [];
       this.imagesCamions = [];
     }
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
   }
 
   async ngOnInit() {

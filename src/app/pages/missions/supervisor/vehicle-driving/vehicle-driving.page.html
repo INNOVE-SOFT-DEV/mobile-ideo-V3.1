@@ -14,44 +14,44 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-details">
-    <div class="anumation-block header-container">
-      <div class="anumation-block month-block" (click)="openPopover($event)">
-        <span class="anumation-block month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
-        <ion-icon name="calendar-outline" class="anumation-block icon-calendar"></ion-icon>
+  <div class="animate__animated animate__fadeInUp cls-details">
+    <div class="animate__animated animate__fadeInUp header-container">
+      <div class="animate__animated animate__fadeInUp month-block" (click)="openPopover($event)">
+        <span class="animate__animated animate__fadeInUp month-text">{{ currentMonth | capitalizeFirstLetter }}</span>
+        <ion-icon name="calendar-outline" class="animate__animated animate__fadeInUp icon-calendar"></ion-icon>
       </div>
       <div [ngClass]="{'document-block-active': isDocumentBlockActive, 'document-block': !isDocumentBlockActive}" (click)="toggleDocumentBlock()">
-        <ion-icon name="list-outline" class="anumation-block icon-document"></ion-icon>
+        <ion-icon name="list-outline" class="animate__animated animate__fadeInUp icon-document"></ion-icon>
       </div>
     </div>
     <ng-container *ngIf="returnsUser.length === 0">
-      <div class="anumation-block empty-container">
+      <div class="animate__animated animate__fadeInUp empty-container">
         <img src="assets/img/emty-icon.png" />
-        <p class="anumation-block cls-empty-title">{{ 'No data found' | translate }}</p>
-        <p class="anumation-block cls-empty-d">{{ 'It appears that this list is currently empty' | translate }}</p>
+        <p class="animate__animated animate__fadeInUp cls-empty-title">{{ 'No data found' | translate }}</p>
+        <p class="animate__animated animate__fadeInUp cls-empty-d">{{ 'It appears that this list is currently empty' | translate }}</p>
       </div>
     </ng-container>
     <ng-container *ngIf="returnsUser.length > 0">
       <ion-card
-        class="anumation-block custom-card"
+        class="animate__animated animate__fadeInUp custom-card"
         *ngFor="let item of returnsUser"
         [ngClass]="{'bg-c-b' : item.contravention && item.contravention.is_paid_by_ideo, 'bg-c-w' : !item.contravention ,  'bg-c-r' :  item.contravention && !item.contravention.is_paid_by_ideo}"
       >
-        <div class="anumation-block card-header">
+        <div class="animate__animated animate__fadeInUp card-header">
           <img
             [src]="item?.user?.photo?.url || ('https://ui-avatars.com/api/?name=' + item?.user?.first_name + '+' + item?.user?.last_name + '&background=233341&color=ffffff&size=64')"
             alt="Vehicle photo"
-            class="anumation-block vehicle-image"
+            class="animate__animated animate__fadeInUp vehicle-image"
           />
-          <div class="anumation-block car-info">
-            <h2 class="anumation-block car-name">{{ item?.user?.first_name }} {{ item?.user?.last_name }}</h2>
-            <span class="anumation-block status-badge">{{ item?.date }}</span>
+          <div class="animate__animated animate__fadeInUp car-info">
+            <h2 class="animate__animated animate__fadeInUp car-name">{{ item?.user?.first_name }} {{ item?.user?.last_name }}</h2>
+            <span class="animate__animated animate__fadeInUp status-badge">{{ item?.date }}</span>
           </div>
           <ng-container *ngIf="item.contravention">
-            <span class="anumation-block cls-by">{{item.contravention.is_paid_by_ideo ? 'Payer par IDEO' : 'Attribué par IDEO'}}</span>
+            <span class="animate__animated animate__fadeInUp cls-by">{{item.contravention.is_paid_by_ideo ? 'Payer par IDEO' : 'Attribué par IDEO'}}</span>
           </ng-container>
-          <ion-icon name="document-text-outline" class="anumation-block arrow-icon" *ngIf="item.contravention" (click)="openDocument(item.contravention.file.url)"></ion-icon>
-          <ion-icon name="chevron-forward-outline" class="anumation-block arrow-icon" (click)="vehicleDrivingDetails(item)"></ion-icon>
+          <ion-icon name="document-text-outline" class="animate__animated animate__fadeInUp arrow-icon" *ngIf="item.contravention" (click)="openDocument(item.contravention.file.url)"></ion-icon>
+          <ion-icon name="chevron-forward-outline" class="animate__animated animate__fadeInUp arrow-icon" (click)="vehicleDrivingDetails(item)"></ion-icon>
         </div>
       </ion-card>
     </ng-container>

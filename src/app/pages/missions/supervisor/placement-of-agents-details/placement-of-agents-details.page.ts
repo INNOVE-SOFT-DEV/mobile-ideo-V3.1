@@ -5,8 +5,12 @@ import {TranslateService} from "@ngx-translate/core";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {Subscription} from "rxjs";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-placement-of-agents-details",
   templateUrl: "./placement-of-agents-details.page.html",
   styleUrls: ["./placement-of-agents-details.page.scss"],
@@ -44,21 +48,6 @@ export class PlacementOfAgentsDetailsPage implements OnInit, OnDestroy {
         this.location.back();
       }
     });
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
   }
 
   async getPlannings() {

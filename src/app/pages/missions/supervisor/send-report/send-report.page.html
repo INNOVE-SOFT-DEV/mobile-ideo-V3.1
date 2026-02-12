@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="anumation-block cls-details">
+  <div class="animate__animated animate__fadeInUp cls-details">
     <ion-card>
       <ion-card-content>
         <ion-grid>
@@ -26,8 +26,8 @@
               <img [src]="data?.logo" />
             </ion-col>
             <ion-col size="9">
-              <div class="anumation-block mt-20">
-                <p class="anumation-block cls-p-title">
+              <div class="animate__animated animate__fadeInUp mt-20">
+                <p class="animate__animated animate__fadeInUp cls-p-title">
                   {{data.intervention_name.split('-')[0]}}
                   <br />
                 </p>
@@ -36,14 +36,14 @@
           </ion-row>
           <ion-row>
             <ion-col size="12">
-              <div class="anumation-block custom-banner">{{data.prestation}}</div>
+              <div class="animate__animated animate__fadeInUp custom-banner">{{data.prestation}}</div>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="2"></ion-col>
             <ion-col size="10">
-              <div class="anumation-block cls-address">
-                <p class="anumation-block cls-p-address">{{data.intervention_name.split('-')[1]}}</p>
+              <div class="animate__animated animate__fadeInUp cls-address">
+                <p class="animate__animated animate__fadeInUp cls-p-address">{{data.intervention_name.split('-')[1]}}</p>
               </div>
             </ion-col>
           </ion-row>
@@ -51,24 +51,24 @@
       </ion-card-content>
     </ion-card>
 
-    <div class="anumation-block mission-title">Les contacts de la mission</div>
+    <div class="animate__animated animate__fadeInUp mission-title">Les contacts de la mission</div>
 
-    <div class="anumation-block custom-card">
+    <div class="animate__animated animate__fadeInUp custom-card">
       <ion-radio-group [(ngModel)]="selectedContactId" (ionChange)="onRadioChange($event)">
         <div
-          class="anumation-block card-item"
+          class="animate__animated animate__fadeInUp card-item"
           *ngFor="let item of data?.contacts"
           [ngStyle]="{ 'background-color': selectedContactId === item.id ? '#ddf5ff' : '#fff' }"
           (click)="selectContact(item.id)"
         >
-          <div class="anumation-block item-grid">
-            <div class="anumation-block col-left">
-              <div class="anumation-block item-name">{{ item?.first_name }} {{ item?.last_name }}</div>
-              <div class="anumation-block item-chip">
-                <span class="anumation-block chip-text">{{ item?.job }}</span>
+          <div class="animate__animated animate__fadeInUp item-grid">
+            <div class="animate__animated animate__fadeInUp col-left">
+              <div class="animate__animated animate__fadeInUp item-name">{{ item?.first_name }} {{ item?.last_name }}</div>
+              <div class="animate__animated animate__fadeInUp item-chip">
+                <span class="animate__animated animate__fadeInUp chip-text">{{ item?.job }}</span>
               </div>
             </div>
-            <div class="anumation-block col-right">
+            <div class="animate__animated animate__fadeInUp col-right">
               <ion-radio slot="end" [value]="item.id"></ion-radio>
             </div>
           </div>
@@ -76,9 +76,9 @@
       </ion-radio-group>
     </div>
 
-    <div class="anumation-block btn-container">
-      <ion-button class="anumation-block custom-button" expand="block" (click)="shareReport()">
-        <ion-img slot="start" class="anumation-block btn-icon" src="assets/img/Navigation.png"></ion-img>
+    <div class="animate__animated animate__fadeInUp btn-container">
+      <ion-button class="animate__animated animate__fadeInUp custom-button" expand="block" (click)="shareReport()">
+        <ion-img slot="start" class="animate__animated animate__fadeInUp btn-icon" src="assets/img/Navigation.png"></ion-img>
         Envoyez le rapport au client
       </ion-button>
     </div>

@@ -13,9 +13,13 @@ import {OcrService} from "src/app/pages/ocr-scanner/ocr-service/ocr.service";
 import {ToastControllerService} from "src/app/widgets/toast-controller/toast-controller.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
 import {AfterViewInit, ElementRef} from "@angular/core";
-import { ConfirmAbsentPage } from "src/app/widgets/modals/confirm-absent/confirm-absent.page";
+import {ConfirmAbsentPage} from "src/app/widgets/modals/confirm-absent/confirm-absent.page";
+import {trigger, style, animate, transition} from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-menu-mession",
   templateUrl: "./menu-mession.page.html",
   styleUrls: ["./menu-mession.page.scss"],
@@ -47,8 +51,7 @@ export class MenuMessionPage implements OnInit {
     private toast: ToastControllerService,
     private modalCtrl: ModalController,
     private el: ElementRef,
-        private popoverController: PopoverController,
-
+    private popoverController: PopoverController
   ) {}
 
   ngOnInit() {
@@ -69,21 +72,6 @@ export class MenuMessionPage implements OnInit {
     this.address = [address.postal_code, address.street, address.complement, address.city, address.country]
       .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
       .join(", ");
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 20);
-      });
-    }, 200);
   }
 
   createTicket() {
@@ -159,31 +147,28 @@ export class MenuMessionPage implements OnInit {
 
     await sheet.present();
   }
-  async notice(agent:any){
+  async notice(agent: any) {
     console.log(agent);
-     const popover = await this.popoverController.create({
+    const popover = await this.popoverController.create({
       component: ConfirmAbsentPage,
       componentProps: {
         // Pass data to the component here
         agent: agent
       },
       translucent: true,
-      cssClass: 'popover',
+      cssClass: "popover"
     });
 
-    popover.onDidDismiss().then((data) => {
+    popover.onDidDismiss().then(data => {
       console.log(data);
-      if(data?.data?.confirmed){
-          console.log('====> call api and toast success or error');
-          
-      }else {
-          console.log('====> user cancled');
+      if (data?.data?.confirmed) {
+        console.log("====> call api and toast success or error");
+      } else {
+        console.log("====> user cancled");
       }
     });
 
-        return await popover.present();
-
-
+    return await popover.present();
   }
 
   async takePhoto(source: CameraSource) {

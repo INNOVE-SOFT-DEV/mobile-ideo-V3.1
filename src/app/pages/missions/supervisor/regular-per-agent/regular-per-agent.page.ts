@@ -1,7 +1,12 @@
 import {Component, ElementRef, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {Router} from "@angular/router";
+import {trigger, style, animate, transition} from "@angular/animations";
+
 @Component({
+  animations: [
+    trigger("fadeUp", [transition(":enter", [style({opacity: 0, transform: "translateY(15px)"}), animate("300ms ease-out", style({opacity: 1, transform: "translateY(0)"}))])])
+  ],
   selector: "app-regular-per-agent",
   templateUrl: "./regular-per-agent.page.html",
   styleUrls: ["./regular-per-agent.page.scss"],
@@ -25,20 +30,6 @@ export class RegularPerAgentPage implements OnInit {
     this.superVisors = navigation.supervisors;
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const blocks: HTMLElement[] = Array.from(this.el.nativeElement.querySelectorAll(".anumation-block"));
-
-      blocks.forEach((block, index) => {
-        setTimeout(() => {
-          block.classList.add("animate__animated", "animate__fadeInUp");
-          block.style.opacity = "1";
-          block.style.transform = "translateY(0)";
-          block.style.animationDuration = "500ms";
-        }, index * 100);
-      });
-    }, 200);
-  }
   goBack() {
     this.location.back();
   }
