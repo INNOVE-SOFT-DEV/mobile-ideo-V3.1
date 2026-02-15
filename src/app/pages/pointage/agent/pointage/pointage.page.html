@@ -68,7 +68,7 @@
         </ion-row>
       </ion-grid>
     </div>
-    <ion-grid class="grid" *ngIf="planning?.pointing_internal?.started_on != null && planning?.pointing_internal?.finished_on != null">
+    <ion-grid class="grid" *ngIf="pointing_internal?.state == 'finished'">
       <ion-row class="row">
         <ion-col>Pointage réalisé avec succès</ion-col>
       </ion-row>

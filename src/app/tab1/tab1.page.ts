@@ -98,6 +98,8 @@ export class Tab1Page implements OnInit, OnDestroy {
   async getAllMissions() {
     this.isLoaded = false;
     console.log(this.isSuperVisor);
+    console.log(this.date);
+    
     if(this.isSuperVisor){
       this.missionService.getSuperVisorPlanningCounts(this.date).subscribe({
         next: (value: any) => {
@@ -112,6 +114,9 @@ export class Tab1Page implements OnInit, OnDestroy {
             supervisor_punctuals_count : value?.our_missions
   
           };
+
+          console.log(this.counts);
+          
 
           console.log(this.counts);
           

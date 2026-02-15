@@ -20,6 +20,8 @@ import {trigger, style, animate, transition} from "@angular/animations";
 export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   private refreshEvent!: Subscription;
   punctuals: any[] = [];
+  regulars: any[] = [];
+  forfaitaires: any [] = []
   punctualDate: string = new Date().toISOString().split("T")[0];
   currentDate: string = "";
   isPopoverOpen: boolean = false;
@@ -29,6 +31,7 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
   superVisors: any[] = [];
   date: string = new Date().toISOString().split("T")[0];
   noSchedule: number = 0;
+  isAgent : any =  true
 
   constructor(
     private location: Location,
@@ -59,13 +62,18 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
     this.noSchedule = 0;
     return data?.map((el: any) => {
       el.showDetails = false;
-      el.today_schedule = el?.schedules?.find((s: any) => s.date === this.date) || el?.schedule?.find((s: any) => s.date === this.date) || null;
+
+      
+      
+      el.today_schedule = el?.schedules?.find((s: any) => s.date === this.punctualDate) || el?.schedule?.find((s: any) => s.date === this.punctualDate) 
+      
       el.today_schedule?.agents?.forEach((agent: any) => {
         agent.first_name = agent.full_name.split(" ")[0];
         agent.last_name = agent.full_name.split(" ")[1] || "";
         agent.role = agent.role_name;
       });
-      console.log(el.today_schedule);
+
+      
 
       let subcontractors: any[] = [];
       if (!el.today_schedule) {
@@ -79,15 +87,27 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
 
       el.team = [...el.today_schedule.agents, ...subcontractors];
       return el;
-    });
+    }).filter((p:any)=> p?.today_schedule != null)
   }
 
   async getAllMissions() {
     this.executed = true;
     await this.loadingService.present(this.laodingMessage);
     this.missionService.getPlannings(true, this.punctualDate, "all", true).subscribe(async (data: any) => {
+      
+
+    
       this.superVisors = data.punctuals?.supervisors;
-      this.punctuals = this.formatPlannings(data.punctuals);
+
+      
+
+      
+  
+      this.punctuals = this.formatPlannings([...data.punctuals , ...data.regulars, ...data.flat_rates]);
+      
+      // this.punctuals = this.formatPlannings(data.punctuals);
+
+      
       await this.loadingService.dimiss();
       this.executed = false;
     });
@@ -100,8 +120,10 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
 
   async getByDate() {
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(true, this.punctualDate, "punctual").subscribe(async (data: any) => {
-      this.punctuals = data.punctuals;
+    this.missionService.getPlannings(true, this.punctualDate, "all", true).subscribe(async (data: any) => {
+      this.punctuals = this.formatPlannings([...data.punctuals , ...data.regulars, ...data.flat_rates]);
+            this.punctuals = this.formatPlannings(data.punctuals);
+
       await this.loadingService.dimiss();
     });
   }
@@ -157,5 +179,8 @@ export class SupervisorPlanningsPage implements OnInit, OnDestroy {
     });
     this.punctualDate = selectedDate.toISOString().split("T")[0];
     this.punctualDate == new Date().toISOString().split("T")[0] ? (this.isTodayPlannings = true) : (this.isTodayPlannings = false);
+    this.getByDate()
+    
+    
   }
 }

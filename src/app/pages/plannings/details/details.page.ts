@@ -93,7 +93,7 @@ export class DetailsPage implements OnInit {
       const address: any = this.planning.intervention.address;
       this.address = this.planning.intervention.address;
 
-      this.address = [address.postal_code, address.street, address.complement, address.city, address.country]
+      this.address = [ address.street,address.postal_code, address.city, address.country]
         .filter(v => v && v.toString().trim() !== "") // remove null, undefined, or empty strings
         .join(", ");
     }

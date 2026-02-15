@@ -120,7 +120,7 @@ export class MissionRepository implements MissionInterface {
     const cacheKey = `supervisor_planning_counts_${date}`;
     console.log(date);
     
-    return this.http.get<any>(`${this.newApiUrl}plannings/count?=${date}`).pipe(
+    return this.http.get<any>(`${this.newApiUrl}plannings/count?date=${date}`).pipe(
       switchMap(async data => {
         await Preferences.set({
           key: cacheKey,

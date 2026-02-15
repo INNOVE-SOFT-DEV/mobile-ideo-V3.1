@@ -14,8 +14,13 @@ export const environment = {
   // urlAPI: "https://api.ideogroupe.com/",
   // url_web: "https://backend.ideogroupe.com/",
 
-  newApiUrl: "https://ideo.webo.tn/api/v1/",
-  newWebUrl: "https://ideo.webo.tn/",
+  newApiUrl: "https://v3.ideogroupe.com/api/v1/",
+  newWebUrl: "https://v3.ideogroupe.com/",
+
+
+  //   newApiUrl: "https://ideo.webo.tn/api/v1/",
+  // newWebUrl: "https://ideo.webo.tn/",
+
 
   ws_api_url: "wss://apideo.webo.tn/cable",
   urlAPI: "https://apideo.webo.tn/",

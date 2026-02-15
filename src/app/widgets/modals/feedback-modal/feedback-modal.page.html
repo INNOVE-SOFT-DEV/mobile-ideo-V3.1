@@ -28,7 +28,7 @@
           <div class="row row-3">
             <span class="date">{{planning?.today_schedule?.date}}</span>
 
-            <ion-chip class="time-chip">
+            <ion-chip class="time-chip" *ngIf="returnTime.length> 0">
               <span class="time-text">{{returnTime}}</span>
             </ion-chip>
           </div>

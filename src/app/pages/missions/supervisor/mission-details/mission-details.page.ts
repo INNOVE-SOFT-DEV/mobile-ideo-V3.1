@@ -45,6 +45,7 @@ export class MissionDetailsPage implements OnInit {
   date: string = new Date().toISOString().split("T")[0];
   supervisors: any[] = [];
   noSchedule: number = 0;
+  isShifted : boolean = false;
 
   constructor(
     private popoverController: PopoverController,
@@ -66,15 +67,10 @@ export class MissionDetailsPage implements OnInit {
 
   async ngOnInit() {
     this.laodingMessage = await this.translateService.get("Loading").toPromise();
-    this.setCurrentDay();
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(false, this.punctualDate, this.type == "forfaitaire" ? "flat_rate" : this.type).subscribe(async (data: any) => {
-      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data["flat_rates"]) : this.foramtplannings(data[`${this.type}s`]);
-
-      this.planningsCached = this.plannings;
-      this.supervisors = data.supervisors_contact;
-      await this.loadingService.dimiss();
-    });
+    await this.setCurrentDay();
+    
+   
 
     this.searchControl.valueChanges.pipe(debounceTime(1000)).subscribe(value => {
       if (value.length > 0) {
@@ -97,15 +93,25 @@ export class MissionDetailsPage implements OnInit {
 
   foramtplannings(data: any) {
     this.noSchedule = 0;
+    
+    
     return data.map((element: any) => {
       element["showDetails"] = false;
-      element["today_schedule"] = element?.schedules?.find((s: any) => s.date == this.date) || element?.schedule?.find((s: any) => s.date == this.date) || null;
+
+
+       
+      
+      element["today_schedule"] =  element?.schedules?.find((s: any) => s.date == this.punctualDate)  || element?.schedule?.find((s: any) => s.date == this.punctualDate)
+      console.log(element);
+      
+      
       element["today_schedule"]?.agents?.forEach((agent: any) => {
         agent.first_name = agent.full_name.split(" ")[0];
         agent.last_name = agent.full_name.split(" ")[1];
         agent.role = agent["role_name"];
       });
-
+      
+      console.log(element.today_schedule);
       let subcontractors: any[] = [];
       if (element["today_schedule"] == null) {
         this.noSchedule++;
@@ -124,11 +130,12 @@ export class MissionDetailsPage implements OnInit {
     });
   }
 
-  setCurrentDay() {
+ async  setCurrentDay() {
     const now = new Date();
     const parisNow = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Paris"}));
     if (parisNow.getHours() >= 21) {
       parisNow.setDate(parisNow.getDate() + 1);
+      this.isShifted =true
     }
     this.currentMonth = parisNow.toLocaleDateString("fr-FR", {
       month: "long",
@@ -138,9 +145,11 @@ export class MissionDetailsPage implements OnInit {
 
     this.selectedDate = parisNow.toISOString();
     this.punctualDate = parisNow.toISOString().split("T")[0];
+    await    this.getByDate()
+    
   }
 
-  async updateDay(event: any) {
+   async updateDay(event: any) {
     const selectedDate = new Date(event.detail.value);
     this.currentMonth = selectedDate.toLocaleDateString("fr-FR", {
       month: "long",
@@ -150,9 +159,12 @@ export class MissionDetailsPage implements OnInit {
     this.selectedDate = selectedDate.toISOString();
     this.date = selectedDate.toISOString().split("T")[0];
     this.punctualDate = selectedDate.toISOString().split("T")[0];
+    console.log(selectedDate ,this.punctualDate);
+    await this.getByDate()
+    
   }
 
-  setCurrentMonth() {
+ async setCurrentMonth() {
     const date = new Date();
     this.currentMonth = date.toLocaleDateString("fr-FR", {
       month: "long",
@@ -160,6 +172,9 @@ export class MissionDetailsPage implements OnInit {
     });
     this.selectedDate = date.toISOString();
     this.date = date.toISOString().split("T")[0];
+    console.log(this.selectedDate);
+    
+   await  this.getByDate()
   }
 
   async updateMonth(event: any) {
@@ -174,6 +189,7 @@ export class MissionDetailsPage implements OnInit {
     const month = (selectedDate.getMonth() + 1).toString().padStart(2, "0");
     const filterDate = `${year}-${month}`;
     this.regularDate = filterDate;
+    await this.getByDate()
   }
 
   async openPopover(event: Event) {
@@ -222,7 +238,7 @@ export class MissionDetailsPage implements OnInit {
         this.closePopover();
       });
     }
-    // }
+   // }
   }
 
   closePopover() {
@@ -239,8 +255,15 @@ export class MissionDetailsPage implements OnInit {
 
   async getByDate() {
     await this.loadingService.present(this.laodingMessage);
-    this.missionService.getPlannings(false, this.date, this.type == "forfaitaire" ? "flat_rate" : this.type).subscribe(async (data: any) => {
-      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data["flat_rates"]) : this.foramtplannings(data[`${this.type}s`]);
+
+    
+    this.missionService.getPlannings(false, this.punctualDate, this.type == "forfaitaire" ? "flat_rate" : this.type).subscribe(async (data: any) => {
+      console.log(data);
+      
+      
+      this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data["flat_rates"]) : this.foramtplannings(data[`${this.type}s`]);   
+         
+      
       if (this.isAgent) {
         this.planningsPerAgent = this.groupTeamMembersByPlanning(this.plannings);
       }

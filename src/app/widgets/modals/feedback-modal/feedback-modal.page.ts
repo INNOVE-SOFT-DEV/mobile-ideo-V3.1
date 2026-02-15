@@ -43,8 +43,8 @@ export class FeedbackModalPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.returnTime = this.reply.recorded_at.split("T")[1].split(".")[0].split(":").slice(0, 2).join(":") || "";
     if (this.reply?.audio_url) {
+      this.returnTime = this.reply.recorded_at.split("T")[1].split(".")[0].split(":").slice(0, 2).join(":") || "";
       this.audioUrl = this.reply.audio_url;
       this.blobUrl = this.reply.audio_url.url;
       this.createWaves();

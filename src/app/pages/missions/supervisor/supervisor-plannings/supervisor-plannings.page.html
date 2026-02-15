@@ -19,9 +19,9 @@
       <span class="animate__animated animate__fadeInUp month-text">{{ currentDate | capitalizeFirstLetter }}</span>
       <ion-icon name="calendar-outline" class="animate__animated animate__fadeInUp icon-calendar"></ion-icon>
     </div>
-    <ion-button expand="block" (click)="getByDate()" class="animate__animated animate__fadeInUp custom-button">{{ "Filter" | translate }}</ion-button>
+    <!-- <ion-button expand="block" (click)="getByDate()" class="animate__animated animate__fadeInUp custom-button">{{ "Filter" | translate }}</ion-button> -->
   </div>
-  <ng-container *ngIf="punctuals?.length == 0">
+  <ng-container *ngIf="punctuals.length == 0">
     <div class="animate__animated animate__fadeInUp empty-container">
       <img src="assets/img/emty-icon.png" />
       <p class="animate__animated animate__fadeInUp cls-empty-title">{{'No data found' | translate}}</p>
@@ -29,5 +29,15 @@
     </div>
   </ng-container>
 
-  <app-punctual *ngIf="punctuals.length > 0" [data]="punctuals" [isToDayPlannings]="isTodayPlannings" [supervisors]="superVisors"></app-punctual>
+        <div class="animate__animated animate__slideInRight delay-1">
+        <!-- <app-forfaitaire [data]="forfaitaires" [isToDayPlannings]="isTodayPlannings" [date]="date" [supervisors]="superVisors"></app-forfaitaire> -->
+      </div>
+
+      <div class="animate__animated animate__slideInRight delay-2">
+        <app-punctual [data]="punctuals" [isAgent] ="true" [date]="date" [isToDayPlannings]="isTodayPlannings" [supervisors]="superVisors"></app-punctual>
+      </div>
+
+      <div class="animate__animated animate__slideInRight delay-3">
+        <!-- <app-regular [data]="regulars" [date]="date" [supervisors]="superVisors"></app-regular> -->
+      </div>
 </ion-content>

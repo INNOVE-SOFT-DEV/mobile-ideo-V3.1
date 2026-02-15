@@ -55,7 +55,9 @@ export class PointagePage implements OnInit, OnDestroy {
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.planning = JSON.parse(localStorage.getItem("currentPlanning")!).planning;
-    this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id)?.pointing_internal[0];
+    console.log(this.planning);
+    
+    this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id)?.pointing_internal[0];    
     this.type = this.route.snapshot.paramMap.get("type");
     this.user = this.authService.getCurrentUser();
     this.updateTime();
@@ -87,7 +89,7 @@ export class PointagePage implements OnInit, OnDestroy {
   }
   getFirstThreeWords(text: string | undefined): string {
     let address = this.planning?.intervention?.address;
-    address = [address?.postal_code, address?.street, address?.complement, address?.city, address?.country].filter(v => v && v.toString().trim() !== ""); // remove null, undefined, or empty strings
+    address = [ address?.street, address?.postal_code,  address?.city, address?.country].filter(v => v && v.toString().trim() !== ""); // remove null, undefined, or empty strings
     if (!text) return "";
     // const words = text.split(" ");
     // return words.length > 3 ? words.slice(0, 3).join(" ") + "..." : text;

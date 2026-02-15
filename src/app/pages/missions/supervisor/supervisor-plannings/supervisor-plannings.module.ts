@@ -11,7 +11,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {ComponentsModule} from "src/app/widgets/intervention/punctual/punctual.module";
 import {CapitalizeFirstLetterPipe} from "../../../../pipes/capitalize-first-letter.pipe";
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, SupervisorPlanningsPageRoutingModule, TranslateModule, ComponentsModule, CapitalizeFirstLetterPipe],
+  imports: [CommonModule, FormsModule, IonicModule, SupervisorPlanningsPageRoutingModule,TranslateModule, ComponentsModule, CapitalizeFirstLetterPipe],
   declarations: [SupervisorPlanningsPage]
 })
 export class SupervisorPlanningsPageModule {}

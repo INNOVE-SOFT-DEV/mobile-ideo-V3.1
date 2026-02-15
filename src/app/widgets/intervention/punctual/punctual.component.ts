@@ -109,6 +109,7 @@ export class PunctualComponent implements OnInit {
   @Input() isToDayPlannings: boolean = true;
   @Input() supervisors: any[] = [];
   @Input() date: string = new Date().toISOString();
+  @Input() isAgent! : boolean 
 
   urlApi: string = environment.newApiUrl;
   webUrl: string = environment.url_web;
