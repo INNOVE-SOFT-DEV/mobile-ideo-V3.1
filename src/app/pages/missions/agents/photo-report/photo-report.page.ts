@@ -103,7 +103,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     this.planningType = cached.planningType;
     this.service.data = this.data;
     this.service.planningType = this.planningType;
-    const local: any = await this.service.getLocalPhotos(this.data.planning.id, this.planningType);
+    const local: any = await this.service.getLocalPhotos(this.data.planning.today_schedule.id, this.planningType);
     this.grouped_presentation_photos = local.grouped_presentation_photos;
     this.photos_truck = local.photos_truck;
     if (this.grouped_presentation_photos.length == 0) this.addPhotoPrestation();
@@ -263,7 +263,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
         const index = reportNeedSync.findIndex((item: any) => item.internal === this.service.getPointageId());
         if (index == -1) {
-          reportNeedSync.push({id: this.data.planning.id, type: this.planningType, internal: this.service.getPointageId()});
+          reportNeedSync.push({id: this.data.planning.today_schedule.id, type: this.planningType, internal: this.service.getPointageId()});
           localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
         }
       }
@@ -302,7 +302,10 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       this.isSliderOpen = true;
     }
   }
-
+  
+ async  triggerSync(){
+    await this.service.checkAndSyncPhotos()
+  }
   private async handleLocalPhotoStateUpdate(photo: any, photosArray: any, type: string, index: number, checkGroupedRemoval?: () => boolean): Promise<void> {
     photo.url = "";
     photo.path = "";
@@ -322,7 +325,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
     if (!hasUnsyncedPresentation && !hasUnsyncedTruck) {
       const reportNeedSync = JSON.parse(localStorage.getItem("report_need_sync") || "[]");
-      const mainIndex = reportNeedSync.findIndex((item: any) => item.id === this.data.planning.id && item.type === this.planningType);
+      const mainIndex = reportNeedSync.findIndex((item: any) => item.id === this.data.planning.today_schedule.id && item.type === this.planningType);
       if (mainIndex !== -1) {
         reportNeedSync.splice(mainIndex, 1);
         localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));

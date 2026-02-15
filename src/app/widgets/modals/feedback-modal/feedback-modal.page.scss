@@ -580,6 +580,30 @@
   box-shadow: 0 0 0 2px #3b82f6;
 }
 
+.reaction {
+  font-size: 32px;          /* increase/decrease size here */
+  cursor: pointer;
+  margin: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.reaction:hover {
+  transform: scale(1.15);
+}
+
+.reaction.selected {
+  transform: scale(1.25);
+  opacity: 1;
+}
+
+.reaction:not(.selected) {
+  opacity: 0.6;
+}
+
+
 #waveform {
   width: 100%;
   height: 52px;

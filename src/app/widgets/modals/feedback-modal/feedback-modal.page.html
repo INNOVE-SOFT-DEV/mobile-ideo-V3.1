@@ -46,15 +46,42 @@
     </div>
 
     <div class="images-container">
-      <img src="assets/img/1.png" (click)="selectOption(0)" [class.selected]="selectedOption === 0 || reply?.reaction_type === 0" />
+<span
+  class="reaction"
+  (click)="selectOption(0)"
+  [class.selected]="selectedOption === 0 || reply?.reaction_type === 0"
+>🚀​</span>
 
-      <img src="assets/img/2.png" (click)="selectOption(1)" [class.selected]="selectedOption === 1 || reply?.reaction_type === 1" />
+<span
+  class="reaction"
+  (click)="selectOption(1)"
+  [class.selected]="selectedOption === 1 || reply?.reaction_type === 1"
+>✅</span>
 
-      <img src="assets/img/3.png" (click)="selectOption(2)" [class.selected]="selectedOption === 2 || reply?.reaction_type === 2" />
-      <img src="assets/img/4.png" (click)="selectOption(3)" [class.selected]="selectedOption === 3 || reply?.reaction_type === 3" />
+<span
+  class="reaction"
+  (click)="selectOption(2)"
+  [class.selected]="selectedOption === 2 || reply?.reaction_type === 2"
+>​🚨​</span>
 
-      <img src="assets/img/5.png" (click)="selectOption(4)" [class.selected]="selectedOption === 4 || reply?.reaction_type === 4" />
-      <img src="assets/img/6.png" (click)="selectOption(5)" [class.selected]="selectedOption === 5 || reply?.reaction_type === 5" />
+<span
+  class="reaction"
+  (click)="selectOption(3)"
+  [class.selected]="selectedOption === 3 || reply?.reaction_type === 3"
+>💯</span>
+
+<span
+  class="reaction"
+  (click)="selectOption(4)"
+  [class.selected]="selectedOption === 4 || reply?.reaction_type === 4"
+>👍</span>
+
+<span
+  class="reaction"
+  (click)="selectOption(5)"
+  [class.selected]="selectedOption === 5 || reply?.reaction_type === 5"
+>⚠️</span>
+
     </div>
 
     <ion-card class="voice-card">

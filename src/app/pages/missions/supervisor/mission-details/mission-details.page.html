@@ -68,7 +68,7 @@
   </ng-container>
 
   <div class="animate__animated animate__fadeInUp bi"></div>
-  <ng-container>
+  <ng-container *ngIf="!isAgent">
     <div class="animate__animated animate__fadeInUp item-missions" (click)="menuMession(item)" *ngFor="let item of plannings; let i = index">
       <ion-card class="animate__animated animate__fadeInUp card" *ngIf="item?.today_schedule">
         <ion-card-header class="animate__animated animate__fadeInUp card-header">
@@ -326,7 +326,7 @@
       <ion-grid>
         <ion-row class="animate__animated animate__fadeInUp ion-align-items-center">
           <ion-col size="auto">
-            <img [src]="agent?.photo?.url" alt="Agent" class="animate__animated animate__fadeInUp agent-img" />
+            <img [src]="agent?.photo_urls?.thumb" alt="Agent" class="animate__animated animate__fadeInUp agent-img" />
           </ion-col>
           <ion-col class="animate__animated animate__fadeInUp agent-info">
             <div class="animate__animated animate__fadeInUp agent-name">{{`${agent.first_name} ${agent.last_name}`}}</div>

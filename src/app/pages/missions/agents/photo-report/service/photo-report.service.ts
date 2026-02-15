@@ -196,28 +196,31 @@ export class PhotoReportService {
           continue;
         }
 
+        console.log(serverData);
+        
+
         /* ------------------ LOCAL STORAGE UPDATE ------------------ */
         const grouped = serverData.pairs.map((p: any) => [
           {
-            id: p.before.id,
-            client_uuid: p.before.client_uuid,
+            id: p.before?.id,
+            client_uuid: p?.before?.client_uuid,
             photo_type: "photo_before",
-            photo: {url: p.before.image_url?.url, thumb: p.before.image_url?.thumb}
+            photo: {url: p?.before?.image_url?.url, thumb: p?.before?.image_url?.thumb}
           },
           {
-            id: p.after.id,
-            client_uuid: p.after.client_uuid,
+            id: p.after?.id,
+            client_uuid: p?.after?.client_uuid,
             photo_type: "photo_after",
-            photo: {url: p.after.image_url?.url, thumb: p.after.image_url?.thumb}
+            photo: {url: p?.after?.image_url?.url, thumb: p?.after?.image_url?.thumb}
           }
         ]);
 
         const truckPhotos = serverData.truck.map((t: any) => ({
-          id: t.id,
-          client_uuid: t.client_uuid,
+          id: t?.id,
+          client_uuid: t?.client_uuid,
           photo_type: "photo_truck",
-          url: t.image_url?.url,
-          thumb: t.image_url?.thumb
+          url: t?.image_url?.url,
+          thumb: t?.image_url?.thumb
         }));
 
         localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(grouped));
@@ -292,9 +295,9 @@ export class PhotoReportService {
 
   updateLocalPhotos(type: string, photos: any) {
     if (type == "photo_truck") {
-      localStorage.setItem(`photo_report_${this.planningType}_${this.data.planning.id}_truck`, JSON.stringify(photos));
+      localStorage.setItem(`photo_report_${this.planningType}_${this.data.planning.today_schedule.id}_truck`, JSON.stringify(photos));
     } else {
-      localStorage.setItem(`photo_report_${this.planningType}_${this.data.planning.id}_presentation`, JSON.stringify(photos));
+      localStorage.setItem(`photo_report_${this.planningType}_${this.data.planning.today_schedule.id}_presentation`, JSON.stringify(photos));
     }
   }
 

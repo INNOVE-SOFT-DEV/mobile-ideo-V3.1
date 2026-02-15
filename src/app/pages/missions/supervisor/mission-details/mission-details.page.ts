@@ -248,6 +248,8 @@ export class MissionDetailsPage implements OnInit {
 
   siteOrAgent(status: boolean) {
     this.isAgent = status;
+    console.log(this.isAgent);
+    
     if (this.isAgent) {
       this.planningsPerAgent = this.groupTeamMembersByPlanning(this.plannings);
     }
@@ -302,6 +304,9 @@ export class MissionDetailsPage implements OnInit {
         }
       }
     }
+
+    console.log(teamMap.values());
+    
 
     return Array.from(teamMap.values());
   }
