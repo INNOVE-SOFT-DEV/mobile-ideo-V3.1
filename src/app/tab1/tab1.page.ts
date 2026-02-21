@@ -97,9 +97,6 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   async getAllMissions() {
     this.isLoaded = false;
-    console.log(this.isSuperVisor);
-    console.log(this.date);
-    
     if(this.isSuperVisor){
       this.missionService.getSuperVisorPlanningCounts(this.date).subscribe({
         next: (value: any) => {
@@ -115,10 +112,6 @@ export class Tab1Page implements OnInit, OnDestroy {
   
           };
 
-          console.log(this.counts);
-          
-
-          console.log(this.counts);
           
           // this.superVisors = value.supervisors_contact;
           
@@ -173,7 +166,6 @@ export class Tab1Page implements OnInit, OnDestroy {
         agent.last_name = agent.full_name.split(" ")[1] || "";
         agent.role = agent.role_name;
       });
-      console.log(el.today_schedule)
       
 
       let subcontractors: any[] = [];

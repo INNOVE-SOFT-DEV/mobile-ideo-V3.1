@@ -121,7 +121,6 @@ export class RegularComponent implements OnInit {
       element["team"] = [...element["today_schedule"]["agents"], ...element["today_schedule"]["subcontractors"]];
     });
 
-    console.log(this.data);
     
   }
 

@@ -52,7 +52,6 @@ export class ReportsPhotosPage implements OnInit {
 
     // Trouver l'agent sélectionné
     this.pickedAgent = this.team.find(u => u.full_name === this.selectedOption);
-    console.log(this.pickedAgent);
 
     if (this.selectedOption === "Tous les agents") {
       // Récupérer toutes les images
@@ -77,7 +76,6 @@ export class ReportsPhotosPage implements OnInit {
     this.planning = data;
     const scheduleId = this.planning.today_schedule.id;
     this.team = this.planning.team.filter((member: any) => (member.first_name || member.last_name) && !member?.manager);
-    console.log(this.team);
 
     await this.loadingService.present(this.laodingMessage);
     Network.getStatus().then(status => {

@@ -102,7 +102,6 @@ export class MissionDetailsPage implements OnInit {
        
       
       element["today_schedule"] =  element?.schedules?.find((s: any) => s.date == this.punctualDate)  || element?.schedule?.find((s: any) => s.date == this.punctualDate)
-      console.log(element);
       
       
       element["today_schedule"]?.agents?.forEach((agent: any) => {
@@ -111,7 +110,6 @@ export class MissionDetailsPage implements OnInit {
         agent.role = agent["role_name"];
       });
       
-      console.log(element.today_schedule);
       let subcontractors: any[] = [];
       if (element["today_schedule"] == null) {
         this.noSchedule++;
@@ -159,7 +157,6 @@ export class MissionDetailsPage implements OnInit {
     this.selectedDate = selectedDate.toISOString();
     this.date = selectedDate.toISOString().split("T")[0];
     this.punctualDate = selectedDate.toISOString().split("T")[0];
-    console.log(selectedDate ,this.punctualDate);
     await this.getByDate()
     
   }
@@ -172,7 +169,6 @@ export class MissionDetailsPage implements OnInit {
     });
     this.selectedDate = date.toISOString();
     this.date = date.toISOString().split("T")[0];
-    console.log(this.selectedDate);
     
    await  this.getByDate()
   }
@@ -248,7 +244,6 @@ export class MissionDetailsPage implements OnInit {
 
   siteOrAgent(status: boolean) {
     this.isAgent = status;
-    console.log(this.isAgent);
     
     if (this.isAgent) {
       this.planningsPerAgent = this.groupTeamMembersByPlanning(this.plannings);
@@ -260,7 +255,6 @@ export class MissionDetailsPage implements OnInit {
 
     
     this.missionService.getPlannings(false, this.punctualDate, this.type == "forfaitaire" ? "flat_rate" : this.type).subscribe(async (data: any) => {
-      console.log(data);
       
       
       this.plannings = this.type == "forfaitaire" ? this.foramtplannings(data["flat_rates"]) : this.foramtplannings(data[`${this.type}s`]);   
@@ -305,7 +299,6 @@ export class MissionDetailsPage implements OnInit {
       }
     }
 
-    console.log(teamMap.values());
     
 
     return Array.from(teamMap.values());

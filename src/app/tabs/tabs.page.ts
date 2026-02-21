@@ -60,7 +60,6 @@ export class TabsPage {
   }
 
   animateTab(tab: string) {
-    console.log(tab);
     //  this.resetStack()
     this.clickedTab = tab;
     this.router.navigate(

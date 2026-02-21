@@ -55,7 +55,6 @@ export class PointagePage implements OnInit, OnDestroy {
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     this.planning = JSON.parse(localStorage.getItem("currentPlanning")!).planning;
-    console.log(this.planning);
     
     this.pointing_internal = this.planning.team.find((user: any) => user.id == user_v3.id)?.pointing_internal[0];    
     this.type = this.route.snapshot.paramMap.get("type");
@@ -173,7 +172,6 @@ export class PointagePage implements OnInit, OnDestroy {
         longitude: parseFloat(this.planning.intervention.address.longitude)
       });
 
-      console.log(distance);
 
       if (distance && distance <= 0.5) {
         // console.log(this.pointing_internal.id, "start", body);

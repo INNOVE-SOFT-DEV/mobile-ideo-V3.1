@@ -185,7 +185,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
-    if (connected ) {
+    if (this.isConneted ) {
       let client_uuid = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;

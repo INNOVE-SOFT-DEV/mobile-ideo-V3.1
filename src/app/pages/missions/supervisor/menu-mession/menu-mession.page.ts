@@ -148,7 +148,6 @@ export class MenuMessionPage implements OnInit {
     await sheet.present();
   }
   async notice(agent: any) {
-    console.log(agent);
     const popover = await this.popoverController.create({
       component: ConfirmAbsentPage,
       componentProps: {
@@ -160,11 +159,10 @@ export class MenuMessionPage implements OnInit {
     });
 
     popover.onDidDismiss().then(data => {
-      console.log(data);
       if (data?.data?.confirmed) {
-        console.log("====> call api and toast success or error");
+        // console.log("====> call api and toast success or error");
       } else {
-        console.log("====> user cancled");
+        // console.log("====> user cancled");
       }
     });
 

@@ -50,10 +50,7 @@ export class MissionReturnsSupervisorPage implements OnInit {
     await this.loadingService.present(this.loadingMessage);
     const id = this.planning.team.find((member: any) => member.is_teamleader)?.pointing_internal[0]?.id;
     this.missionService.getSupervisorAudioReport(this.planning.today_schedule.id).subscribe(async (data: any) => {
-      console.log(data);
       this.returnTime = data.audio_report?.recorded_at.split("T")[1].split(".")[0].split(":").slice(0, 2).join(":") || "";
-      console.log(this.returnTime);
-
       this.reply = data?.reply;
       this.returnType = data.audio_report?.return_types;
       this.important = data.audio_report?.important;

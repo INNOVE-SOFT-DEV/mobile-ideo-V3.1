@@ -48,7 +48,6 @@ export class PointagesPage implements OnInit {
 
     this.planning = data;
     this.team = this.planning.team.filter((member: any) => !member?.manager);
-    console.log(this.team);
 
     if (this.planning.type != "regular") this.nonRegularDay = new Intl.DateTimeFormat("fr-FR", {weekday: "long"})?.format(new Date(this.planning.today_schedule.date));
     this.setDate();
