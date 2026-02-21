@@ -15,7 +15,6 @@ import {AuthService} from "src/app/pages/login/service/auth.service";
 import exifr from "exifr";
 import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
 import {zip} from "fflate";
-import { connected } from "process";
 @Component({
   selector: "app-photo-report",
   templateUrl: "./photo-report.page.html",
