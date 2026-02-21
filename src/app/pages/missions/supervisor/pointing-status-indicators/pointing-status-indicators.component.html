@@ -1,33 +1,44 @@
-<div *ngIf="agent?.pointing_internal[0].started_on && agent?.pointing_internal[0].finished_on" class="status-indicator green">
-  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M21 10.3115L17 14.3115L15 12.3115M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
-      stroke="#308451"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-</div>
-<div *ngIf="!agent?.pointing_internal[0].started_on && !agent?.pointing_internal[0].finished_on" class="status-indicator red">
-  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M17 14.3115L21 10.3115M17 10.3115L21 14.3115M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
-      stroke="#FF6565"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-</div>
-<div *ngIf="agent?.pointing_internal[0].started_on && !agent?.pointing_internal[0].finished_on" class="status-indicator yellow">
-  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M15 13.3115H21M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
-      stroke="#DE914B"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
+<div class="status-indicators-container" style="display: flex; align-items: center; gap: 8px;">
+  <!-- Synchronized Image Indicator (Left) -->
+  <div *ngIf="agent?.pointing_internal[0].synchronized_image" class="status-indicator green">
+    <ion-icon name="cloud-done-outline" style="font-size: 24px; color: #308451;"></ion-icon>
+  </div>
+  <div *ngIf="!agent?.pointing_internal[0].synchronized_image" class="status-indicator red">
+    <ion-icon name="cloud-offline-outline" style="font-size: 24px; color: #FF6565;"></ion-icon>
+  </div>
+
+  <!-- Existing Pointing Status Indicator (Right) -->
+  <div *ngIf="agent?.pointing_internal[0].started_on && agent?.pointing_internal[0].finished_on" class="status-indicator green">
+    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M21 10.3115L17 14.3115L15 12.3115M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
+        stroke="#308451"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </div>
+  <div *ngIf="!agent?.pointing_internal[0].started_on && !agent?.pointing_internal[0].finished_on" class="status-indicator red">
+    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M17 14.3115L21 10.3115M17 10.3115L21 14.3115M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
+        stroke="#FF6565"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </div>
+  <div *ngIf="agent?.pointing_internal[0].started_on && !agent?.pointing_internal[0].finished_on" class="status-indicator yellow">
+    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M15 19.3115C15 17.1024 12.3137 15.3115 9 15.3115C5.68629 15.3115 3 17.1024 3 19.3115M15 13.3115H21M9 12.3115C6.79086 12.3115 5 10.5207 5 8.31152C5 6.10238 6.79086 4.31152 9 4.31152C11.2091 4.31152 13 6.10238 13 8.31152C13 10.5207 11.2091 12.3115 9 12.3115Z"
+        stroke="#DE914B"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </div>
 </div>

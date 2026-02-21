@@ -15,6 +15,7 @@ import {AuthService} from "src/app/pages/login/service/auth.service";
 import exifr from "exifr";
 import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
 import {zip} from "fflate";
+import { connected } from "process";
 @Component({
   selector: "app-photo-report",
   templateUrl: "./photo-report.page.html",
@@ -48,6 +49,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   win: any;
   user: any = this.authServie.getCurrentUser();
   baseUrl = `${environment.newWebUrl}`;
+  syncMessage: string = "test";
 
   setOpen(isOpen: boolean) {
     this.isOffLineAlertOpen = isOpen;
@@ -74,8 +76,11 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.syncMessage = localStorage.getItem("photos_erros") || "";
+    
+ 
     await this.refreshLocalData();
-    console.log(this.grouped_presentation_photos);
+
 
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     Network.addListener("networkStatusChange", async status => {
@@ -146,18 +151,17 @@ export class PhotoReportPage implements OnInit, OnDestroy {
   }
 
   async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
-    console.log(this.user , this.data);
     
+      
     if (this.service.startedOn() == null && !this.isPointed) {
       //await this.geolocationService.getCurrentLocation();
-      let userCoordinates = this.geolocationService.coordinates;
+      let userCoordinates = this.geolocationService?.coordinates;
       let pointageInternalId = this.service.getPointageId();
-      console.log(pointageInternalId);
       
       let body: any = {
         point: {
-          longitude: userCoordinates.longitude,
-          latitude: userCoordinates.latitude,
+          longitude: userCoordinates?.longitude,
+          latitude: userCoordinates?.latitude,
           recorder_at: new Date().toISOString()
         }
       };
@@ -168,7 +172,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           // console.log("Pointage début réalisé ");
         },
         error: () => {
-          console.error("Erreur lors du pointage ");
+          // console.error("Erreur lors du pointage ");
         }
       });
     }
@@ -182,7 +186,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     } catch (error) {
       console.error("❌ Impossible de lire les EXIF", error);
     }
-    if (this.isConneted) {
+    if (connected ) {
       let client_uuid = null;
       if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
         client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
@@ -200,6 +204,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       
       
       await this.loadingService.present(this.loadingMessage);
+      
       this.missionsService.createReportPhoto(form, this.service.getPointageId()).subscribe({
         next: async value => {
           if (value[0].photo_type == "before") {
@@ -210,7 +215,6 @@ export class PhotoReportPage implements OnInit, OnDestroy {
 
             this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
           } else if (value[0].photo_type == "after") {
-            console.log(value);
 
             this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
             this.grouped_presentation_photos[i][1].id = value[0].id;
@@ -233,23 +237,21 @@ export class PhotoReportPage implements OnInit, OnDestroy {
       });
     } else {
       const url = await this.service.savePhotoOffline(this.photosService.lastImage);
+      
       if (url) {
         if (photo_type == "photo_before") {
           this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][0].photo.thumb = url.displayUri;
-
           this.grouped_presentation_photos[i][0].photo.path = url.path;
           this.grouped_presentation_photos[i][0].photo.remote = true;
-          this.grouped_presentation_photos[i][0].photo.date = currentDate;
-
           this.service.updateLocalPhotos("photo_before", this.grouped_presentation_photos);
         } else if (photo_type == "photo_after") {
           this.grouped_presentation_photos[i][1].photo.url = url.displayUri;
           this.grouped_presentation_photos[i][1].photo.thumb = url.displayUri;
           this.grouped_presentation_photos[i][1].photo.path = url.path;
           this.grouped_presentation_photos[i][1].photo.remote = true;
-          this.grouped_presentation_photos[i][1].photo.date = currentDate;
           this.service.updateLocalPhotos("photo_after", this.grouped_presentation_photos);
+
         } else {
           this.photos_truck[i].url = url.displayUri;
           this.photos_truck[i].thumb = url.displayUri;
@@ -258,6 +260,7 @@ export class PhotoReportPage implements OnInit, OnDestroy {
           this.photos_truck[i].date = currentDate;
           this.photos_truck[i].client_uuid = this.service.generateUniqueId();
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
+          
         }
         let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
 
@@ -270,9 +273,12 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     }
   }
 
-  goBack() {
+  async goBack() {
     if (this.isSliderOpen) this.isSliderOpen = false;
-    else this.location.back();
+    else{
+      this.location.back();
+      await this.service.updatePhotoReportStatus();
+    }
   }
 
   addPhotoPrestation() {

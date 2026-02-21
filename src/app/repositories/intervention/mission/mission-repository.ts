@@ -26,6 +26,12 @@ export class MissionRepository implements MissionInterface {
       this.connected = status.connected;
     });
   }
+  setReportStatus(id: any, status: boolean): Observable<any> {
+    return this.http.post<any>(`${this.newApiUrl}schedules/${id}/synchronized_image`, {synchronized_image: status});
+  }
+  getReportStatus(id: any): Observable<any> {
+    return this.http.get<any>(`${this.newApiUrl}schedules/${id}/photos_count`);
+  }
   getSupervisorAudioReport(data: any): Observable<any> {
     return this.http.get<any>(`${this.newApiUrl}schedules/${data}/get_audio_report`);
   }
@@ -117,9 +123,7 @@ export class MissionRepository implements MissionInterface {
   }
 
   getSuperVisorPlanningCounts(date?: string): Observable<any> {
-    const cacheKey = `supervisor_planning_counts_${date}`;
-    console.log(date);
-    
+    const cacheKey = `supervisor_planning_counts_${date}`;    
     return this.http.get<any>(`${this.newApiUrl}plannings/count?date=${date}`).pipe(
       switchMap(async data => {
         await Preferences.set({

@@ -27,19 +27,23 @@ export class PhotosService {
         quality: quality,
         correctOrientation: true,
         presentationStyle: "fullscreen",
-        allowEditing: true,
+        allowEditing: false,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
-        direction: CameraDirection.Rear
+        direction: CameraDirection.Rear,
+        width: 1280,
+         height: 961,
       });
     } else {
       this.lastImage = await Camera.getPhoto({
         quality: quality,
         correctOrientation: true,
         presentationStyle: "fullscreen",
-        allowEditing: true,
+        allowEditing: false,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Photos
+        source: CameraSource.Photos,
+          width: 1280,
+         height: 961,
       });
     }
   }

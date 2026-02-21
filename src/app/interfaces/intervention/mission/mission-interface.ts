@@ -30,4 +30,6 @@ export interface MissionInterface {
   dispatchAgent(data: any): Observable<any>;
   getDispatchAgent(): Observable<any>;
   getSupervisorAudioReport(data: any): Observable<any>;
+  getReportStatus(id:any): Observable<any>;
+  setReportStatus(id:any, status: boolean): Observable<any>;
 }

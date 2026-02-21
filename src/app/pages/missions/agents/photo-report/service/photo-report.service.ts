@@ -5,7 +5,6 @@ import {Network} from "@capacitor/network";
 import {Share} from "@capacitor/share";
 import {Platform} from "@ionic/angular";
 import {TranslateService} from "@ngx-translate/core";
-import {BehaviorSubject} from "rxjs";
 import {MissionService} from "src/app/tab1/service/intervention/mission/mission.service";
 import {FileSystemService} from "src/app/widgets/file-system/file-system.service";
 import {LoadingControllerService} from "src/app/widgets/loading-controller/loading-controller.service";
@@ -13,6 +12,7 @@ import {ToastControllerService} from "src/app/widgets/toast-controller/toast-con
 import {v4 as uuidv4} from "uuid";
 import {lastValueFrom} from "rxjs";
 import {zip, zipSync} from "fflate";
+import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -22,6 +22,25 @@ export class PhotoReportService {
   planningType: any;
   isConneted: boolean | null = null;
   doneEvent = new EventEmitter<any>();
+  private dataSubject = new BehaviorSubject<any>(null);
+
+  // Public Observable - pages can subscribe
+  public data$: Observable<any> = this.dataSubject.asObservable();
+
+  // Method to update the data
+  updateData(newData: any) {
+    this.dataSubject.next(newData);
+  }
+
+  // Method to get current value without subscribing
+  getCurrentData() {
+    return this.dataSubject.value;
+  }
+
+  // Method to clear/reset data
+  clearData() {
+    this.dataSubject.next(null);
+  }
 
   private progressSubject = new BehaviorSubject<number>(0);
   public progress$ = this.progressSubject.asObservable();
@@ -54,6 +73,58 @@ export class PhotoReportService {
     });
   }
 
+  countValidPhotos(data: any) {
+    let count = 0;
+
+    // photos_truck
+    if (Array.isArray(data.photos_truck)) {
+      count += data.photos_truck.filter((p: any) => typeof p.url === "string" && p.url.trim() !== "").length;
+    }
+
+    // grouped_presentation_photos
+    if (Array.isArray(data.grouped_presentation_photos)) {
+      data.grouped_presentation_photos.forEach((group: any) => {
+        if (Array.isArray(group)) {
+          count += group.filter((p: any) => p.photo && typeof p.photo.url === "string" && p.photo.url.trim() !== "").length;
+        }
+      });
+    }
+
+    return count;
+  }
+
+  async updatePhotoReportStatus() {
+    if (!this.isConneted) {
+      this.updateData("red");
+    }
+    if (this.isConneted) {
+      this.missionsService.getReportStatus(this.data.planning.today_schedule.id).subscribe({
+        next: (res: any) => {
+          this.getLocalPhotos(this.data.planning.today_schedule.id, this.data.planningType).then(localPhotos => {
+            const countLocal = this.countValidPhotos(localPhotos);
+            if (countLocal == res.count && res.count > 0) {
+              this.updateData("green");
+              this.missionsService.setReportStatus(this.data.planning.today_schedule.id, true).subscribe({
+                next: (res: any) => {
+                  this.updateData("green");
+                }
+              });
+            } else if (res.count == 0 && countLocal > 0) {
+              this.updateData("red");
+            } else if (res.count > 0 && countLocal > 0 && countLocal > res.count) {
+              this.updateData("orange");
+            } else if (res.count == 0 && countLocal == 0) {
+              this.updateData("default");
+            }
+          });
+        },
+        error: (err: any) => {
+          console.error("Erreur lors de la récupération du statut du rapport :", err);
+        }
+      });
+    }
+  }
+
   isRemote(photo: any): boolean {
     return photo?.remote === true;
   }
@@ -80,151 +151,197 @@ export class PhotoReportService {
     }
   }
 
-  async checkAndSyncPhotos() {
-    if (this.isSyncingLock) {
-      console.warn("🔒 Sync already running, skipping");
-      return;
-    }
+async checkAndSyncPhotos() {
+  if (this.isSyncingLock) {
+    console.warn("🔒 Sync already running, skipping");
+    return;
+  }
 
-    this.isSyncingLock = true;
-    this.isSyncingSubject.next(true);
+  this.isSyncingLock = true;
+  this.isSyncingSubject.next(true);
+  this.progressSubject.next(0);
 
-    console.group("🟡 OFFLINE PHOTO SYNC START");
 
-    try {
-      const reportsToSync: any[] = JSON.parse(localStorage.getItem("report_need_sync") || "[]");
+  try {
+    const reportsToSync: any[] = JSON.parse(
+      localStorage.getItem("report_need_sync") || "[]"
+    );
 
-      console.log("Reports queued for sync:", reportsToSync);
-      // await this.loadingService.present("Synchronisation des photos en cours...");
+    const total = reportsToSync.length;
+    let completed = 0;
 
-      // IMPORTANT: clone array to avoid mutation bugs
-      for (const report of [...reportsToSync]) {
-        console.group(`📦 Syncing report internal=${report.internal}`);
-
+    for (const report of [...reportsToSync]) {
+      // ── Per-report isolation: one bad report won't kill the rest ──
+      try {
         const obj: Record<string, Uint8Array> = {};
-        const expectedFiles: string[] = [];
+        const filesToDelete: string[] = [];
+        let fileCounter = 0; // Fix: avoid Date.now() collisions
 
-        const groupedPresentationPhotos = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`) || "[]");
+        const groupedPresentationPhotos: any[] = JSON.parse(
+          localStorage.getItem(`photo_report_${report.type}_${report.id}_presentation`) || "[]"
+        );
+        const photosTruck: any[] = JSON.parse(
+          localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`) || "[]"
+        );
 
-        const photosTruck = JSON.parse(localStorage.getItem(`photo_report_${report.type}_${report.id}_truck`) || "[]");
-
-        console.log("Presentation groups:", groupedPresentationPhotos.length);
-        console.log("Truck photos:", photosTruck.length);
+     
 
         /* ------------------ PRESENTATION PHOTOS ------------------ */
         for (const group of groupedPresentationPhotos) {
-          // BEFORE
+          // BEFORE photo
           if (group?.[0]?.photo?.path && group[0].photo.path.includes("v3")) {
-            const filename = `before_${group[0].client_uuid}_${Date.now()}.jpeg`;
-            expectedFiles.push(filename);
-
+            const filename = `before_${group[0].client_uuid}_${++fileCounter}.jpeg`;
             try {
               const fileData = await this.fs.readSecretFile(group[0].photo.path);
-              obj[filename] = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+              const compressed = await this.compressBase64Image(fileData);
+              obj[filename] = Uint8Array.from(atob(compressed), c => c.charCodeAt(0));
+              filesToDelete.push(group[0].photo.path);
             } catch (e) {
               console.error("❌ Failed reading BEFORE photo:", group[0].photo.path, e);
             }
           }
 
-          // AFTER
+          // AFTER photo
           if (group?.[1]?.photo?.path && group[1].photo.path.includes("v3")) {
-            const filename = `after_${group[1].client_uuid}_${Date.now()}.jpeg`;
-            expectedFiles.push(filename);
-
+            const filename = `after_${group[1].client_uuid}_${++fileCounter}.jpeg`;
             try {
               const fileData = await this.fs.readSecretFile(group[1].photo.path);
-              obj[filename] = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+              const compressed = await this.compressBase64Image(fileData);
+              obj[filename] = Uint8Array.from(atob(compressed), c => c.charCodeAt(0));
+              filesToDelete.push(group[1].photo.path);
             } catch (e) {
               console.error("❌ Failed reading AFTER photo:", group[1].photo.path, e);
             }
           }
+
+          // Yield to browser between groups to prevent UI blocking
+          await this.yieldToMain();
         }
 
         /* ------------------ TRUCK PHOTOS ------------------ */
         for (const photo of photosTruck) {
           if (!photo?.path || !photo?.client_uuid) continue;
+          if (!photo.path.includes("v3")) continue;
 
-          const filename = `truck_${photo.client_uuid}_${Date.now()}.jpeg`;
-          expectedFiles.push(filename);
-
+          const filename = `truck_${photo.client_uuid}_${++fileCounter}.jpeg`;
           try {
             const fileData = await this.fs.readSecretFile(photo.path);
-            obj[filename] = Uint8Array.from(atob(fileData), c => c.charCodeAt(0));
+            const compressed = await this.compressBase64Image(fileData);
+            obj[filename] = Uint8Array.from(atob(compressed), c => c.charCodeAt(0));
+            filesToDelete.push(photo.path);
           } catch (e) {
             console.error("❌ Failed reading TRUCK photo:", photo.path, e);
           }
+
+          // Yield to browser between photos
+          await this.yieldToMain();
         }
 
-        console.log("Expected files:", expectedFiles.length);
-        console.log("Files added to ZIP:", Object.keys(obj).length);
-        console.log("ZIP filenames:", Object.keys(obj));
-
+        // Skip empty uploads (restored & safe)
         if (Object.keys(obj).length === 0) {
-          console.warn("⚠️ No files to sync for this report, skipping");
-          console.groupEnd();
+          console.warn("⚠️ No files to sync, removing from queue");
+          const index = reportsToSync.findIndex((r: any) => r.internal === report.internal);
+          if (index !== -1) {
+            reportsToSync.splice(index, 1);
+            localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
+          }
           continue;
         }
 
         /* ------------------ ZIP CREATION ------------------ */
+        // Yield before heavy ZIP operation
+        await this.yieldToMain();
+
         const zipBlob: Blob = await new Promise((resolve, reject) => {
-          zip(obj, (err, data: any) => {
+          zip(obj, { level: 6 }, (err, data: any) => { // level 6: better speed/size tradeoff vs 9
             if (err) return reject(err);
-            resolve(new Blob([data], {type: "application/zip"}));
+            resolve(new Blob([data], { type: "application/zip" }));
           });
         });
 
-        console.log("ZIP size (bytes):", zipBlob.size);
+
+        // Yield after heavy ZIP operation
+        await this.yieldToMain();
 
         /* ------------------ API SYNC ------------------ */
         const formData = new FormData();
         formData.append("zip", zipBlob, `photos_internal_${report.internal}.zip`);
         formData.append("internal", report.internal.toString());
 
-        const syncRes = await lastValueFrom(this.missionsService.syncPhotos(formData, report.internal));
-
-        console.log("✅ Sync API response:", syncRes);
+        const syncRes = await lastValueFrom(
+          this.missionsService.syncPhotos(formData, report.internal)
+        );
 
         /* ------------------ SERVER VERIFICATION ------------------ */
-        const serverData = await lastValueFrom(this.missionsService.getPhotoReport(report.internal, report.type));
+        const serverData = await lastValueFrom(
+          this.missionsService.getPhotoReport(report.internal, report.type)
+        );
 
-        console.log("Server pairs:", serverData.pairs?.length);
-        console.log("Server truck photos:", serverData.truck?.length);
 
-        if (serverData.pairs.length < groupedPresentationPhotos.length || serverData.truck.length < photosTruck.length) {
-          console.warn("⚠️ Server mismatch detected, keeping report in sync queue");
-          console.groupEnd();
-          continue;
-        }
 
-        console.log(serverData);
-        
+        /* ------------------ HANDLE INCOMPLETE PAIRS ------------------ */
+        const grouped = serverData.pairs.map((p: any) => {
+          const pair: any[] = [];
 
-        /* ------------------ LOCAL STORAGE UPDATE ------------------ */
-        const grouped = serverData.pairs.map((p: any) => [
-          {
-            id: p.before?.id,
-            client_uuid: p?.before?.client_uuid,
-            photo_type: "photo_before",
-            photo: {url: p?.before?.image_url?.url, thumb: p?.before?.image_url?.thumb}
-          },
-          {
-            id: p.after?.id,
-            client_uuid: p?.after?.client_uuid,
-            photo_type: "photo_after",
-            photo: {url: p?.after?.image_url?.url, thumb: p?.after?.image_url?.thumb}
+          if (p.before && p.before.id) {
+            pair.push({
+              id: p.before.id,
+              client_uuid: p.before.client_uuid,
+              photo_type: "photo_before",
+              photo: {
+                url: p.before.image_url?.url || "",
+                thumb: p.before.image_url?.thumb || ""
+              }
+            });
+          } else {
+            pair.push({
+              id: null,
+              client_uuid: p.client_uuid || this.generateUniqueId(),
+              photo_type: "photo_before",
+              photo: { url: "", thumb: "" }
+            });
           }
-        ]);
+
+          if (p.after && p.after.id) {
+            pair.push({
+              id: p.after.id,
+              client_uuid: p.after.client_uuid || p.client_uuid,
+              photo_type: "photo_after",
+              photo: {
+                url: p.after.image_url?.url || "",
+                thumb: p.after.image_url?.thumb || ""
+              }
+            });
+          } else {
+            pair.push({
+              id: null,
+              client_uuid: p.client_uuid || pair[0].client_uuid,
+              photo_type: "photo_after",
+              photo: { url: "", thumb: "" }
+            });
+          }
+
+          return pair;
+        });
 
         const truckPhotos = serverData.truck.map((t: any) => ({
           id: t?.id,
           client_uuid: t?.client_uuid,
           photo_type: "photo_truck",
-          url: t?.image_url?.url,
-          thumb: t?.image_url?.thumb
+          url: t?.image_url?.url || "",
+          thumb: t?.image_url?.thumb || ""
         }));
 
-        localStorage.setItem(`photo_report_${report.type}_${report.id}_presentation`, JSON.stringify(grouped));
-        localStorage.setItem(`photo_report_${report.type}_${report.id}_truck`, JSON.stringify(truckPhotos));
+        /* ------------------ UPDATE LOCAL STORAGE FIRST ------------------ */
+        // Do this BEFORE deleting files — safer ordering
+        localStorage.setItem(
+          `photo_report_${report.type}_${report.id}_presentation`,
+          JSON.stringify(grouped)
+        );
+        localStorage.setItem(
+          `photo_report_${report.type}_${report.id}_truck`,
+          JSON.stringify(truckPhotos)
+        );
 
         /* ------------------ REMOVE FROM SYNC QUEUE ------------------ */
         const index = reportsToSync.findIndex((r: any) => r.internal === report.internal);
@@ -233,21 +350,107 @@ export class PhotoReportService {
           localStorage.setItem("report_need_sync", JSON.stringify(reportsToSync));
         }
 
-        console.log("🟢 Report fully synced and removed from queue");
-        this.doneEvent.emit(true);
+        /* ------------------ DELETE LOCAL FILES (non-blocking) ------------------ */
+        // Fire and forget — don't block progress on cleanup
+        Promise.allSettled(
+          filesToDelete.map(path =>
+            this.fs.deleteSecretFile(path)
+              .then(() => console.log("🗑️ Deleted synced file:", path))
+              .catch(e => console.error("Failed to delete file:", path, e))
+          )
+        );
 
-        console.groupEnd();
+        completed++;
+        this.progressSubject.next(Math.round((completed / total) * 100));
+        this.doneEvent.emit(true);
+        await this.updatePhotoReportStatus();
+
+      } catch (reportErr) {
+        console.error(`🔥 Failed to sync report ${report.internal}:`, reportErr);
+        // Continue to next report instead of aborting everything
       }
-    } catch (err) {
-      console.error("🔥 Global sync error:", err);
-    } finally {
-      console.groupEnd();
-      await this.loadingService.dimiss();
-      this.isSyncingLock = false;
-      this.isSyncingSubject.next(false);
+    }
+
+    // Ensure we always land on 100% when done
+    this.progressSubject.next(100);
+
+  } catch (err) {
+    console.error("🔥 Global sync error:", err);
+    this.progressSubject.next(0);
+  } finally {
+    await this.loadingService.dimiss();
+    this.isSyncingLock = false;
+    this.isSyncingSubject.next(false);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   HELPER: Yield control back to the browser
+   Prevents the UI from freezing on heavy loops
+───────────────────────────────────────────── */
+private yieldToMain(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, 0));
+}
+
+/* ─────────────────────────────────────────────
+   HELPER: Compress a base64 JPEG via Canvas
+   Reduces file size before zipping/uploading
+   Target: 800px max dimension, 0.7 quality
+───────────────────────────────────────────── */
+private compressBase64Image(
+  base64: string,
+  maxDimension: number = 800,
+  quality: number = 0.7
+): Promise<string> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+
+      // Scale down if needed
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        } else {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Strip the data URL prefix, return raw base64
+      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      resolve(dataUrl.split(",")[1]);
+    };
+
+    img.onerror = () => {
+      // On failure, return original uncompressed
+      console.warn("⚠️ Image compression failed, using original");
+      resolve(base64);
+    };
+
+    img.src = `data:image/jpeg;base64,${base64}`;
+  });
+}
+/**
+ * Delete local files after successful sync
+ */
+private async deleteLocalFiles(filePaths: string[]): Promise<void> {
+  for (const path of filePaths) {
+    try {
+      await this.fs.deleteSecretFile(path);
+    } catch (e) {
+      // console.log(`❌ Failed to delete file: ${path}`, e);
     }
   }
-
+}
   async base64ToArrayBuffer(base64: string): Promise<ArrayBuffer> {
     const binaryString = atob(base64);
     const len = binaryString.length;
@@ -319,20 +522,51 @@ export class PhotoReportService {
     }
 
     const files: Record<string, Uint8Array> = {};
+    let validImageCount = 0;
 
     for (const [index, img] of images.entries()) {
       if (!img) continue;
 
       const url = img?.photo?.url || img?.url;
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const buffer = await blob.arrayBuffer();
 
-      const typePhoto = img?.photo_type === "photo_truck" || !img?.photo_type ? "camion" : img?.photo_type.includes("before") ? "before" : "after";
+      // Skip if URL is invalid or empty
+      if (!url || typeof url !== "string" || url.trim() === "") {
+        continue;
+      }
 
-      const filename = `image_${typePhoto}_${index + 1}_${intervention_name}_${type}_${date}.jpg`;
-      files[filename] = new Uint8Array(buffer);
+      try {
+        const response = await fetch(url);
+
+        // Check if response is successful
+        if (!response.ok) {
+          continue;
+        }
+
+        const blob = await response.blob();
+        const buffer = await blob.arrayBuffer();
+
+        const typePhoto = img?.photo_type === "photo_truck" || !img?.photo_type ? "camion" : img?.photo_type.includes("before") ? "before" : "after";
+
+        const filename = `image_${typePhoto}_${index + 1}_${intervention_name}_${type}_${date}.jpg`;
+        files[filename] = new Uint8Array(buffer);
+        validImageCount++;
+      } catch (error) {
+        // Silently skip invalid/failed images
+        console.warn(`Failed to fetch image at index ${index}:`, error);
+        continue;
+      }
     }
+
+    await this.loadingService.dimiss();
+
+    // Show toast if no valid images were found
+    if (validImageCount === 0) {
+      await this.toastController.presentToast("Aucune image à compresser", "warning");
+      return;
+    }
+
+    // Re-show loading for zip creation
+    await this.loadingService.present(loadingMessage);
 
     // Create ZIP (Uint8Array)
     const zipData: Uint8Array = await new Promise((resolve, reject) => {
@@ -404,14 +638,11 @@ export class PhotoReportService {
   getPointageId() {
     const user_v3 = JSON.parse(localStorage.getItem("user-v3") || "{}");
     const currentId = user_v3?.id;
-    console.log(this.data.planning);
-    
+
     // if (!this.data || !this.data.planning || !Array.isArray(this.data.planning.schedule)) {
     //   console.warn("Schedule non défini ou données non chargées");
     //   return null;
     // }
-
-
 
     const agent = this.data.planning.today_schedule.agents.find((a: any) => a.id === currentId);
     return agent.pointing_internal[0].id || null;

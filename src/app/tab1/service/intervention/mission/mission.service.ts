@@ -34,6 +34,12 @@ export class MissionService implements MissionInterface {
       }
     });
   }
+  getReportStatus(id: any): Observable<any> {
+    return this.missionRepo.getReportStatus(id);
+  }
+  setReportStatus(id: any, status: boolean): Observable<any> {
+    return this.missionRepo.setReportStatus(id, status);
+  }
   getSupervisorAudioReport(data: any): Observable<any> {
     return this.missionRepo.getSupervisorAudioReport(data);
   }

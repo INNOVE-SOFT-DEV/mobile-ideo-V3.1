@@ -16,6 +16,9 @@ import {ToastControllerService} from "src/app/widgets/toast-controller/toast-con
 import {OcrScannerPage} from "../../ocr-scanner/ocr-scanner.page";
 import {ChatService} from "src/app/tab2/chatService/chat.service";
 import {trigger, state, style, transition, animate} from "@angular/animations";
+import { Network } from "@capacitor/network";
+import { PhotoReportService } from "../../missions/agents/photo-report/service/photo-report.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-details",
@@ -59,6 +62,21 @@ export class DetailsPage implements OnInit {
   hasSubcontractor: boolean = false;
   svgRotationState: Record<string, "default" | "rotated"> = {};
   address: string = "";
+  connected: boolean | null = null;
+  timestamp : number = new Date().getTime();
+  reportStatus: string = "";
+   statusColorMap : Record<string, string> = {
+  green: "#2ecc71",
+  orange: "#f39c12",
+  red: "#e74c3c",
+};
+ iconFill :string =
+  this.reportStatus && this.statusColorMap[this.reportStatus]
+    ? this.statusColorMap[this.reportStatus]
+    : "#00a2e1"; // { path: '', pathMatch: 'full', redirectTo: '
+    // ' },
+  private subscription!: Subscription;
+  
 
   constructor(
     private loadingService: LoadingControllerService,
@@ -73,10 +91,21 @@ export class DetailsPage implements OnInit {
     private toast: ToastControllerService,
     private modalCtrl: ModalController,
     private chatService: ChatService,
-    private el: ElementRef
+    private el: ElementRef,
+    private reportService: PhotoReportService
+
   ) {}
 
   async ngOnInit() {
+        Network.getStatus().then(status => {
+      this.connected = status.connected;
+    });
+    this.subscription = this.reportService.data$.subscribe(data => {
+      this.reportStatus = data;
+      this.iconFill = this.getReportColor();
+    });
+    
+ 
     this.loadingMessage = await this.translateService.get("Loading").toPromise();
     try {
       await this.refreshLocalData();
@@ -88,7 +117,6 @@ export class DetailsPage implements OnInit {
       console.error("Erreur lors du chargement des détails :", error);
     } finally {
       await this.refreshLocalData();
-      console.log(this.planningType);
 
       const address: any = this.planning.intervention.address;
       this.address = this.planning.intervention.address;
@@ -105,7 +133,28 @@ export class DetailsPage implements OnInit {
     if (this.planning != null) this.planning.info_photos?.length > 0 ? (this.planning.has_info_photo = true) : (this.planning.has_info_photo = false);
   }
 
+  getReportColor(): string {
+  if (!this.connected) {
+    return '#00a2e1'; // blue
+  }
+  
+  switch(this.reportStatus) {
+    case 'green':
+      return '#39c491'; // green
+    case 'red':
+      return '#FF605C'; // red
+    case 'orange':
+      return '#FFBD44'; // orange
+    default:
+      return '#00a2e1'; // blue (fallback)
+  }
+}
+
+
+
   async refreshLocalData() {
+    this.timestamp = new Date().getTime();
+
     const cached = await JSON.parse(localStorage.getItem("currentPlanning")!);
     this.planning = cached.planning;
     this.planningType = cached.planningType;
@@ -113,9 +162,49 @@ export class DetailsPage implements OnInit {
     this.setupPhotos();
     const user_v3: any = JSON.parse(localStorage.getItem("user-v3") || "{}");
     this.agent = this.planning.team.find((user: any) => user.id == user_v3.id);
+    
+    
+    if(this.connected) {
+      this.reportService.data = {
+        planning: this.planning,
+        planningType: this.planningType
+      }
+      await this.reportService.updatePhotoReportStatus();
+      
+      
+    }
+    
 
     await this.loadingService.dimiss();
   }
+
+   countValidPhotos (data :any) {
+  let count = 0;
+
+  // photos_truck
+  if (Array.isArray(data.photos_truck)) {
+    count += data.photos_truck.filter(
+      (p:any) => typeof p.url === "string" && p.url.trim() !== ""
+    ).length;
+  }
+
+  // grouped_presentation_photos
+  if (Array.isArray(data.grouped_presentation_photos)) {
+    data.grouped_presentation_photos.forEach((group:any) => {
+      if (Array.isArray(group)) {
+        count += group.filter(
+          (p:any) =>
+            p.photo &&
+            typeof p.photo.url === "string" &&
+            p.photo.url.trim() !== ""
+        ).length;
+      }
+    });
+  }
+
+  return count;
+};
+
 
   transform(): string {
     let frenchDate: string = "";
@@ -163,7 +252,6 @@ export class DetailsPage implements OnInit {
   }
 
   direction() {
-    console.log(this.planning);
     const address: any = this.planning.intervention.address;
 
     this.mapService.address = [address.postal_code, address.street, address.complement, address.city, address.country]

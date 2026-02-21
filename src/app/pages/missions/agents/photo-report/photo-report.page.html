@@ -22,11 +22,12 @@
 
     <div *ngIf="!(isSyncing$ | async)  && isConneted" class="status-box synced">✅ Votre rapport est à jour</div>
 
-    <div *ngIf="!(isSyncing$ | async) && !isSynced" style="font-size: 42px; display:flex;justify-content:center;">
+    <div *ngIf="isConneted == false" class="status-box offline">❌ Vous êtes hors ligne</div>
+    <div style="font-size: 42px; display:flex;justify-content:center;">
       <ion-icon name="sync-circle-outline" (click)="triggerSync()"></ion-icon>
     </div>
+    <!-- <div>{{syncMessage}}</div> -->
 
-    <div *ngIf="isConneted == false" class="status-box offline">❌ Vous êtes hors ligne</div>
   </ng-container>
 
   <ng-container *ngIf="!isSliderOpen && !isLoading">
