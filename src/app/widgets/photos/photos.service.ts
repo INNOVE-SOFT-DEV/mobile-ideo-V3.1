@@ -24,7 +24,7 @@ export class PhotosService {
   public async takePictureOption(option: string, quality: number) {
     if (option == "Camera") {
       this.lastImage = await Camera.getPhoto({
-        quality: quality,
+        quality: 100,
         correctOrientation: true,
         presentationStyle: "fullscreen",
         allowEditing: false,
@@ -36,7 +36,7 @@ export class PhotosService {
       });
     } else {
       this.lastImage = await Camera.getPhoto({
-        quality: quality,
+        quality: 100,
         correctOrientation: true,
         presentationStyle: "fullscreen",
         allowEditing: false,

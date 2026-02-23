@@ -253,7 +253,7 @@ async checkAndSyncPhotos() {
         await this.yieldToMain();
 
         const zipBlob: Blob = await new Promise((resolve, reject) => {
-          zip(obj, { level: 6 }, (err, data: any) => { // level 6: better speed/size tradeoff vs 9
+          zip(obj, { level: 3 }, (err, data: any) => { // level 6: better speed/size tradeoff vs 9
             if (err) return reject(err);
             resolve(new Blob([data], { type: "application/zip" }));
           });
@@ -399,39 +399,29 @@ private yieldToMain(): Promise<void> {
 ───────────────────────────────────────────── */
 private compressBase64Image(
   base64: string,
-  maxDimension: number = 800,
   quality: number = 0.7
 ): Promise<string> {
+  const TARGET_WIDTH = 1280;
+  const TARGET_HEIGHT = 961;
+
   return new Promise((resolve) => {
     const img = new Image();
+
     img.onload = () => {
-      let { width, height } = img;
-
-      // Scale down if needed
-      if (width > maxDimension || height > maxDimension) {
-        if (width > height) {
-          height = Math.round((height * maxDimension) / width);
-          width = maxDimension;
-        } else {
-          width = Math.round((width * maxDimension) / height);
-          height = maxDimension;
-        }
-      }
-
       const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = TARGET_WIDTH;
+      canvas.height = TARGET_HEIGHT;
 
       const ctx = canvas.getContext("2d")!;
-      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Draw image stretched to exact dimensions
+      ctx.drawImage(img, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
 
-      // Strip the data URL prefix, return raw base64
-      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      const dataUrl = canvas.toDataURL("image/jpeg", 1);
       resolve(dataUrl.split(",")[1]);
     };
 
     img.onerror = () => {
-      // On failure, return original uncompressed
       console.warn("⚠️ Image compression failed, using original");
       resolve(base64);
     };
