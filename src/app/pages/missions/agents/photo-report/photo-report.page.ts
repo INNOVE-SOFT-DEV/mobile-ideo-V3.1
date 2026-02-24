@@ -203,7 +203,7 @@ async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
       client_uuid = this.service.generateUniqueId();
     }
 
-    const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, client_uuid);
+    const data = await this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, client_uuid);
 
     const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
     let form = data;
