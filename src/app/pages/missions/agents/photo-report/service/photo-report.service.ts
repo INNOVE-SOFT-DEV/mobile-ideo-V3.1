@@ -186,56 +186,51 @@ async checkAndSyncPhotos() {
 
      
 
-        /* ------------------ PRESENTATION PHOTOS ------------------ */
-        for (const group of groupedPresentationPhotos) {
-          // BEFORE photo
-          if (group?.[0]?.photo?.path && group[0].photo.path.includes("v3")) {
-            const filename = `before_${group[0].client_uuid}_${++fileCounter}.jpeg`;
-            try {
-              const fileData = await this.fs.readSecretFile(group[0].photo.path);
-              const compressed = await this.compressBase64Image(fileData);
-              obj[filename] = Uint8Array.from(atob(compressed), c => c.charCodeAt(0));
-              filesToDelete.push(group[0].photo.path);
-            } catch (e) {
-              console.error("❌ Failed reading BEFORE photo:", group[0].photo.path, e);
-            }
-          }
+/* ------------------ PRESENTATION PHOTOS ------------------ */
+for (const group of groupedPresentationPhotos) {
+  // BEFORE photo
+  if (group?.[0]?.photo?.path && group[0].photo.path.includes("v3")) {
+    const filename = `before_${group[0].client_uuid}_${++fileCounter}.jpeg`;
+    try {
+      const fileData = await this.fs.readSecretFile(group[0].photo.path);
+      obj[filename] = this.base64ToUint8Array(fileData);
+      filesToDelete.push(group[0].photo.path);
+    } catch (e) {
+      console.error("❌ Failed reading BEFORE photo:", group[0].photo.path, e);
+    }
+  }
 
-          // AFTER photo
-          if (group?.[1]?.photo?.path && group[1].photo.path.includes("v3")) {
-            const filename = `after_${group[1].client_uuid}_${++fileCounter}.jpeg`;
-            try {
-              const fileData = await this.fs.readSecretFile(group[1].photo.path);
-              const compressed = await this.compressBase64Image(fileData);
-              obj[filename] = Uint8Array.from(atob(compressed), c => c.charCodeAt(0));
-              filesToDelete.push(group[1].photo.path);
-            } catch (e) {
-              console.error("❌ Failed reading AFTER photo:", group[1].photo.path, e);
-            }
-          }
+  // AFTER photo
+  if (group?.[1]?.photo?.path && group[1].photo.path.includes("v3")) {
+    const filename = `after_${group[1].client_uuid}_${++fileCounter}.jpeg`;
+    try {
+      const fileData = await this.fs.readSecretFile(group[1].photo.path);
+      obj[filename] = this.base64ToUint8Array(fileData);
+      filesToDelete.push(group[1].photo.path);
+    } catch (e) {
+      console.error("❌ Failed reading AFTER photo:", group[1].photo.path, e);
+    }
+  }
 
-          // Yield to browser between groups to prevent UI blocking
-          await this.yieldToMain();
-        }
+  await this.yieldToMain();
+}
 
-        /* ------------------ TRUCK PHOTOS ------------------ */
-        for (const photo of photosTruck) {
-          if (!photo?.path || !photo?.client_uuid) continue;
-          if (!photo.path.includes("v3")) continue;
+/* ------------------ TRUCK PHOTOS ------------------ */
+for (const photo of photosTruck) {
+  if (!photo?.path || !photo?.client_uuid) continue;
+  if (!photo.path.includes("v3")) continue;
 
-          const filename = `truck_${photo.client_uuid}_${++fileCounter}.jpeg`;
-          try {
-            const fileData = await this.fs.readSecretFile(photo.path);
-            const compressed = await this.compressBase64Image(fileData);
-            obj[filename] = Uint8Array.from(atob(compressed), c => c.charCodeAt(0));
-            filesToDelete.push(photo.path);
-          } catch (e) {
-            console.error("❌ Failed reading TRUCK photo:", photo.path, e);
-          }
+  const filename = `truck_${photo.client_uuid}_${++fileCounter}.jpeg`;
+  try {
+    const fileData = await this.fs.readSecretFile(photo.path);
+    obj[filename] = this.base64ToUint8Array(fileData);
+    filesToDelete.push(photo.path);
+  } catch (e) {
+    console.error("❌ Failed reading TRUCK photo:", photo.path, e);
+  }
 
-          // Yield to browser between photos
-          await this.yieldToMain();
-        }
+  await this.yieldToMain();
+}
 
         // Skip empty uploads (restored & safe)
         if (Object.keys(obj).length === 0) {
@@ -397,37 +392,21 @@ private yieldToMain(): Promise<void> {
    Reduces file size before zipping/uploading
    Target: 800px max dimension, 0.7 quality
 ───────────────────────────────────────────── */
-private compressBase64Image(
-  base64: string,
-  quality: number = 0.7
-): Promise<string> {
-  const TARGET_WIDTH = 1280;
-  const TARGET_HEIGHT = 961;
-
-  return new Promise((resolve) => {
-    const img = new Image();
-
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = TARGET_WIDTH;
-      canvas.height = TARGET_HEIGHT;
-
-      const ctx = canvas.getContext("2d")!;
-      
-      // Draw image stretched to exact dimensions
-      ctx.drawImage(img, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-
-      const dataUrl = canvas.toDataURL("image/jpeg", 1);
-      resolve(dataUrl.split(",")[1]);
-    };
-
-    img.onerror = () => {
-      console.warn("⚠️ Image compression failed, using original");
-      resolve(base64);
-    };
-
-    img.src = `data:image/jpeg;base64,${base64}`;
-  });
+private base64ToUint8Array(base64: string): Uint8Array {
+  // Strip data URI prefix if present (e.g. "data:image/jpeg;base64,")
+  const clean = base64.includes(',') ? base64.split(',')[1] : base64;
+  
+  // Remove any whitespace/newlines that Filesystem.readFile sometimes adds
+  const sanitized = clean.replace(/\s/g, '');
+  
+  console.log(`🔄 [base64ToUint8Array] first 20 chars=`, sanitized.substring(0, 20), `| length=`, sanitized.length);
+  
+  const binary = atob(sanitized);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
 /**
  * Delete local files after successful sync

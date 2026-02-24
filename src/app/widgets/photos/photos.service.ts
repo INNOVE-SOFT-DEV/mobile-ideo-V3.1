@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Camera, CameraDirection, CameraResultType, CameraSource} from "@capacitor/camera";
+import { ToastControllerService } from "../toast-controller/toast-controller.service";
 
 @Injectable({
   providedIn: "root"
@@ -7,7 +8,9 @@ import {Camera, CameraDirection, CameraResultType, CameraSource} from "@capacito
 export class PhotosService {
   lastImage: any;
   multipleImages: any[] = [];
-  constructor() {}
+  constructor(
+    private toastController: ToastControllerService
+  ) {}
 
   dataURLtoBlob(imagePath: string) {
     const arr = imagePath.split(",");
@@ -22,29 +25,36 @@ export class PhotosService {
   }
 
   public async takePictureOption(option: string, quality: number) {
-    if (option == "Camera") {
-      this.lastImage = await Camera.getPhoto({
-        quality: 100,
-        correctOrientation: true,
-        presentationStyle: "fullscreen",
-        allowEditing: false,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Camera,
-        direction: CameraDirection.Rear,
-        width: 1280,
-         height: 961,
-      });
-    } else {
-      this.lastImage = await Camera.getPhoto({
-        quality: 100,
-        correctOrientation: true,
-        presentationStyle: "fullscreen",
-        allowEditing: false,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Photos,
+    try {
+      if (option == "Camera") {
+        this.lastImage = await Camera.getPhoto({
+          quality: 100,
+          correctOrientation: true,
+          presentationStyle: "fullscreen",
+          allowEditing: false,
+          resultType: CameraResultType.Base64,
+          source: CameraSource.Camera,
+          direction: CameraDirection.Rear,
           width: 1280,
-         height: 961,
-      });
+           height: 961,
+        });
+      } else {
+        this.lastImage = await Camera.getPhoto({
+          quality: 100,
+          correctOrientation: true,
+          presentationStyle: "fullscreen",
+          allowEditing: false,
+          resultType: CameraResultType.Base64,
+          source: CameraSource.Photos,
+            width: 1280,
+           height: 961,
+        });
+      }
+      
+    } catch (error) {
+      this.toastController.presentToast("Cette photo n'est pas disponible en local" , "danger");
+      
+      
     }
   }
 

@@ -15,6 +15,7 @@ import {AuthService} from "src/app/pages/login/service/auth.service";
 import exifr from "exifr";
 import {GeolocationService} from "src/app/widgets/geolocation/geolocation.service";
 import {zip} from "fflate";
+import { ToastControllerService } from "src/app/widgets/toast-controller/toast-controller.service";
 @Component({
   selector: "app-photo-report",
   templateUrl: "./photo-report.page.html",
@@ -66,7 +67,8 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private missionsService: MissionService,
     private geolocationService: GeolocationService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private toast : ToastControllerService
   ) {}
   ngOnDestroy(): void {
     if (this.doneSyncEvent) {
@@ -116,162 +118,175 @@ export class PhotoReportPage implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 
-  async takePicture(photo_type: string, i: number) {
-    const actionSheet = await this.actionSheetController.create({
-      header: "Choisir option :",
-      cssClass: "header_actionSheet",
-      buttons: [
-        {
-          text: "Camera",
-          cssClass: "btn_actionSheet",
-          handler: async () => {
-            await this.photosService.takePictureOption("Camera", 30);
-            let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
-            await this.saveNewPhoto(photo_type, i, currentDate);
-          }
-        },
-        {
-          text: "Galerie",
-          cssClass: "btn_actionSheet",
-          handler: async () => {
+async takePicture(photo_type: string, i: number) {
+  const actionSheet = await this.actionSheetController.create({
+    header: "Choisir option :",
+    cssClass: "header_actionSheet",
+    buttons: [
+      {
+        text: "Camera",
+        cssClass: "btn_actionSheet",
+        handler: async () => {
+          await this.photosService.takePictureOption("Camera", 30);
+          let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
+          await this.saveNewPhoto(photo_type, i, currentDate);
+        }
+      },
+      {
+        text: "Galerie",
+        cssClass: "btn_actionSheet",
+        handler: async () => {
+          try {
             await this.photosService.takePictureOption("Galerie", 30);
+
             let currentDate = this.datePipe.transform(new Date(), "yyyy-MM-dd");
             await this.saveNewPhoto(photo_type, i, currentDate);
+            
+          } catch (error) {
+            this.toast.presentToast("Cette photo n'est pas disponible en local" , "danger");
+            
+            
           }
-        },
-        {
-          text: "Annuler",
-          cssClass: "btn_actionSheet",
-          handler: () => {}
         }
-      ]
+      },
+      {
+        text: "Annuler",
+        cssClass: "btn_actionSheet",
+        handler: () => {
+          console.log(`🚫 [takePicture] Cancelled`);
+        }
+      }
+    ]
+  });
+  await actionSheet.present();
+}
+
+async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
+
+
+  if (this.service.startedOn() == null && !this.isPointed) {
+    let userCoordinates = this.geolocationService?.coordinates;
+    let pointageInternalId = this.service.getPointageId();
+    let body: any = {
+      point: {
+        longitude: userCoordinates?.longitude,
+        latitude: userCoordinates?.latitude,
+        recorder_at: new Date().toISOString()
+      }
+    };
+    this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
+      next: async () => {
+        this.isPointed = true;
+      },
+      error: (err) => {
+        // console.error(`📍 [saveNewPhoto] Pointing ERROR`, err);
+      }
     });
-    await actionSheet.present();
   }
 
-  async saveNewPhoto(photo_type: string, i: number, currentDate: any) {
-    
-      
-    if (this.service.startedOn() == null && !this.isPointed) {
-      //await this.geolocationService.getCurrentLocation();
-      let userCoordinates = this.geolocationService?.coordinates;
-      let pointageInternalId = this.service.getPointageId();
-      
-      let body: any = {
-        point: {
-          longitude: userCoordinates?.longitude,
-          latitude: userCoordinates?.latitude,
-          recorder_at: new Date().toISOString()
-        }
-      };
+  const base64 = this.photosService.lastImage?.base64String;
 
-      this.missionsService.pointing(pointageInternalId, "start", body).subscribe({
-        next: async () => {
-          this.isPointed = true;
-          // console.log("Pointage début réalisé ");
-        },
-        error: () => {
-          // console.error("Erreur lors du pointage ");
-        }
-      });
-    }
+  const blob = this.photosService.getInfoBase64ToBlob(base64, "image/jpeg");
 
-    const base64 = this.photosService.lastImage.base64String;
+  try {
+    const exifData = await exifr.parse(blob);
+  } catch (error) {
+  }
 
-    const blob = this.photosService.getInfoBase64ToBlob(base64, "image/jpeg");
-
-    try {
-      const exifData = await exifr.parse(blob);
-    } catch (error) {
-      console.error("❌ Impossible de lire les EXIF", error);
-    }
-    if (this.isConneted ) {
-      let client_uuid = null;
-      if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
-        client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
-      } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
-        client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
-      }else {
-        client_uuid = this.service.generateUniqueId();
-      }
-      const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, client_uuid);
-      const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
-      let form = data;
-      if (hasAfterOrBefore) {
-        form = this.service.updateClientUuidFromGroupedPhotos(data, this.grouped_presentation_photos, i);
-      }
-      
-      
-      await this.loadingService.present(this.loadingMessage);
-      
-      this.missionsService.createReportPhoto(form, this.service.getPointageId()).subscribe({
-        next: async value => {
-          if (value[0].photo_type == "before") {
-            this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
-            this.grouped_presentation_photos[i][0].id = value[0].id;
-            this.grouped_presentation_photos[i][0].photo.client_uuid = value[0].client_uuid;
-            this.grouped_presentation_photos[i][0].photo.thumb = value[0].image_url.thumb;
-
-            this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
-          } else if (value[0].photo_type == "after") {
-
-            this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
-            this.grouped_presentation_photos[i][1].id = value[0].id;
-            this.grouped_presentation_photos[i][1].photo.client_uuid = value[0].client_uuid;
-            this.grouped_presentation_photos[i][1].photo.thumb = value[0].image_url.thumb;
-            this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
-          } else {
-            this.photos_truck[i].url = value[0]?.image_url?.url;
-            this.photos_truck[i].id = value[0].id;
-            this.photos_truck[i].thumb = value[0].image_url.thumb;
-            this.photos_truck[i].client_uuid = value[0].client_uuid;
-            this.service.updateLocalPhotos(photo_type, this.photos_truck);
-          }
-          await this.loadingService.dimiss();
-        },
-        error: async err => {
-          await this.loadingService.dimiss();
-          console.error(err);
-        }
-      });
+  if (this.isConneted) {
+    let client_uuid = null;
+    if (photo_type == "photo_before" && this.grouped_presentation_photos[i][1].photo.client_uuid) {
+      client_uuid = this.grouped_presentation_photos[i][1].photo.client_uuid;
+    } else if (photo_type == "photo_after" && this.grouped_presentation_photos[i][0].photo.client_uuid) {
+      client_uuid = this.grouped_presentation_photos[i][0].photo.client_uuid;
     } else {
-      const url = await this.service.savePhotoOffline(this.photosService.lastImage);
-      
-      if (url) {
-        if (photo_type == "photo_before") {
-          this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
-          this.grouped_presentation_photos[i][0].photo.thumb = url.displayUri;
-          this.grouped_presentation_photos[i][0].photo.path = url.path;
-          this.grouped_presentation_photos[i][0].photo.remote = true;
-          this.service.updateLocalPhotos("photo_before", this.grouped_presentation_photos);
-        } else if (photo_type == "photo_after") {
-          this.grouped_presentation_photos[i][1].photo.url = url.displayUri;
-          this.grouped_presentation_photos[i][1].photo.thumb = url.displayUri;
-          this.grouped_presentation_photos[i][1].photo.path = url.path;
-          this.grouped_presentation_photos[i][1].photo.remote = true;
-          this.service.updateLocalPhotos("photo_after", this.grouped_presentation_photos);
+      client_uuid = this.service.generateUniqueId();
+    }
 
+    const data = this.service.uploadImagetoApi(this.photosService.lastImage.base64String, photo_type, currentDate, client_uuid);
+
+    const hasAfterOrBefore = data?.photo?.some((p: any) => p.photo_type === "after" || p.photo_type === "before");
+    let form = data;
+    if (hasAfterOrBefore) {
+      form = this.service.updateClientUuidFromGroupedPhotos(data, this.grouped_presentation_photos, i);
+    }
+
+    await this.loadingService.present(this.loadingMessage);
+    this.missionsService.createReportPhoto(form, this.service.getPointageId()).subscribe({
+      next: async value => {
+        if (value[0].photo_type == "before") {
+          this.grouped_presentation_photos[i][0].photo.url = value[0]?.image_url?.url;
+          this.grouped_presentation_photos[i][0].id = value[0].id;
+          this.grouped_presentation_photos[i][0].photo.client_uuid = value[0].client_uuid;
+          this.grouped_presentation_photos[i][0].photo.thumb = value[0].image_url.thumb;
+          this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
+        } else if (value[0].photo_type == "after") {
+          this.grouped_presentation_photos[i][1].photo.url = value[0]?.image_url?.url;
+          this.grouped_presentation_photos[i][1].id = value[0].id;
+          this.grouped_presentation_photos[i][1].photo.client_uuid = value[0].client_uuid;
+          this.grouped_presentation_photos[i][1].photo.thumb = value[0].image_url.thumb;
+          this.service.updateLocalPhotos(photo_type, this.grouped_presentation_photos);
         } else {
-          this.photos_truck[i].url = url.displayUri;
-          this.photos_truck[i].thumb = url.displayUri;
-          this.photos_truck[i].path = url.path;
-          this.photos_truck[i].remote = true;
-          this.photos_truck[i].date = currentDate;
-          this.photos_truck[i].client_uuid = this.service.generateUniqueId();
+          this.photos_truck[i].url = value[0]?.image_url?.url;
+          this.photos_truck[i].id = value[0].id;
+          this.photos_truck[i].thumb = value[0].image_url.thumb;
+          this.photos_truck[i].client_uuid = value[0].client_uuid;
           this.service.updateLocalPhotos(photo_type, this.photos_truck);
-          
         }
-        let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
-
-        const index = reportNeedSync.findIndex((item: any) => item.internal === this.service.getPointageId());
-        if (index == -1) {
-          reportNeedSync.push({id: this.data.planning.today_schedule.id, type: this.planningType, internal: this.service.getPointageId()});
-          localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
-        }
+        await this.loadingService.dimiss();
+      },
+      error: async err => {
+        await this.loadingService.dimiss();
       }
+    });
+
+  } else {
+
+       await this.loadingService.present(this.loadingMessage);
+
+    const url = await this.service.savePhotoOffline(this.photosService.lastImage);
+
+
+    if (url) {
+      if (photo_type == "photo_before") {
+        this.grouped_presentation_photos[i][0].photo.url = url.displayUri;
+        this.grouped_presentation_photos[i][0].photo.thumb = url.displayUri;
+        this.grouped_presentation_photos[i][0].photo.path = url.path;
+        this.grouped_presentation_photos[i][0].photo.remote = true;
+        this.service.updateLocalPhotos("photo_before", this.grouped_presentation_photos);
+      } else if (photo_type == "photo_after") {
+        this.grouped_presentation_photos[i][1].photo.url = url.displayUri;
+        this.grouped_presentation_photos[i][1].photo.thumb = url.displayUri;
+        this.grouped_presentation_photos[i][1].photo.path = url.path;
+        this.grouped_presentation_photos[i][1].photo.remote = true;
+        this.service.updateLocalPhotos("photo_after", this.grouped_presentation_photos);
+      } else {
+        this.photos_truck[i].url = url.displayUri;
+        this.photos_truck[i].thumb = url.displayUri;
+        this.photos_truck[i].path = url.path;
+        this.photos_truck[i].remote = true;
+        this.photos_truck[i].date = currentDate;
+        this.photos_truck[i].client_uuid = this.service.generateUniqueId();
+        this.service.updateLocalPhotos(photo_type, this.photos_truck);
+      }
+      await this.loadingService.dimiss();
+
+      let reportNeedSync = await JSON.parse(localStorage.getItem("report_need_sync")!);
+
+      const index = reportNeedSync.findIndex((item: any) => item.internal === this.service.getPointageId());
+
+      if (index == -1) {
+        reportNeedSync.push({ id: this.data.planning.today_schedule.id, type: this.planningType, internal: this.service.getPointageId() });
+        localStorage.setItem("report_need_sync", JSON.stringify(reportNeedSync));
+      } else {
+        console.log(`📴 [saveNewPhoto] Already in reportNeedSync, skipping push`);
+      }
+    } else {
+      console.warn(`📴 [saveNewPhoto] ⚠️ savePhotoOffline returned falsy — url is null/undefined. Photo NOT saved.`);
     }
   }
 
+}
   async goBack() {
     if (this.isSliderOpen) this.isSliderOpen = false;
     else{

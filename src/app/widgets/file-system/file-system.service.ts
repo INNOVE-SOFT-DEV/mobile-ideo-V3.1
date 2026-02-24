@@ -60,18 +60,27 @@ export class FileSystemService {
   }
 
   async readSecretFile(path: string) {
-    const granted = await this.ensurePermissions();
-    if (!granted) {
-      console.warn("Permission not granted to read file.");
-      return;
-    }
-
-    const contents: any = await Filesystem.readFile({
-      path: path,
-      directory: Directory.Data
-    });
-    return contents.data;
+  const granted = await this.ensurePermissions();
+  if (!granted) {
+    console.warn("Permission not granted to read file.");
+    return;
   }
+
+  console.log(`📁 [readSecretFile] path=`, path);
+
+  // If path is absolute (file:// or starts with /), read without Directory
+  // so Capacitor doesn't prepend the DataDirectory prefix
+  const isAbsolute = path.startsWith('file://') || path.startsWith('/');
+  console.log(`📁 [readSecretFile] isAbsolute=`, isAbsolute);
+
+  const contents: any = await Filesystem.readFile(
+    isAbsolute
+      ? { path }                                      // absolute — no directory prefix
+      : { path, directory: Directory.Data }           // relative — use Data directory
+  );
+
+  return contents.data;
+}
 
   async deleteSecretFile(path: string) {
     const granted = await this.ensurePermissions();
