@@ -111,7 +111,7 @@ export class GlideComponent implements OnInit {
 
     // Write to public Pictures directory — auto-indexed by gallery on Android 10+
     await Filesystem.writeFile({
-      path: `Pictures/idegroupe/${fileName}`,
+      path: `Pictures/ideogroupe/${fileName}`,
       data: base64.split(",")[1],
       directory: Directory.ExternalStorage,
       recursive: true
@@ -119,7 +119,7 @@ export class GlideComponent implements OnInit {
 
     // Get the native URI and trigger media scan for older Android
     const {uri} = await Filesystem.getUri({
-      path: `Pictures/idegroupe/${fileName}`,
+      path: `Pictures/ideogroupe/${fileName}`,
       directory: Directory.ExternalStorage
     });
 
